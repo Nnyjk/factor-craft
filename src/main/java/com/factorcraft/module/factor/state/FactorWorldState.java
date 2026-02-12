@@ -7,5 +7,8 @@ public record FactorWorldState(
         String dimensionKey,
         double currentFactor,
         double baseFactor,
+        double dayAverage,
+        double trend,
+        int currentTier,
         long lastUpdatedTick
 ) {}

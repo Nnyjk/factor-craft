@@ -30,6 +30,7 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
+
 }
 
 processResources {
@@ -72,4 +73,19 @@ tasks.register('verifyCommandM0', JavaExec) {
     dependsOn classes
     classpath = sourceSets.main.runtimeClasspath
     mainClass = 'com.factorcraft.module.command.verification.CommandM0Verifier'
+}
+
+
+
+tasks.register('verifyFactorM1', JavaExec) {
+    dependsOn classes
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'com.factorcraft.module.factor.verification.FactorM1Verifier'
+}
+
+
+tasks.register('verifyCreatureM1b', JavaExec) {
+    dependsOn classes
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'com.factorcraft.module.creature.verification.CreatureM1bVerifier'
 }

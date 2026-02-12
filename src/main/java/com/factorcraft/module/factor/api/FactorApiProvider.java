@@ -1,14 +1,23 @@
 package com.factorcraft.module.factor.api;
 
 /**
- * 当前阶段先提供占位实现，后续可替换为真实服务实例。
+ * M1 后通过模块初始化注入真实服务，默认回退 noop。
  */
 public final class FactorApiProvider {
     private static final FactorApi NOOP = new NoopFactorApi();
+    private static volatile FactorApi active = NOOP;
 
     private FactorApiProvider() {}
 
     public static FactorApi get() {
-        return NOOP;
+        return active;
+    }
+
+    public static void set(FactorApi factorApi) {
+        active = factorApi == null ? NOOP : factorApi;
+    }
+
+    public static void reset() {
+        active = NOOP;
     }
 }

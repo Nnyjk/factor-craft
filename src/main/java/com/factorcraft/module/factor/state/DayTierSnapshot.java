@@ -8,5 +8,6 @@ public record DayTierSnapshot(
         double dayAverage,
         double trend,
         double hysteresis,
+        int previousTier,
         int nextTier
 ) {}
