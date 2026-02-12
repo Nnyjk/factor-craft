@@ -35,7 +35,7 @@
 
 ## 生命周期（建议）
 
-1. 启动时加载命令配置（后续可接入 dynamic JSON）。
+1. 启动时通过 `DynamicContentLoader` 读取 `commands.json`。
 2. 通过 `CommandSpecValidator` 校验。
 3. 注册到 `CommandRegistry`。
 4. 执行时：命令查找 -> 处理器查找 -> 执行 -> 结果落审计/事件。

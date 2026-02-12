@@ -36,4 +36,5 @@ com.factorcraft.module
 
 1. 保留既有 `dynamic` 动态配置系统。
 2. `FactorCraftMod` 启动时统一调用 `ModuleBootstrap.initializeDefaults()`。
-3. 当前阶段模块仅注册骨架与日志，后续按 M1~M5 里程碑填充真实逻辑。
+3. `ModuleBootstrap` 提供 `reloadDefaults()` 与 `shutdownDefaults()`，并进行模块依赖校验。
+4. 当前阶段模块以骨架和标准为主，后续按里程碑逐步填充逻辑。

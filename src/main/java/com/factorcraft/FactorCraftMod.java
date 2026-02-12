@@ -18,6 +18,6 @@ public class FactorCraftMod implements ModInitializer {
         ModuleBootstrap.initializeDefaults();
 
         DynamicBundle bundle = DynamicContentManager.getInstance().current();
-        LOGGER.info("Factor Craft Fabric 开发环境已加载，统一动态加载系统已启用。configs={}", bundle.configs().size());
+        LOGGER.info("Factor Craft Fabric 开发环境已加载，统一动态加载系统已启用。configs={}, commands={}", bundle.configs().size(), bundle.commands().size());
     }
 }

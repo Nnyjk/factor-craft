@@ -9,10 +9,11 @@ public class FactorCraftClient implements ClientModInitializer {
     public void onInitializeClient() {
         DynamicBundle bundle = DynamicContentManager.getInstance().current();
         FactorCraftMod.LOGGER.info(
-                "Factor Craft 客户端初始化完成。textures={}, models={}, languages={}",
+                "Factor Craft 客户端初始化完成。textures={}, models={}, languages={}, commands={}",
                 bundle.textures().size(),
                 bundle.models().size(),
-                bundle.languages().size()
+                bundle.languages().size(),
+                bundle.commands().size()
         );
     }
 }
