@@ -93,6 +93,11 @@ public final class CommandRegistry implements CommandRegistrar, CommandApi {
         return Collections.unmodifiableMap(new LinkedHashMap<>(handlers));
     }
 
+    public synchronized void clearCommands() {
+        byCommandId.clear();
+        aliasToCommandId.clear();
+    }
+
     private static String normalize(String value) {
         return value == null ? "" : value.trim().toLowerCase();
     }
