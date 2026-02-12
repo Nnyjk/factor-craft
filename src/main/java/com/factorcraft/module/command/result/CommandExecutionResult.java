@@ -6,13 +6,13 @@ package com.factorcraft.module.command.result;
 public record CommandExecutionResult(
         boolean success,
         String message,
-        String errorCode
+        String code
 ) {
     public static CommandExecutionResult success(String message) {
-        return new CommandExecutionResult(true, message, "");
+        return new CommandExecutionResult(true, message, "OK");
     }
 
-    public static CommandExecutionResult failure(String message, String errorCode) {
-        return new CommandExecutionResult(false, message, errorCode);
+    public static CommandExecutionResult failure(String message, String code) {
+        return new CommandExecutionResult(false, message, code == null || code.isBlank() ? "UNKNOWN_ERROR" : code);
     }
 }

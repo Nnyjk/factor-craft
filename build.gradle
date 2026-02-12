@@ -29,6 +29,7 @@ dependencies {
     mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+
 }
 
 processResources {
@@ -64,4 +65,11 @@ publishing {
             from components.java
         }
     }
+}
+
+
+tasks.register('verifyCommandM0', JavaExec) {
+    dependsOn classes
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'com.factorcraft.module.command.verification.CommandM0Verifier'
 }
