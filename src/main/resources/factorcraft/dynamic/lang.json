@@ -1,0 +1,18 @@
+{
+  "languages": [
+    {
+      "locale": "zh_cn",
+      "entries": {
+        "item.factor_craft.factor_chip": "因子芯片",
+        "block.factor_craft.factor_core": "因子核心"
+      }
+    },
+    {
+      "locale": "en_us",
+      "entries": {
+        "item.factor_craft.factor_chip": "Factor Chip",
+        "block.factor_craft.factor_core": "Factor Core"
+      }
+    }
+  ]
+}
