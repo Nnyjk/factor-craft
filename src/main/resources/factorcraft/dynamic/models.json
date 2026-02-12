@@ -1,0 +1,12 @@
+{
+  "models": [
+    {
+      "key": "block.factor_core",
+      "resourcePath": "factor_craft:models/block/factor_core.json"
+    },
+    {
+      "key": "item.factor_chip",
+      "resourcePath": "factor_craft:models/item/factor_chip.json"
+    }
+  ]
+}

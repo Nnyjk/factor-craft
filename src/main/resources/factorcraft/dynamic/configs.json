@@ -1,0 +1,7 @@
+{
+  "configs": {
+    "feature.switch.dynamicResource": true,
+    "balance.recipe.factorEnergyCost": 120,
+    "ui.theme": "industrial"
+  }
+}

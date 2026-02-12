@@ -1,0 +1,12 @@
+{
+  "textures": [
+    {
+      "key": "block.factor_core",
+      "resourcePath": "factor_craft:textures/block/factor_core.png"
+    },
+    {
+      "key": "item.factor_chip",
+      "resourcePath": "factor_craft:textures/item/factor_chip.png"
+    }
+  ]
+}
