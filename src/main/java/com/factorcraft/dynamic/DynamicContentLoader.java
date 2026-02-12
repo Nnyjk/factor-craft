@@ -33,13 +33,15 @@ public final class DynamicContentLoader {
         Path texturesFile = configRoot.resolve("textures.json");
         Path modelsFile = configRoot.resolve("models.json");
         Path langFile = configRoot.resolve("lang.json");
+        Path commandsFile = configRoot.resolve("commands.json");
 
         Map<String, Object> configs = readConfigs(configsFile);
         List<DynamicBundle.TextureSpec> textures = readTextures(texturesFile);
         List<DynamicBundle.ModelSpec> models = readModels(modelsFile);
         List<DynamicBundle.LangSpec> languages = readLanguages(langFile);
+        List<DynamicBundle.CommandSpec> commands = readCommands(commandsFile);
 
-        return new DynamicBundle(configs, textures, models, languages);
+        return new DynamicBundle(configs, textures, models, languages, commands);
     }
 
     public static void ensureDefaults(Path configRoot) {
@@ -49,6 +51,7 @@ public final class DynamicContentLoader {
             writeDefaultIfMissing(configRoot.resolve("textures.json"), defaultTextures());
             writeDefaultIfMissing(configRoot.resolve("models.json"), defaultModels());
             writeDefaultIfMissing(configRoot.resolve("lang.json"), defaultLang());
+            writeDefaultIfMissing(configRoot.resolve("commands.json"), defaultCommands());
         } catch (IOException e) {
             FactorCraftMod.LOGGER.error("初始化动态配置目录失败: {}", configRoot, e);
         }
@@ -118,6 +121,25 @@ public final class DynamicContentLoader {
         return results;
     }
 
+    private static List<DynamicBundle.CommandSpec> readCommands(Path file) {
+        JsonObject root = readJson(file);
+        if (root == null || !root.has("commands")) {
+            return List.of();
+        }
+
+        List<DynamicBundle.CommandSpec> results = new ArrayList<>();
+        root.getAsJsonArray("commands").forEach(item -> {
+            JsonObject obj = item.getAsJsonObject();
+            results.add(new DynamicBundle.CommandSpec(
+                    obj.get("commandId").getAsString(),
+                    obj.get("handlerId").getAsString(),
+                    obj.get("permission").getAsString(),
+                    obj.has("enabled") && obj.get("enabled").getAsBoolean()
+            ));
+        });
+        return results;
+    }
+
     private static JsonObject readJson(Path file) {
         if (!Files.exists(file)) {
             FactorCraftMod.LOGGER.warn("动态配置文件不存在: {}", file);
@@ -169,6 +191,17 @@ public final class DynamicContentLoader {
                                 "item.factor_craft.factor_chip", "Factor Chip",
                                 "block.factor_craft.factor_core", "Factor Core"
                         )
+                )
+        )));
+    }
+
+    private static String defaultCommands() {
+        return GSON.toJson(Map.of("commands", List.of(
+                Map.of(
+                        "commandId", "factor_craft:factor_debug",
+                        "handlerId", "factor.debug",
+                        "permission", "factorcraft.command.factor.debug",
+                        "enabled", true
                 )
         )));
     }
