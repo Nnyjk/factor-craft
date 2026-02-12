@@ -1,0 +1,26 @@
+{
+  "commands": [
+    {
+      "commandId": "factor_craft:factor_debug",
+      "sourcePackId": "factor_craft",
+      "handlerId": "factor.debug",
+      "aliases": ["fc_factor_debug"],
+      "description": "输出当前世界因子信息",
+      "permission": "factorcraft.command.factor.debug",
+      "scope": "OPERATOR",
+      "cooldownTicks": 20,
+      "rateLimitPerMinute": 30,
+      "enabled": true,
+      "tags": ["debug", "factor"],
+      "args": [
+        {
+          "name": "dimension",
+          "type": "DIMENSION",
+          "required": false,
+          "description": "维度ID",
+          "defaultValue": "minecraft:overworld"
+        }
+      ]
+    }
+  ]
+}
