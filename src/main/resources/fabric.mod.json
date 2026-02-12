@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "id": "factor_craft",
+  "version": "${version}",
+  "name": "Factor Craft",
+  "description": "基于最新 Fabric 工作流搭建的 Minecraft Mod 开发工程。",
+  "authors": [
+    "factor-craft"
+  ],
+  "contact": {},
+  "license": "MIT",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.factorcraft.FactorCraftMod"
+    ],
+    "client": [
+      "com.factorcraft.FactorCraftClient"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "minecraft": "~${minecraft_version}",
+    "java": ">=21",
+    "fabric-api": "*"
+  }
+}
