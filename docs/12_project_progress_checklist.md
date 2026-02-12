@@ -38,17 +38,17 @@
 ## M1（Factor + Tier + 日切，含 M1b 怪物/掉落联动）
 
 ### M1 核心能力（Factor 系统）
-- [ ] `FactorWorldState`：实时因子更新（含潮汐、玩家偏移、噪声、阻尼）。
-- [ ] `DayTierSnapshot`：日切结算（`F_dayAvg`、趋势、迟滞参数）。
-- [ ] Tier 判定与边界事件广播（`FactorTierChangeEvent` / `FactorThresholdEvent`）。
-- [ ] HUD / 调试可视化（至少含当前 Factor、今日均值、明日 Tier 预测）。
-- [ ] 冷却与灾害触发状态管理（`EventCooldownState` / `FactorDisasterEvent`）。
+- [x] `FactorWorldState`：实时因子更新（含潮汐、玩家偏移、噪声、阻尼）。
+- [x] `DayTierSnapshot`：日切结算（`F_dayAvg`、趋势、迟滞参数）。
+- [x] Tier 判定与边界事件广播（`FactorTierChangeEvent` / `FactorThresholdEvent`）。
+- [x] HUD / 调试可视化（至少含当前 Factor、今日均值、明日 Tier 预测）。
+- [x] 冷却与灾害触发状态管理（`EventCooldownState` / `FactorDisasterEvent`）。
 
 ### M1b 扩展能力（怪物生态与凋落物）
-- [ ] 刷新规则注册与按维度/Tier 过滤查询。
-- [ ] 掉落池注册与按实体/Tier 切换。
-- [ ] 阶段能力（高能/过载）触发框架。
-- [ ] 日切后刷新规则与掉落池自动切换。
+- [x] 刷新规则注册与按维度/Tier 过滤查询。
+- [x] 掉落池注册与按实体/Tier 切换。
+- [x] 阶段能力（高能/过载）触发框架。
+- [x] 日切后刷新规则与掉落池自动切换。
 
 **M1 验收标准**
 - [ ] 单日内 Factor 波动可观测，跨日 Tier 变化符合阈值规则。
