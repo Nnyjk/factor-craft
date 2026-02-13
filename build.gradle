@@ -89,3 +89,17 @@ tasks.register('verifyCreatureM1b', JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
     mainClass = 'com.factorcraft.module.creature.verification.CreatureM1bVerifier'
 }
+
+
+tasks.register('verifyMaterialsM2', JavaExec) {
+    dependsOn classes
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'com.factorcraft.module.material.verification.MaterialsM2Verifier'
+}
+
+
+tasks.register('verifyMaterialsM2TierSync', JavaExec) {
+    dependsOn classes
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'com.factorcraft.module.material.verification.MaterialsM2TierSyncVerifier'
+}

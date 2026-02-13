@@ -21,7 +21,7 @@ public final class DynamicContentManager {
     private static final DynamicContentManager INSTANCE = new DynamicContentManager();
 
     private final AtomicReference<DynamicBundle> bundleRef = new AtomicReference<>(
-            new DynamicBundle(java.util.Map.of(), java.util.List.of(), java.util.List.of(), java.util.List.of(), java.util.List.of())
+            new DynamicBundle(java.util.Map.of(), java.util.Map.of(), java.util.List.of(), java.util.List.of(), java.util.List.of(), java.util.List.of())
     );
 
     private volatile Thread watchThread;
@@ -52,8 +52,9 @@ public final class DynamicContentManager {
         bundleRef.set(bundle);
 
         FactorCraftMod.LOGGER.info(
-                "动态资源重载完成: configs={}, textures={}, models={}, languages={}, commands={}",
+                "动态资源重载完成: configs={}, materialsM2Keys={}, textures={}, models={}, languages={}, commands={}",
                 bundle.configs().size(),
+                bundle.materialsM2().size(),
                 bundle.textures().size(),
                 bundle.models().size(),
                 bundle.languages().size(),
