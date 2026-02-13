@@ -1,0 +1,9 @@
+{
+  "materialsM2": {
+    "materials": [],
+    "traits": [],
+    "enchants": [],
+    "statuses": [],
+    "notes": "填充上述四个数组后将覆盖默认池；为空或结构不完整时自动回退默认池"
+  }
+}

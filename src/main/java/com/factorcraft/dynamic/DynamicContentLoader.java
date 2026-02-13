@@ -30,24 +30,27 @@ public final class DynamicContentLoader {
 
     public static DynamicBundle load(Path configRoot) {
         Path configsFile = configRoot.resolve("configs.json");
+        Path materialsM2File = configRoot.resolve("materials_m2.json");
         Path texturesFile = configRoot.resolve("textures.json");
         Path modelsFile = configRoot.resolve("models.json");
         Path langFile = configRoot.resolve("lang.json");
         Path commandsFile = configRoot.resolve("commands.json");
 
         Map<String, Object> configs = readConfigs(configsFile);
+        Map<String, Object> materialsM2 = readMaterialsM2(materialsM2File);
         List<DynamicBundle.TextureSpec> textures = readTextures(texturesFile);
         List<DynamicBundle.ModelSpec> models = readModels(modelsFile);
         List<DynamicBundle.LangSpec> languages = readLanguages(langFile);
         List<DynamicBundle.CommandSpec> commands = readCommands(commandsFile);
 
-        return new DynamicBundle(configs, textures, models, languages, commands);
+        return new DynamicBundle(configs, materialsM2, textures, models, languages, commands);
     }
 
     public static void ensureDefaults(Path configRoot) {
         try {
             Files.createDirectories(configRoot);
             writeDefaultIfMissing(configRoot.resolve("configs.json"), defaultConfigs());
+            writeDefaultIfMissing(configRoot.resolve("materials_m2.json"), defaultMaterialsM2());
             writeDefaultIfMissing(configRoot.resolve("textures.json"), defaultTextures());
             writeDefaultIfMissing(configRoot.resolve("models.json"), defaultModels());
             writeDefaultIfMissing(configRoot.resolve("lang.json"), defaultLang());
@@ -69,6 +72,15 @@ public final class DynamicContentLoader {
             return Map.of();
         }
         return GSON.fromJson(root.get("configs"), STRING_OBJECT_MAP);
+    }
+
+
+    private static Map<String, Object> readMaterialsM2(Path file) {
+        JsonObject root = readJson(file);
+        if (root == null || !root.has("materialsM2")) {
+            return Map.of();
+        }
+        return GSON.fromJson(root.get("materialsM2"), STRING_OBJECT_MAP);
     }
 
     private static List<DynamicBundle.TextureSpec> readTextures(Path file) {
@@ -160,6 +172,11 @@ public final class DynamicContentLoader {
         defaults.put("balance.recipe.factorEnergyCost", 120);
         defaults.put("ui.theme", "industrial");
         return GSON.toJson(Map.of("configs", defaults));
+    }
+
+
+    private static String defaultMaterialsM2() {
+        return GSON.toJson(Map.of("materialsM2", Map.of()));
     }
 
     private static String defaultTextures() {

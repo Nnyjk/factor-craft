@@ -6,11 +6,13 @@ import java.util.Map;
 /**
  * 统一动态加载数据模型：
  * - configs: 任意业务配置键值
+ * - materialsM2: M2 材料/词条/附魔/状态动态配置
  * - textures/models/lang: 资源路径或国际化键值
  * - commands: 命令配置草案
  */
 public record DynamicBundle(
         Map<String, Object> configs,
+        Map<String, Object> materialsM2,
         List<TextureSpec> textures,
         List<ModelSpec> models,
         List<LangSpec> languages,

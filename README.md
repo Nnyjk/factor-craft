@@ -35,6 +35,7 @@ bash scripts/sync_fabric_versions.sh
 运行后会在 `config/factor-craft/` 下自动生成并读取：
 
 - `configs.json`：业务配置
+- `materials_m2.json`：M2 材料/词条/附魔/状态动态配置
 - `textures.json`：贴图资源映射
 - `models.json`：模型资源映射
 - `lang.json`：国际化词条
