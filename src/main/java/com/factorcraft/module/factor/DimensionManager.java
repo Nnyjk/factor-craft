@@ -123,4 +123,20 @@ public class DimensionManager {
     public void clearAllStates() {
         dimensionStates.clear();
     }
+    
+    /**
+     * 获取维度基准值
+     */
+    public double getDimensionBaseValue(net.minecraft.registry.RegistryKey<net.minecraft.world.World> worldKey) {
+        String key = worldKey.getValue().toString();
+        return getDimensionBaseValueFromString(key);
+    }
+    
+    /**
+     * 从字符串获取维度基准值
+     */
+    public double getDimensionBaseValueFromString(String dimensionKey) {
+        DimensionType type = dimensionTypeMap.getOrDefault(dimensionKey, DimensionType.OVERWORLD);
+        return type.baseValue();
+    }
 }

@@ -24,6 +24,20 @@ import java.util.concurrent.ConcurrentHashMap;
  * M1 因子系统运行时服务：实时更新 + 日切结算 + 阈值事件/灾害冷却。
  */
 public final class FactorService implements FactorApi {
+    
+    private static FactorService instance;
+    
+    /**
+     * 获取 FactorService 实例（用于 BlockEntity 等）
+     */
+    public static FactorService getInstance() {
+        if (instance == null) {
+            // 从 FactorApiProvider 获取
+            instance = (FactorService) com.factorcraft.module.factor.api.FactorApiProvider.get();
+        }
+        return instance;
+    }
+    
     private static final long WORLD_DAY_TICKS = 24_000;
     private static final double FACTOR_MIN = 0;
     private static final double FACTOR_MAX = 100;
@@ -181,6 +195,24 @@ public final class FactorService implements FactorApi {
         String key = world.getRegistryKey().getValue().toString();
         RuntimeState state = states.computeIfAbsent(key, k -> new RuntimeState(baseForDimension(k), world.getTime() / WORLD_DAY_TICKS));
         state.offsets.add(new TimedOffset(offset, world.getTime() + durationTicks));
+    }
+    
+    /**
+     * 向维度添加 Factor（用于 BlockEntity）
+     */
+    public void addFactor(net.minecraft.util.math.BlockPos pos, int amount) {
+        // 简化实现：直接添加到当前维度
+        // 实际应该根据位置找到对应的世界
+        // 这里只是一个占位实现
+    }
+    
+    /**
+     * 从维度消耗 Factor（用于 BlockEntity）
+     */
+    public void consumeFactor(net.minecraft.util.math.BlockPos pos, int amount) {
+        // 简化实现：直接从当前维度消耗
+        // 实际应该根据位置找到对应的世界
+        // 这里只是一个占位实现
     }
 
     private void settleDay(ServerWorld world, RuntimeState state, long dayIndex) {
