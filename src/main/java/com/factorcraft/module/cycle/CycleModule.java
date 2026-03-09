@@ -1,13 +1,11 @@
 package com.factorcraft.module.cycle;
 
-import com.factorcraft.module.cycle.block.entity.FactorSinkBlockEntity;
-import com.factorcraft.module.cycle.block.entity.FactorSourceBlockEntity;
-import com.factorcraft.module.cycle.block.entity.FactorTransmitterBlockEntity;
-
 /**
  * Factor 循环模块 - 核心模块
  * 
  * 基于 docs/17_factor_cycle_structures.md
+ * 
+ * 注意：BlockEntity 实现待适配 Minecraft 1.21.4 API
  */
 public class CycleModule {
     
@@ -25,8 +23,8 @@ public class CycleModule {
     }
     
     public void initialize() {
-        // 注册方块实体
-        // 注册配方
-        // 初始化网络
+        // TODO: 注册方块实体
+        // TODO: 注册配方
+        // TODO: 初始化网络
     }
 }
