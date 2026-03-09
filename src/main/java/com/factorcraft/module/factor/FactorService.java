@@ -214,6 +214,41 @@ public final class FactorService implements FactorApi {
         // 实际应该根据位置找到对应的世界
         // 这里只是一个占位实现
     }
+    
+    /**
+     * 向世界添加 Factor (API 实现)
+     */
+    public void addFactor(net.minecraft.server.world.ServerWorld world, 
+                         net.minecraft.util.math.BlockPos pos, int amount) {
+        // TODO: 实现 Factor 添加逻辑
+        addFactorOffset(world, amount, 1200); // 持续 60 秒
+    }
+    
+    /**
+     * 从世界消耗 Factor (API 实现)
+     */
+    public void consumeFactor(net.minecraft.server.world.ServerWorld world,
+                             net.minecraft.util.math.BlockPos pos, int amount) {
+        // TODO: 实现 Factor 消耗逻辑
+        addFactorOffset(world, -amount, 1200); // 持续 60 秒
+    }
+    
+    /**
+     * 获取维度基准值 (API 实现)
+     */
+    public double getDimensionBaseValue(net.minecraft.server.world.ServerWorld world) {
+        return baseForDimension(world.getRegistryKey().getValue().toString());
+    }
+    
+    /**
+     * 计算跨维度传输倍率 (API 实现)
+     */
+    public double calculateTransferMultiplier(net.minecraft.server.world.ServerWorld fromWorld,
+                                             net.minecraft.server.world.ServerWorld toWorld) {
+        double fromBase = getDimensionBaseValue(fromWorld);
+        double toBase = getDimensionBaseValue(toWorld);
+        return fromBase / toBase;
+    }
 
     private void settleDay(ServerWorld world, RuntimeState state, long dayIndex) {
         double dayAverage = state.daySampleCount == 0 ? state.currentFactor : state.dayFactorSum / state.daySampleCount;
