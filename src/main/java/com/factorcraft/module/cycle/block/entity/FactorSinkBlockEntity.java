@@ -40,8 +40,7 @@ public class FactorSinkBlockEntity extends BlockEntity {
     private static final int PROCESSING_TIME = 200; // 10 秒
     
     public FactorSinkBlockEntity(BlockPos pos, BlockState state) {
-        // TODO: 恢复 BlockEntity 后修复
-        super(null, pos, state);
+        super(CycleBlockEntities.FACTOR_SINK, pos, state);
     }
     
     @Override

@@ -1,6 +1,10 @@
 package com.factorcraft.module.cycle.block;
 
 import com.factorcraft.FactorCraftMod;
+import com.factorcraft.module.cycle.block.entity.CycleBlockEntities;
+import com.factorcraft.module.cycle.block.entity.FactorSinkBlockEntity;
+import com.factorcraft.module.cycle.block.entity.FactorSourceBlockEntity;
+import com.factorcraft.module.cycle.block.entity.FactorTransmitterBlockEntity;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
@@ -14,8 +18,9 @@ import net.minecraft.util.Identifier;
 /**
  * Cycle 模块方块注册
  * 
- * ⚠️ BlockEntity 功能暂时禁用
- * 原因：Minecraft 1.21.4 BlockEntityFactory 是私有接口
+ * Fabric 1.21.4 最佳实践：
+ * - 使用 FabricBlockEntityTypeBuilder 创建 BlockEntityType
+ * - 延迟初始化避免循环依赖
  */
 public class CycleBlocks {
     
@@ -83,11 +88,22 @@ public class CycleBlocks {
     
     /**
      * 获取方块的 BlockEntityTicker
-     * TODO: BlockEntity 实现待恢复
      */
+    @SuppressWarnings("unchecked")
     public static <T extends BlockEntity> BlockEntityTicker<T> getTicker(
             Block block, BlockEntityType<T> type) {
-        // TODO: 恢复 BlockEntity 后实现
+        if (block == factorSink && type == CycleBlockEntities.FACTOR_SINK) {
+            return (world, pos, state, blockEntity) -> 
+                FactorSinkBlockEntity.tick(world, pos, state, (FactorSinkBlockEntity) blockEntity);
+        }
+        if (block == factorSource && type == CycleBlockEntities.FACTOR_SOURCE) {
+            return (world, pos, state, blockEntity) -> 
+                FactorSourceBlockEntity.tick(world, pos, state, (FactorSourceBlockEntity) blockEntity);
+        }
+        if (block == factorTransmitter && type == CycleBlockEntities.FACTOR_TRANSMITTER) {
+            return (world, pos, state, blockEntity) -> 
+                FactorTransmitterBlockEntity.tick(world, pos, state, (FactorTransmitterBlockEntity) blockEntity);
+        }
         return null;
     }
 }

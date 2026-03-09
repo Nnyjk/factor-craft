@@ -39,8 +39,7 @@ public class FactorSourceBlockEntity extends BlockEntity {
     private static final int PROCESSING_TIME = 100; // 5 秒
     
     public FactorSourceBlockEntity(BlockPos pos, BlockState state) {
-        // TODO: 恢复 BlockEntity 后修复
-        super(null, pos, state);
+        super(CycleBlockEntities.FACTOR_SOURCE, pos, state);
     }
     
     @Override

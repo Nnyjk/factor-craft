@@ -56,8 +56,7 @@ public class FactorTransmitterBlockEntity extends BlockEntity {
     private static final double[] DISTANCE_LOSS_BY_TIER = {0.01, 0.008, 0.005, 0.003};
     
     public FactorTransmitterBlockEntity(BlockPos pos, BlockState state) {
-        // TODO: 恢复 BlockEntity 后修复
-        super(null, pos, state);
+        super(CycleBlockEntities.FACTOR_TRANSMITTER, pos, state);
     }
     
     @Override
