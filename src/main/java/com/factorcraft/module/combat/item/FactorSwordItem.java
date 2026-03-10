@@ -1,6 +1,7 @@
 package com.factorcraft.module.combat.item;
 
 import com.factorcraft.api.CombatApi;
+import com.factorcraft.module.combat.WeaponAttributes;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
@@ -8,31 +9,38 @@ import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 
 /**
- * Factor 剑 - 基础 Factor 武器 (简化版)
+ * Factor 剑 - 平衡型近战武器
+ * 
+ * 特点：中等伤害，快速攻击，均衡属性
  */
 public class FactorSwordItem extends Item implements CombatApi.FactorWeapon {
     
     private final int tier;
-    private final double factorDamageBonus;
+    private final float damage;
+    private final float attackSpeed;
+    private final float armorPierce;
+    private final int enchantability;
     
-    public FactorSwordItem(int tier, double factorDamageBonus) {
+    public FactorSwordItem(int tier) {
         super(new Item.Settings()
             .maxCount(1)
-            .maxDamage(1000 + tier * 500)
+            .maxDamage(WeaponAttributes.Sword.DURABILITY[tier - 1])
         );
         this.tier = tier;
-        this.factorDamageBonus = factorDamageBonus;
+        this.damage = WeaponAttributes.Sword.DAMAGE[tier - 1];
+        this.attackSpeed = WeaponAttributes.Sword.ATTACK_SPEED[tier - 1];
+        this.armorPierce = WeaponAttributes.Sword.ARMOR_PIERCE[tier - 1];
+        this.enchantability = WeaponAttributes.Sword.ENCHANTABILITY[tier - 1];
     }
     
     /**
      * 创建 T1-T5 所有等级的 Factor 剑
      */
     public static void registerAll() {
-        register("factor_sword_t1", new FactorSwordItem(1, 0.2));
-        register("factor_sword_t2", new FactorSwordItem(2, 0.4));
-        register("factor_sword_t3", new FactorSwordItem(3, 0.6));
-        register("factor_sword_t4", new FactorSwordItem(4, 0.8));
-        register("factor_sword_t5", new FactorSwordItem(5, 1.0));
+        for (int tier = 1; tier <= 5; tier++) {
+            String name = "factor_sword_t" + tier;
+            register(name, new FactorSwordItem(tier));
+        }
     }
     
     private static void register(String name, FactorSwordItem sword) {
@@ -41,11 +49,46 @@ public class FactorSwordItem extends Item implements CombatApi.FactorWeapon {
     
     @Override
     public double getFactorDamageBonus(ItemStack stack) {
-        return factorDamageBonus;
+        return WeaponAttributes.Sword.FACTOR_BONUS[tier - 1];
     }
     
     @Override
     public int getDimensionPenetration(ItemStack stack) {
         return tier >= 3 ? tier - 2 : 0;
+    }
+    
+    /**
+     * 获取武器伤害
+     */
+    public float getDamage() {
+        return damage;
+    }
+    
+    /**
+     * 获取攻击速度
+     */
+    public float getAttackSpeed() {
+        return attackSpeed;
+    }
+    
+    /**
+     * 获取破甲比例
+     */
+    public float getArmorPierce() {
+        return armorPierce;
+    }
+    
+    /**
+     * 获取附魔能力
+     */
+    public int getEnchantability() {
+        return enchantability;
+    }
+    
+    /**
+     * 获取武器名称
+     */
+    public String getWeaponName() {
+        return WeaponAttributes.getWeaponName("sword", tier);
     }
 }
