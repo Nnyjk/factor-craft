@@ -29,7 +29,7 @@ public class QuestChain {
         this.questIds.add(questId);
     }
     
-    public void advance(PlayerProgress progress) {
+    public void advance() {
         if (currentStep < questIds.size()) {
             currentStep++;
         }

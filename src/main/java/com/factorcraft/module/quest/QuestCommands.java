@@ -1,11 +1,8 @@
 package com.factorcraft.module.quest;
 
 import com.factorcraft.module.quest.manager.QuestManager;
-import com.factorcraft.module.quest.ui.QuestTrackerScreen;
-import com.factorcraft.module.quest.ui.QuestTrackerScreenHandler;
 import com.mojang.brigadier.CommandDispatcher;
 import net.minecraft.command.CommandRegistryAccess;
-import net.minecraft.command.CommandSource;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
 
@@ -16,7 +13,7 @@ import static net.minecraft.server.command.CommandManager.literal;
  */
 public class QuestCommands {
     
-    public static void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess registryAccess, CommandSource.RegistrationEnvironment environment) {
+    public static void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess registryAccess) {
         dispatcher.register(literal("quest")
             .requires(source -> source.hasPermissionLevel(0))
             .then(literal("list")

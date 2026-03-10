@@ -3,66 +3,54 @@ package com.factorcraft.module.quest.ui;
 import com.factorcraft.module.quest.instance.QuestInstance;
 import com.factorcraft.module.quest.manager.QuestManager;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.screen.ingame.HandledScreen;
-import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
 
 import java.util.List;
 
 /**
- * 任务追踪界面 - 显示玩家当前任务列表和进度
+ * 任务追踪界面 - 简化版本
  */
-public class QuestTrackerScreen extends HandledScreen<QuestTrackerScreenHandler> {
+public class QuestTrackerScreen extends Screen {
     
     private final QuestManager questManager;
-    private QuestListWidget questList;
+    private List<QuestInstance> activeQuests;
     
-    public QuestTrackerScreen(QuestTrackerScreenHandler handler, PlayerInventory inventory, Text title) {
-        super(handler, inventory, title);
-        this.questManager = handler.getQuestManager();
-        this.backgroundWidth = 256;
-        this.backgroundHeight = 256;
+    public QuestTrackerScreen(QuestManager questManager) {
+        super(Text.literal("Quest Tracker"));
+        this.questManager = questManager;
     }
     
     @Override
     protected void init() {
         super.init();
-        
-        // 初始化任务列表
-        List<QuestInstance> activeQuests = questManager.getActiveQuests(client.player.getUuid());
-        questList = new QuestListWidget(client, this, activeQuests);
-        addSelectableChild(questList);
+        // TODO: 从服务器获取玩家 UUID
+        // activeQuests = questManager.getActiveQuests(playerUuid);
+        activeQuests = List.of();
     }
     
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        renderBackground(context);
+        this.renderBackground(context, mouseX, mouseY, delta);
         super.render(context, mouseX, mouseY, delta);
-        drawMouseoverTooltip(context, mouseX, mouseY);
-    }
-    
-    @Override
-    protected void drawBackground(DrawContext context, float delta, int mouseX, int mouseY) {
-        // 绘制背景
-        context.drawTexture(TEXTURE, x, y, 0, 0, backgroundWidth, backgroundHeight);
-    }
-    
-    @Override
-    protected void drawForeground(DrawContext context, int mouseX, int mouseY) {
-        // 绘制标题
-        context.drawText(textRenderer, title, titleX, titleY, 0x404040, false);
         
-        // 绘制任务数量
-        int questCount = questManager.getActiveQuests(client.player.getUuid()).size();
-        String countText = "Active Quests: " + questCount;
-        context.drawText(textRenderer, countText, 8, 60, 0x404040, false);
-    }
-    
-    public QuestListWidget getQuestList() {
-        return questList;
-    }
-    
-    public QuestManager getQuestManager() {
-        return questManager;
+        // 绘制标题
+        context.drawTextWithShadow(textRenderer, getTitle(), 10, 10, 0xFFFFFF);
+        
+        // 绘制任务列表
+        int y = 30;
+        for (QuestInstance quest : activeQuests) {
+            context.drawTextWithShadow(textRenderer, quest.getTemplate().getTitle(), 10, y, 0xFFFF00);
+            y += 12;
+            context.drawTextWithShadow(textRenderer, quest.getTemplate().getDescription(), 10, y, 0xAAAAAA);
+            y += 12;
+            
+            // 进度条
+            float progress = quest.getOverallProgress();
+            int barWidth = (int) (progress * 200);
+            context.fill(10, y, 10 + barWidth, y + 5, 0xFF00FF00);
+            context.fill(10 + barWidth, y, 210, y + 5, 0xFF333333);
+            y += 15;
+        }
     }
 }

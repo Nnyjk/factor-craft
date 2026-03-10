@@ -4,9 +4,10 @@ import com.factorcraft.module.quest.instance.QuestInstance;
 import com.factorcraft.module.quest.manager.QuestManager;
 import com.factorcraft.module.quest.template.QuestTemplate;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.Identifier;
 
-import java.util.List;
-import java.util.Random;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 任务生成器 - 生成动态任务和每日任务
@@ -20,9 +21,10 @@ public class QuestGenerator {
      */
     public static void generateDailyQuests(PlayerEntity player, QuestManager questManager, List<QuestTemplate> templates) {
         // 清除旧的每日任务
-        questManager.getActiveQuests(player.getUuid()).stream()
+        List<QuestInstance> activeQuests = questManager.getActiveQuests(player.getUuid());
+        activeQuests.stream()
             .filter(quest -> quest.getTemplate().getCategory().equals("daily"))
-            .forEach(quest -> questManager.completeQuest(player.getUuid(), quest.getTemplate().getId()));
+            .forEach(quest -> questManager.completeQuest(player, quest.getTemplate().getId()));
         
         // 生成 3 个每日任务
         int dailyQuestCount = 3;
@@ -32,7 +34,7 @@ public class QuestGenerator {
         
         for (int i = 0; i < dailyQuestCount && i < dailyTemplates.size(); i++) {
             QuestTemplate template = dailyTemplates.get(RANDOM.nextInt(dailyTemplates.size()));
-            questManager.addQuest(player.getUuid(), template);
+            questManager.startQuest(player, template.getId());
         }
     }
     
@@ -40,25 +42,23 @@ public class QuestGenerator {
      * 根据玩家进度生成推荐任务
      */
     public static void generateRecommendedQuests(PlayerEntity player, QuestManager questManager, List<QuestTemplate> templates) {
-        List<QuestInstance> completedQuests = questManager.getCompletedQuests(player.getUuid());
+        Set<Identifier> completedQuests = questManager.getCompletedQuests(player.getUuid());
+        List<Identifier> activeQuestIds = questManager.getActiveQuests(player.getUuid()).stream()
+            .map(q -> q.getTemplate().getId())
+            .collect(Collectors.toList());
         
         // 找到已完成任务的后续任务
         templates.stream()
             .filter(template -> isRecommended(template, completedQuests))
-            .filter(template -> !questManager.hasQuest(player.getUuid(), template.getId()))
+            .filter(template -> !completedQuests.contains(template.getId()))
+            .filter(template -> !activeQuestIds.contains(template.getId()))
             .limit(5)
-            .forEach(template -> questManager.addQuest(player.getUuid(), template));
+            .forEach(template -> questManager.startQuest(player, template.getId()));
     }
     
-    private static boolean isRecommended(QuestTemplate template, List<QuestInstance> completedQuests) {
-        // 检查前置任务是否完成
-        for (String prerequisite : template.getPrerequisites()) {
-            boolean completed = completedQuests.stream()
-                .anyMatch(quest -> quest.getTemplate().getId().equals(prerequisite));
-            if (!completed) {
-                return false;
-            }
-        }
-        return true;
+    private static boolean isRecommended(QuestTemplate template, Set<Identifier> completedIds) {
+        // 简单逻辑：如果任务没有前置要求，或者是新手任务，则推荐
+        // 更复杂的逻辑需要添加 prerequisites 字段到 QuestTemplate
+        return template.getCategory().equals("newbie") || completedIds.isEmpty();
     }
 }
