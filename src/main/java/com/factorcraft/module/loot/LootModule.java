@@ -1,29 +1,60 @@
 package com.factorcraft.module.loot;
 
+import net.minecraft.loot.LootTable;
+import net.minecraft.util.Identifier;
+
+import java.util.HashMap;
+import java.util.Map;
+
 /**
- * 掉落物系统模块
+ * LootModule - 战利品表系统
+ * 
+ * 使用原版战利品表系统，添加 Factor Craft 专属战利品
  */
 public class LootModule {
     
-    private static LootModule instance;
+    private static final Map<Identifier, LootTable> TABLES = new HashMap<>();
     
-    private LootModule() {}
-    
-    public static LootModule getInstance() {
-        if (instance == null) {
-            instance = new LootModule();
-        }
-        return instance;
+    public void initialize() {
+        // 注册战利品表
+        registerLootTables();
     }
     
-    /**
-     * 初始化掉落物系统
-     */
-    public void initialize() {
-        // 注册所有掉落物
-        FactorShardItem.registerAll();
-        ResonanceCoreItem.register();
+    private void registerLootTables() {
+        // 维度宝箱战利品
+        TABLES.put(Identifier.of("factorcraft:chests/overworld"), createOverworldLoot());
+        TABLES.put(Identifier.of("factorcraft:chests/nether"), createNetherLoot());
+        TABLES.put(Identifier.of("factorcraft:chests/end"), createEndLoot());
         
-        System.out.println("[LootModule] 掉落物系统已初始化");
+        // 怪物掉落
+        TABLES.put(Identifier.of("factorcraft:entities/factor_entity"), createFactorEntityLoot());
+        
+        // 结构战利品
+        TABLES.put(Identifier.of("factorcraft:structures/altar"), createAltarLoot());
+    }
+    
+    private LootTable createOverworldLoot() {
+        // TODO: 使用 LootTable.Builder 创建
+        return null;
+    }
+    
+    private LootTable createNetherLoot() {
+        return null;
+    }
+    
+    private LootTable createEndLoot() {
+        return null;
+    }
+    
+    private LootTable createFactorEntityLoot() {
+        return null;
+    }
+    
+    private LootTable createAltarLoot() {
+        return null;
+    }
+    
+    public static LootTable getTable(Identifier id) {
+        return TABLES.get(id);
     }
 }
