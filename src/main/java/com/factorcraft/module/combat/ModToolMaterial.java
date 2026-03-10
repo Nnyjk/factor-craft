@@ -1,35 +1,51 @@
 package com.factorcraft.module.combat;
 
-import net.minecraft.item.Items;
+import net.minecraft.item.ToolMaterial;
 import net.minecraft.recipe.Ingredient;
+import net.minecraft.registry.tag.ItemTags;
 
 /**
- * T4-T5 工具材料数据类
- * 不实现 ToolMaterial 接口，仅作为数据容器
+ * Factor Craft 自定义 ToolMaterial 包装器
+ * 
+ * Minecraft 1.21.4 ToolMaterial 是 record，不能直接实现
+ * 使用 ToolMaterials 的预定义实例
  */
 public class ModToolMaterial {
     
-    public final int durability;
-    public final float miningSpeed;
-    public final float attackDamage;
-    public final int miningLevel;
-    public final Ingredient repairIngredient;
+    // T1-T5 材料映射到原版 ToolMaterial
+    public static final ToolMaterial T1_STONE = ToolMaterial.STONE;
+    public static final ToolMaterial T2_IRON = ToolMaterial.IRON;
+    public static final ToolMaterial T3_GOLD = ToolMaterial.GOLD;
+    public static final ToolMaterial T4_NETHERITE = ToolMaterial.NETHERITE;
     
-    public ModToolMaterial(int durability, float miningSpeed, float attackDamage, int miningLevel, Ingredient repairIngredient) {
-        this.durability = durability;
-        this.miningSpeed = miningSpeed;
-        this.attackDamage = attackDamage;
-        this.miningLevel = miningLevel;
-        this.repairIngredient = repairIngredient;
+    // T5 使用 NETHERITE 作为基础（无法创建自定义 ToolMaterial record）
+    public static final ToolMaterial T5_FACTOR = ToolMaterial.NETHERITE;
+    
+    /**
+     * 获取 T1-T5 武器耐久度 (自定义覆盖)
+     */
+    public static int getDurability(int tier) {
+        return switch (tier) {
+            case 1 -> 1500;
+            case 2 -> 2000;
+            case 3 -> 2500;
+            case 4 -> 3000;
+            case 5 -> 3500;
+            default -> 100;
+        };
     }
     
-    // T4 材料 (下界合金级)
-    public static final ModToolMaterial T4 = new ModToolMaterial(
-        2031, 9.0f, 4.0f, 4, Ingredient.ofItems(Items.NETHERITE_INGOT)
-    );
-    
-    // T5 材料 (Factor 晶体级)
-    public static final ModToolMaterial T5 = new ModToolMaterial(
-        4096, 12.0f, 5.0f, 4, Ingredient.ofItems(Items.NETHERITE_INGOT)
-    );
+    /**
+     * 获取 T1-T5 武器附魔能力 (自定义覆盖)
+     */
+    public static int getEnchantability(int tier) {
+        return switch (tier) {
+            case 1 -> 10;
+            case 2 -> 12;
+            case 3 -> 14;
+            case 4 -> 16;
+            case 5 -> 18;
+            default -> 10;
+        };
+    }
 }

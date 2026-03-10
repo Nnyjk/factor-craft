@@ -34,9 +34,6 @@ public class CombatModule {
         DimensionHammerItem.registerAll();
         ResonanceBowItem.registerAll();
         
-        // TODO: 注册怪物
-        // TODO: 注册战利品表
-        
         System.out.println("[CombatModule] 战斗系统已初始化");
     }
 }

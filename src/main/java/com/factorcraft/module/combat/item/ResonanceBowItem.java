@@ -1,8 +1,10 @@
 package com.factorcraft.module.combat.item;
 
 import com.factorcraft.api.CombatApi;
+import com.factorcraft.module.combat.ModToolMaterial;
 import com.factorcraft.module.combat.WeaponAttributes;
 import net.minecraft.item.BowItem;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
@@ -23,16 +25,16 @@ public class ResonanceBowItem extends BowItem implements CombatApi.FactorWeapon 
     private final int enchantability;
     
     public ResonanceBowItem(int tier) {
-        super(new Settings()
+        super(new Item.Settings()
             .maxCount(1)
-            .maxDamage(WeaponAttributes.Bow.DURABILITY[tier - 1])
+            .maxDamage(ModToolMaterial.getDurability(tier))
         );
         this.tier = tier;
         this.damage = WeaponAttributes.Bow.DAMAGE[tier - 1];
         this.drawTime = WeaponAttributes.Bow.DRAW_TIME[tier - 1];
         this.rangeBonus = WeaponAttributes.Bow.RANGE_BONUS[tier - 1];
         this.pierceLevel = WeaponAttributes.Bow.PIERCE_LEVEL[tier - 1];
-        this.enchantability = WeaponAttributes.Bow.ENCHANTABILITY[tier - 1];
+        this.enchantability = ModToolMaterial.getEnchantability(tier);
     }
     
     /**
