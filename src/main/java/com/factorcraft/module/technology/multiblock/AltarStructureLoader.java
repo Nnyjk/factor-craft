@@ -1,51 +1,89 @@
 package com.factorcraft.module.technology.multiblock;
 
-import com.factorcraft.module.technology.TechnologyModule;
+import com.factorcraft.FactorCraftMod;
 import net.minecraft.util.Identifier;
 
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 祭坛结构配置加载器
+ * 祭坛结构加载器
  * 
- * 从 data/factorcraft/altar_structures/ 加载 JSON 配置
+ * 统一管理所有祭坛结构定义
+ * 使用 BlueprintLoader 加载 JSON 蓝图
  */
 public class AltarStructureLoader {
     
     private static final Map<Identifier, AltarStructure> STRUCTURES = new HashMap<>();
     
+    /**
+     * 加载所有祭坛结构
+     */
     public static void load() {
-        TechnologyModule.LOGGER.info("[AltarStructureLoader] 加载祭坛结构配置...");
+        FactorCraftMod.LOGGER.info("[AltarStructureLoader] 加载祭坛结构配置...");
         
-        // TODO: 从 JSON 文件加载
-        // 示例：注册 T1 提取器祭坛
-        registerDefaultStructures();
+        // 从 BlueprintLoader 加载蓝图并转换为 AltarStructure
+        BlueprintLoader.loadAll();
         
-        TechnologyModule.LOGGER.info("[AltarStructureLoader] 加载完成，共 {} 个结构", STRUCTURES.size());
+        for (Map.Entry<Identifier, Blueprint> entry : BlueprintLoader.getAllBlueprints().entrySet()) {
+            Blueprint blueprint = entry.getValue();
+            AltarStructure structure = convertBlueprint(blueprint);
+            STRUCTURES.put(structure.getId(), structure);
+        }
+        
+        FactorCraftMod.LOGGER.info("[AltarStructureLoader] 加载完成，共 {} 个结构", STRUCTURES.size());
     }
     
-    private static void registerDefaultStructures() {
-        // T1 提取器祭坛
-        AltarStructure extractorT1 = new AltarStructure(
-            Identifier.of("factorcraft:extractor_t1"),
-            "extractor",
-            1
+    /**
+     * 将蓝图转换为祭坛结构
+     */
+    private static AltarStructure convertBlueprint(Blueprint blueprint) {
+        return new AltarStructure(
+            blueprint.getId(),
+            blueprint.getType(),
+            blueprint.getTier(),
+            blueprint.parseBlockPositions(),
+            blueprint.getProperties()
         );
-        STRUCTURES.put(extractorT1.getId(), extractorT1);
-        
-        // T2 提取器祭坛
-        AltarStructure extractorT2 = new AltarStructure(
-            Identifier.of("factorcraft:extractor_t2"),
-            "extractor",
-            2
-        );
-        STRUCTURES.put(extractorT2.getId(), extractorT2);
-        
-        // T3-T5 类似...
     }
     
+    /**
+     * 获取所有结构
+     */
     public static Map<Identifier, AltarStructure> getStructures() {
         return STRUCTURES;
+    }
+    
+    /**
+     * 获取指定结构
+     */
+    public static AltarStructure getStructure(Identifier id) {
+        return STRUCTURES.get(id);
+    }
+    
+    /**
+     * 按类型获取结构
+     */
+    public static Map<Identifier, AltarStructure> getStructuresByType(String type) {
+        Map<Identifier, AltarStructure> result = new HashMap<>();
+        for (Map.Entry<Identifier, AltarStructure> entry : STRUCTURES.entrySet()) {
+            if (entry.getValue().getType().equals(type)) {
+                result.put(entry.getKey(), entry.getValue());
+            }
+        }
+        return result;
+    }
+    
+    /**
+     * 按阶获取结构
+     */
+    public static Map<Identifier, AltarStructure> getStructuresByTier(int tier) {
+        Map<Identifier, AltarStructure> result = new HashMap<>();
+        for (Map.Entry<Identifier, AltarStructure> entry : STRUCTURES.entrySet()) {
+            if (entry.getValue().getTier() == tier) {
+                result.put(entry.getKey(), entry.getValue());
+            }
+        }
+        return result;
     }
 }
