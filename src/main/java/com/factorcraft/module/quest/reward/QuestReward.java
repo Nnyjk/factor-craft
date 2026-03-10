@@ -9,8 +9,10 @@ import net.minecraft.registry.RegistryWrapper;
  */
 public interface QuestReward {
     
+    QuestRewardType getType();
+    
     /**
-     * 发放奖励给玩家
+     * 给予奖励
      */
     void give(PlayerEntity player);
     
@@ -20,10 +22,7 @@ public interface QuestReward {
     NbtCompound toNbt(RegistryWrapper.WrapperLookup registries);
     
     /**
-     * 从 NBT 反序列化
+     * 获取奖励描述
      */
-    static QuestReward fromNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registries) {
-        // TODO: 实现反序列化逻辑
-        return null;
-    }
+    String getDescription();
 }
