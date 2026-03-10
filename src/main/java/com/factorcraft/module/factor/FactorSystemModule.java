@@ -14,7 +14,13 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public final class FactorSystemModule implements FactorCraftModule {
     private static final AtomicBoolean REGISTERED = new AtomicBoolean(false);
     private static final FactorService SERVICE = new FactorService();
-
+    private static FactorSystemModule instance;
+    
+    public static FactorSystemModule getInstance() {
+        if (instance == null) instance = new FactorSystemModule();
+        return instance;
+    }
+    
     @Override
     public String moduleId() {
         return "factor_system";
