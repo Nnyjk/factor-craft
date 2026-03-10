@@ -1,6 +1,7 @@
 package com.factorcraft.module.combat.item;
 
 import com.factorcraft.api.CombatApi;
+import com.factorcraft.module.combat.WeaponAttributes;
 import net.minecraft.item.BowItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
@@ -8,29 +9,40 @@ import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 
 /**
- * 共振弓 - Factor 能量远程武器 (简化版)
+ * 共振弓 - Factor 能量远程武器
+ * 
+ * 特点：中等伤害，远程攻击，蓄力射击，穿透能力
  */
 public class ResonanceBowItem extends BowItem implements CombatApi.FactorWeapon {
     
     private final int tier;
+    private final float damage;
+    private final int drawTime;
+    private final float rangeBonus;
+    private final int pierceLevel;
+    private final int enchantability;
     
     public ResonanceBowItem(int tier) {
-        super(new net.minecraft.item.Item.Settings()
-            .maxDamage(1000 + tier * 500)
+        super(new Settings()
             .maxCount(1)
+            .maxDamage(WeaponAttributes.Bow.DURABILITY[tier - 1])
         );
         this.tier = tier;
+        this.damage = WeaponAttributes.Bow.DAMAGE[tier - 1];
+        this.drawTime = WeaponAttributes.Bow.DRAW_TIME[tier - 1];
+        this.rangeBonus = WeaponAttributes.Bow.RANGE_BONUS[tier - 1];
+        this.pierceLevel = WeaponAttributes.Bow.PIERCE_LEVEL[tier - 1];
+        this.enchantability = WeaponAttributes.Bow.ENCHANTABILITY[tier - 1];
     }
     
     /**
      * 创建 T1-T5 所有等级的共振弓
      */
     public static void registerAll() {
-        register("resonance_bow_t1", new ResonanceBowItem(1));
-        register("resonance_bow_t2", new ResonanceBowItem(2));
-        register("resonance_bow_t3", new ResonanceBowItem(3));
-        register("resonance_bow_t4", new ResonanceBowItem(4));
-        register("resonance_bow_t5", new ResonanceBowItem(5));
+        for (int tier = 1; tier <= 5; tier++) {
+            String name = "resonance_bow_t" + tier;
+            register(name, new ResonanceBowItem(tier));
+        }
     }
     
     private static void register(String name, ResonanceBowItem bow) {
@@ -39,11 +51,53 @@ public class ResonanceBowItem extends BowItem implements CombatApi.FactorWeapon 
     
     @Override
     public double getFactorDamageBonus(ItemStack stack) {
-        return 0.15 * tier;
+        return WeaponAttributes.Bow.FACTOR_BONUS[tier - 1];
     }
     
     @Override
     public int getDimensionPenetration(ItemStack stack) {
         return tier >= 3 ? 1 : 0;
+    }
+    
+    /**
+     * 获取武器伤害
+     */
+    public float getDamage() {
+        return damage;
+    }
+    
+    /**
+     * 获取蓄力时间 (ticks)
+     */
+    public int getDrawTime() {
+        return drawTime;
+    }
+    
+    /**
+     * 获取射程加成
+     */
+    public float getRangeBonus() {
+        return rangeBonus;
+    }
+    
+    /**
+     * 获取穿透等级
+     */
+    public int getPierceLevel() {
+        return pierceLevel;
+    }
+    
+    /**
+     * 获取附魔能力
+     */
+    public int getEnchantability() {
+        return enchantability;
+    }
+    
+    /**
+     * 获取武器名称
+     */
+    public String getWeaponName() {
+        return WeaponAttributes.getWeaponName("bow", tier);
     }
 }

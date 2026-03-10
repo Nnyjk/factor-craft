@@ -1,6 +1,7 @@
 package com.factorcraft.module.combat.item;
 
 import com.factorcraft.api.CombatApi;
+import com.factorcraft.module.combat.WeaponAttributes;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
@@ -8,29 +9,38 @@ import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 
 /**
- * 维度锤 - 重型破甲武器 (简化版)
+ * 维度锤 - 重型破甲武器
+ * 
+ * 特点：高伤害，慢速攻击，高破甲，维度穿透
  */
 public class DimensionHammerItem extends Item implements CombatApi.FactorWeapon {
     
     private final int tier;
+    private final float damage;
+    private final float attackSpeed;
+    private final float armorPierce;
+    private final int enchantability;
     
     public DimensionHammerItem(int tier) {
         super(new Item.Settings()
-            .maxDamage(1000 + tier * 500)
             .maxCount(1)
+            .maxDamage(WeaponAttributes.Hammer.DURABILITY[tier - 1])
         );
         this.tier = tier;
+        this.damage = WeaponAttributes.Hammer.DAMAGE[tier - 1];
+        this.attackSpeed = WeaponAttributes.Hammer.ATTACK_SPEED[tier - 1];
+        this.armorPierce = WeaponAttributes.Hammer.ARMOR_PIERCE[tier - 1];
+        this.enchantability = WeaponAttributes.Hammer.ENCHANTABILITY[tier - 1];
     }
     
     /**
      * 创建 T1-T5 所有等级的维度锤
      */
     public static void registerAll() {
-        register("dimension_hammer_t1", new DimensionHammerItem(1));
-        register("dimension_hammer_t2", new DimensionHammerItem(2));
-        register("dimension_hammer_t3", new DimensionHammerItem(3));
-        register("dimension_hammer_t4", new DimensionHammerItem(4));
-        register("dimension_hammer_t5", new DimensionHammerItem(5));
+        for (int tier = 1; tier <= 5; tier++) {
+            String name = "dimension_hammer_t" + tier;
+            register(name, new DimensionHammerItem(tier));
+        }
     }
     
     private static void register(String name, DimensionHammerItem hammer) {
@@ -39,18 +49,46 @@ public class DimensionHammerItem extends Item implements CombatApi.FactorWeapon 
     
     @Override
     public double getFactorDamageBonus(ItemStack stack) {
-        return 0.1 * tier;
+        return WeaponAttributes.Hammer.FACTOR_BONUS[tier - 1];
     }
     
     @Override
     public int getDimensionPenetration(ItemStack stack) {
-        return tier >= 2 ? tier - 1 : 0;
+        return WeaponAttributes.Hammer.DIMENSION_PENETRATION[tier - 1];
+    }
+    
+    /**
+     * 获取武器伤害
+     */
+    public float getDamage() {
+        return damage;
+    }
+    
+    /**
+     * 获取攻击速度
+     */
+    public float getAttackSpeed() {
+        return attackSpeed;
     }
     
     /**
      * 获取破甲比例
      */
-    public float getArmorPenetration() {
-        return 0.2f + (tier * 0.1f);
+    public float getArmorPierce() {
+        return armorPierce;
+    }
+    
+    /**
+     * 获取附魔能力
+     */
+    public int getEnchantability() {
+        return enchantability;
+    }
+    
+    /**
+     * 获取武器名称
+     */
+    public String getWeaponName() {
+        return WeaponAttributes.getWeaponName("hammer", tier);
     }
 }
