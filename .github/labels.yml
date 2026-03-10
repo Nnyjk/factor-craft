@@ -1,0 +1,40 @@
+# GitHub Issue/PR 标签配置
+# 使用方法：在 GitHub Settings → Labels 中导入或手动创建
+
+# 类型标签 (Type)
+type:feature, #0E8A16, "新功能开发"
+type:bug, #D73A4A, "Bug 修复"
+type:enhancement, #0075CA, "功能增强"
+type:docs, #D93F0B, "文档更新"
+type:refactor, #FBCA04, "代码重构"
+type:test, #c5def5, "测试相关"
+type:chore, #c2e0c6, "日常维护"
+
+# 优先级标签 (Priority)
+priority:critical, #B60205, "紧急 - 需要立即处理"
+priority:high, #FF9F1C, "高优先级"
+priority:medium, #FFCC00, "中优先级"
+priority:low, #06D6A0, "低优先级"
+
+# 状态标签 (Status)
+status:todo, #6c757d, "待办"
+status:in-progress, #3498DB, "进行中"
+status:review-needed, #9B59B6, "待审查"
+status:blocked, #000000, "被阻塞"
+status:done, #28a745, "已完成"
+
+# 模块标签 (Module)
+module:core, #1d76db, "核心系统"
+module:combat, #fbca04, "战斗系统"
+module:multiblock, #0e8a16, "多方块"
+module:network, #d93f0b, "网络系统"
+module:ui, #5319e7, "UI 界面"
+module:quest, #c5def5, "任务系统"
+module:loot, #006b75, "掉落物"
+
+# 特殊标签 (Special)
+good first issue, #7057FF, "适合新手的任务"
+help wanted, #008672, "需要帮助"
+wontfix, #ffffff, "不会修复"
+duplicate, #cfd3d7, "重复问题"
+question, #d876e3, "疑问"
