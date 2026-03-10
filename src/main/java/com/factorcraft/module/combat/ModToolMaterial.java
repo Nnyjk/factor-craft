@@ -1,49 +1,35 @@
 package com.factorcraft.module.combat;
 
-import net.minecraft.item.ToolMaterial;
+import net.minecraft.item.Items;
 import net.minecraft.recipe.Ingredient;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.util.Identifier;
 
-public class ModToolMaterial implements ToolMaterial {
+/**
+ * T4-T5 工具材料数据类
+ * 不实现 ToolMaterial 接口，仅作为数据容器
+ */
+public class ModToolMaterial {
     
-    private final int durability;
-    private final float miningSpeed;
-    private final float attackDamage;
-    private final int miningLevel;
-    private final RegistryKey<Item> repairIngredientKey;
+    public final int durability;
+    public final float miningSpeed;
+    public final float attackDamage;
+    public final int miningLevel;
+    public final Ingredient repairIngredient;
     
-    public ModToolMaterial(int durability, float miningSpeed, float attackDamage, int miningLevel, RegistryKey<Item> repairIngredientKey) {
+    public ModToolMaterial(int durability, float miningSpeed, float attackDamage, int miningLevel, Ingredient repairIngredient) {
         this.durability = durability;
         this.miningSpeed = miningSpeed;
         this.attackDamage = attackDamage;
         this.miningLevel = miningLevel;
-        this.repairIngredientKey = repairIngredientKey;
+        this.repairIngredient = repairIngredient;
     }
     
-    @Override
-    public int getDurability() {
-        return durability;
-    }
+    // T4 材料 (下界合金级)
+    public static final ModToolMaterial T4 = new ModToolMaterial(
+        2031, 9.0f, 4.0f, 4, Ingredient.ofItems(Items.NETHERITE_INGOT)
+    );
     
-    @Override
-    public float getMiningSpeedMultiplier() {
-        return miningSpeed;
-    }
-    
-    @Override
-    public float getAttackDamage() {
-        return attackDamage;
-    }
-    
-    @Override
-    public int getMiningLevel() {
-        return miningLevel;
-    }
-    
-    @Override
-    public Ingredient getRepairIngredient() {
-        return Ingredient.ofItem(repairIngredientKey.getValue());
-    }
+    // T5 材料 (Factor 晶体级)
+    public static final ModToolMaterial T5 = new ModToolMaterial(
+        4096, 12.0f, 5.0f, 4, Ingredient.ofItems(Items.NETHERITE_INGOT)
+    );
 }

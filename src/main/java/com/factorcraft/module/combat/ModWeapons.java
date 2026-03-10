@@ -1,30 +1,43 @@
 package com.factorcraft.module.combat;
 
 import net.minecraft.item.Item;
-import net.minecraft.item.SwordItem;
-import net.minecraft.item.ToolMaterial;
-import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
+import net.minecraft.util.Identifier;
 
 /**
- * T4-T5 武器扩展
+ * T4-T5 武器扩展 - Fabric 1.21.4
+ * 使用简单 Item 而非 SwordItem，避免 ToolMaterial 依赖
  */
 public class ModWeapons {
     
     // T4 武器 (下界合金级)
-    public static final ToolMaterial T4_MATERIAL = new ModToolMaterial(
-        2031, 9.0f, 4.0f, 25, RegistryKey.of(net.minecraft.registry.RegistryKeys.ITEM, net.minecraft.util.Identifier.of("factorcraft:t4_ingot"))
+    public static final Item T4_SWORD = registerItem(
+        "t4_sword",
+        new Item(new Item.Settings().maxCount(1).maxDamage(2031))
     );
-    public static final SwordItem T4_SWORD = new SwordItem(T4_MATERIAL, 4, -2.4f, new Item.Settings());
-    public static final SwordItem T4_HAMMER = new SwordItem(T4_MATERIAL, 6, -3.0f, new Item.Settings());
+    
+    public static final Item T4_HAMMER = registerItem(
+        "t4_hammer",
+        new Item(new Item.Settings().maxCount(1).maxDamage(2031))
+    );
     
     // T5 武器 (Factor 晶体级)
-    public static final ToolMaterial T5_MATERIAL = new ModToolMaterial(
-        4096, 12.0f, 5.0f, 30, RegistryKey.of(net.minecraft.registry.RegistryKeys.ITEM, net.minecraft.util.Identifier.of("factorcraft:t5_crystal"))
+    public static final Item T5_SWORD = registerItem(
+        "t5_sword",
+        new Item(new Item.Settings().maxCount(1).maxDamage(4096))
     );
-    public static final SwordItem T5_SWORD = new SwordItem(T5_MATERIAL, 5, -2.4f, new Item.Settings());
-    public static final SwordItem T5_HAMMER = new SwordItem(T5_MATERIAL, 8, -3.0f, new Item.Settings());
+    
+    public static final Item T5_HAMMER = registerItem(
+        "t5_hammer",
+        new Item(new Item.Settings().maxCount(1).maxDamage(4096))
+    );
+    
+    private static Item registerItem(String name, Item item) {
+        return Registry.register(Registries.ITEM, Identifier.of("factorcraft", name), item);
+    }
     
     public static void register() {
-        // TODO: 注册物品
+        // 静态初始化时已注册
     }
 }

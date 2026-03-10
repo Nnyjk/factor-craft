@@ -18,16 +18,19 @@ import java.util.Map;
  * 统一管理模块注册与初始化。
  */
 public final class ModuleBootstrap {
-    private static final List<FactorCraftModule> DEFAULT_MODULES = List.of(
-            new CommandModule(),
-            new FactorSystemModule(),
-            new CreatureDropModule(),
-            new MaterialsModule(),
-            new TechnologyModule(),
-            new GearModule(),
-            new BuildingModule(),
-            new NonCoreIntegrationModule()
-    );
+    private static final List<FactorCraftModule> DEFAULT_MODULES;
+    static {
+        DEFAULT_MODULES = List.of(
+                (FactorCraftModule) new CommandModule(),
+                (FactorCraftModule) new FactorSystemModule(),
+                (FactorCraftModule) new CreatureDropModule(),
+                (FactorCraftModule) new MaterialsModule(),
+                (FactorCraftModule) new TechnologyModule(),
+                (FactorCraftModule) new GearModule(),
+                (FactorCraftModule) new BuildingModule(),
+                (FactorCraftModule) new NonCoreIntegrationModule()
+        );
+    }
 
     private ModuleBootstrap() {}
 
