@@ -16,7 +16,7 @@ public class FactorEmitterCoreBlockEntity extends FactorMachineBlockEntity {
     private String targetDimension = "minecraft:overworld";
     
     public FactorEmitterCoreBlockEntity(BlockPos pos, BlockState state) {
-        super(ModMachines.FACTOR_EMITTER_CORE, pos, state);
+        super(null, pos, state);
         this.emitProgress = 0;
         this.factorBuffer = 0.0;
     }
