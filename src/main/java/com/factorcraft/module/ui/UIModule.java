@@ -1,13 +1,28 @@
 package com.factorcraft.module.ui;
 
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.text.Text;
+
+/**
+ * UIModule - 通用 UI 系统
+ */
 public class UIModule {
+    
     private static UIModule instance;
-    private UIModule() {}
-    public static UIModule getInstance() {
-        if (instance == null) instance = new UIModule();
-        return instance;
+    
+    public UIModule() {
+        instance = this;
     }
+    
     public void initialize() {
-        System.out.println("[UIModule] UI 系统已初始化 (占位)");
+        // 注册通用 UI 组件
+        // - 能量条
+        // - 进度条
+        // - 物品提示
+        // - 多方块预览
+    }
+    
+    public static UIModule getInstance() {
+        return instance;
     }
 }
