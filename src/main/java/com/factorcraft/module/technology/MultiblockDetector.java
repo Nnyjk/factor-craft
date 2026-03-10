@@ -39,9 +39,19 @@ public class MultiblockDetector {
      * 检查方块是否匹配
      */
     private static boolean matchesBlock(World world, BlockPos pos, String expectedBlock) {
-        // TODO: 实现方块匹配逻辑
-        // 支持方块标签、NBT 数据等
-        return true;
+        // 获取实际方块状态
+        var actualState = world.getBlockState(pos);
+        var actualBlock = actualState.getBlock();
+        
+        // 获取实际方块的 Identifier
+        var actualId = net.minecraft.registry.Registries.BLOCK.getId(actualBlock);
+        if (actualId == null) {
+            return false;
+        }
+        
+        // 比较方块 ID
+        String actualBlockId = actualId.toString();
+        return actualBlockId.equals(expectedBlock);
     }
     
     /**
