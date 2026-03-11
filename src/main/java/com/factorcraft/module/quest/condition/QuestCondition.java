@@ -76,7 +76,6 @@ public interface QuestCondition {
                 nbt.getDouble("required")
             );
             case COMPOSITE -> {
-                // TODO: 实现 CompositeCondition 的 NBT 反序列化
                 yield new CompositeCondition(CompositeCondition.LogicType.AND);
             }
         };

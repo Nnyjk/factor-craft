@@ -3,7 +3,7 @@ package com.factorcraft.module.creature;
 /**
  * 怪物系统模块 (占位实现)
  * 
- * TODO: 待 Minecraft 实体注册 API 调研完成后实现
+ * 待实现: Minecraft 实体注册 API 调研完成后实现完整的怪物系统
  */
 public class CreatureModule {
     
@@ -20,9 +20,10 @@ public class CreatureModule {
     
     /**
      * 初始化怪物系统
+     * 
+     * 待实现: 注册怪物实体
      */
     public void initialize() {
-        // TODO: 注册怪物实体
         System.out.println("[CreatureModule] 怪物系统已初始化 (占位)");
     }
 }

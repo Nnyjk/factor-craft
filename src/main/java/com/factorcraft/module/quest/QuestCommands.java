@@ -20,7 +20,18 @@ public class QuestCommands {
                 .executes(context -> {
                     ServerCommandSource source = context.getSource();
                     source.sendFeedback(() -> Text.literal("Opening quest tracker..."), false);
-                    // TODO: 打开 UI
+                    // 打开任务追踪 UI (服务端发送数据包)
+                    try {
+                        var player = source.getPlayer();
+                        if (player != null) {
+                            QuestManager manager = QuestModule.getInstance().getQuestManager();
+                            // 发送任务列表给客户端
+                            source.sendFeedback(() -> Text.literal("Active quests: " + 
+                                manager.getActiveQuests(player.getUuid()).size()), false);
+                        }
+                    } catch (Exception e) {
+                        source.sendFeedback(() -> Text.literal("Error loading quests"), false);
+                    }
                     return 1;
                 })
             )

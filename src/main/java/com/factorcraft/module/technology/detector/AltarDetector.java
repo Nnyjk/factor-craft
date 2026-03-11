@@ -40,7 +40,16 @@ public class AltarDetector {
     }
     
     private static boolean isStructureBlock(BlockState state, String type) {
-        // TODO: 根据 type 检查对应的建筑方块
-        return state.getBlock().getName().getString().contains("BUILDING_BLOCK");
+        // 根据方块类型检查是否为建筑方块
+        String blockName = state.getBlock().getName().getString().toLowerCase();
+        
+        return switch (type.toLowerCase()) {
+            case "building_t1" -> blockName.contains("building_t1") || blockName.contains("building block t1");
+            case "building_t2" -> blockName.contains("building_t2") || blockName.contains("building block t2");
+            case "building_t3" -> blockName.contains("building_t3") || blockName.contains("building block t3");
+            case "building_t4" -> blockName.contains("building_t4") || blockName.contains("building block t4");
+            case "building_t5" -> blockName.contains("building_t5") || blockName.contains("building block t5");
+            default -> blockName.contains("building");
+        };
     }
 }

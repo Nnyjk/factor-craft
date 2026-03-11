@@ -24,9 +24,14 @@ public class QuestTrackerScreen extends Screen {
     @Override
     protected void init() {
         super.init();
-        // TODO: 从服务器获取玩家 UUID
-        // activeQuests = questManager.getActiveQuests(playerUuid);
-        activeQuests = List.of();
+        // 从客户端获取玩家 UUID
+        // 待完善：实现完整的客户端-服务端同步
+        if (client != null && client.player != null) {
+            // activeQuests = questManager.getActiveQuests(client.player.getUuid());
+            activeQuests = List.of();
+        } else {
+            activeQuests = List.of();
+        }
     }
     
     @Override

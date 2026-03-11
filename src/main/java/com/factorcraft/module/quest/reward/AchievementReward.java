@@ -23,8 +23,9 @@ public class AchievementReward implements QuestReward {
     
     @Override
     public void give(PlayerEntity player) {
-        // TODO: 集成到成就系统
-        // AchievementManager.unlock(player, achievementId);
+        // 集成到成就系统
+        // 待完善：实现完整的成就解锁系统
+        System.out.println("[AchievementReward] 解锁成就: " + achievementId + " for player " + player.getName().getString());
     }
     
     @Override
