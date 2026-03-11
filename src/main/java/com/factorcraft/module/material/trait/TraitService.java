@@ -1,6 +1,7 @@
 package com.factorcraft.module.material.trait;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class TraitService {
     private static final Map<net.minecraft.item.ItemStack, TraitData> ITEM_TRAITS = new WeakHashMap<>();
@@ -60,6 +61,44 @@ public class TraitService {
             if (count >= 3) bonus *= (2.5 / 1.5);
         }
         return bonus;
+    }
+    
+    public static List<TraitInstance> generateRandomTraits(int tier, int count, net.minecraft.util.math.random.Random random, double positiveChance) {
+        List<TraitInstance> result = new ArrayList<>();
+        Set<String> added = new HashSet<>();
+        
+        for (int i = 0; i < count; i++) {
+            boolean wantPositive = random.nextDouble() < positiveChance;
+            
+            List<TraitDefinition> candidates = TraitRegistry.getTraitsForTier(tier).stream()
+                .filter(t -> !added.contains(t.id()))
+                .filter(t -> wantPositive == t.isPositive())
+                .filter(t -> added.stream().allMatch(addedId -> {
+                    TraitDefinition addedDef = TraitRegistry.get(addedId).orElse(null);
+                    return addedDef == null || (addedDef.isCompatibleWith(t.id()) && t.isCompatibleWith(addedId));
+                }))
+                .toList();
+            
+            if (!candidates.isEmpty()) {
+                double totalWeight = candidates.stream().mapToDouble(TraitDefinition::weight).sum();
+                double value = random.nextDouble() * totalWeight;
+                double cumulative = 0.0;
+                
+                TraitDefinition selected = candidates.get(0);
+                for (TraitDefinition t : candidates) {
+                    cumulative += t.weight();
+                    if (value <= cumulative) {
+                        selected = t;
+                        break;
+                    }
+                }
+                
+                result.add(new TraitInstance(selected.id(), 1));
+                added.add(selected.id());
+            }
+        }
+        
+        return result;
     }
 }
 
