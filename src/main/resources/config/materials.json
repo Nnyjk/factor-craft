@@ -1,15 +1,35 @@
 {
   "materials": {
     "factor_ingot": {
+      "level": "LV2_INDUSTRIAL",
       "hardness": 5.0,
       "resistance": 30.0,
       "enchantability": 20,
-      "rarity": "rare"
+      "rarity": "rare",
+      "factor_value": 10,
+      "base_trait_slots": 2,
+      "dimensions": ["minecraft:overworld", "minecraft:the_nether", "minecraft:the_end"]
     },
     "factor_essence": {
+      "level": "LV3_DIMENSIONAL",
       "power": 100.0,
       "stability": 0.8,
-      "decay_rate": 0.01
+      "decay_rate": 0.01,
+      "factor_value": 100,
+      "base_trait_slots": 2,
+      "dimensions": ["minecraft:the_end"]
+    },
+    "factor_crystal": {
+      "level": "LV4_ANCIENT",
+      "factor_value": 1000,
+      "base_trait_slots": 3,
+      "dimensions": ["minecraft:the_end"]
+    },
+    "factor_core": {
+      "level": "LV5_ARBITER",
+      "factor_value": 10000,
+      "base_trait_slots": 3,
+      "dimensions": ["minecraft:the_end"]
     }
   },
   "tier_multipliers": {
