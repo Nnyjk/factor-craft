@@ -146,15 +146,29 @@ public class FactorSinkBlockEntity extends BlockEntity {
     
     /**
      * 获取维度惩罚（推荐维度×1.0，非推荐×10）
+     * 
+     * T1/T2 (LOW_ENERGY/STABLE): 主世界推荐
+     * T3 (HIGH_ENERGY): 下界推荐
+     * T4 (OVERLOAD): 末地推荐
      */
     private double getDimensionPenalty() {
         if (world == null) {
             return 1.0;
         }
         
-        // TODO: 获取当前维度类型
-        // TODO: 根据 tier 判断是否为推荐维度
-        return 1.0; // 默认推荐维度
+        // 获取当前维度类型
+        String dimensionKey = world.getRegistryKey().getValue().toString();
+        
+        // 根据 tier 判断是否为推荐维度
+        int level = tier.level();
+        boolean isRecommended = switch (level) {
+            case 0, 1, 2 -> dimensionKey.equals("minecraft:overworld"); // T1/T2: 主世界
+            case 3 -> dimensionKey.equals("minecraft:the_nether"); // T3: 下界
+            case 4 -> dimensionKey.equals("minecraft:the_end"); // T4: 末地
+            default -> true;
+        };
+        
+        return isRecommended ? 1.0 : 10.0;
     }
     
     /**
