@@ -1,0 +1,46 @@
+{
+  "dimensional_transfer": {
+    "tier_required": 3,
+    "binding_cost_base": 100,
+    "dimension_multipliers": {
+      "overworld_nether": 2.0,
+      "overworld_end": 5.0
+    },
+    "transmission_efficiency": 0.8,
+    "tier_efficiency_bonus": {
+      "t3": 1.0,
+      "t4": 1.2,
+      "t5": 1.5
+    }
+  },
+  "auto_cultivation": {
+    "tier_required": 4,
+    "features": ["auto_inject", "batch", "smart", "recipe_preset"],
+    "config": {
+      "max_injections": 5,
+      "batch_slots": 9,
+      "guide_cost_multiplier": 1.5
+    }
+  },
+  "factor_synthesis": {
+    "tier_required": 5,
+    "features": ["trait_creation", "factor_source", "chunk_modification", "dimension_anchor"],
+    "costs": {
+      "trait_creation": {
+        "base": 10000,
+        "rarity_multipliers": {"normal": 1.0, "rare": 2.0, "legendary": 5.0}
+      },
+      "factor_source": {
+        "basic": 100000,
+        "advanced": 500000,
+        "legendary": 2000000
+      },
+      "chunk_modification": {
+        "per_point": 1000
+      },
+      "dimension_anchor": {
+        "per_radius_square": 10000
+      }
+    }
+  }
+}
