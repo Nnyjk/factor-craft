@@ -1,19 +1,11 @@
 package com.factorcraft.module.material.component;
 
 import com.factorcraft.module.material.trait.TraitInstance;
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
 import java.util.*;
 
 public record TraitData(
     List<TraitInstance> traits
 ) {
-    public static final Codec<TraitData> CODEC = RecordCodecBuilder.create(instance ->
-        instance.group(
-            TraitInstance.CODEC.listOf().fieldOf("traits").forGetter(TraitData::traits)
-        ).apply(instance, TraitData::new)
-    );
-    
     public static TraitData empty() {
         return new TraitData(Collections.emptyList());
     }
