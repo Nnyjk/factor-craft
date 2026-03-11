@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
  */
 public final class CommandSpecValidator {
     private static final Pattern ID_PATTERN = Pattern.compile("^[a-z0-9_.-]+:[a-z0-9_/.-]+$");
-    private static final Pattern SIMPLE_NAME_PATTERN = Pattern.compile("^[a-z0-9_:-]+$");
+    private static final Pattern SIMPLE_NAME_PATTERN = Pattern.compile("^[a-z0-9_.:-]+$");
 
     private CommandSpecValidator() {}
 
