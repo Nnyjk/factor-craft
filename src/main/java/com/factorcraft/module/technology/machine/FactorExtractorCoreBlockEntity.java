@@ -1,6 +1,7 @@
 package com.factorcraft.module.technology.machine;
 
 import net.minecraft.block.BlockState;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.util.math.BlockPos;
@@ -17,7 +18,8 @@ public class FactorExtractorCoreBlockEntity extends FactorMachineBlockEntity {
     private double extractRate = 10.0;
     
     public FactorExtractorCoreBlockEntity(BlockPos pos, BlockState state) {
-        super(ModMachines.FACTOR_EXTRACTOR_CORE, pos, state);
+        // BlockEntityType 会由 FabricBlockEntityTypeBuilder 自动设置
+        super(null, pos, state);
         this.extractProgress = 0;
         this.factorStorage = 0.0;
     }

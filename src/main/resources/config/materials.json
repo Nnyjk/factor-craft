@@ -1,0 +1,22 @@
+{
+  "materials": {
+    "factor_ingot": {
+      "hardness": 5.0,
+      "resistance": 30.0,
+      "enchantability": 20,
+      "rarity": "rare"
+    },
+    "factor_essence": {
+      "power": 100.0,
+      "stability": 0.8,
+      "decay_rate": 0.01
+    }
+  },
+  "tier_multipliers": {
+    "t1": 1.0,
+    "t2": 2.5,
+    "t3": 5.0,
+    "t4": 10.0,
+    "t5": 20.0
+  }
+}

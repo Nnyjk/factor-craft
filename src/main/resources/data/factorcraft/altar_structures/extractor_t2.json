@@ -1,0 +1,21 @@
+{
+  "id": "factorcraft:extractor_t2",
+  "name": "二阶提取器祭坛",
+  "description": "进阶 Factor 提取结构",
+  "tier": 2,
+  "type": "extractor",
+  "size": [5, 5, 1],
+  "structure": [
+    ["#####", "#___#", "#_C_#", "#___#", "#####"]
+  ],
+  "legend": {
+    "#": "factorcraft:building_block_t2",
+    "C": "factorcraft:factor_extractor_core",
+    "_": "minecraft:air"
+  },
+  "properties": {
+    "extractionRate": 2.5,
+    "powerConsumption": 25,
+    "bufferSize": 2500
+  }
+}

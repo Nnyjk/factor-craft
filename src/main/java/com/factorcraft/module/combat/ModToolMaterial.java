@@ -2,48 +2,50 @@ package com.factorcraft.module.combat;
 
 import net.minecraft.item.ToolMaterial;
 import net.minecraft.recipe.Ingredient;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.util.Identifier;
+import net.minecraft.registry.tag.ItemTags;
 
-public class ModToolMaterial implements ToolMaterial {
+/**
+ * Factor Craft 自定义 ToolMaterial 包装器
+ * 
+ * Minecraft 1.21.4 ToolMaterial 是 record，不能直接实现
+ * 使用 ToolMaterials 的预定义实例
+ */
+public class ModToolMaterial {
     
-    private final int durability;
-    private final float miningSpeed;
-    private final float attackDamage;
-    private final int miningLevel;
-    private final RegistryKey<Item> repairIngredientKey;
+    // T1-T5 材料映射到原版 ToolMaterial
+    public static final ToolMaterial T1_STONE = ToolMaterial.STONE;
+    public static final ToolMaterial T2_IRON = ToolMaterial.IRON;
+    public static final ToolMaterial T3_GOLD = ToolMaterial.GOLD;
+    public static final ToolMaterial T4_NETHERITE = ToolMaterial.NETHERITE;
     
-    public ModToolMaterial(int durability, float miningSpeed, float attackDamage, int miningLevel, RegistryKey<Item> repairIngredientKey) {
-        this.durability = durability;
-        this.miningSpeed = miningSpeed;
-        this.attackDamage = attackDamage;
-        this.miningLevel = miningLevel;
-        this.repairIngredientKey = repairIngredientKey;
+    // T5 使用 NETHERITE 作为基础（无法创建自定义 ToolMaterial record）
+    public static final ToolMaterial T5_FACTOR = ToolMaterial.NETHERITE;
+    
+    /**
+     * 获取 T1-T5 武器耐久度 (自定义覆盖)
+     */
+    public static int getDurability(int tier) {
+        return switch (tier) {
+            case 1 -> 1500;
+            case 2 -> 2000;
+            case 3 -> 2500;
+            case 4 -> 3000;
+            case 5 -> 3500;
+            default -> 100;
+        };
     }
     
-    @Override
-    public int getDurability() {
-        return durability;
-    }
-    
-    @Override
-    public float getMiningSpeedMultiplier() {
-        return miningSpeed;
-    }
-    
-    @Override
-    public float getAttackDamage() {
-        return attackDamage;
-    }
-    
-    @Override
-    public int getMiningLevel() {
-        return miningLevel;
-    }
-    
-    @Override
-    public Ingredient getRepairIngredient() {
-        return Ingredient.ofItem(repairIngredientKey.getValue());
+    /**
+     * 获取 T1-T5 武器附魔能力 (自定义覆盖)
+     */
+    public static int getEnchantability(int tier) {
+        return switch (tier) {
+            case 1 -> 10;
+            case 2 -> 12;
+            case 3 -> 14;
+            case 4 -> 16;
+            case 5 -> 18;
+            default -> 10;
+        };
     }
 }

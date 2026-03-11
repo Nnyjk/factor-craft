@@ -16,7 +16,7 @@ public class FactorUtilizerCoreBlockEntity extends FactorMachineBlockEntity {
     private String currentRecipe;
     
     public FactorUtilizerCoreBlockEntity(BlockPos pos, BlockState state) {
-        super(ModMachines.FACTOR_UTILIZER_CORE, pos, state);
+        super(null, pos, state);
         this.craftProgress = 0;
         this.factorCost = 0.0;
         this.currentRecipe = null;

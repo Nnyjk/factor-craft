@@ -167,9 +167,10 @@ public class FactorTransmitterBlockEntity extends BlockEntity {
      * 获取接收端维度基准值
      */
     private double getReceiverDimensionBase() {
-        // TODO: 根据目标维度 ID 获取基准值
         DimensionManager dm = DimensionManager.getInstance();
-        // 临时返回默认值
+        if (targetDimension.isEmpty()) {
+            return 1.0;
+        }
         return dm.getDimensionBaseValueFromString(targetDimension);
     }
     

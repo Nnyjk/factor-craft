@@ -1,0 +1,39 @@
+{
+  "weapons": {
+    "factor_sword": {
+      "attack_damage": 8.0,
+      "attack_speed": -2.4,
+      "durability": 1561,
+      "enchantability": 15,
+      "repair_item": "minecraft:netherite_ingot"
+    },
+    "dimension_hammer": {
+      "attack_damage": 12.0,
+      "attack_speed": -3.0,
+      "durability": 2031,
+      "enchantability": 18,
+      "repair_item": "factorcraft:factor_ingot"
+    },
+    "resonance_bow": {
+      "damage": 10.0,
+      "velocity": 3.0,
+      "divergence": 1.0,
+      "durability": 384,
+      "enchantability": 15
+    }
+  },
+  "dimensions": {
+    "minecraft:overworld": {
+      "factor_multiplier": 0.5,
+      "base_factor": 1.0
+    },
+    "minecraft:the_nether": {
+      "factor_multiplier": 1.5,
+      "base_factor": 1.5
+    },
+    "minecraft:the_end": {
+      "factor_multiplier": 3.0,
+      "base_factor": 3.0
+    }
+  }
+}

@@ -4,11 +4,14 @@ import com.factorcraft.module.factor.FactorService;
 import com.factorcraft.module.factor.FactorTier;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.inventory.Inventories;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
 import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -36,6 +39,9 @@ public class FactorSinkBlockEntity extends BlockEntity {
     private FactorTier tier = FactorTier.LOW_ENERGY; // T1
     private int recipeIndex = 0;
     
+    // 物品栈 (输入槽 + 输出槽)
+    private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(2, ItemStack.EMPTY);
+    
     // 处理时间（ticks）
     private static final int PROCESSING_TIME = 200; // 10 秒
     
@@ -50,6 +56,7 @@ public class FactorSinkBlockEntity extends BlockEntity {
         nbt.putInt(NBT_PROGRESS, progress);
         nbt.putInt(NBT_TIER, tier.ordinal());
         nbt.putInt(NBT_RECIPE_INDEX, recipeIndex);
+        Inventories.writeNbt(nbt, inventory, registryLookup);
     }
     
     @Override
@@ -59,6 +66,7 @@ public class FactorSinkBlockEntity extends BlockEntity {
         progress = nbt.getInt(NBT_PROGRESS);
         tier = FactorTier.values()[nbt.getInt(NBT_TIER)];
         recipeIndex = nbt.getInt(NBT_RECIPE_INDEX);
+        Inventories.readNbt(nbt, inventory, registryLookup);
     }
     
     /**
@@ -89,29 +97,52 @@ public class FactorSinkBlockEntity extends BlockEntity {
      * 检查是否可以处理
      */
     private boolean canProcess() {
-        // TODO: 检查输入物品
-        // TODO: 检查 Factor 存储
-        // TODO: 检查输出空间
-        return factorStored > 0 && progress < PROCESSING_TIME;
+        // 检查输入物品
+        ItemStack input = inventory.get(0);
+        if (input.isEmpty()) {
+            return false;
+        }
+        
+        // 检查 Factor 存储
+        if (factorStored <= 0) {
+            return false;
+        }
+        
+        // 检查输出空间
+        ItemStack output = inventory.get(1);
+        if (!output.isEmpty() && output.getCount() >= output.getMaxCount()) {
+            return false;
+        }
+        
+        return progress < PROCESSING_TIME;
     }
     
     /**
      * 执行处理
      */
     private void process() {
-        // TODO: 消耗 Factor
-        // TODO: 消耗输入物品
-        // TODO: 生成输出物品
-        // TODO: 触发事件
+        // 消耗 Factor
+        int consumed = calculateFactorConsumption();
+        factorStored = Math.max(0, factorStored - consumed);
         
-        if (world != null && !world.isClient) {
-            FactorService service = FactorService.getInstance();
-            if (service != null) {
-                // 消耗 Factor（根据维度基准值计算）
-                int consumed = calculateFactorConsumption();
-                service.consumeFactor(pos, consumed);
-            }
+        // 消耗输入物品
+        ItemStack input = inventory.get(0);
+        if (!input.isEmpty()) {
+            input.decrement(1);
+            inventory.set(0, input);
         }
+        
+        // 生成输出物品（简化：直接生成因子碎片）
+        ItemStack output = inventory.get(1);
+        if (output.isEmpty()) {
+            output = new ItemStack(net.minecraft.item.Items.AMETHYST_SHARD, 1); // 占位物品
+        } else {
+            output.increment(1);
+        }
+        inventory.set(1, output);
+        
+        // 触发事件
+        markDirty();
     }
     
     /**
@@ -146,15 +177,29 @@ public class FactorSinkBlockEntity extends BlockEntity {
     
     /**
      * 获取维度惩罚（推荐维度×1.0，非推荐×10）
+     * 
+     * T1/T2 (LOW_ENERGY/STABLE): 主世界推荐
+     * T3 (HIGH_ENERGY): 下界推荐
+     * T4 (OVERLOAD): 末地推荐
      */
     private double getDimensionPenalty() {
         if (world == null) {
             return 1.0;
         }
         
-        // TODO: 获取当前维度类型
-        // TODO: 根据 tier 判断是否为推荐维度
-        return 1.0; // 默认推荐维度
+        // 获取当前维度类型
+        String dimensionKey = world.getRegistryKey().getValue().toString();
+        
+        // 根据 tier 判断是否为推荐维度
+        int level = tier.level();
+        boolean isRecommended = switch (level) {
+            case 0, 1, 2 -> dimensionKey.equals("minecraft:overworld"); // T1/T2: 主世界
+            case 3 -> dimensionKey.equals("minecraft:the_nether"); // T3: 下界
+            case 4 -> dimensionKey.equals("minecraft:the_end"); // T4: 末地
+            default -> true;
+        };
+        
+        return isRecommended ? 1.0 : 10.0;
     }
     
     /**
@@ -163,13 +208,36 @@ public class FactorSinkBlockEntity extends BlockEntity {
     private double getEnvironmentBonus() {
         double bonus = 0.0;
         
-        // TODO: 检查 Factor 是否在推荐窗口
-        // TODO: 检查 ΔF 值
-        // Factor 50-70: -20%
-        // ΔF 30-50: -10%
-        // ΔF 50+: -15%
+        if (world == null || world.isClient) {
+            return bonus;
+        }
         
-        return bonus;
+        FactorService service = FactorService.getInstance();
+        if (service == null) {
+            return bonus;
+        }
+        
+        // 获取当前 Factor 值
+        double currentFactor = service.getFactor((net.minecraft.server.world.ServerWorld) world);
+        
+        // 检查 Factor 是否在推荐窗口 (50-70)
+        if (currentFactor >= 50 && currentFactor <= 70) {
+            bonus += 0.20; // 20% 加成
+        }
+        
+        // 基于 Factor 值的趋势判断（简化为当前值与基准值的偏差）
+        double baseFactor = FactorService.baseForDimension(world.getRegistryKey().getValue().toString());
+        double delta = Math.abs(currentFactor - baseFactor);
+        
+        // ΔF 30-50: 10% 加成
+        // ΔF 50+: 15% 加成
+        if (delta >= 50) {
+            bonus += 0.15;
+        } else if (delta >= 30) {
+            bonus += 0.10;
+        }
+        
+        return Math.min(bonus, 0.35); // 最大 35% 加成
     }
     
     /**
