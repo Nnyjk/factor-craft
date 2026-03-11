@@ -4,11 +4,14 @@ import com.factorcraft.module.factor.FactorService;
 import com.factorcraft.module.factor.FactorTier;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.inventory.Inventories;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
 import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -35,6 +38,9 @@ public class FactorSourceBlockEntity extends BlockEntity {
     private int progress = 0;
     private FactorTier tier = FactorTier.LOW_ENERGY; // T1
     
+    // 物品栈
+    private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(1, ItemStack.EMPTY);
+    
     // 处理时间（ticks）
     private static final int PROCESSING_TIME = 100; // 5 秒
     
@@ -48,7 +54,7 @@ public class FactorSourceBlockEntity extends BlockEntity {
         nbt.putInt(NBT_FACTOR_BUFFER, factorBuffer);
         nbt.putInt(NBT_PROGRESS, progress);
         nbt.putInt(NBT_TIER, tier.ordinal());
-        // TODO: 保存输入物品栈
+        Inventories.writeNbt(nbt, inventory, registryLookup);
     }
     
     @Override
@@ -57,7 +63,7 @@ public class FactorSourceBlockEntity extends BlockEntity {
         factorBuffer = nbt.getInt(NBT_FACTOR_BUFFER);
         progress = nbt.getInt(NBT_PROGRESS);
         tier = FactorTier.values()[nbt.getInt(NBT_TIER)];
-        // TODO: 加载输入物品栈
+        Inventories.readNbt(nbt, inventory, registryLookup);
     }
     
     /**
@@ -93,8 +99,17 @@ public class FactorSourceBlockEntity extends BlockEntity {
      * 检查是否可以处理
      */
     private boolean canProcess() {
-        // TODO: 检查输入物品
-        // TODO: 检查输出空间（Factor 缓存）
+        // 检查输入物品
+        ItemStack input = inventory.get(0);
+        if (input.isEmpty()) {
+            return false;
+        }
+        
+        // 检查输出空间（Factor 缓存有上限）
+        if (factorBuffer >= 10000) {
+            return false;
+        }
+        
         return progress < PROCESSING_TIME;
     }
     
@@ -102,11 +117,18 @@ public class FactorSourceBlockEntity extends BlockEntity {
      * 执行处理（消耗材料，缓存 Factor）
      */
     private void process() {
-        // TODO: 消耗输入物品
-        // TODO: 计算 Factor 产出
-        // TODO: 缓存 Factor
+        // 消耗输入物品
+        ItemStack input = inventory.get(0);
+        if (!input.isEmpty()) {
+            input.decrement(1);
+            inventory.set(0, input);
+            markDirty();
+        }
         
+        // 计算 Factor 产出
         int factorProduced = calculateFactorProduction();
+        
+        // 缓存 Factor
         factorBuffer += factorProduced;
         markDirty();
     }
@@ -168,22 +190,56 @@ public class FactorSourceBlockEntity extends BlockEntity {
             return 1.0;
         }
         
-        // TODO: 获取当前维度类型
+        // 获取当前维度类型
+        String dimensionType = getDimensionType();
+        
         // 根据 tier 和维度返回倍率
-        return 1.0; // 默认
+        return switch (dimensionType) {
+            case "nether" -> 1.5 + (tier.level() * 0.1);
+            case "end" -> 2.0;
+            default -> 1.0 + (tier.level() * 0.1); // 主世界
+        };
+    }
+    
+    /**
+     * 获取维度类型
+     */
+    private String getDimensionType() {
+        if (world == null) return "overworld";
+        String dimId = world.getRegistryKey().getValue().toString();
+        if (dimId.contains("the_nether")) return "nether";
+        if (dimId.contains("the_end")) return "end";
+        return "overworld";
     }
     
     /**
      * 获取材料品质系数
      * 
      * 普通品质：×1.0
-     * 高纯度（ΔF > 40）：×1.2
-     * 完美品质（ΔF > 70）：×1.5
+     * 高纯度（当前 Factor > 70）：×1.2
+     * 完美品质（当前 Factor > 90）：×1.5
      */
     private double getQualityCoefficient() {
-        // TODO: 检查 ΔF 值
-        // 根据 ΔF 返回品质系数
-        return 1.0; // 默认普通品质
+        // 检查当前 Factor 值（作为品质指标）
+        if (world == null) {
+            return 1.0;
+        }
+        
+        FactorService service = FactorService.getInstance();
+        if (service == null) {
+            return 1.0;
+        }
+        
+        // 获取当前维度的 Factor 值
+        double currentFactor = service.getFactor((net.minecraft.server.world.ServerWorld) world);
+        
+        // 根据 Factor 值返回品质系数
+        if (currentFactor > 90) {
+            return 1.5; // 完美品质
+        } else if (currentFactor > 70) {
+            return 1.2; // 高纯度
+        }
+        return 1.0; // 普通品质
     }
     
     /**
