@@ -1,5 +1,6 @@
 package com.factorcraft.module.technology.machine;
 
+import com.factorcraft.module.technology.MultiblockDetector;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.nbt.NbtCompound;
@@ -43,8 +44,13 @@ public class FactorExtractorCoreBlockEntity extends FactorMachineBlockEntity {
     }
     
     private int getAltarTier(World world, BlockPos pos) {
-        // TODO: 调用 MultiblockDetector
-        return 1;
+        // 遍历所有蓝图检测结构等级
+        for (var pattern : MultiblockDetector.getAllPatterns()) {
+            if (MultiblockDetector.detect(world, pos, pattern)) {
+                return pattern.getTier();
+            }
+        }
+        return 1; // 默认 T1
     }
     
     private void updateStatsByTier(int tier) {
