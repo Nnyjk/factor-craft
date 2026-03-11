@@ -1,0 +1,238 @@
+{
+  "traits": [
+    {
+      "id": "conductive",
+      "name": "导电",
+      "type": "positive",
+      "category": "extraction",
+      "description": "提升 Factor 提取速度",
+      "effects": [
+        {
+          "target": "extraction_speed",
+          "operation": "multiply",
+          "value": 0.2
+        }
+      ],
+      "max_level": 3,
+      "level_scaling": 0.1,
+      "resonance": {
+        "same_trait": {
+          "threshold": 2,
+          "effect": "multiply",
+          "value": 1.5
+        }
+      },
+      "incompatible": ["insulating"],
+      "weight": 100,
+      "tier_range": [1, 5]
+    },
+    {
+      "id": "stable",
+      "name": "稳定",
+      "type": "positive",
+      "category": "extraction",
+      "description": "减少区块浓度波动",
+      "effects": [
+        {
+          "target": "concentration_fluctuation",
+          "operation": "multiply",
+          "value": 0.7
+        }
+      ],
+      "max_level": 2,
+      "level_scaling": 0.15,
+      "incompatible": ["unstable"],
+      "weight": 80,
+      "tier_range": [1, 5]
+    },
+    {
+      "id": "factor_sensitive",
+      "name": "Factor敏感",
+      "type": "positive",
+      "category": "extraction",
+      "description": "低浓度区域提取效率提升",
+      "effects": [
+        {
+          "target": "low_concentration_bonus",
+          "operation": "add",
+          "value": 0.3,
+          "condition": {
+            "concentration_below": 50
+          }
+        }
+      ],
+      "max_level": 2,
+      "level_scaling": 0.2,
+      "weight": 60,
+      "tier_range": [2, 5]
+    },
+    {
+      "id": "conductive_transfer",
+      "name": "传导",
+      "type": "positive",
+      "category": "transfer",
+      "description": "加速区块间 Factor 扩散",
+      "effects": [
+        {
+          "target": "diffusion_speed",
+          "operation": "multiply",
+          "value": 1.5
+        }
+      ],
+      "max_level": 2,
+      "level_scaling": 0.5,
+      "weight": 70,
+      "tier_range": [1, 5]
+    },
+    {
+      "id": "storage",
+      "name": "存储",
+      "type": "positive",
+      "category": "transfer",
+      "description": "临时存储更多 Factor",
+      "effects": [
+        {
+          "target": "buffer_capacity",
+          "operation": "multiply",
+          "value": 1.5
+        }
+      ],
+      "max_level": 3,
+      "level_scaling": 0.5,
+      "weight": 90,
+      "tier_range": [1, 5]
+    },
+    {
+      "id": "catalyst",
+      "name": "催化",
+      "type": "positive",
+      "category": "production",
+      "description": "加速合成速度",
+      "effects": [
+        {
+          "target": "crafting_speed",
+          "operation": "multiply",
+          "value": 1.3
+        }
+      ],
+      "max_level": 2,
+      "level_scaling": 0.2,
+      "weight": 100,
+      "tier_range": [1, 5]
+    },
+    {
+      "id": "heat_resistant",
+      "name": "耐热",
+      "type": "positive",
+      "category": "environment",
+      "description": "下界效率提升",
+      "effects": [
+        {
+          "target": "dimension_efficiency",
+          "operation": "multiply",
+          "value": 1.5,
+          "condition": {
+            "dimension": "minecraft:the_nether"
+          }
+        }
+      ],
+      "max_level": 2,
+      "level_scaling": 0.3,
+      "weight": 80,
+      "tier_range": [1, 5]
+    },
+    {
+      "id": "void_adapted",
+      "name": "虚空适应",
+      "type": "positive",
+      "category": "environment",
+      "description": "末地效率提升",
+      "effects": [
+        {
+          "target": "dimension_efficiency",
+          "operation": "multiply",
+          "value": 1.5,
+          "condition": {
+            "dimension": "minecraft:the_end"
+          }
+        }
+      ],
+      "max_level": 2,
+      "level_scaling": 0.3,
+      "weight": 80,
+      "tier_range": [1, 5]
+    },
+    {
+      "id": "fragile",
+      "name": "易损",
+      "type": "negative",
+      "category": "negative",
+      "description": "耐久消耗加快",
+      "effects": [
+        {
+          "target": "durability_consumption",
+          "operation": "multiply",
+          "value": 1.3
+        }
+      ],
+      "max_level": 2,
+      "level_scaling": 0.2,
+      "weight": 60,
+      "tier_range": [1, 5]
+    },
+    {
+      "id": "unstable",
+      "name": "不稳定",
+      "type": "negative",
+      "category": "negative",
+      "description": "区块浓度波动增加",
+      "effects": [
+        {
+          "target": "concentration_fluctuation",
+          "operation": "multiply",
+          "value": 1.5
+        }
+      ],
+      "max_level": 2,
+      "level_scaling": 0.3,
+      "incompatible": ["stable"],
+      "weight": 50,
+      "tier_range": [1, 5]
+    },
+    {
+      "id": "energy_hungry",
+      "name": "耗能",
+      "type": "negative",
+      "category": "negative",
+      "description": "额外 Factor 消耗",
+      "effects": [
+        {
+          "target": "factor_consumption",
+          "operation": "multiply",
+          "value": 1.2
+        }
+      ],
+      "max_level": 2,
+      "level_scaling": 0.2,
+      "weight": 70,
+      "tier_range": [1, 5]
+    },
+    {
+      "id": "noisy",
+      "name": "噪音",
+      "type": "negative",
+      "category": "negative",
+      "description": "降低相邻槽位特性效果",
+      "effects": [
+        {
+          "target": "adjacent_trait_effect",
+          "operation": "multiply",
+          "value": 0.7
+        }
+      ],
+      "max_level": 1,
+      "weight": 40,
+      "tier_range": [1, 5]
+    }
+  ]
+}
