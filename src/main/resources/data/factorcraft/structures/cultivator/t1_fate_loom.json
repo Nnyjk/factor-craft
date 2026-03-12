@@ -1,0 +1,31 @@
+{
+  "structure_id": "t1_fate_loom",
+  "name": "命运织机",
+  "name_en": "Fate Loom",
+  "tier": 1,
+  "type": "cultivator",
+  "description": "给物品注入特性的基础结构",
+  
+  "dimensions": {
+    "width": 3,
+    "height": 5,
+    "depth": 3
+  },
+  
+  "core_block": "factorcraft:cultivator_core_t1",
+  
+  "pattern": {
+    "comment": "多方块结构蓝图配置 - 待实现",
+    "layers": [],
+    "slots": []
+  },
+  
+  "input_slots": 1,
+  "trait_slots": 1,
+  
+  "features": {
+    "trait_slots": 1,
+    "cost_multiplier": 1.0,
+    "cost_formula": "base_value * 10^(n-1)"
+  }
+}

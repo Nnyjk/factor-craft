@@ -1,0 +1,31 @@
+{
+  "structure_id": "t1_ancient_synthesis",
+  "name": "远古合成阵",
+  "name_en": "Ancient Synthesis Array",
+  "tier": 1,
+  "type": "synthesizer",
+  "description": "用 Factor 合成物品的基础结构",
+  
+  "dimensions": {
+    "width": 3,
+    "height": 5,
+    "depth": 3
+  },
+  
+  "core_block": "factorcraft:synthesizer_core_t1",
+  
+  "pattern": {
+    "comment": "多方块结构蓝图配置 - 待实现",
+    "layers": [],
+    "slots": []
+  },
+  
+  "input_slots": 9,
+  "output_slots": 1,
+  
+  "features": {
+    "factor_cost": 1000,
+    "conversion_rate": "2:1",
+    "recommended_dimension": "minecraft:overworld"
+  }
+}
