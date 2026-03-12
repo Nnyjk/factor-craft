@@ -65,9 +65,14 @@ record QuestReward(
             player.addExperience(experience);
         }
         
-        // TODO: 给予 Factor 点数
+        // 给予 Factor 点数
         if (factorPoints > 0) {
-            // Factor 点数系统待实现
+            // 通过 FactorService 添加 Factor
+            var factorService = com.factorcraft.module.factor.FactorService.getInstance();
+            if (factorService != null && player.getServer() != null) {
+                var world = player.getServerWorld();
+                factorService.addFactorOffset(world, factorPoints, 1200);
+            }
         }
     }
 }

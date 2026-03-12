@@ -70,11 +70,15 @@ public class TradingManager {
             return false;
         }
         
-        // TODO: 检查买家 Factor 点数
-        // if (getFactorPoints(buyer) < trade.factorAmount()) {
-        //     buyer.sendMessage(Text.literal("§cFactor 点数不足"), false);
-        //     return false;
-        // }
+        // 检查买家 Factor 点数
+        var factorService = com.factorcraft.module.factor.FactorService.getInstance();
+        if (factorService != null) {
+            double availableFactor = factorService.getFactor((net.minecraft.server.world.ServerWorld) buyer.getWorld());
+            if (availableFactor < trade.factorAmount()) {
+                buyer.sendMessage(Text.literal("§cFactor 点数不足"), false);
+                return false;
+            }
+        }
         
         // 执行交易
         // 移除卖家的物品

@@ -26,8 +26,14 @@ public class AdvancementManager {
      * 触发成就
      */
     public static void grantAdvancement(ServerPlayerEntity player, Identifier advancementId) {
-        // TODO: 实现成就触发
-        System.out.println("[FactorCraft] Advancement triggered: " + advancementId);
+        var server = player.getServer();
+        if (server == null) return;
+        
+        var advancementLoader = server.getAdvancementLoader();
+        var advancement = advancementLoader.get(advancementId);
+        if (advancement != null) {
+            player.getAdvancementTracker().grantCriterion(advancement, "done");
+        }
     }
     
     /**
