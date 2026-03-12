@@ -75,9 +75,7 @@ public interface QuestCondition {
             case FACTOR_ABSORB -> new FactorAbsorbCondition(
                 nbt.getDouble("required")
             );
-            case COMPOSITE -> {
-                yield new CompositeCondition(CompositeCondition.LogicType.AND);
-            }
+            case COMPOSITE -> new CompositeCondition(CompositeCondition.LogicType.AND);
         };
     }
 }
