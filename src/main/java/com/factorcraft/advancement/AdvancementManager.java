@@ -10,9 +10,12 @@ import java.util.List;
 
 /**
  * Factor Craft 成就系统
- * TODO: 完整实现成就触发机制
+ * 管理所有 Factor 相关的成就触发
  */
 public class AdvancementManager {
+    
+    // 培育等级阈值
+    private static final int CULTIVATION_EXPERT_LEVEL = 3;
     
     // 成就 ID
     public static final Identifier ROOT = Identifier.of("factorcraft", "root");
@@ -63,6 +66,17 @@ public class AdvancementManager {
         double resonance = TraitService.calculateResonanceBonus(traits);
         if (resonance >= 2.5) {
             grantAdvancement(player, RESONANCE_DISCOVERER);
+        }
+    }
+    
+    /**
+     * 检查并触发培育相关成就
+     * @param player 玩家
+     * @param traitLevel 新增特性的等级
+     */
+    public static void checkCultivationAdvancements(ServerPlayerEntity player, int traitLevel) {
+        if (traitLevel >= CULTIVATION_EXPERT_LEVEL) {
+            grantAdvancement(player, CULTIVATION_EXPERT);
         }
     }
 }

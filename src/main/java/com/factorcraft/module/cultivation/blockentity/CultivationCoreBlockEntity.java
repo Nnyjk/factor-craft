@@ -1,5 +1,6 @@
 package com.factorcraft.module.cultivation.blockentity;
 
+import com.factorcraft.advancement.AdvancementManager;
 import com.factorcraft.module.factor.management.ChunkFactorManager;
 import com.factorcraft.module.material.trait.TraitInstance;
 import com.factorcraft.module.material.trait.TraitService;
@@ -8,6 +9,7 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
@@ -63,6 +65,16 @@ public class CultivationCoreBlockEntity extends BlockEntity {
             TraitInstance newTrait = newTraits.get(0);
             if (TraitService.addTrait(targetItem, newTrait.traitId(), newTrait.level())) {
                 ChunkFactorManager.extractFactor(world, chunkPos, FACTOR_COST_BASE);
+                
+                // 触发成就 - 获取附近玩家
+                double range = 8.0;
+                for (var player : world.getPlayers()) {
+                    if (player instanceof ServerPlayerEntity sp && 
+                        player.squaredDistanceTo(pos.getX(), pos.getY(), pos.getZ()) < range * range) {
+                        AdvancementManager.checkTraitAdvancements(sp, targetItem);
+                        AdvancementManager.checkCultivationAdvancements(sp, newTrait.level());
+                    }
+                }
             }
         }
     }
