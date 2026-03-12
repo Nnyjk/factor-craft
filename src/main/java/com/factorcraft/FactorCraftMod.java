@@ -2,6 +2,7 @@ package com.factorcraft;
 
 import com.factorcraft.config.ConfigManager;
 import com.factorcraft.module.ModuleBootstrap;
+import com.factorcraft.registry.ModInitialization;
 import net.fabricmc.api.ModInitializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +25,9 @@ public class FactorCraftMod implements ModInitializer {
         
         // 使用 ModuleBootstrap 初始化所有模块
         ModuleBootstrap.initializeDefaults();
+        
+        // 注册游戏内容
+        ModInitialization.initialize();
         
         LOGGER.info("Factor Craft Mod initialized successfully!");
     }
