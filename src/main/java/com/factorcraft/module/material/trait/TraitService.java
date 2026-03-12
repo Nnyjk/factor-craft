@@ -50,6 +50,25 @@ public class TraitService {
         return traitData != null ? traitData.getTraitLevel(traitId) : 0;
     }
     
+    /**
+     * 移除物品上的指定特性
+     */
+    public static boolean removeTrait(net.minecraft.item.ItemStack stack, String traitId) {
+        TraitData traitData = ITEM_TRAITS.get(stack);
+        if (traitData == null || !traitData.hasTrait(traitId)) {
+            return false;
+        }
+        ITEM_TRAITS.put(stack, traitData.removeTrait(traitId));
+        return true;
+    }
+    
+    /**
+     * 清除物品上的所有特性
+     */
+    public static void clearTraits(net.minecraft.item.ItemStack stack) {
+        ITEM_TRAITS.remove(stack);
+    }
+    
     public static double calculateResonanceBonus(List<TraitInstance> traits) {
         Map<String, Long> counts = new HashMap<>();
         for (TraitInstance t : traits) {
@@ -108,6 +127,9 @@ record TraitData(List<TraitInstance> traits) {
         List<TraitInstance> n = new ArrayList<>(traits);
         n.add(t);
         return new TraitData(Collections.unmodifiableList(n));
+    }
+    TraitData removeTrait(String id) {
+        return new TraitData(traits.stream().filter(t -> !t.traitId().equals(id)).toList());
     }
     boolean hasTrait(String id) { return traits.stream().anyMatch(t -> t.traitId().equals(id)); }
     int getTraitLevel(String id) {

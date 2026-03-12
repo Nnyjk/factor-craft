@@ -155,8 +155,11 @@ public class FactorCraftCommands {
         String traitId = StringArgumentType.getString(context, "trait_id");
         ItemStack stack = source.getPlayer().getMainHandStack();
         
-        // TODO: 实现 TraitService.removeTrait
-        source.sendFeedback(() -> Text.literal("§c特性移除功能暂未实现"), false);
+        if (TraitService.removeTrait(stack, traitId)) {
+            source.sendFeedback(() -> Text.literal("§a已移除特性: " + traitId), false);
+        } else {
+            source.sendFeedback(() -> Text.literal("§c未找到特性: " + traitId), false);
+        }
         
         return 1;
     }
@@ -165,8 +168,11 @@ public class FactorCraftCommands {
         ServerCommandSource source = context.getSource();
         ItemStack stack = source.getPlayer().getMainHandStack();
         
-        // TODO: 实现 TraitService.clearTraits
-        source.sendFeedback(() -> Text.literal("§c特性清除功能暂未实现"), false);
+        var traits = TraitService.getTraits(stack);
+        int count = traits.size();
+        TraitService.clearTraits(stack);
+        
+        source.sendFeedback(() -> Text.literal("§a已清除 " + count + " 个特性"), false);
         
         return 1;
     }
