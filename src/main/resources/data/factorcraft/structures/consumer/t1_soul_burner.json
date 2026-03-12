@@ -1,0 +1,34 @@
+{
+  "structure_id": "t1_soul_burner",
+  "name": "灵魂燃烧器",
+  "name_en": "Soul Burner",
+  "tier": 1,
+  "type": "consumer",
+  "description": "消耗物品获得 Factor 的基础结构",
+  
+  "dimensions": {
+    "width": 3,
+    "height": 5,
+    "depth": 3
+  },
+  
+  "core_block": "factorcraft:consumer_core_t1",
+  
+  "pattern": {
+    "comment": "多方块结构蓝图配置 - 待实现",
+    "layers": [],
+    "slots": []
+  },
+  
+  "input_slots": 1,
+  "fuel_types": ["block", "material"],
+  
+  "features": {
+    "base_output": 50,
+    "dimension_multiplier": {
+      "minecraft:overworld": 1.0,
+      "minecraft:the_nether": 1.5,
+      "minecraft:the_end": 2.0
+    }
+  }
+}
