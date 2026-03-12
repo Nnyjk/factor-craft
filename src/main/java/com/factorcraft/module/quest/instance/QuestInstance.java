@@ -2,6 +2,7 @@ package com.factorcraft.module.quest.instance;
 
 import com.factorcraft.module.quest.template.QuestTemplate;
 import com.factorcraft.module.quest.condition.QuestCondition;
+import net.minecraft.entity.player.PlayerEntity;
 
 import java.util.UUID;
 
@@ -30,11 +31,11 @@ public class QuestInstance {
     /**
      * 更新任务进度
      */
-    public void updateProgress(Object context) {
+    public void updateProgress(PlayerEntity player, Object context) {
         for (int i = 0; i < template.getConditions().size(); i++) {
             QuestCondition condition = template.getConditions().get(i);
-            // TODO: 实现条件进度更新逻辑
-            conditionProgress[i] = condition.getProgress(null, context);
+            // 实现条件进度更新逻辑
+            conditionProgress[i] = condition.getProgress(player, context);
         }
     }
     

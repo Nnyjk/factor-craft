@@ -1,0 +1,68 @@
+{
+  "dimensions": {
+    "minecraft:overworld": {
+      "baseline_multiplier": 0.5,
+      "base_concentration": {
+        "min": 20,
+        "max": 60
+      },
+      "biome_modifiers": {
+        "minecraft:forest": 15,
+        "minecraft:flower_forest": 20,
+        "minecraft:desert": -10,
+        "minecraft:badlands": -5,
+        "minecraft:swamp": 10,
+        "minecraft:mushroom_fields": 15,
+        "minecraft:jungle": 25,
+        "minecraft:stony_peaks": 30,
+        "minecraft:ice_spikes": 20
+      },
+      "structure_modifiers": {
+        "minecraft:village": 20,
+        "minecraft:desert_pyramid": 30,
+        "minecraft:jungle_pyramid": 35,
+        "minecraft:stronghold": 40
+      }
+    },
+    "minecraft:the_nether": {
+      "baseline_multiplier": 1.5,
+      "base_concentration": {
+        "min": 40,
+        "max": 100
+      },
+      "biome_modifiers": {
+        "minecraft:nether_wastes": 0,
+        "minecraft:soul_sand_valley": 5,
+        "minecraft:basalt_deltas": 15,
+        "minecraft:crimson_forest": 10,
+        "minecraft:warped_forest": 10
+      },
+      "structure_modifiers": {
+        "minecraft:fortress": 30,
+        "minecraft:bastion_remnant": 25
+      }
+    },
+    "minecraft:the_end": {
+      "baseline_multiplier": 3.0,
+      "base_concentration": {
+        "min": 60,
+        "max": 150
+      },
+      "biome_modifiers": {
+        "minecraft:the_end": 0,
+        "minecraft:end_midlands": 10,
+        "minecraft:end_highlands": 15,
+        "minecraft:end_barrens": -10
+      },
+      "structure_modifiers": {
+        "minecraft:end_city": 40,
+        "minecraft:end_ship": 50
+      }
+    }
+  },
+  "noise_settings": {
+    "noise_scale": 0.05,
+    "noise_amplitude": 10,
+    "noise_seed_offset": 12345
+  }
+}

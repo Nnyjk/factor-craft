@@ -96,6 +96,23 @@ public class CompositeCondition implements QuestCondition {
         return nbt;
     }
     
+    /**
+     * 从 NBT 反序列化
+     */
+    public static CompositeCondition fromNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registries) {
+        LogicType logic = LogicType.valueOf(nbt.getString("logic"));
+        CompositeCondition composite = new CompositeCondition(logic);
+        NbtList list = nbt.getList("conditions", NbtList.COMPOUND_TYPE);
+        for (int i = 0; i < list.size(); i++) {
+            NbtCompound condNbt = list.getCompound(i);
+            QuestCondition condition = QuestCondition.fromNbt(condNbt, registries);
+            if (condition != null) {
+                composite.addCondition(condition);
+            }
+        }
+        return composite;
+    }
+    
     public LogicType getLogicType() { return logicType; }
     public List<QuestCondition> getConditions() { return conditions; }
 }

@@ -1,0 +1,32 @@
+{
+  "production_structures": {
+    "factor_forge_t1": {
+      "tier": 1,
+      "max_output_tier": 2,
+      "speed_multiplier": 1.0,
+      "slots": 1
+    },
+    "factor_forge_t3": {
+      "tier": 3,
+      "max_output_tier": 4,
+      "speed_multiplier": 2.0,
+      "slots": 3
+    },
+    "factor_forge_t5": {
+      "tier": 5,
+      "max_output_tier": 5,
+      "speed_multiplier": 5.0,
+      "slots": 5
+    }
+  },
+  "production_costs": {
+    "t1": 1,
+    "t2": 10,
+    "t3": 100,
+    "t4": 1000,
+    "t5": 10000
+  },
+  "production_time": {
+    "all_tiers": 0
+  }
+}

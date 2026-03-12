@@ -126,12 +126,33 @@ public class FactorTransmitterBlockEntity extends BlockEntity {
         factorStored -= amountToSend;
         markDirty();
         
-        // TODO: 获取目标维度的世界
-        // TODO: 获取目标 BlockEntity
-        // TODO: 在目标维度添加 Factor
-        
-        // 临时实现：在同一维度添加（用于测试）
-        service.addFactor(targetPos, received);
+        // 获取目标维度的世界并传输 Factor
+        if (world instanceof net.minecraft.server.world.ServerWorld serverWorld) {
+            net.minecraft.server.MinecraftServer server = serverWorld.getServer();
+            net.minecraft.registry.RegistryKey<net.minecraft.world.World> targetKey = 
+                parseDimensionKey(targetDimension);
+            net.minecraft.server.world.ServerWorld targetWorld = server.getWorld(targetKey);
+            
+            if (targetWorld != null) {
+                // 在目标维度添加 Factor
+                service.addFactor(targetWorld, targetPos, received);
+            } else {
+                // 目标维度未加载，在同一维度添加（降级处理）
+                service.addFactor(targetPos, received);
+            }
+        }
+    }
+    
+    /**
+     * 解析维度 ID 为 RegistryKey
+     */
+    private net.minecraft.registry.RegistryKey<net.minecraft.world.World> parseDimensionKey(String dimId) {
+        if (dimId.contains("the_nether")) {
+            return net.minecraft.world.World.NETHER;
+        } else if (dimId.contains("the_end")) {
+            return net.minecraft.world.World.END;
+        }
+        return net.minecraft.world.World.OVERWORLD;
     }
     
     /**

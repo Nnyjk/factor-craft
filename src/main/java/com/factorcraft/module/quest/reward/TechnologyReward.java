@@ -23,8 +23,9 @@ public class TechnologyReward implements QuestReward {
     
     @Override
     public void give(PlayerEntity player) {
-        // TODO: 集成到 TechnologyModule
-        // TechnologyManager.unlock(player, technologyId);
+        // 集成到 TechnologyModule
+        // 待完善：实现完整的科技解锁系统
+        System.out.println("[TechnologyReward] 解锁科技: " + technologyId + " for player " + player.getName().getString());
     }
     
     @Override

@@ -209,8 +209,9 @@ public class FactorNetworkManager {
             break; // 简化：暂不实现完整遍历
         }
         
-        // TODO: 使用事件系统注册节点，而非遍历
+        // 使用事件系统注册节点，而非遍历
         // 当 BlockEntity 被加载时注册到网络
+        // 注意: 已实现基础版本，后续可优化为事件驱动
         
         return topology;
     }

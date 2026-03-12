@@ -1,0 +1,16 @@
+{
+  "resonance_rules": [
+    {
+      "type": "same_trait",
+      "threshold": 2,
+      "effect_multiplier": 1.5,
+      "description": "两个相同特性相邻，效果 ×1.5"
+    },
+    {
+      "type": "same_trait",
+      "threshold": 3,
+      "effect_multiplier": 2.5,
+      "description": "三个相同特性相邻，效果 ×2.5"
+    }
+  ]
+}

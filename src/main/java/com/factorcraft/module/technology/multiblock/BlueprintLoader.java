@@ -84,8 +84,40 @@ public class BlueprintLoader {
      * 加载外部数据包蓝图（从 config 目录）
      */
     private static void loadExternalBlueprints() {
-        // TODO: 实现从 config/factorcraft/altar_structures/ 加载
-        // 支持数据包扩展
+        Path configDir = Path.of("config/factorcraft/altar_structures");
+        if (!Files.exists(configDir)) {
+            try {
+                Files.createDirectories(configDir);
+                FactorCraftMod.LOGGER.info("[BlueprintLoader] 创建配置目录: {}", configDir.toAbsolutePath());
+            } catch (IOException e) {
+                FactorCraftMod.LOGGER.error("[BlueprintLoader] 无法创建配置目录: {}", e.getMessage());
+                return;
+            }
+            return; // 新创建的目录是空的
+        }
+        
+        try (var stream = Files.list(configDir)) {
+            stream.filter(p -> p.toString().endsWith(".json"))
+                  .forEach(BlueprintLoader::loadExternalBlueprint);
+        } catch (IOException e) {
+            FactorCraftMod.LOGGER.error("[BlueprintLoader] 扫描配置目录失败: {}", e.getMessage());
+        }
+    }
+    
+    /**
+     * 加载单个外部蓝图
+     */
+    private static void loadExternalBlueprint(Path path) {
+        try (BufferedReader reader = Files.newBufferedReader(path)) {
+            JsonObject json = JsonParser.parseReader(reader).getAsJsonObject();
+            Blueprint blueprint = parseBlueprint(json);
+            BLUEPRINTS.put(blueprint.getId(), blueprint);
+            FactorCraftMod.LOGGER.info("[BlueprintLoader] 加载外部蓝图: {} from {}", 
+                blueprint.getId(), path.getFileName());
+        } catch (Exception e) {
+            FactorCraftMod.LOGGER.warn("[BlueprintLoader] 加载外部蓝图失败 {}: {}", 
+                path.getFileName(), e.getMessage());
+        }
     }
     
     /**

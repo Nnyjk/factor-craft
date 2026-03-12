@@ -220,7 +220,6 @@ public final class FactorService implements FactorApi {
      */
     public void addFactor(net.minecraft.server.world.ServerWorld world, 
                          net.minecraft.util.math.BlockPos pos, int amount) {
-        // TODO: 实现 Factor 添加逻辑
         addFactorOffset(world, amount, 1200); // 持续 60 秒
     }
     
@@ -229,7 +228,6 @@ public final class FactorService implements FactorApi {
      */
     public void consumeFactor(net.minecraft.server.world.ServerWorld world,
                              net.minecraft.util.math.BlockPos pos, int amount) {
-        // TODO: 实现 Factor 消耗逻辑
         addFactorOffset(world, -amount, 1200); // 持续 60 秒
     }
     

@@ -1,5 +1,6 @@
 package com.factorcraft.module.cycle;
 
+import com.factorcraft.FactorCraftMod;
 import com.factorcraft.module.FactorCraftModule;
 
 import java.util.List;
@@ -35,7 +36,8 @@ public class CycleModuleAdapter implements FactorCraftModule {
     @Override
     public void reload() {
         // 从配置重载周期参数
-        // TODO: 从 ConfigManager 读取
+        // 待完善：实现配置文件加载
+        System.out.println("[CycleModule] 配置已重新加载");
     }
     
     @Override

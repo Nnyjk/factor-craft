@@ -34,6 +34,10 @@ public final class CommandRegistry implements CommandRegistrar, CommandApi {
         if (byCommandId.containsKey(normalizedCommandId)) {
             throw new IllegalArgumentException("duplicate commandId: " + spec.commandId());
         }
+        // Issue #6: 检查命令 ID 是否与现有别名冲突
+        if (aliasToCommandId.containsKey(normalizedCommandId)) {
+            throw new IllegalArgumentException("commandId collides with existing alias: " + spec.commandId());
+        }
         byCommandId.put(normalizedCommandId, spec);
 
         if (spec.aliases() != null) {
@@ -41,6 +45,10 @@ public final class CommandRegistry implements CommandRegistrar, CommandApi {
                 String normalizedAlias = normalize(alias);
                 if (aliasToCommandId.containsKey(normalizedAlias)) {
                     throw new IllegalArgumentException("duplicate alias: " + alias);
+                }
+                // Issue #6: 检查别名是否与现有命令 ID 冲突
+                if (byCommandId.containsKey(normalizedAlias)) {
+                    throw new IllegalArgumentException("alias collides with existing commandId: " + alias);
                 }
                 aliasToCommandId.put(normalizedAlias, normalizedCommandId);
             }

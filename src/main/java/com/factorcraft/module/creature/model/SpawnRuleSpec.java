@@ -16,6 +16,10 @@ public record SpawnRuleSpec(
         int maxGroupSize
 ) {
     public SpawnRuleSpec {
+        // Issue #7: 验证 dimensions 非 null
+        if (dimensions == null) {
+            dimensions = Set.of(); // 默认空集合
+        }
         if (minTier < 0 || maxTier < minTier) {
             throw new IllegalArgumentException("invalid tier range");
         }

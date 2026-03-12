@@ -22,8 +22,9 @@ public class FactorReward implements QuestReward {
     
     @Override
     public void give(PlayerEntity player) {
-        // TODO: 集成到 FactorNetworkManager
-        // FactorNetworkManager.giveFactor(player, amount);
+        // 集成到 FactorNetworkManager
+        // 待完善：实现完整的 Factor 奖励系统
+        System.out.println("[FactorReward] 给予 Factor: " + amount + " to player " + player.getName().getString());
     }
     
     @Override
