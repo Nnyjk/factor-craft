@@ -22,3 +22,8 @@ replay_pid*
 *.tar.gz
 *.rar
 .worktrees/
+
+# GameTest
+logs/
+*.log
+*.pid
