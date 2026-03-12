@@ -37,7 +37,7 @@ public class FactorOreGenerator {
         
         // 创建区块状态
         ChunkFactorState state = new ChunkFactorState(concentration);
-        // TODO: 实现区块状态存储
+        ChunkFactorManager.setState(chunkPos, state);
     }
     
     /**
