@@ -2,7 +2,8 @@ package com.factorcraft.module.technology.block;
 
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
+import net.minecraft.item.BlockItem;
+import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
@@ -106,7 +107,15 @@ public class ModBlocks {
     );
     
     private static Block registerBlock(String name, Block block) {
-        return Registry.register(Registries.BLOCK, Identifier.of("factorcraft", name), block);
+        // 注册方块
+        Registry.register(Registries.BLOCK, Identifier.of("factorcraft", name), block);
+        // 注册 BlockItem（让方块可以在创造模式获得）
+        Registry.register(
+            Registries.ITEM,
+            Identifier.of("factorcraft", name),
+            new BlockItem(block, new Item.Settings())
+        );
+        return block;
     }
     
     public static void register() {

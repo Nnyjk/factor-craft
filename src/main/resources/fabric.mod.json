@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "id": "factor_craft",
+  "id": "factorcraft",
   "version": "${version}",
   "name": "Factor Craft",
   "description": "基于最新 Fabric 工作流搭建的 Minecraft Mod 开发工程。",

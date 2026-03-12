@@ -1,7 +1,5 @@
 package com.factorcraft.world.generation;
 
-import com.factorcraft.module.factor.state.ChunkFactorState;
-import com.factorcraft.registry.ModBlocks;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
