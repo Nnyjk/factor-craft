@@ -16,6 +16,9 @@
     ],
     "client": [
       "com.factorcraft.FactorCraftClient"
+    ],
+    "fabric-gametest": [
+      "com.factorcraft.gametest.FactorCraftGameTests"
     ]
   },
   "depends": {
