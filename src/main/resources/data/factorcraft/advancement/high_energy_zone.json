@@ -1,7 +1,7 @@
 {
   "display": {
     "icon": {
-      "id": "factorcraft:factor_condenser"
+      "id": "factorcraft:factor_item_crystal_energetic"
     },
     "title": "高能区域",
     "description": "发现 Factor 浓度达到 100+ 的区域",
