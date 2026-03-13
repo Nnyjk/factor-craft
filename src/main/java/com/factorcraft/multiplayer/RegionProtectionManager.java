@@ -10,6 +10,12 @@ import java.util.*;
 /**
  * 区域保护系统
  * 允许玩家保护 Factor 区域不被他人破坏
+ * 
+ * TODO: 计划功能 - 需要接入事件系统
+ * 接入方式：
+ * 1. 在 BlockBreakEvent 中调用 canInteract() 检查权限
+ * 2. 创建 /region 命令管理保护区
+ * 3. 持久化保护区数据到世界存储
  */
 public class RegionProtectionManager {
     private static final Map<UUID, Set<ProtectedRegion>> PROTECTED_REGIONS = new HashMap<>();

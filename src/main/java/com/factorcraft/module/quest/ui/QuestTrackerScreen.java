@@ -9,7 +9,13 @@ import net.minecraft.text.Text;
 import java.util.List;
 
 /**
- * 任务追踪界面 - 简化版本
+ * 任务追踪界面
+ * 
+ * TODO: 需要接入客户端系统
+ * 接入方式：
+ * 1. 在 KeyBindings 中注册快捷键
+ * 2. 在按键回调中打开此界面: client.setScreen(new QuestTrackerScreen(manager))
+ * 3. 需要实现客户端-服务端任务数据同步
  */
 public class QuestTrackerScreen extends Screen {
     

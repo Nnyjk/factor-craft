@@ -8,6 +8,11 @@ import java.util.*;
 /**
  * 优化的扩散算法
  * 使用 BFS 和批量处理提高性能
+ * 
+ * TODO: 需要接入 Factor 系统
+ * 作为 DiffusionSystem 的高性能替代方案
+ * 
+ * @see com.factorcraft.module.factor.management.DiffusionSystem
  */
 public class OptimizedDiffusion {
     private static final int MAX_DIFFUSION_RADIUS = 3;

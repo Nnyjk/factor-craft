@@ -9,6 +9,11 @@ import java.util.*;
 /**
  * Factor 交易系统
  * 允许玩家之间交易 Factor 物品
+ * 
+ * TODO: 计划功能 - 需要接入命令系统和网络同步
+ * 接入方式：
+ * 1. 创建 /trade 命令
+ * 2. 实现网络包同步交易状态
  */
 public class TradingManager {
     private static final Map<UUID, List<TradeOffer>> PLAYER_TRADES = new HashMap<>();

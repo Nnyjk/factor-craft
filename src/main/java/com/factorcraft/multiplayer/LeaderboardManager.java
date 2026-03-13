@@ -9,6 +9,10 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * 排行榜系统
  * 追踪玩家在 Factor Craft 中的表现
+ * 
+ * TODO: 计划功能 - 需要接入玩家事件系统
+ * 接入方式：在各模块的完成事件中调用 addScore()
+ * 例如：FactorExtractor 完成时调用 LeaderboardManager.addScore(player, EXTRACTIONS, 1)
  */
 public class LeaderboardManager {
     private static final Map<String, Leaderboard> LEADERBOARDS = new ConcurrentHashMap<>();

@@ -7,6 +7,13 @@ import net.minecraft.world.StructureWorldAccess;
 
 /**
  * Factor 祭坛结构生成器
+ * 
+ * TODO: 需要接入结构生成系统
+ * 接入方式：
+ * 1. 使用 Fabric API 的 StructurePool Based Generation
+ * 2. 或实现自定义 Structure 并在 fabric.mod.json 中注册
+ * 
+ * @see net.fabricmc.fabric.api.structure.v1.FabricStructure
  */
 public class FactorAltarGenerator {
     
