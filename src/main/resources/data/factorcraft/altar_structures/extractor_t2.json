@@ -9,8 +9,8 @@
     ["#####", "#___#", "#_C_#", "#___#", "#####"]
   ],
   "legend": {
-    "#": "factorcraft:building_block_t2",
-    "C": "factorcraft:factor_extractor_core",
+    "#": "factorcraft:factor_block_building_t2",
+    "C": "factorcraft:factor_machine_extractor_core_t2",
     "_": "minecraft:air"
   },
   "properties": {

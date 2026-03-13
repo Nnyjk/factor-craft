@@ -1,0 +1,31 @@
+{
+  "structure_id": "t5_cosmic_synthesizer",
+  "name": "宇宙合成器",
+  "name_en": "Cosmic Synthesizer",
+  "tier": 5,
+  "type": "synthesizer",
+  "description": "用 Factor 合成物品的终极结构",
+  
+  "dimensions": {
+    "width": 9,
+    "height": 9,
+    "depth": 9
+  },
+  
+  "core_block": "factorcraft:factor_machine_synthesizer_core_t5",
+  
+  "pattern": {
+    "comment": "多方块结构蓝图配置 - 待实现",
+    "layers": [],
+    "slots": []
+  },
+  
+  "input_slots": 9,
+  "output_slots": 9,
+  
+  "features": {
+    "factor_cost": 50,
+    "conversion_rate": "0.5:1",
+    "recommended_dimension": "minecraft:the_end"
+  }
+}

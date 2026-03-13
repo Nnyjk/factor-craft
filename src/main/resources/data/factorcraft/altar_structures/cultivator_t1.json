@@ -1,0 +1,20 @@
+{
+  "id": "factorcraft:cultivator_t1",
+  "name": "一阶培养器祭坛",
+  "description": "基础 Factor 培养结构",
+  "tier": 1,
+  "type": "cultivator",
+  "size": [3, 3, 1],
+  "structure": [
+    ["###", "#C#", "###"]
+  ],
+  "legend": {
+    "#": "factorcraft:factor_block_building_t1",
+    "C": "factorcraft:factor_machine_cultivator_core_t1"
+  },
+  "properties": {
+    "cultivationRate": 1.0,
+    "powerConsumption": 15,
+    "bufferSize": 800
+  }
+}

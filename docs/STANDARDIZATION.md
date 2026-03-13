@@ -154,7 +154,9 @@
 4. [x] 更新模型文件 (models/block/, models/item/)
 5. [x] 更新 blockstate 文件
 6. [x] 更新语言文件 (en_us.json, 新增 zh_cn.json)
-7. [ ] 更新结构配置 (altar_structures/, structures/)
+7. [x] 更新结构配置 (altar_structures/, structures/)
+   - altar_structures: extractor_t1, extractor_t2, consumer_t1, synthesizer_t1, cultivator_t1
+   - structures: extractor (T1-T5), consumer (T1-T5), synthesizer (T1-T5), cultivator (T1-T5)
 8. [x] 更新创造模式标签页
 9. [x] 编译测试通过
 

@@ -1,18 +1,18 @@
 {
-  "structure_id": "t1_star_collector",
-  "name": "星辰收集器",
-  "name_en": "Star Collector",
-  "tier": 1,
+  "structure_id": "t2_star_collector",
+  "name": "进阶星辰收集器",
+  "name_en": "Advanced Star Collector",
+  "tier": 2,
   "type": "extractor",
-  "description": "从环境中提取 Factor 的基础结构",
+  "description": "从环境中提取 Factor 的进阶结构",
   
   "dimensions": {
-    "width": 3,
+    "width": 5,
     "height": 5,
-    "depth": 3
+    "depth": 5
   },
   
-  "core_block": "factorcraft:extractor_core_t1",
+  "core_block": "factorcraft:factor_machine_extractor_core_t2",
   
   "pattern": {
     "comment": "多方块结构蓝图配置 - 待实现",
@@ -21,13 +21,13 @@
   },
   
   "requirements": {
-    "min_factor_concentration": 0.1,
+    "min_factor_concentration": 0.05,
     "recommended_dimension": "minecraft:overworld"
   },
   
   "features": {
-    "extraction_rate": 1.0,
-    "range_chunks": 1,
+    "extraction_rate": 2.5,
+    "range_chunks": 2,
     "dimension_bonus": {
       "minecraft:overworld": 1.0,
       "minecraft:the_nether": 1.5,

@@ -1,16 +1,16 @@
 {
-  "id": "factorcraft:utilizer_t1",
-  "name": "一阶利用器祭坛",
+  "id": "factorcraft:consumer_t1",
+  "name": "一阶消费者祭坛",
   "description": "基础 Factor 转换结构",
   "tier": 1,
-  "type": "utilizer",
+  "type": "consumer",
   "size": [3, 3, 1],
   "structure": [
     ["###", "#C#", "###"]
   ],
   "legend": {
-    "#": "factorcraft:building_block_t1",
-    "C": "factorcraft:factor_utilizer_core"
+    "#": "factorcraft:factor_block_building_t1",
+    "C": "factorcraft:factor_machine_consumer_core_t1"
   },
   "properties": {
     "conversionRate": 0.1,
