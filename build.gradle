@@ -29,7 +29,10 @@ dependencies {
     mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-
+    
+    // Game Test API
+    modImplementation "net.fabricmc.fabric-api:fabric-game-rule-api-v1:${project.fabric_version}"
+    
     // Test dependencies
     testImplementation 'org.junit.jupiter:junit-jupiter:5.10.0'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
@@ -66,7 +69,7 @@ jar {
     }
 }
 
-// Fabric Loom 运行配置
+// Fabric Loom Game Test 配置
 loom {
     runs {
         gametest {
@@ -74,8 +77,24 @@ loom {
             name "Game Test"
             vmArg "-Dfabric-api.gametest=true"
             vmArg "-Dfabric-api.gametest.report-file=${project.buildDir}/gametest/results.xml"
+            runDir "build/gametest"
+        }
+        
+        testServer {
+            server()
+            name "Test Server"
+            runDir "build/testserver"
         }
     }
+}
+
+// 简化测试命令
+tasks.register('runQuickTest', JavaExec) {
+    dependsOn 'build'
+    group = 'verification'
+    description = 'Run quick verification tests'
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'com.factorcraft.verification.QuickVerifier'
 }
 
 publishing {

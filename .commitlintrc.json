@@ -1,0 +1,17 @@
+{
+  "extends": ["@commitlint/config-conventional"],
+  "rules": {
+    "type-enum": [
+      2,
+      "always",
+      ["feat", "fix", "docs", "style", "refactor", "test", "chore", "revert", "perf", "ci", "build"]
+    ],
+    "scope-enum": [
+      2,
+      "always",
+      ["combat", "cycle", "factor", "material", "technology", "quest", "creature", "loot", "cultivation", "ui", "network", "multiblock", "command", "config", "api", "core"]
+    ],
+    "subject-case": [2, "always", "lower-case"],
+    "header-max-length": [2, "always", 72]
+  }
+}

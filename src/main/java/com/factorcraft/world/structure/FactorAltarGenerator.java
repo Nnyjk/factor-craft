@@ -1,6 +1,5 @@
 package com.factorcraft.world.structure;
 
-import com.factorcraft.registry.ModBlocks;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;

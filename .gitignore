@@ -13,8 +13,7 @@ out/
 hs_err_pid*
 replay_pid*
 
-# Archives
-*.jar
+# Archives (except gradle wrapper)
 *.war
 *.nar
 *.ear
@@ -23,7 +22,9 @@ replay_pid*
 *.rar
 .worktrees/
 
-# GameTest
+# Test outputs
 logs/
+run/
+build/gametest/
 *.log
 *.pid
