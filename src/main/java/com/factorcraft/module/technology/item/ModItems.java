@@ -9,32 +9,37 @@ import net.minecraft.util.Identifier;
 
 /**
  * 科技模块物品注册 - Fabric 1.21.4
+ * 
+ * 命名规范: factor_item_{name}_{tier}
  */
 public class ModItems {
     
     private static final String MOD_ID = "factorcraft";
     
-    // 特性水晶
-    public static final Item SHARP_CRYSTAL = register("sharp_crystal");
-    public static final Item STURDY_CRYSTAL = register("sturdy_crystal");
-    public static final Item PROTECTIVE_CRYSTAL = register("protective_crystal");
-    public static final Item ENERGETIC_CRYSTAL = register("energetic_crystal");
-    public static final Item CATALYTIC_CRYSTAL = register("catalytic_crystal");
+    // ========== 特性水晶 ==========
     
-    // 升级组件
-    public static final Item EXTRACTION_COIL_T1 = register("extraction_coil_t1");
-    public static final Item EXTRACTION_COIL_T2 = register("extraction_coil_t2");
-    public static final Item EXTRACTION_COIL_T3 = register("extraction_coil_t3");
-    public static final Item EXTRACTION_COIL_T4 = register("extraction_coil_t4");
-    public static final Item EXTRACTION_COIL_T5 = register("extraction_coil_t5");
+    public static final Item CRYSTAL_SHARP = register("factor_item_crystal_sharp");
+    public static final Item CRYSTAL_STURDY = register("factor_item_crystal_sturdy");
+    public static final Item CRYSTAL_PROTECTIVE = register("factor_item_crystal_protective");
+    public static final Item CRYSTAL_ENERGETIC = register("factor_item_crystal_energetic");
+    public static final Item CRYSTAL_CATALYTIC = register("factor_item_crystal_catalytic");
     
-    // 电路
-    public static final Item BASIC_CIRCUIT = register("basic_circuit");
-    public static final Item ADVANCED_CIRCUIT = register("advanced_circuit");
-    public static final Item ELITE_CIRCUIT = register("elite_circuit");
+    // ========== 线圈 (T1-T5) ==========
+    
+    public static final Item COIL_T1 = register("factor_item_coil_t1");
+    public static final Item COIL_T2 = register("factor_item_coil_t2");
+    public static final Item COIL_T3 = register("factor_item_coil_t3");
+    public static final Item COIL_T4 = register("factor_item_coil_t4");
+    public static final Item COIL_T5 = register("factor_item_coil_t5");
+    
+    // ========== 电路 ==========
+    
+    public static final Item CIRCUIT_BASIC = register("factor_item_circuit_basic");
+    public static final Item CIRCUIT_ADVANCED = register("factor_item_circuit_advanced");
+    public static final Item CIRCUIT_ELITE = register("factor_item_circuit_elite");
     
     /**
-     * 注册物品（使用 RegistryKey 模式，符合 Fabric 1.21.4 要求）
+     * 注册物品
      */
     private static Item register(String name) {
         Identifier id = Identifier.of(MOD_ID, name);

@@ -3,6 +3,7 @@ package com.factorcraft.registry;
 import com.factorcraft.FactorCraftMod;
 import com.factorcraft.module.technology.block.ModBlocks;
 import com.factorcraft.module.technology.item.ModItems;
+import com.factorcraft.module.technology.machine.ModMachines;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
@@ -24,56 +25,80 @@ public class ModItemGroups {
         RegistryKey.of(RegistryKeys.ITEM_GROUP, Identifier.of(MOD_ID, "general"));
     
     public static final ItemGroup FACTOR_CRAFT = FabricItemGroup.builder()
-        .icon(() -> new ItemStack(ModBlocks.FACTOR_EXTRACTOR_CORE))
+        .icon(() -> new ItemStack(ModMachines.EXTRACTOR_CORE_T1))
         .displayName(Text.translatable("itemGroup.factorcraft.general"))
         .entries((displayContext, entries) -> {
-            // 核心机器
-            entries.add(ModBlocks.FACTOR_EXTRACTOR_CORE);
-            entries.add(ModBlocks.FACTOR_EMITTER_CORE);
-            entries.add(ModBlocks.FACTOR_UTILIZER_CORE);
+            // ========== 核心机器 ==========
+            // 提取核心
+            entries.add(ModMachines.EXTRACTOR_CORE_T1);
+            entries.add(ModMachines.EXTRACTOR_CORE_T2);
+            entries.add(ModMachines.EXTRACTOR_CORE_T3);
+            entries.add(ModMachines.EXTRACTOR_CORE_T4);
+            entries.add(ModMachines.EXTRACTOR_CORE_T5);
             
-            // 传输系统
-            entries.add(ModBlocks.FACTOR_CONDUIT_T1);
-            entries.add(ModBlocks.FACTOR_CONDUIT_T2);
-            entries.add(ModBlocks.FACTOR_CONDUIT_T3);
-            entries.add(ModBlocks.FACTOR_CONDUIT_T4);
-            entries.add(ModBlocks.FACTOR_CONDUIT_T5);
-            entries.add(ModBlocks.FACTOR_TANK);
-            entries.add(ModBlocks.FACTOR_PUMP);
+            // 消耗核心
+            entries.add(ModMachines.CONSUMER_CORE_T1);
+            entries.add(ModMachines.CONSUMER_CORE_T2);
+            entries.add(ModMachines.CONSUMER_CORE_T3);
+            entries.add(ModMachines.CONSUMER_CORE_T4);
+            entries.add(ModMachines.CONSUMER_CORE_T5);
             
-            // 特性方块
-            entries.add(ModBlocks.SHARP_BLOCK);
-            entries.add(ModBlocks.STURDY_BLOCK);
-            entries.add(ModBlocks.PROTECTIVE_BLOCK);
-            entries.add(ModBlocks.ENERGETIC_BLOCK);
-            entries.add(ModBlocks.CATALYTIC_BLOCK);
-            entries.add(ModBlocks.STABILIZING_BLOCK);
+            // 合成核心
+            entries.add(ModMachines.SYNTHESIZER_CORE_T1);
+            entries.add(ModMachines.SYNTHESIZER_CORE_T2);
+            entries.add(ModMachines.SYNTHESIZER_CORE_T3);
+            entries.add(ModMachines.SYNTHESIZER_CORE_T4);
+            entries.add(ModMachines.SYNTHESIZER_CORE_T5);
             
-            // 建筑方块
-            entries.add(ModBlocks.BUILDING_BLOCK_T1);
-            entries.add(ModBlocks.BUILDING_BLOCK_T2);
-            entries.add(ModBlocks.BUILDING_BLOCK_T3);
-            entries.add(ModBlocks.BUILDING_BLOCK_T4);
-            entries.add(ModBlocks.BUILDING_BLOCK_T5);
+            // 培育核心
+            entries.add(ModMachines.CULTIVATOR_CORE_T1);
+            entries.add(ModMachines.CULTIVATOR_CORE_T2);
+            entries.add(ModMachines.CULTIVATOR_CORE_T3);
+            entries.add(ModMachines.CULTIVATOR_CORE_T4);
+            entries.add(ModMachines.CULTIVATOR_CORE_T5);
             
-            // 特性水晶
-            entries.add(ModItems.SHARP_CRYSTAL);
-            entries.add(ModItems.STURDY_CRYSTAL);
-            entries.add(ModItems.PROTECTIVE_CRYSTAL);
-            entries.add(ModItems.ENERGETIC_CRYSTAL);
-            entries.add(ModItems.CATALYTIC_CRYSTAL);
+            // ========== 传输系统 ==========
+            entries.add(ModBlocks.CONDUIT_T1);
+            entries.add(ModBlocks.CONDUIT_T2);
+            entries.add(ModBlocks.CONDUIT_T3);
+            entries.add(ModBlocks.CONDUIT_T4);
+            entries.add(ModBlocks.CONDUIT_T5);
+            entries.add(ModBlocks.TANK);
+            entries.add(ModBlocks.PUMP);
             
-            // 升级组件
-            entries.add(ModItems.EXTRACTION_COIL_T1);
-            entries.add(ModItems.EXTRACTION_COIL_T2);
-            entries.add(ModItems.EXTRACTION_COIL_T3);
-            entries.add(ModItems.EXTRACTION_COIL_T4);
-            entries.add(ModItems.EXTRACTION_COIL_T5);
+            // ========== 特性方块 ==========
+            entries.add(ModBlocks.TRAIT_SHARP);
+            entries.add(ModBlocks.TRAIT_STURDY);
+            entries.add(ModBlocks.TRAIT_PROTECTIVE);
+            entries.add(ModBlocks.TRAIT_ENERGETIC);
+            entries.add(ModBlocks.TRAIT_CATALYTIC);
+            entries.add(ModBlocks.TRAIT_STABILIZING);
             
-            // 电路
-            entries.add(ModItems.BASIC_CIRCUIT);
-            entries.add(ModItems.ADVANCED_CIRCUIT);
-            entries.add(ModItems.ELITE_CIRCUIT);
+            // ========== 建筑方块 ==========
+            entries.add(ModBlocks.BUILDING_T1);
+            entries.add(ModBlocks.BUILDING_T2);
+            entries.add(ModBlocks.BUILDING_T3);
+            entries.add(ModBlocks.BUILDING_T4);
+            entries.add(ModBlocks.BUILDING_T5);
+            
+            // ========== 特性水晶 ==========
+            entries.add(ModItems.CRYSTAL_SHARP);
+            entries.add(ModItems.CRYSTAL_STURDY);
+            entries.add(ModItems.CRYSTAL_PROTECTIVE);
+            entries.add(ModItems.CRYSTAL_ENERGETIC);
+            entries.add(ModItems.CRYSTAL_CATALYTIC);
+            
+            // ========== 线圈 ==========
+            entries.add(ModItems.COIL_T1);
+            entries.add(ModItems.COIL_T2);
+            entries.add(ModItems.COIL_T3);
+            entries.add(ModItems.COIL_T4);
+            entries.add(ModItems.COIL_T5);
+            
+            // ========== 电路 ==========
+            entries.add(ModItems.CIRCUIT_BASIC);
+            entries.add(ModItems.CIRCUIT_ADVANCED);
+            entries.add(ModItems.CIRCUIT_ELITE);
         })
         .build();
     

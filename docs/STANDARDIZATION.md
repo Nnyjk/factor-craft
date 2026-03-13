@@ -1,6 +1,6 @@
 # Factor Craft 命名标准化规范
 
-> 版本: 1.0  
+> 版本: 1.1  
 > 日期: 2026-03-14  
 > 状态: 已批准
 
@@ -8,28 +8,28 @@
 
 ## 一、命名格式
 
-**标准格式**: `factor_{group}_{命名}_{tier}`
+**标准格式**: `factor` + `_` + `{group}` + `_` + `{name}` + `_` + `{tier}`
 
 | 组成部分 | 说明 |
 |----------|------|
 | `factor` | 前缀，所有标签统一 |
-| `{group}` | 分组：`block` / `item` / `machine` |
-| `{命名}` | 功能名称 |
+| `{group}` | 分组：`machine` / `block` / `item` |
+| `{name}` | 功能名称 |
 | `{tier}` | 科技等级 T1-T5（可选，跨 tier 存在时必填）|
 
 ---
 
-## 二、分组定义
+## 二、Group 定义
 
-| Group | 说明 | 示例 |
+| Group | 定义 | 特征 |
 |-------|------|------|
-| `block` | 普通方块、建筑方块、特性方块 | `factor_block_building_t1` |
-| `item` | 物品、水晶、线圈、电路 | `factor_item_crystal_sharp` |
-| `machine` | 机器核心（多方块结构核心） | `factor_machine_extractor_core_t1` |
+| `machine` | 机器方块 | 有 BlockEntity + tick 逻辑 |
+| `block` | 静态方块 | 无 BlockEntity |
+| `item` | 物品 | 可堆叠物品 |
 
 ---
 
-## 三、核心方块命名 (machine)
+## 三、Machine 命名
 
 ### 四大结构核心 (T1-T5)
 
@@ -41,7 +41,17 @@
 | T4 | `factor_machine_extractor_core_t4` | `factor_machine_consumer_core_t4` | `factor_machine_synthesizer_core_t4` | `factor_machine_cultivator_core_t4` |
 | T5 | `factor_machine_extractor_core_t5` | `factor_machine_consumer_core_t5` | `factor_machine_synthesizer_core_t5` | `factor_machine_cultivator_core_t5` |
 
-### 四大结构命名
+### 传输系统 (T1-T5)
+
+| Tier | 传递器 | 储罐 | 泵 |
+|------|--------|------|-----|
+| T1 | `factor_machine_conduit_t1` | `factor_machine_tank` | `factor_machine_pump` |
+| T2 | `factor_machine_conduit_t2` | — | — |
+| T3 | `factor_machine_conduit_t3` | — | — |
+| T4 | `factor_machine_conduit_t4` | — | — |
+| T5 | `factor_machine_conduit_t5` | — | — |
+
+### 四大结构名称对照
 
 | Tier | 提取结构 | 消耗结构 | 合成结构 | 培育结构 |
 |------|----------|----------|----------|----------|
@@ -53,17 +63,7 @@
 
 ---
 
-## 四、方块命名 (block)
-
-### 传输系统 (T1-T5)
-
-| Tier | 传递器 | 储罐 | 泵 |
-|------|--------|------|-----|
-| T1 | `factor_block_conduit_t1` | `factor_block_tank` | `factor_block_pump` |
-| T2 | `factor_block_conduit_t2` | — | — |
-| T3 | `factor_block_conduit_t3` | — | — |
-| T4 | `factor_block_conduit_t4` | — | — |
-| T5 | `factor_block_conduit_t5` | — | — |
+## 四、Block 命名
 
 ### 特性方块 (无 tier)
 
@@ -91,12 +91,10 @@
 | 修改前 | 修改后 | 中文名 |
 |--------|--------|--------|
 | `factor_anchor` | `factor_block_anchor` | Factor 锚点 |
-| `cultivation_core` | 删除 | 被培育核心 T1-T5 替代 |
-| `factor_extractor` | 删除 | 被提取核心 T1-T5 替代 |
 
 ---
 
-## 五、物品命名 (item)
+## 五、Item 命名
 
 ### 特性水晶 (无 tier)
 
@@ -130,53 +128,35 @@
 
 ## 六、语言文件 Key
 
-**格式**: `{type}.factorcraft.{name}`
-
-注意：语言文件中 modid 保持 `factorcraft`（无下划线）
+**格式**: `{type}.factorcraft.{id}`
 
 示例：
-- `block.factorcraft.factor_block_conduit_t1`
+- `block.factorcraft.factor_machine_extractor_core_t1`
+- `block.factorcraft.factor_block_building_t1`
 - `item.factorcraft.factor_item_crystal_sharp`
 
 ---
 
-## 七、迁移清单
+## 七、需删除的旧注册
 
-### 需删除的旧注册
-
-| 文件 | 删除项 |
+| 类别 | 删除项 |
 |------|--------|
-| ModBlocks.java | `factor_extractor_core`, `factor_emitter_core`, `factor_utilizer_core` |
-| ModBlocks.java | `cultivation_core`, `factor_extractor` |
-| ModMachines.java | 对应 BlockEntity |
-
-### 需新增的注册
-
-| 文件 | 新增项 |
-|------|--------|
-| ModBlocks.java | 20 个核心方块 (machine) |
-| ModBlocks.java | 传输方块重命名 |
-| ModBlocks.java | 特性方块重命名 |
-| ModItems.java | 物品重命名 |
-
-### 需修改的资源
-
-| 类型 | 数量 |
-|------|------|
-| 模型文件 | ~40 |
-| blockstate 文件 | ~25 |
-| 语言文件 | 2 |
-| 结构配置 | 8 |
+| 方块 | `factor_extractor_core`, `factor_emitter_core`, `factor_utilizer_core` |
+| 方块 | `cultivation_core`, `factor_extractor` |
 
 ---
 
-## 八、MOD ID
+## 八、迁移执行顺序
 
-保持 `factorcraft`（无下划线），与语言文件 key 区分：
-
-- 资源路径: `assets/factorcraft/`
-- 语言 key: `block.factorcraft.xxx`
-- 标签 ID: `factor_block_xxx`
+1. [x] 更新 ModBlocks.java
+2. [x] 更新 ModItems.java
+3. [x] 更新 ModMachines.java
+4. [x] 更新模型文件 (models/block/, models/item/)
+5. [x] 更新 blockstate 文件
+6. [x] 更新语言文件 (en_us.json, 新增 zh_cn.json)
+7. [ ] 更新结构配置 (altar_structures/, structures/)
+8. [x] 更新创造模式标签页
+9. [x] 编译测试通过
 
 ---
 
