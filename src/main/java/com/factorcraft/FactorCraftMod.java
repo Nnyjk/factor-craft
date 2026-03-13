@@ -1,6 +1,7 @@
 package com.factorcraft;
 
 import com.factorcraft.command.FactorCraftCommands;
+import com.factorcraft.module.quest.QuestCommands;
 import com.factorcraft.config.ConfigManager;
 import com.factorcraft.datapack.DataPackManager;
 import com.factorcraft.module.ModuleBootstrap;
@@ -35,6 +36,7 @@ public class FactorCraftMod implements ModInitializer {
         // 注册命令
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
             FactorCraftCommands.register(dispatcher);
+            QuestCommands.register(dispatcher, registryAccess);
         });
         LOGGER.info("[FactorCraft] 命令系统注册完成");
         

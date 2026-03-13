@@ -1,6 +1,9 @@
 package com.factorcraft.module.factor;
 
 import com.factorcraft.module.factor.state.FactorWorldState;
+import net.minecraft.world.World;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * 潮汐系统 - 基于 docs/16_dimensions_and_biomes.md
@@ -8,6 +11,8 @@ import com.factorcraft.module.factor.state.FactorWorldState;
  * 负责计算和管理各维度的 Factor 潮汐变化
  */
 public class TideSystem {
+    
+    private static final Logger LOGGER = LoggerFactory.getLogger("FactorCraft:Factor");
 
     /**
      * 计算指定维度在当前 tick 的 Factor 值
@@ -28,6 +33,7 @@ public class TideSystem {
      * @return 偏离百分比（-1.0 到 1.0）
      */
     public static double calculateDeviation(double currentFactor, double baseValue) {
+        if (baseValue == 0) return 0;
         return (currentFactor - baseValue) / baseValue;
     }
 
@@ -119,6 +125,44 @@ public class TideSystem {
             return currentTick + (threeQuarterPeriod - cyclePosition);
         } else {
             return currentTick + (period - cyclePosition) + threeQuarterPeriod;
+        }
+    }
+
+    /**
+     * 判断是否为爆发时间（Factor 处于高位）
+     * 
+     * @param world 世界实例
+     * @return 是否为爆发时间
+     */
+    public static boolean isOutbreakTime(World world) {
+        DimensionType dimensionType = DimensionType.fromKey(
+            world.getRegistryKey().getValue().toString()
+        );
+        long time = world.getTime();
+        double currentFactor = calculateCurrentFactor(dimensionType, time);
+        double deviation = calculateDeviation(currentFactor, dimensionType.baseValue());
+        return deviation > 0.5; // 偏离基准 50% 以上
+    }
+
+    /**
+     * 应用潮汐效果到世界
+     * 
+     * @param world 世界实例
+     */
+    public static void applyTideEffects(World world) {
+        DimensionType dimensionType = DimensionType.fromKey(
+            world.getRegistryKey().getValue().toString()
+        );
+        double currentFactor = calculateCurrentFactor(dimensionType, world.getTime());
+        FactorStatus status = getStatusFromDeviation(
+            calculateDeviation(currentFactor, dimensionType.baseValue())
+        );
+        
+        // 根据 Factor 状态触发相应效果
+        // TODO: 在后续 Phase 中完整实现
+        if (status != FactorStatus.STABLE) {
+            LOGGER.debug("[FactorCraft:Factor] 潮汐状态: {} (偏离度: {})", 
+                status, calculateDeviation(currentFactor, dimensionType.baseValue()));
         }
     }
 
