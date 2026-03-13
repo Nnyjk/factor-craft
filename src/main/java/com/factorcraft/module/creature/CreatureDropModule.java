@@ -10,7 +10,6 @@ import com.factorcraft.module.creature.registry.CreatureDropRegistry;
 import com.factorcraft.module.event.FactorTierChangeEvent;
 import com.factorcraft.module.event.bus.EventPriority;
 import com.factorcraft.module.event.bus.SimpleFactorEventBus;
-import com.factorcraft.module.shared.ModuleMilestone;
 
 import java.util.List;
 import java.util.Set;
@@ -62,7 +61,7 @@ public final class CreatureDropModule implements FactorCraftModule {
             CreatureTierSyncService syncService = new CreatureTierSyncService(registry);
             SimpleFactorEventBus.getInstance().subscribe(FactorTierChangeEvent.class, EventPriority.NORMAL, syncService::onTierChanged);
         }
-        FactorCraftMod.LOGGER.info("[{}] 怪物与凋落物模块 M1b 已启用（生态刷新/掉落池/日切联动）", ModuleMilestone.M1B_CREATURE_AND_DROPS);
+        FactorCraftMod.LOGGER.info("[FactorCraft:Creature] 怪物与凋落物模块已启用（生态刷新/掉落池/日切联动）");
     }
 
     private static void bootstrapDefaults(CreatureDropRegistry registry) {

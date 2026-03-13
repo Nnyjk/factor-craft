@@ -15,7 +15,6 @@ import com.factorcraft.module.material.service.MaterialRollResult;
 import com.factorcraft.module.material.service.MaterialsM2Service;
 import com.factorcraft.module.material.state.MaterialStatusState;
 import com.factorcraft.module.material.validation.MaterialsM2SpecValidator;
-import com.factorcraft.module.shared.ModuleMilestone;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -53,7 +52,7 @@ public final class MaterialsModule implements FactorCraftModule {
         }
 
         MaterialRollResult demo = service.roll(20260214L, "minecraft:the_nether", 3);
-        FactorCraftMod.LOGGER.info("[{}] M2 模块已加载，演示链路={}, trackedWorlds={}", ModuleMilestone.M2_MATERIALS_AND_STATUS, demo, statusState.worldCount());
+        FactorCraftMod.LOGGER.info("[FactorCraft:Material] 材料模块已加载，演示链路={}, trackedWorlds={}", demo, statusState.worldCount());
     }
 
     @Override

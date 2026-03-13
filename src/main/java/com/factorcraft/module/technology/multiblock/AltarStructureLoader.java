@@ -20,7 +20,7 @@ public class AltarStructureLoader {
      * 加载所有祭坛结构
      */
     public static void load() {
-        FactorCraftMod.LOGGER.info("[AltarStructureLoader] 加载祭坛结构配置...");
+        FactorCraftMod.LOGGER.info("[FactorCraft:Structure] 加载祭坛结构配置...");
         
         // 从 BlueprintLoader 加载蓝图并转换为 AltarStructure
         BlueprintLoader.loadAll();
@@ -31,7 +31,7 @@ public class AltarStructureLoader {
             STRUCTURES.put(structure.getId(), structure);
         }
         
-        FactorCraftMod.LOGGER.info("[AltarStructureLoader] 加载完成，共 {} 个结构", STRUCTURES.size());
+        FactorCraftMod.LOGGER.info("[FactorCraft:Structure] 加载完成，共 {} 个结构", STRUCTURES.size());
     }
     
     /**

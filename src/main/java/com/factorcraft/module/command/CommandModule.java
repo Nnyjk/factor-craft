@@ -10,7 +10,6 @@ import com.factorcraft.module.command.model.CommandScope;
 import com.factorcraft.module.command.model.CommandSpec;
 import com.factorcraft.module.command.registry.CommandRegistry;
 import com.factorcraft.module.command.result.CommandExecutionResult;
-import com.factorcraft.module.shared.ModuleMilestone;
 
 import java.util.List;
 import java.util.Set;
@@ -19,7 +18,7 @@ import java.util.Set;
  * 命令系统 MVP 模块（低自由度、强约束）。
  */
 public final class CommandModule implements FactorCraftModule {
-    private static final org.slf4j.Logger LOG = ModuleLoggers.forModule("command_mvp");
+    private static final org.slf4j.Logger LOG = ModuleLoggers.forModule("command");
     private final CommandRegistry registry = CommandRegistry.getInstance();
 
     @Override
@@ -31,7 +30,7 @@ public final class CommandModule implements FactorCraftModule {
     public void initialize() {
         registerBuiltinHandlers();
         reload();
-        LOG.info("[{}] 命令MVP模块初始化完成（动态配置/校验/注册/审计）", ModuleMilestone.M0_COMMAND_MVP);
+        LOG.info("[FactorCraft:Command] 命令模块初始化完成（动态配置/校验/注册/审计）");
     }
 
     @Override

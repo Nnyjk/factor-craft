@@ -57,6 +57,6 @@ public class ModMachines {
             FACTOR_UTILIZER_CORE
         );
         
-        FactorCraftMod.LOGGER.info("[ModMachines] 已注册 3 个 BlockEntity 类型");
+        FactorCraftMod.LOGGER.info("[FactorCraft:Machine] 已注册 3 个 BlockEntity 类型");
     }
 }

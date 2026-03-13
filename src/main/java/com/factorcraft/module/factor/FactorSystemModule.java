@@ -6,7 +6,6 @@ import com.factorcraft.module.event.FactorTierChangeEvent;
 import com.factorcraft.module.event.bus.EventPriority;
 import com.factorcraft.module.event.bus.SimpleFactorEventBus;
 import com.factorcraft.module.factor.api.FactorApiProvider;
-import com.factorcraft.module.shared.ModuleMilestone;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -33,13 +32,13 @@ public final class FactorSystemModule implements FactorCraftModule {
             ServerTickEvents.END_WORLD_TICK.register(world -> {
                 SERVICE.tick(world);
                 if (world.getTime() % 1200 == 0) {
-                    FactorCraftMod.LOGGER.debug("[M1] {} {}", world.getRegistryKey().getValue(), SERVICE.debugHudLine(world));
+                    FactorCraftMod.LOGGER.debug("[FactorCraft:Factor] {} {}", world.getRegistryKey().getValue(), SERVICE.debugHudLine(world));
                 }
             });
 
             SimpleFactorEventBus.getInstance().subscribe(FactorTierChangeEvent.class, EventPriority.NORMAL, event ->
                     FactorCraftMod.LOGGER.info(
-                            "[M1] 日切 Tier 变更: world={}, day={}, {} -> {}",
+                            "[FactorCraft:Factor] 日切 Tier 变更: world={}, day={}, {} -> {}",
                             event.world().getRegistryKey().getValue(),
                             event.dayIndex(),
                             event.previousTier(),
@@ -48,7 +47,7 @@ public final class FactorSystemModule implements FactorCraftModule {
             );
         }
 
-        FactorCraftMod.LOGGER.info("[{}] 因子系统 M1 已启用（实时因子/日切Tier/阈值广播/灾害冷却）", ModuleMilestone.M1_FACTOR_AND_TIER);
+        FactorCraftMod.LOGGER.info("[FactorCraft:Factor] 因子系统已启用（实时因子/日切Tier/阈值广播/灾害冷却）");
     }
 
     @Override

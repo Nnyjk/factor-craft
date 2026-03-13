@@ -56,7 +56,7 @@ public final class DynamicContentLoader {
             writeDefaultIfMissing(configRoot.resolve("lang.json"), defaultLang());
             writeDefaultIfMissing(configRoot.resolve("commands.json"), defaultCommands());
         } catch (IOException e) {
-            FactorCraftMod.LOGGER.error("初始化动态配置目录失败: {}", configRoot, e);
+            FactorCraftMod.LOGGER.error("[FactorCraft:Dynamic] 初始化动态配置目录失败: {}", configRoot, e);
         }
     }
 
@@ -154,14 +154,14 @@ public final class DynamicContentLoader {
 
     private static JsonObject readJson(Path file) {
         if (!Files.exists(file)) {
-            FactorCraftMod.LOGGER.warn("动态配置文件不存在: {}", file);
+            FactorCraftMod.LOGGER.warn("[FactorCraft:Dynamic] 动态配置文件不存在: {}", file);
             return null;
         }
 
         try (Reader reader = Files.newBufferedReader(file)) {
             return JsonParser.parseReader(reader).getAsJsonObject();
         } catch (Exception e) {
-            FactorCraftMod.LOGGER.error("读取动态配置文件失败: {}", file, e);
+            FactorCraftMod.LOGGER.error("[FactorCraft:Dynamic] 读取动态配置文件失败: {}", file, e);
             return null;
         }
     }

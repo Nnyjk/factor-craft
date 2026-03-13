@@ -44,14 +44,14 @@ public final class ModuleBootstrap {
         validateDependencies(DEFAULT_MODULES);
         for (FactorCraftModule module : DEFAULT_MODULES) {
             module.initialize();
-            FactorCraftMod.LOGGER.info("模块已初始化: {}", module.moduleId());
+            FactorCraftMod.LOGGER.info("[FactorCraft:Bootstrap] 模块已初始化: {}", module.moduleId());
         }
     }
 
     public static void reloadDefaults() {
         for (FactorCraftModule module : DEFAULT_MODULES) {
             module.reload();
-            FactorCraftMod.LOGGER.info("模块已重载: {}", module.moduleId());
+            FactorCraftMod.LOGGER.info("[FactorCraft:Bootstrap] 模块已重载: {}", module.moduleId());
         }
     }
 
@@ -59,7 +59,7 @@ public final class ModuleBootstrap {
         for (int i = DEFAULT_MODULES.size() - 1; i >= 0; i--) {
             FactorCraftModule module = DEFAULT_MODULES.get(i);
             module.shutdown();
-            FactorCraftMod.LOGGER.info("模块已关闭: {}", module.moduleId());
+            FactorCraftMod.LOGGER.info("[FactorCraft:Bootstrap] 模块已关闭: {}", module.moduleId());
         }
     }
 

@@ -5,15 +5,15 @@ import org.slf4j.LoggerFactory;
 import java.nio.file.Path;
 
 public class TraitInitializer {
-    private static final Logger LOGGER = LoggerFactory.getLogger(TraitInitializer.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger("FactorCraft:Trait");
     
     public static void initialize() {
-        LOGGER.info("Initializing trait system...");
-        LOGGER.info("Trait system initialized");
+        LOGGER.info("[FactorCraft:Trait] Initializing trait system...");
+        LOGGER.info("[FactorCraft:Trait] Trait system initialized");
     }
     
     public static void loadTraits(Path configPath) {
         TraitRegistry.loadFromConfig(configPath);
-        LOGGER.info("Loaded {} traits", TraitRegistry.size());
+        LOGGER.info("[FactorCraft:Trait] Loaded {} traits", TraitRegistry.size());
     }
 }
