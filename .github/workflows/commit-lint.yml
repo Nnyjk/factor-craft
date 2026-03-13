@@ -19,6 +19,12 @@ jobs:
         BASE="${{ github.base_ref }}"
         HEAD="${{ github.head_ref }}"
         
+        # Skip lint for develop -> main merges (historical commits)
+        if [[ "$BASE" == "main" && "$HEAD" == "develop" ]]; then
+          echo "⏭️ Skipping commit lint for develop → main merge (historical commits)"
+          exit 0
+        fi
+        
         # Get all commits in the PR
         COMMITS=$(git log origin/$BASE..origin/$HEAD --pretty=format:"%s")
         
@@ -38,7 +44,7 @@ jobs:
         
         while IFS= read -r COMMIT; do
           # Skip merge commits
-          if [[ "$COMMIT" =~ ^Merge\ branch|^Merge\ pull\ request ]]; then
+          if [[ "$COMMIT" =~ ^Merge\ branch|^Merge\ pull\ request|^Merge\ PR: ]]; then
             continue
           fi
           
