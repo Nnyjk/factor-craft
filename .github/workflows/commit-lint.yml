@@ -19,6 +19,12 @@ jobs:
         BASE="${{ github.base_ref }}"
         HEAD="${{ github.head_ref }}"
         
+        # Skip lint for develop -> main merges (historical commits)
+        if [[ "$BASE" == "main" && "$HEAD" == "develop" ]]; then
+          echo "⏭️ Skipping commit lint for develop → main merge (historical commits)"
+          exit 0
+        fi
+        
         # Get all commits in the PR
         COMMITS=$(git log origin/$BASE..origin/$HEAD --pretty=format:"%s")
         
@@ -28,8 +34,8 @@ jobs:
         # Valid scopes
         VALID_SCOPES="combat|cycle|factor|material|technology|quest|creature|loot|cultivation|ui|network|multiblock|command|config|api|core"
         
-        # Pattern
-        PATTERN="^($VALID_TYPES)(\($VALID_SCOPES\))?:\s.+$"
+        # Pattern (allow optional PR reference suffix like "(PR #41)")
+        PATTERN="^($VALID_TYPES)(\($VALID_SCOPES\))?:\s.+(\s\(PR\s#[0-9]+\))?$"
         
         FAILED=0
         
@@ -38,7 +44,7 @@ jobs:
         
         while IFS= read -r COMMIT; do
           # Skip merge commits
-          if [[ "$COMMIT" =~ ^Merge\ branch|^Merge\ pull\ request ]]; then
+          if [[ "$COMMIT" =~ ^Merge\ branch|^Merge\ pull\ request|^Merge\ PR: ]]; then
             continue
           fi
           
