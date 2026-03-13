@@ -66,6 +66,18 @@ jar {
     }
 }
 
+// Fabric Loom 运行配置
+loom {
+    runs {
+        gametest {
+            server()
+            name "Game Test"
+            vmArg "-Dfabric-api.gametest=true"
+            vmArg "-Dfabric-api.gametest.report-file=${project.buildDir}/gametest/results.xml"
+        }
+    }
+}
+
 publishing {
     publications {
         mavenJava(MavenPublication) {
