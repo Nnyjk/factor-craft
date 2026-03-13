@@ -227,15 +227,29 @@ feat(combat): add T6 weapon system
 Refs: #123
 ```
 
-**Git Hooks:**
+**Git Hooks 分层检查:**
 
-项目提供 commit 格式检查 hook，克隆仓库后运行：
+项目提供三层检查机制：
+
+| Hook | 触发时机 | 检查内容 | 耗时 |
+|------|----------|----------|------|
+| `pre-commit` | 每次 commit | 编译检查 | ~5s |
+| `pre-push` | 每次 push | 编译 + 快速测试 | ~35s |
+| `commit-msg` | 每次 commit | Commit 格式 | 即时 |
+
+克隆仓库后运行：
 
 ```bash
 ./scripts/install-hooks.sh
 ```
 
-CI 会在 PR 时自动检查所有 commit 格式。
+**跳过检查：**
+```bash
+git commit --no-verify  # 跳过 pre-commit 和 commit-msg
+git push --no-verify    # 跳过 pre-push
+```
+
+CI 会在 PR 时运行完整测试（编译 + QuickTest + GameTest）作为最终保障。
 
 ---
 
