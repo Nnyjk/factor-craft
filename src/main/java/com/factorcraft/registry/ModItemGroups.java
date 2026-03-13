@@ -8,13 +8,20 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 /**
- * 创造模式标签页
+ * 创造模式标签页 - Fabric 1.21.4
  */
 public class ModItemGroups {
+    
+    private static final String MOD_ID = "factorcraft";
+    
+    public static final RegistryKey<ItemGroup> FACTOR_CRAFT_KEY = 
+        RegistryKey.of(RegistryKeys.ITEM_GROUP, Identifier.of(MOD_ID, "general"));
     
     public static final ItemGroup FACTOR_CRAFT = FabricItemGroup.builder()
         .icon(() -> new ItemStack(ModBlocks.FACTOR_EXTRACTOR_CORE))
@@ -71,12 +78,7 @@ public class ModItemGroups {
         .build();
     
     public static void register() {
-        Registry.register(
-            Registries.ITEM_GROUP,
-            Identifier.of(FactorCraftMod.MOD_ID, "general"),
-            FACTOR_CRAFT
-        );
-        
+        Registry.register(Registries.ITEM_GROUP, FACTOR_CRAFT_KEY, FACTOR_CRAFT);
         FactorCraftMod.LOGGER.info("[ModItemGroups] 创造模式标签页已注册");
     }
 }
