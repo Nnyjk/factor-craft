@@ -1,0 +1,27 @@
+#!/bin/bash
+#
+# Pre-push hook: 快速测试
+# 在每次 push 前运行，确保基本功能正常
+#
+
+echo "🧪 Pre-push: 快速测试..."
+
+cd "$(git rev-parse --show-toplevel)"
+
+# 检查是否是 force push
+if [ "$1" = "--force" ] || [ "$1" = "-f" ]; then
+    echo "⚠️  Force push 检测到，跳过测试"
+    exit 0
+fi
+
+# 运行构建和快速测试
+if ! ./gradlew build runQuickTest --quiet 2>&1; then
+    echo ""
+    echo "❌ 测试失败！请修复后再推送。"
+    echo "   跳过检查: git push --no-verify"
+    echo ""
+    exit 1
+fi
+
+echo "✅ 测试通过"
+exit 0
