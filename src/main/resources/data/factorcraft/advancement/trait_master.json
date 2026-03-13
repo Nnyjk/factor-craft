@@ -1,0 +1,18 @@
+{
+  "display": {
+    "icon": {
+      "id": "factorcraft:resonance_crystal"
+    },
+    "title": "特性大师",
+    "description": "在单个物品上拥有 5 个或更多特性",
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "parent": "factorcraft:first_extraction",
+  "criteria": {
+    "requirement": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

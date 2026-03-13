@@ -1,0 +1,18 @@
+{
+  "display": {
+    "icon": {
+      "id": "factorcraft:cultivation_core"
+    },
+    "title": "培育专家",
+    "description": "成功培育出一个高级特性",
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "parent": "factorcraft:first_extraction",
+  "criteria": {
+    "requirement": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

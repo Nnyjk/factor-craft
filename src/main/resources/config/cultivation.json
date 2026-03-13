@@ -1,0 +1,15 @@
+{
+  "injection": {
+    "success_rate": 1.0,
+    "positive_trait_chance": 0.7,
+    "negative_trait_chance": 0.3
+  },
+  "cost_multiplier": 10,
+  "trait_limits": {
+    "lv1": {"min": 1, "max": 2, "min_positive": 1},
+    "lv2": {"min": 1, "max": 2, "min_positive": 2},
+    "lv3": {"min": 2, "max": 3, "min_positive": 2},
+    "lv4": {"min": 2, "max": 3, "min_positive": 3},
+    "lv5": {"min": 3, "max": 5, "min_positive": 3}
+  }
+}

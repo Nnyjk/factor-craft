@@ -1,0 +1,20 @@
+{
+  "extraction_speed": {
+    "base_at_100": 0.0125,
+    "tiers": {
+      "DEPLETED": {"range": [0, 20], "multiplier": 0.5},
+      "LOW_ENERGY": {"range": [20, 50], "multiplier": 0.5},
+      "STABLE": {"range": [50, 80], "multiplier": 1.0},
+      "HIGH_ENERGY": {"range": [80, 100], "multiplier": 1.5},
+      "OVERLOAD": {"range": [100, 999], "multiplier": 2.0}
+    }
+  },
+  "tier_multipliers": {
+    "t1": 1.0,
+    "t2": 2.0,
+    "t3": 4.0,
+    "t4": 8.0,
+    "t5": 16.0
+  },
+  "concentration_floor_ratio": 0.1
+}

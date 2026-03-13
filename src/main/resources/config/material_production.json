@@ -1,0 +1,126 @@
+{
+  "production_structures": {
+    "ancient_synthesis_t1": {
+      "name": "远古合成阵",
+      "name_en": "Ancient Synthesis Array",
+      "tier": 1,
+      "type": "synthesizer",
+      "input_tier": 1,
+      "output_tier": 2,
+      "factor_cost": 1000,
+      "conversion_rate": "2:1",
+      "recommended_dimension": "minecraft:overworld",
+      "speed_multiplier": 1.0,
+      "slots": 1
+    },
+    "ancient_forge_t2": {
+      "name": "远古锻造台",
+      "name_en": "Ancient Forge",
+      "tier": 2,
+      "type": "synthesizer",
+      "input_tier": 2,
+      "output_tier": 3,
+      "factor_cost": 5000,
+      "conversion_rate": "4:1",
+      "recommended_dimension": "minecraft:the_nether",
+      "speed_multiplier": 1.5,
+      "slots": 2
+    },
+    "fate_foundry_t3": {
+      "name": "命运铸造炉",
+      "name_en": "Fate Foundry",
+      "tier": 3,
+      "type": "synthesizer",
+      "input_tier": 3,
+      "output_tier": 4,
+      "factor_cost": 25000,
+      "conversion_rate": "6:1",
+      "recommended_dimension": "minecraft:the_nether",
+      "speed_multiplier": 2.0,
+      "slots": 3
+    },
+    "creation_furnace_t4": {
+      "name": "创世熔炉",
+      "name_en": "Creation Furnace",
+      "tier": 4,
+      "type": "synthesizer",
+      "input_tier": 4,
+      "output_tier": 5,
+      "factor_cost": 125000,
+      "conversion_rate": "10:1",
+      "recommended_dimension": "minecraft:the_end",
+      "speed_multiplier": 3.0,
+      "slots": 4
+    },
+    "origin_altar_t5": {
+      "name": "本源祭坛",
+      "name_en": "Origin Altar",
+      "tier": 5,
+      "type": "synthesizer",
+      "input_tier": 5,
+      "output_tier": 6,
+      "factor_cost": 500000,
+      "conversion_rate": "15:1",
+      "recommended_dimension": "minecraft:the_end",
+      "speed_multiplier": 5.0,
+      "slots": 5
+    }
+  },
+  "production_recipes": {
+    "t1_to_t2": {
+      "structure": "ancient_synthesis_t1",
+      "input": {
+        "item": "factorcraft:dust_copper_ingot",
+        "count": 64
+      },
+      "output": {
+        "item": "factorcraft:shadow_steel_ingot",
+        "count": 32
+      },
+      "factor_cost": 1000
+    },
+    "t2_to_t3": {
+      "structure": "ancient_forge_t2",
+      "input": {
+        "item": "factorcraft:shadow_steel_ingot",
+        "count": 128
+      },
+      "output": {
+        "item": "factorcraft:stardust_ingot",
+        "count": 32
+      },
+      "factor_cost": 5000
+    },
+    "t3_to_t4": {
+      "structure": "fate_foundry_t3",
+      "input": {
+        "item": "factorcraft:stardust_ingot",
+        "count": 256
+      },
+      "output": {
+        "item": "factorcraft:ancient_alloy",
+        "count": 42
+      },
+      "factor_cost": 25000
+    },
+    "t4_to_t5": {
+      "structure": "creation_furnace_t4",
+      "input": {
+        "item": "factorcraft:ancient_alloy",
+        "count": 512
+      },
+      "output": {
+        "item": "factorcraft:void_crystal",
+        "count": 51
+      },
+      "factor_cost": 125000
+    }
+  },
+  "dimension_penalty": {
+    "multiplier": 10.0,
+    "description": "非推荐维度生产时的 Factor 消耗倍率"
+  },
+  "production_time": {
+    "all_tiers": 0
+  }
+}

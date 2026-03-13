@@ -1,0 +1,354 @@
+{
+  "extractor_unlocks": {
+    "t1_star_collector": {
+      "name": "星辰收集器",
+      "name_en": "Star Collector",
+      "tier": 1,
+      "required_material": "factorcraft:dust_copper_ingot",
+      "required_count": 32,
+      "prerequisites": [],
+      "features": {
+        "extraction_rate": 1.0,
+        "range_chunks": 1,
+        "dimension_bonus": {
+          "minecraft:overworld": 1.0,
+          "minecraft:the_nether": 1.5,
+          "minecraft:the_end": 2.0
+        }
+      }
+    },
+    "t2_star_array": {
+      "name": "星辰阵列",
+      "name_en": "Star Array",
+      "tier": 2,
+      "required_material": "factorcraft:shadow_steel_ingot",
+      "required_count": 64,
+      "prerequisites": ["t1_star_collector"],
+      "features": {
+        "extraction_rate": 2.0,
+        "range_chunks": 9,
+        "dimension_bonus": {
+          "minecraft:overworld": 1.0,
+          "minecraft:the_nether": 1.5,
+          "minecraft:the_end": 2.0
+        }
+      }
+    },
+    "t3_nebula_siphon": {
+      "name": "星云汲取器",
+      "name_en": "Nebula Siphon",
+      "tier": 3,
+      "required_material": "factorcraft:stardust_ingot",
+      "required_count": 64,
+      "prerequisites": ["t2_star_array"],
+      "features": {
+        "extraction_rate": 4.0,
+        "range_chunks": 25,
+        "dimension_bonus": {
+          "minecraft:overworld": 1.0,
+          "minecraft:the_nether": 1.5,
+          "minecraft:the_end": 2.0
+        }
+      }
+    },
+    "t4_cosmic_resonator": {
+      "name": "宇宙共鸣器",
+      "name_en": "Cosmic Resonator",
+      "tier": 4,
+      "required_material": "factorcraft:ancient_alloy",
+      "required_count": 64,
+      "prerequisites": ["t3_nebula_siphon"],
+      "features": {
+        "extraction_rate": 8.0,
+        "range_chunks": 81,
+        "dimension_bonus": {
+          "minecraft:overworld": 1.0,
+          "minecraft:the_nether": 1.5,
+          "minecraft:the_end": 2.0
+        }
+      }
+    },
+    "t5_void_vortex": {
+      "name": "虚空漩涡",
+      "name_en": "Void Vortex",
+      "tier": 5,
+      "required_material": "factorcraft:void_crystal",
+      "required_count": 64,
+      "prerequisites": ["t4_cosmic_resonator"],
+      "features": {
+        "extraction_rate": 16.0,
+        "range_chunks": 225,
+        "dimension_bonus": {
+          "minecraft:overworld": 1.0,
+          "minecraft:the_nether": 1.5,
+          "minecraft:the_end": 2.0
+        }
+      }
+    }
+  },
+  "consumer_unlocks": {
+    "t1_soul_burner": {
+      "name": "灵魂燃烧器",
+      "name_en": "Soul Burner",
+      "tier": 1,
+      "required_material": "factorcraft:dust_copper_ingot",
+      "required_count": 32,
+      "prerequisites": ["t1_star_collector"],
+      "features": {
+        "base_output": 50,
+        "dimension_multiplier": {
+          "minecraft:overworld": 1.0,
+          "minecraft:the_nether": 1.5,
+          "minecraft:the_end": 2.0
+        }
+      }
+    },
+    "t2_soul_furnace": {
+      "name": "灵魂熔炉",
+      "name_en": "Soul Furnace",
+      "tier": 2,
+      "required_material": "factorcraft:shadow_steel_ingot",
+      "required_count": 64,
+      "prerequisites": ["t1_soul_burner"],
+      "features": {
+        "base_output": 150,
+        "dimension_multiplier": {
+          "minecraft:overworld": 1.2,
+          "minecraft:the_nether": 1.5,
+          "minecraft:the_end": 2.0
+        }
+      }
+    },
+    "t3_abyss_devourer": {
+      "name": "深渊吞噬者",
+      "name_en": "Abyss Devourer",
+      "tier": 3,
+      "required_material": "factorcraft:stardust_ingot",
+      "required_count": 64,
+      "prerequisites": ["t2_soul_furnace"],
+      "features": {
+        "base_output": 500,
+        "dimension_multiplier": {
+          "minecraft:overworld": 1.5,
+          "minecraft:the_nether": 1.8,
+          "minecraft:the_end": 2.0
+        }
+      }
+    },
+    "t4_chaos_rift": {
+      "name": "混沌裂隙",
+      "name_en": "Chaos Rift",
+      "tier": 4,
+      "required_material": "factorcraft:ancient_alloy",
+      "required_count": 64,
+      "prerequisites": ["t3_abyss_devourer"],
+      "features": {
+        "base_output": 2000,
+        "dimension_multiplier": {
+          "minecraft:overworld": 1.5,
+          "minecraft:the_nether": 1.8,
+          "minecraft:the_end": 2.0
+        }
+      }
+    },
+    "t5_eternal_core": {
+      "name": "永恒炉心",
+      "name_en": "Eternal Core",
+      "tier": 5,
+      "required_material": "factorcraft:void_crystal",
+      "required_count": 64,
+      "prerequisites": ["t4_chaos_rift"],
+      "features": {
+        "base_output": 5000,
+        "dimension_multiplier": {
+          "minecraft:overworld": 1.5,
+          "minecraft:the_nether": 1.8,
+          "minecraft:the_end": 2.0
+        }
+      }
+    }
+  },
+  "synthesizer_unlocks": {
+    "t1_ancient_synthesis": {
+      "name": "远古合成阵",
+      "name_en": "Ancient Synthesis Array",
+      "tier": 1,
+      "required_material": "factorcraft:dust_copper_ingot",
+      "required_count": 64,
+      "prerequisites": ["t1_soul_burner"],
+      "features": {
+        "factor_cost": 1000,
+        "conversion_rate": "2:1",
+        "recommended_dimension": "minecraft:overworld"
+      }
+    },
+    "t2_ancient_forge": {
+      "name": "远古锻造台",
+      "name_en": "Ancient Forge",
+      "tier": 2,
+      "required_material": "factorcraft:shadow_steel_ingot",
+      "required_count": 128,
+      "prerequisites": ["t1_ancient_synthesis"],
+      "features": {
+        "factor_cost": 5000,
+        "conversion_rate": "4:1",
+        "recommended_dimension": "minecraft:the_nether"
+      }
+    },
+    "t3_fate_foundry": {
+      "name": "命运铸造炉",
+      "name_en": "Fate Foundry",
+      "tier": 3,
+      "required_material": "factorcraft:stardust_ingot",
+      "required_count": 256,
+      "prerequisites": ["t2_ancient_forge"],
+      "features": {
+        "factor_cost": 25000,
+        "conversion_rate": "6:1",
+        "recommended_dimension": "minecraft:the_nether"
+      }
+    },
+    "t4_creation_furnace": {
+      "name": "创世熔炉",
+      "name_en": "Creation Furnace",
+      "tier": 4,
+      "required_material": "factorcraft:ancient_alloy",
+      "required_count": 512,
+      "prerequisites": ["t3_fate_foundry"],
+      "features": {
+        "factor_cost": 125000,
+        "conversion_rate": "10:1",
+        "recommended_dimension": "minecraft:the_end"
+      }
+    },
+    "t5_origin_altar": {
+      "name": "本源祭坛",
+      "name_en": "Origin Altar",
+      "tier": 5,
+      "required_material": "factorcraft:void_crystal",
+      "required_count": 512,
+      "prerequisites": ["t4_creation_furnace"],
+      "features": {
+        "factor_cost": 500000,
+        "conversion_rate": "15:1",
+        "recommended_dimension": "minecraft:the_end"
+      }
+    }
+  },
+  "cultivator_unlocks": {
+    "t1_fate_loom": {
+      "name": "命运织机",
+      "name_en": "Fate Loom",
+      "tier": 1,
+      "required_material": "factorcraft:dust_copper_ingot",
+      "required_count": 32,
+      "prerequisites": ["t1_ancient_synthesis"],
+      "features": {
+        "trait_slots": 1,
+        "cost_multiplier": 1.0
+      }
+    },
+    "t2_soul_weaver": {
+      "name": "灵魂编织器",
+      "name_en": "Soul Weaver",
+      "tier": 2,
+      "required_material": "factorcraft:shadow_steel_ingot",
+      "required_count": 64,
+      "prerequisites": ["t1_fate_loom"],
+      "features": {
+        "trait_slots": 1,
+        "cost_multiplier": 1.5
+      }
+    },
+    "t3_fate_altar": {
+      "name": "命运祭坛",
+      "name_en": "Fate Altar",
+      "tier": 3,
+      "required_material": "factorcraft:stardust_ingot",
+      "required_count": 64,
+      "prerequisites": ["t2_soul_weaver"],
+      "features": {
+        "trait_slots": 2,
+        "cost_multiplier": 2.0
+      }
+    },
+    "t4_fate_sanctuary": {
+      "name": "命运圣所",
+      "name_en": "Fate Sanctuary",
+      "tier": 4,
+      "required_material": "factorcraft:ancient_alloy",
+      "required_count": 64,
+      "prerequisites": ["t3_fate_altar"],
+      "features": {
+        "trait_slots": 2,
+        "cost_multiplier": 3.0
+      }
+    },
+    "t5_reincarnation_gate": {
+      "name": "轮回之门",
+      "name_en": "Reincarnation Gate",
+      "tier": 5,
+      "required_material": "factorcraft:void_crystal",
+      "required_count": 64,
+      "prerequisites": ["t4_fate_sanctuary"],
+      "features": {
+        "trait_slots": 3,
+        "cost_multiplier": 5.0
+      }
+    }
+  },
+  "transmitter_unlocks": {
+    "t1_transmitter": {
+      "name": "基础传递器",
+      "name_en": "Basic Transmitter",
+      "tier": 1,
+      "required_material": "factorcraft:shadow_steel_ingot",
+      "required_count": 32,
+      "prerequisites": ["t2_ancient_forge"],
+      "features": {
+        "efficiency": 0.80,
+        "distance_loss": 0.01
+      }
+    },
+    "t2_transmitter": {
+      "name": "维度传递器",
+      "name_en": "Dimension Transmitter",
+      "tier": 2,
+      "required_material": "factorcraft:stardust_ingot",
+      "required_count": 32,
+      "prerequisites": ["t1_transmitter"],
+      "features": {
+        "efficiency": 0.85,
+        "distance_loss": 0.008
+      }
+    },
+    "t3_transmitter": {
+      "name": "远古传递器",
+      "name_en": "Ancient Transmitter",
+      "tier": 3,
+      "required_material": "factorcraft:ancient_alloy",
+      "required_count": 32,
+      "prerequisites": ["t2_transmitter"],
+      "features": {
+        "efficiency": 0.90,
+        "distance_loss": 0.005
+      }
+    },
+    "t4_transmitter": {
+      "name": "仲裁传递器",
+      "name_en": "Arbiter Transmitter",
+      "tier": 4,
+      "required_material": "factorcraft:void_crystal",
+      "required_count": 32,
+      "prerequisites": ["t3_transmitter"],
+      "features": {
+        "efficiency": 0.95,
+        "distance_loss": 0.003
+      }
+    }
+  },
+  "dimension_penalty": {
+    "multiplier": 10.0,
+    "description": "非推荐维度生产时的 Factor 消耗倍率"
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "display": {
+    "icon": {
+      "id": "factorcraft:factor_crystal"
+    },
+    "title": "Factor Craft",
+    "description": "开始探索 Factor 的世界",
+    "background": "minecraft:textures/gui/advancements/backgrounds/stone.png",
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "requirement": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": ["factorcraft:factor_crystal"]
+          }
+        ]
+      }
+    }
+  }
+}

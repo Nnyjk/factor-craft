@@ -1,0 +1,20 @@
+{
+  "id": "factorcraft:emitter_t1",
+  "name": "一阶释放器祭坛",
+  "description": "基础 Factor 跨维度传输结构",
+  "tier": 1,
+  "type": "emitter",
+  "size": [3, 3, 1],
+  "structure": [
+    ["###", "#C#", "###"]
+  ],
+  "legend": {
+    "#": "factorcraft:building_block_t1",
+    "C": "factorcraft:factor_emitter_core"
+  },
+  "properties": {
+    "transmissionRate": 1.0,
+    "powerConsumption": 15,
+    "rangeMultiplier": 1.0
+  }
+}

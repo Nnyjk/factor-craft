@@ -1,0 +1,63 @@
+#!/bin/bash
+#
+# Commit message format checker
+# Format: <type>(<scope>): <subject>
+# Example: feat(combat): add T6 weapon system
+#
+
+COMMIT_MSG_FILE=$1
+COMMIT_MSG=$(cat "$COMMIT_MSG_FILE")
+
+# Allow merge commits and revert commits
+if echo "$COMMIT_MSG" | grep -qE "^Merge branch|^Merge pull request|^Revert "; then
+    exit 0
+fi
+
+# Allow commits that start with version tags
+if echo "$COMMIT_MSG" | grep -qE "^v[0-9]+\.[0-9]+\.[0-9]+"; then
+    exit 0
+fi
+
+# Check first line only
+FIRST_LINE=$(echo "$COMMIT_MSG" | head -n1)
+
+# Check format: type(scope): subject or type: subject
+# Types: feat, fix, docs, style, refactor, test, chore, revert, perf, ci, build
+# Scopes (optional): combat, cycle, factor, material, technology, quest, creature, loot, cultivation, ui, network, multiblock, command, config, api, core
+
+if echo "$FIRST_LINE" | grep -qE "^(feat|fix|docs|style|refactor|test|chore|revert|perf|ci|build)\((combat|cycle|factor|material|technology|quest|creature|loot|cultivation|ui|network|multiblock|command|config|api|core)\): .+"; then
+    # Valid with scope
+    :
+elif echo "$FIRST_LINE" | grep -qE "^(feat|fix|docs|style|refactor|test|chore|revert|perf|ci|build): .+"; then
+    # Valid without scope
+    :
+else
+    echo ""
+    echo "❌ Commit message format is invalid!"
+    echo ""
+    echo "Expected format: <type>(<scope>): <subject>"
+    echo "       or simply: <type>: <subject>"
+    echo ""
+    echo "Valid types: feat, fix, docs, style, refactor, test, chore, revert, perf, ci, build"
+    echo "Valid scopes (optional): combat, cycle, factor, material, technology, quest, creature, loot, cultivation, ui, network, multiblock, command, config, api, core"
+    echo ""
+    echo "Examples:"
+    echo "  feat(combat): add T6 weapon system"
+    echo "  fix: resolve registration issue"
+    echo "  docs: update installation guide"
+    echo "  refactor(cycle): improve performance"
+    echo ""
+    echo "Your message: $FIRST_LINE"
+    echo ""
+    exit 1
+fi
+
+# Check subject length (max 72 chars for header)
+HEADER_LENGTH=${#FIRST_LINE}
+if [ $HEADER_LENGTH -gt 72 ]; then
+    echo ""
+    echo "⚠️  Warning: Header exceeds 72 characters ($HEADER_LENGTH chars)"
+    echo ""
+fi
+
+exit 0

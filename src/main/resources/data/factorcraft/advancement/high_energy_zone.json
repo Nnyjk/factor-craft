@@ -1,0 +1,18 @@
+{
+  "display": {
+    "icon": {
+      "id": "factorcraft:factor_condenser"
+    },
+    "title": "高能区域",
+    "description": "发现 Factor 浓度达到 100+ 的区域",
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "parent": "factorcraft:root",
+  "criteria": {
+    "requirement": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

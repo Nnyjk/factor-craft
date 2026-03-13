@@ -1,0 +1,20 @@
+{
+  "id": "factorcraft:extractor_t1",
+  "name": "一阶提取器祭坛",
+  "description": "基础 Factor 提取结构",
+  "tier": 1,
+  "type": "extractor",
+  "size": [3, 3, 1],
+  "structure": [
+    ["###", "#C#", "###"]
+  ],
+  "legend": {
+    "#": "factorcraft:building_block_t1",
+    "C": "factorcraft:factor_extractor_core"
+  },
+  "properties": {
+    "extractionRate": 1.0,
+    "powerConsumption": 10,
+    "bufferSize": 1000
+  }
+}

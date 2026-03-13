@@ -1,0 +1,88 @@
+{
+  "materials": {
+    "dust_copper_ingot": {
+      "name": "尘铜锭",
+      "name_en": "Dust Copper Ingot",
+      "tier": 1,
+      "tier_name": "粗坯级",
+      "hardness": 3.0,
+      "resistance": 15.0,
+      "enchantability": 10,
+      "rarity": "common",
+      "factor_value": 10,
+      "base_trait_slots": 1,
+      "dimensions": ["minecraft:overworld", "minecraft:the_nether", "minecraft:the_end"],
+      "description": "尘埃中提炼的粗坯金属，废弃文明的残留"
+    },
+    "shadow_steel_ingot": {
+      "name": "暗影钢锭",
+      "name_en": "Shadow Steel Ingot",
+      "tier": 2,
+      "tier_name": "工业级",
+      "hardness": 5.0,
+      "resistance": 30.0,
+      "enchantability": 15,
+      "rarity": "uncommon",
+      "factor_value": 100,
+      "base_trait_slots": 1,
+      "dimensions": ["minecraft:overworld", "minecraft:the_nether", "minecraft:the_end"],
+      "description": "注入暗影能量的工业级金属"
+    },
+    "stardust_ingot": {
+      "name": "星尘锭",
+      "name_en": "Stardust Ingot",
+      "tier": 3,
+      "tier_name": "维度级",
+      "hardness": 7.0,
+      "resistance": 50.0,
+      "enchantability": 20,
+      "rarity": "rare",
+      "factor_value": 1000,
+      "base_trait_slots": 2,
+      "dimensions": ["minecraft:the_nether", "minecraft:the_end"],
+      "description": "跨维度的星辰之力凝结"
+    },
+    "ancient_alloy": {
+      "name": "远古合金",
+      "name_en": "Ancient Alloy",
+      "tier": 4,
+      "tier_name": "远古级",
+      "hardness": 10.0,
+      "resistance": 80.0,
+      "enchantability": 25,
+      "rarity": "epic",
+      "factor_value": 10000,
+      "base_trait_slots": 2,
+      "dimensions": ["minecraft:the_end"],
+      "description": "远古文明的科技结晶"
+    },
+    "void_crystal": {
+      "name": "虚空结晶",
+      "name_en": "Void Crystal",
+      "tier": 5,
+      "tier_name": "仲裁级",
+      "hardness": 15.0,
+      "resistance": 120.0,
+      "enchantability": 30,
+      "rarity": "legendary",
+      "factor_value": 100000,
+      "base_trait_slots": 3,
+      "dimensions": ["minecraft:the_end"],
+      "description": "纯粹的虚空能量，接近本源"
+    }
+  },
+  "tier_multipliers": {
+    "t1": 1.0,
+    "t2": 2.5,
+    "t3": 5.0,
+    "t4": 10.0,
+    "t5": 20.0
+  },
+  "tier_names": {
+    "t1": "粗坯级",
+    "t2": "工业级",
+    "t3": "维度级",
+    "t4": "远古级",
+    "t5": "仲裁级"
+  }
+}

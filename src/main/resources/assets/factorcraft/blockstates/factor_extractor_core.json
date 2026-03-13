@@ -1,0 +1,5 @@
+{
+  "variants": {
+    "": { "model": "factorcraft:block/factor_extractor_core" }
+  }
+}
