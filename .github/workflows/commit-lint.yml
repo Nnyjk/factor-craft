@@ -1,0 +1,74 @@
+name: Commit Lint
+
+on:
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    
+    - name: Check commit format
+      run: |
+        # Get the base branch
+        BASE="${{ github.base_ref }}"
+        HEAD="${{ github.head_ref }}"
+        
+        # Get all commits in the PR
+        COMMITS=$(git log origin/$BASE..origin/$HEAD --pretty=format:"%s")
+        
+        # Valid types
+        VALID_TYPES="feat|fix|docs|style|refactor|test|chore|revert|perf|ci|build"
+        
+        # Valid scopes
+        VALID_SCOPES="combat|cycle|factor|material|technology|quest|creature|loot|cultivation|ui|network|multiblock|command|config|api|core"
+        
+        # Pattern
+        PATTERN="^($VALID_TYPES)(\($VALID_SCOPES\))?:\s.+$"
+        
+        FAILED=0
+        
+        echo "Checking commit messages..."
+        echo ""
+        
+        while IFS= read -r COMMIT; do
+          # Skip merge commits
+          if [[ "$COMMIT" =~ ^Merge\ branch|^Merge\ pull\ request ]]; then
+            continue
+          fi
+          
+          # Skip version tags
+          if [[ "$COMMIT" =~ ^v[0-9]+\.[0-9]+\.[0-9]+ ]]; then
+            continue
+          fi
+          
+          if [[ ! "$COMMIT" =~ $PATTERN ]]; then
+            echo "❌ Invalid: $COMMIT"
+            FAILED=1
+          else
+            echo "✅ Valid:   $COMMIT"
+          fi
+        done <<< "$COMMITS"
+        
+        echo ""
+        
+        if [ $FAILED -eq 1 ]; then
+          echo ""
+          echo "Commit message format requirements:"
+          echo "  Format: <type>(<scope>): <subject>"
+          echo "  Types: feat, fix, docs, style, refactor, test, chore, revert, perf, ci, build"
+          echo "  Scopes (optional): combat, cycle, factor, material, technology, quest, creature, loot, cultivation, ui, network, multiblock, command, config, api, core"
+          echo ""
+          echo "Examples:"
+          echo "  feat(combat): add T6 weapon system"
+          echo "  fix: resolve registration issue"
+          echo "  docs: update installation guide"
+          exit 1
+        fi
+        
+        echo "✅ All commits follow the format!"

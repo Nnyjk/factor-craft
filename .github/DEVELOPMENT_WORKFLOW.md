@@ -1,8 +1,8 @@
 # Factor Craft 开发流程规范
 
-**版本:** 1.0.0  
+**版本:** 1.1.0  
 **创建日期:** 2026-03-10  
-**最后更新:** 2026-03-10
+**最后更新:** 2026-03-13
 
 ---
 
@@ -183,13 +183,38 @@ PR 创建
 ```
 
 **Type:**
-- `feat` - 新功能
-- `fix` - Bug 修复
-- `docs` - 文档
-- `style` - 格式
-- `refactor` - 重构
-- `test` - 测试
-- `chore` - 维护
+| Type | 说明 |
+|------|------|
+| `feat` | 新功能 |
+| `fix` | Bug 修复 |
+| `docs` | 文档 |
+| `style` | 格式（不影响代码运行） |
+| `refactor` | 重构 |
+| `test` | 测试 |
+| `chore` | 维护 |
+| `perf` | 性能优化 |
+| `ci` | CI 配置 |
+| `build` | 构建系统 |
+
+**Scope（可选）:**
+| Scope | 模块 |
+|-------|------|
+| `combat` | 战斗系统 |
+| `cycle` | 潮汐周期 |
+| `factor` | Factor 能量 |
+| `material` | 材料系统 |
+| `technology` | 科技树 |
+| `quest` | 任务系统 |
+| `creature` | 生物系统 |
+| `loot` | 战利品 |
+| `cultivation` | 培养系统 |
+| `ui` | 用户界面 |
+| `network` | Factor 网络 |
+| `multiblock` | 多方块结构 |
+| `command` | 命令系统 |
+| `config` | 配置系统 |
+| `api` | API 接口 |
+| `core` | 核心系统 |
 
 **示例:**
 ```
@@ -201,6 +226,16 @@ feat(combat): add T6 weapon system
 
 Refs: #123
 ```
+
+**Git Hooks:**
+
+项目提供 commit 格式检查 hook，克隆仓库后运行：
+
+```bash
+./scripts/install-hooks.sh
+```
+
+CI 会在 PR 时自动检查所有 commit 格式。
 
 ---
 
