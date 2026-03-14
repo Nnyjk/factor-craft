@@ -1,0 +1,34 @@
+{
+  "structure_id": "t4_void_furnace",
+  "name": "虚空熔炉",
+  "name_en": "Void Furnace",
+  "tier": 4,
+  "type": "consumer",
+  "description": "消耗物品获得 Factor 的精英结构",
+  
+  "dimensions": {
+    "width": 7,
+    "height": 7,
+    "depth": 7
+  },
+  
+  "core_block": "factorcraft:factor_machine_consumer_core_t4",
+  
+  "pattern": {
+    "comment": "多方块结构蓝图配置 - 待实现",
+    "layers": [],
+    "slots": []
+  },
+  
+  "input_slots": 9,
+  "fuel_types": ["block", "material", "gem", "artifact", "dimensional"],
+  
+  "features": {
+    "base_output": 1200,
+    "dimension_multiplier": {
+      "minecraft:overworld": 1.0,
+      "minecraft:the_nether": 2.5,
+      "minecraft:the_end": 4.0
+    }
+  }
+}

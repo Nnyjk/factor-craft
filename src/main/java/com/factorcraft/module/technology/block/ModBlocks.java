@@ -13,58 +13,79 @@ import net.minecraft.util.Identifier;
 /**
  * 科技模块方块注册 - Fabric 1.21.4
  * 
- * 注意：Fabric 1.21.4 要求方块在创建时通过 RegistryKey 关联注册表
+ * 命名规范: factor_{group}_{name}_{tier}
+ * - machine: 有 BlockEntity 的机器方块
+ * - block: 静态方块
+ * 
+ * 注意：机器核心方块在 ModMachines 中注册
  */
 public class ModBlocks {
     
     private static final String MOD_ID = "factorcraft";
     
-    // 核心机器方块
-    public static final Block FACTOR_EXTRACTOR_CORE = register("factor_extractor_core", 3.0f);
-    public static final Block FACTOR_EMITTER_CORE = register("factor_emitter_core", 3.0f);
-    public static final Block FACTOR_UTILIZER_CORE = register("factor_utilizer_core", 3.0f);
+    // ========== 传输系统 (machine) ==========
+    // 在 ModMachines 中注册 BlockEntity
     
-    // 传输系统方块
-    public static final Block FACTOR_CONDUIT_T1 = register("factor_conduit_t1", 2.0f);
-    public static final Block FACTOR_CONDUIT_T2 = register("factor_conduit_t2", 3.0f);
-    public static final Block FACTOR_CONDUIT_T3 = register("factor_conduit_t3", 4.0f);
-    public static final Block FACTOR_CONDUIT_T4 = register("factor_conduit_t4", 5.0f);
-    public static final Block FACTOR_CONDUIT_T5 = register("factor_conduit_t5", 6.0f);
+    public static final Block CONDUIT_T1 = registerMachine("factor_machine_conduit_t1", 2.0f);
+    public static final Block CONDUIT_T2 = registerMachine("factor_machine_conduit_t2", 3.0f);
+    public static final Block CONDUIT_T3 = registerMachine("factor_machine_conduit_t3", 4.0f);
+    public static final Block CONDUIT_T4 = registerMachine("factor_machine_conduit_t4", 5.0f);
+    public static final Block CONDUIT_T5 = registerMachine("factor_machine_conduit_t5", 6.0f);
     
-    public static final Block FACTOR_TANK = register("factor_tank", 3.0f);
-    public static final Block FACTOR_PUMP = register("factor_pump", 3.0f);
+    public static final Block TANK = registerMachine("factor_machine_tank", 3.0f);
+    public static final Block PUMP = registerMachine("factor_machine_pump", 3.0f);
     
-    // 特性方块
-    public static final Block SHARP_BLOCK = register("sharp_block", 3.0f);
-    public static final Block STURDY_BLOCK = register("sturdy_block", 3.0f);
-    public static final Block PROTECTIVE_BLOCK = register("protective_block", 3.0f);
-    public static final Block ENERGETIC_BLOCK = register("energetic_block", 3.0f);
-    public static final Block CATALYTIC_BLOCK = register("catalytic_block", 3.0f);
-    public static final Block STABILIZING_BLOCK = register("stabilizing_block", 3.0f);
+    // ========== 特性方块 (block) ==========
     
-    // 建筑方块 T1-T5
-    public static final Block BUILDING_BLOCK_T1 = register("building_block_t1", 1.5f);
-    public static final Block BUILDING_BLOCK_T2 = register("building_block_t2", 3.0f);
-    public static final Block BUILDING_BLOCK_T3 = register("building_block_t3", 4.0f);
-    public static final Block BUILDING_BLOCK_T4 = register("building_block_t4", 5.0f);
-    public static final Block BUILDING_BLOCK_T5 = register("building_block_t5", 6.0f);
+    public static final Block TRAIT_SHARP = registerBlock("factor_block_trait_sharp", 3.0f);
+    public static final Block TRAIT_STURDY = registerBlock("factor_block_trait_sturdy", 3.0f);
+    public static final Block TRAIT_PROTECTIVE = registerBlock("factor_block_trait_protective", 3.0f);
+    public static final Block TRAIT_ENERGETIC = registerBlock("factor_block_trait_energetic", 3.0f);
+    public static final Block TRAIT_CATALYTIC = registerBlock("factor_block_trait_catalytic", 3.0f);
+    public static final Block TRAIT_STABILIZING = registerBlock("factor_block_trait_stabilizing", 3.0f);
+    
+    // ========== 建筑方块 (block) ==========
+    
+    public static final Block BUILDING_T1 = registerBlock("factor_block_building_t1", 1.5f);
+    public static final Block BUILDING_T2 = registerBlock("factor_block_building_t2", 3.0f);
+    public static final Block BUILDING_T3 = registerBlock("factor_block_building_t3", 4.0f);
+    public static final Block BUILDING_T4 = registerBlock("factor_block_building_t4", 5.0f);
+    public static final Block BUILDING_T5 = registerBlock("factor_block_building_t5", 6.0f);
+    
+    // ========== 其他方块 (block) ==========
+    
+    public static final Block ANCHOR = registerBlock("factor_block_anchor", 3.0f);
     
     /**
-     * 注册方块（使用 RegistryKey 模式，符合 Fabric 1.21.4 要求）
+     * 注册静态方块
      */
-    private static Block register(String name, float hardness) {
+    private static Block registerBlock(String name, float hardness) {
         Identifier id = Identifier.of(MOD_ID, name);
         RegistryKey<Block> key = RegistryKey.of(RegistryKeys.BLOCK, id);
         
-        // 创建方块时传入 RegistryKey
         Block block = new Block(AbstractBlock.Settings.create()
             .registryKey(key)
             .strength(hardness));
         
-        // 注册方块
         Registry.register(Registries.BLOCK, id, block);
+        Registry.register(Registries.ITEM, id, new BlockItem(block, new Item.Settings()
+            .registryKey(RegistryKey.of(RegistryKeys.ITEM, id))));
         
-        // 注册 BlockItem
+        return block;
+    }
+    
+    /**
+     * 注册机器方块（仅方块，BlockEntity 在 ModMachines 中注册）
+     */
+    private static Block registerMachine(String name, float hardness) {
+        Identifier id = Identifier.of(MOD_ID, name);
+        RegistryKey<Block> key = RegistryKey.of(RegistryKeys.BLOCK, id);
+        
+        Block block = new Block(AbstractBlock.Settings.create()
+            .registryKey(key)
+            .strength(hardness));
+        
+        Registry.register(Registries.BLOCK, id, block);
         Registry.register(Registries.ITEM, id, new BlockItem(block, new Item.Settings()
             .registryKey(RegistryKey.of(RegistryKeys.ITEM, id))));
         

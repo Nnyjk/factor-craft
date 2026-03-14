@@ -1,0 +1,37 @@
+{
+  "structure_id": "t4_dimensional_extractor",
+  "name": "维度提取器",
+  "name_en": "Dimensional Extractor",
+  "tier": 4,
+  "type": "extractor",
+  "description": "从维度深处提取 Factor 的精英结构",
+  
+  "dimensions": {
+    "width": 7,
+    "height": 7,
+    "depth": 7
+  },
+  
+  "core_block": "factorcraft:factor_machine_extractor_core_t4",
+  
+  "pattern": {
+    "comment": "多方块结构蓝图配置 - 待实现",
+    "layers": [],
+    "slots": []
+  },
+  
+  "requirements": {
+    "min_factor_concentration": 0.01,
+    "recommended_dimension": "minecraft:the_end"
+  },
+  
+  "features": {
+    "extraction_rate": 10.0,
+    "range_chunks": 8,
+    "dimension_bonus": {
+      "minecraft:overworld": 1.0,
+      "minecraft:the_nether": 1.8,
+      "minecraft:the_end": 3.0
+    }
+  }
+}

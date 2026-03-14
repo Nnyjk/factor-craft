@@ -1,0 +1,31 @@
+{
+  "structure_id": "t4_destiny_weaver",
+  "name": "命运编织者",
+  "name_en": "Destiny Weaver",
+  "tier": 4,
+  "type": "cultivator",
+  "description": "给物品注入特性的精英结构",
+  
+  "dimensions": {
+    "width": 7,
+    "height": 7,
+    "depth": 7
+  },
+  
+  "core_block": "factorcraft:factor_machine_cultivator_core_t4",
+  
+  "pattern": {
+    "comment": "多方块结构蓝图配置 - 待实现",
+    "layers": [],
+    "slots": []
+  },
+  
+  "input_slots": 4,
+  "trait_slots": 4,
+  
+  "features": {
+    "trait_slots": 4,
+    "cost_multiplier": 0.5,
+    "cost_formula": "base_value * 5^(n-1)"
+  }
+}

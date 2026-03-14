@@ -1,0 +1,20 @@
+{
+  "id": "factorcraft:consumer_t1",
+  "name": "一阶消费者祭坛",
+  "description": "基础 Factor 转换结构",
+  "tier": 1,
+  "type": "consumer",
+  "size": [3, 3, 1],
+  "structure": [
+    ["###", "#C#", "###"]
+  ],
+  "legend": {
+    "#": "factorcraft:factor_block_building_t1",
+    "C": "factorcraft:factor_machine_consumer_core_t1"
+  },
+  "properties": {
+    "conversionRate": 0.1,
+    "powerConsumption": 20,
+    "bufferSize": 500
+  }
+}

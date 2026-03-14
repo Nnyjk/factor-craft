@@ -1,7 +1,7 @@
 {
   "display": {
     "icon": {
-      "id": "factorcraft:factor_extractor"
+      "id": "factorcraft:factor_machine_extractor_core_t1"
     },
     "title": "首次提取",
     "description": "成功从物品中提取出第一个特性",

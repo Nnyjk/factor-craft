@@ -1,0 +1,31 @@
+{
+  "structure_id": "t5_fate_master",
+  "name": "命运主宰",
+  "name_en": "Fate Master",
+  "tier": 5,
+  "type": "cultivator",
+  "description": "给物品注入特性的终极结构",
+  
+  "dimensions": {
+    "width": 9,
+    "height": 9,
+    "depth": 9
+  },
+  
+  "core_block": "factorcraft:factor_machine_cultivator_core_t5",
+  
+  "pattern": {
+    "comment": "多方块结构蓝图配置 - 待实现",
+    "layers": [],
+    "slots": []
+  },
+  
+  "input_slots": 5,
+  "trait_slots": 5,
+  
+  "features": {
+    "trait_slots": 5,
+    "cost_multiplier": 0.35,
+    "cost_formula": "base_value * 3.5^(n-1)"
+  }
+}

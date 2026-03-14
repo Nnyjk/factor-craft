@@ -1,0 +1,34 @@
+{
+  "structure_id": "t3_soul_burner",
+  "name": "高级灵魂燃烧器",
+  "name_en": "Advanced Soul Burner",
+  "tier": 3,
+  "type": "consumer",
+  "description": "消耗物品获得 Factor 的高级结构",
+  
+  "dimensions": {
+    "width": 5,
+    "height": 7,
+    "depth": 5
+  },
+  
+  "core_block": "factorcraft:factor_machine_consumer_core_t3",
+  
+  "pattern": {
+    "comment": "多方块结构蓝图配置 - 待实现",
+    "layers": [],
+    "slots": []
+  },
+  
+  "input_slots": 5,
+  "fuel_types": ["block", "material", "gem", "artifact"],
+  
+  "features": {
+    "base_output": 400,
+    "dimension_multiplier": {
+      "minecraft:overworld": 1.0,
+      "minecraft:the_nether": 2.0,
+      "minecraft:the_end": 3.0
+    }
+  }
+}

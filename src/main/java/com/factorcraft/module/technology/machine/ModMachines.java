@@ -1,62 +1,117 @@
 package com.factorcraft.module.technology.machine;
 
 import com.factorcraft.FactorCraftMod;
-import com.factorcraft.module.technology.block.ModBlocks;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
+import net.minecraft.block.AbstractBlock;
+import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.item.BlockItem;
+import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.Identifier;
 
 /**
- * 机器 BlockEntity 注册
+ * 机器核心方块与 BlockEntity 注册
+ * 
+ * 命名规范: factor_machine_{type}_core_{tier}
  */
 public class ModMachines {
     
-    public static BlockEntityType<FactorExtractorCoreBlockEntity> FACTOR_EXTRACTOR_CORE;
-    public static BlockEntityType<FactorEmitterCoreBlockEntity> FACTOR_EMITTER_CORE;
-    public static BlockEntityType<FactorUtilizerCoreBlockEntity> FACTOR_UTILIZER_CORE;
+    private static final String MOD_ID = "factorcraft";
+    
+    // ========== 提取核心 T1-T5 ==========
+    public static final Block EXTRACTOR_CORE_T1 = registerMachineBlock("factor_machine_extractor_core_t1", 3.0f);
+    public static final Block EXTRACTOR_CORE_T2 = registerMachineBlock("factor_machine_extractor_core_t2", 3.5f);
+    public static final Block EXTRACTOR_CORE_T3 = registerMachineBlock("factor_machine_extractor_core_t3", 4.0f);
+    public static final Block EXTRACTOR_CORE_T4 = registerMachineBlock("factor_machine_extractor_core_t4", 4.5f);
+    public static final Block EXTRACTOR_CORE_T5 = registerMachineBlock("factor_machine_extractor_core_t5", 5.0f);
+    
+    // ========== 消耗核心 T1-T5 ==========
+    public static final Block CONSUMER_CORE_T1 = registerMachineBlock("factor_machine_consumer_core_t1", 3.0f);
+    public static final Block CONSUMER_CORE_T2 = registerMachineBlock("factor_machine_consumer_core_t2", 3.5f);
+    public static final Block CONSUMER_CORE_T3 = registerMachineBlock("factor_machine_consumer_core_t3", 4.0f);
+    public static final Block CONSUMER_CORE_T4 = registerMachineBlock("factor_machine_consumer_core_t4", 4.5f);
+    public static final Block CONSUMER_CORE_T5 = registerMachineBlock("factor_machine_consumer_core_t5", 5.0f);
+    
+    // ========== 合成核心 T1-T5 ==========
+    public static final Block SYNTHESIZER_CORE_T1 = registerMachineBlock("factor_machine_synthesizer_core_t1", 3.0f);
+    public static final Block SYNTHESIZER_CORE_T2 = registerMachineBlock("factor_machine_synthesizer_core_t2", 3.5f);
+    public static final Block SYNTHESIZER_CORE_T3 = registerMachineBlock("factor_machine_synthesizer_core_t3", 4.0f);
+    public static final Block SYNTHESIZER_CORE_T4 = registerMachineBlock("factor_machine_synthesizer_core_t4", 4.5f);
+    public static final Block SYNTHESIZER_CORE_T5 = registerMachineBlock("factor_machine_synthesizer_core_t5", 5.0f);
+    
+    // ========== 培育核心 T1-T5 ==========
+    public static final Block CULTIVATOR_CORE_T1 = registerMachineBlock("factor_machine_cultivator_core_t1", 3.0f);
+    public static final Block CULTIVATOR_CORE_T2 = registerMachineBlock("factor_machine_cultivator_core_t2", 3.5f);
+    public static final Block CULTIVATOR_CORE_T3 = registerMachineBlock("factor_machine_cultivator_core_t3", 4.0f);
+    public static final Block CULTIVATOR_CORE_T4 = registerMachineBlock("factor_machine_cultivator_core_t4", 4.5f);
+    public static final Block CULTIVATOR_CORE_T5 = registerMachineBlock("factor_machine_cultivator_core_t5", 5.0f);
+    
+    // ========== BlockEntity 类型 ==========
+    public static BlockEntityType<ExtractorCoreBlockEntity> EXTRACTOR_CORE;
+    public static BlockEntityType<ConsumerCoreBlockEntity> CONSUMER_CORE;
+    public static BlockEntityType<SynthesizerCoreBlockEntity> SYNTHESIZER_CORE;
+    public static BlockEntityType<CultivatorCoreBlockEntity> CULTIVATOR_CORE;
+    
+    /**
+     * 注册机器核心方块
+     */
+    private static Block registerMachineBlock(String name, float hardness) {
+        Identifier id = Identifier.of(MOD_ID, name);
+        RegistryKey<Block> key = RegistryKey.of(RegistryKeys.BLOCK, id);
+        
+        Block block = new Block(AbstractBlock.Settings.create()
+            .registryKey(key)
+            .strength(hardness));
+        
+        Registry.register(Registries.BLOCK, id, block);
+        Registry.register(Registries.ITEM, id, new BlockItem(block, new Item.Settings()
+            .registryKey(RegistryKey.of(RegistryKeys.ITEM, id))));
+        
+        return block;
+    }
     
     /**
      * 注册所有 BlockEntity
-     * 注意：必须在 ModBlocks.register() 之后调用
      */
     public static void register() {
-        // 使用 FabricBlockEntityTypeBuilder 创建 BlockEntityType
-        FACTOR_EXTRACTOR_CORE = FabricBlockEntityTypeBuilder.create(
-            FactorExtractorCoreBlockEntity::new,
-            ModBlocks.FACTOR_EXTRACTOR_CORE
+        // 提取核心 BlockEntity（支持 T1-T5 方块）
+        EXTRACTOR_CORE = FabricBlockEntityTypeBuilder.create(
+            ExtractorCoreBlockEntity::new,
+            EXTRACTOR_CORE_T1, EXTRACTOR_CORE_T2, EXTRACTOR_CORE_T3, EXTRACTOR_CORE_T4, EXTRACTOR_CORE_T5
         ).build(null);
         
-        FACTOR_EMITTER_CORE = FabricBlockEntityTypeBuilder.create(
-            FactorEmitterCoreBlockEntity::new,
-            ModBlocks.FACTOR_EMITTER_CORE
+        // 消耗核心 BlockEntity
+        CONSUMER_CORE = FabricBlockEntityTypeBuilder.create(
+            ConsumerCoreBlockEntity::new,
+            CONSUMER_CORE_T1, CONSUMER_CORE_T2, CONSUMER_CORE_T3, CONSUMER_CORE_T4, CONSUMER_CORE_T5
         ).build(null);
         
-        FACTOR_UTILIZER_CORE = FabricBlockEntityTypeBuilder.create(
-            FactorUtilizerCoreBlockEntity::new,
-            ModBlocks.FACTOR_UTILIZER_CORE
+        // 合成核心 BlockEntity
+        SYNTHESIZER_CORE = FabricBlockEntityTypeBuilder.create(
+            SynthesizerCoreBlockEntity::new,
+            SYNTHESIZER_CORE_T1, SYNTHESIZER_CORE_T2, SYNTHESIZER_CORE_T3, SYNTHESIZER_CORE_T4, SYNTHESIZER_CORE_T5
         ).build(null);
         
-        // 注册到 Registry
-        Registry.register(
-            Registries.BLOCK_ENTITY_TYPE,
-            Identifier.of(FactorCraftMod.MOD_ID, "factor_extractor_core"),
-            FACTOR_EXTRACTOR_CORE
-        );
+        // 培育核心 BlockEntity
+        CULTIVATOR_CORE = FabricBlockEntityTypeBuilder.create(
+            CultivatorCoreBlockEntity::new,
+            CULTIVATOR_CORE_T1, CULTIVATOR_CORE_T2, CULTIVATOR_CORE_T3, CULTIVATOR_CORE_T4, CULTIVATOR_CORE_T5
+        ).build(null);
         
-        Registry.register(
-            Registries.BLOCK_ENTITY_TYPE,
-            Identifier.of(FactorCraftMod.MOD_ID, "factor_emitter_core"),
-            FACTOR_EMITTER_CORE
-        );
+        // 注册 BlockEntity 类型
+        Registry.register(Registries.BLOCK_ENTITY_TYPE, 
+            Identifier.of(MOD_ID, "extractor_core"), EXTRACTOR_CORE);
+        Registry.register(Registries.BLOCK_ENTITY_TYPE, 
+            Identifier.of(MOD_ID, "consumer_core"), CONSUMER_CORE);
+        Registry.register(Registries.BLOCK_ENTITY_TYPE, 
+            Identifier.of(MOD_ID, "synthesizer_core"), SYNTHESIZER_CORE);
+        Registry.register(Registries.BLOCK_ENTITY_TYPE, 
+            Identifier.of(MOD_ID, "cultivator_core"), CULTIVATOR_CORE);
         
-        Registry.register(
-            Registries.BLOCK_ENTITY_TYPE,
-            Identifier.of(FactorCraftMod.MOD_ID, "factor_utilizer_core"),
-            FACTOR_UTILIZER_CORE
-        );
-        
-        FactorCraftMod.LOGGER.info("[FactorCraft:Machine] 已注册 3 个 BlockEntity 类型");
+        FactorCraftMod.LOGGER.info("[ModMachines] 已注册 20 个核心方块, 4 个 BlockEntity 类型");
     }
 }

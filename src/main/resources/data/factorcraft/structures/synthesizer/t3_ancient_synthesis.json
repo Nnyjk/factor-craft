@@ -1,0 +1,31 @@
+{
+  "structure_id": "t3_ancient_synthesis",
+  "name": "高级远古合成阵",
+  "name_en": "Advanced Ancient Synthesis Array",
+  "tier": 3,
+  "type": "synthesizer",
+  "description": "用 Factor 合成物品的高级结构",
+  
+  "dimensions": {
+    "width": 5,
+    "height": 7,
+    "depth": 5
+  },
+  
+  "core_block": "factorcraft:factor_machine_synthesizer_core_t3",
+  
+  "pattern": {
+    "comment": "多方块结构蓝图配置 - 待实现",
+    "layers": [],
+    "slots": []
+  },
+  
+  "input_slots": 9,
+  "output_slots": 5,
+  
+  "features": {
+    "factor_cost": 250,
+    "conversion_rate": "1:1",
+    "recommended_dimension": "minecraft:the_end"
+  }
+}
