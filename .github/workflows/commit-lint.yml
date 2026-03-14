@@ -16,8 +16,9 @@ jobs:
     - name: Set up locale
       run: |
         sudo locale-gen en_US.UTF-8
-        echo "LANG=en_US.UTF-8" >> $GITHUB_ENV
-        echo "LC_ALL=en_US.UTF-8" >> $GITHUB_ENV
+        sudo locale-gen C.UTF-8
+        echo "LANG=C.UTF-8" >> $GITHUB_ENV
+        echo "LC_ALL=C.UTF-8" >> $GITHUB_ENV
     
     - name: Check commit format
       run: |
@@ -41,7 +42,8 @@ jobs:
         VALID_SCOPES="combat|cycle|factor|material|technology|quest|creature|loot|cultivation|ui|network|multiblock|command|config|api|core"
         
         # Pattern (allow optional PR reference suffix like "(PR #41)")
-        PATTERN="^($VALID_TYPES)(\($VALID_SCOPES\))?:\s.+(\s\(PR\s#[0-9]+\))?$"
+        # Use [[:space:]] for better locale support
+        PATTERN="^($VALID_TYPES)(\($VALID_SCOPES\))?:[[:space:]].+(\s\(PR\s#[0-9]+\))?$"
         
         FAILED=0
         
