@@ -35,10 +35,11 @@ jobs:
         )
         commits = result.stdout.strip().split('\n') if result.stdout.strip() else []
         
-        # Pattern
+        # Pattern - scope must be in parentheses like (factor)
+        # Correct: \((scope1|scope2)\) matches "(scope1)" not "scope1)"
         valid_types = 'feat|fix|docs|style|refactor|test|chore|revert|perf|ci|build'
         valid_scopes = 'combat|cycle|factor|material|technology|quest|creature|loot|cultivation|ui|network|multiblock|command|config|api|core'
-        pattern = rf'^({valid_types})(\({valid_scopes}\))?:\s.+(\s\(PR #[0-9]+\))?$'
+        pattern = rf'^({valid_types})(\(({valid_scopes})\))?:\s.+'
         
         print("Checking commit messages...\n")
         failed = False
