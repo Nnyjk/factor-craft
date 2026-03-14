@@ -19,28 +19,38 @@ public class FactorCraftGameTests {
     public static void blockRegistration(TestContext context) {
         FactorCraftMod.LOGGER.info("[GameTest] Testing block registration...");
         
-        // 核心方块
-        assertRegistered(context, "factor_extractor_core");
-        assertRegistered(context, "factor_emitter_core");
-        assertRegistered(context, "factor_utilizer_core");
-        
-        // 导管
-        for (int i = 1; i <= 5; i++) {
-            assertRegistered(context, "factor_conduit_t" + i);
+        // 四大核心机器 (T1-T5)
+        String[] machineTypes = {"extractor", "consumer", "synthesizer", "cultivator"};
+        for (String type : machineTypes) {
+            for (int tier = 1; tier <= 5; tier++) {
+                assertRegistered(context, "factor_machine_" + type + "_core_t" + tier);
+            }
         }
+        
+        // 导管 (T1-T5)
+        for (int i = 1; i <= 5; i++) {
+            assertRegistered(context, "factor_machine_conduit_t" + i);
+        }
+        
+        // 其他机器
+        assertRegistered(context, "factor_machine_tank");
+        assertRegistered(context, "factor_machine_pump");
         
         // 特性方块
-        assertRegistered(context, "sharp_block");
-        assertRegistered(context, "sturdy_block");
-        assertRegistered(context, "protective_block");
-        assertRegistered(context, "energetic_block");
-        assertRegistered(context, "catalytic_block");
-        assertRegistered(context, "stabilizing_block");
+        assertRegistered(context, "factor_block_trait_sharp");
+        assertRegistered(context, "factor_block_trait_sturdy");
+        assertRegistered(context, "factor_block_trait_protective");
+        assertRegistered(context, "factor_block_trait_energetic");
+        assertRegistered(context, "factor_block_trait_catalytic");
+        assertRegistered(context, "factor_block_trait_stabilizing");
         
-        // 建筑方块
+        // 建筑方块 (T1-T5)
         for (int i = 1; i <= 5; i++) {
-            assertRegistered(context, "building_block_t" + i);
+            assertRegistered(context, "factor_block_building_t" + i);
         }
+        
+        // 其他方块
+        assertRegistered(context, "factor_block_anchor");
         
         context.complete();
     }
@@ -49,22 +59,22 @@ public class FactorCraftGameTests {
     public static void itemRegistration(TestContext context) {
         FactorCraftMod.LOGGER.info("[GameTest] Testing item registration...");
         
-        // 水晶
-        assertItemRegistered(context, "sharp_crystal");
-        assertItemRegistered(context, "sturdy_crystal");
-        assertItemRegistered(context, "protective_crystal");
-        assertItemRegistered(context, "energetic_crystal");
-        assertItemRegistered(context, "catalytic_crystal");
+        // 特性水晶
+        assertItemRegistered(context, "factor_item_crystal_sharp");
+        assertItemRegistered(context, "factor_item_crystal_sturdy");
+        assertItemRegistered(context, "factor_item_crystal_protective");
+        assertItemRegistered(context, "factor_item_crystal_energetic");
+        assertItemRegistered(context, "factor_item_crystal_catalytic");
         
-        // 线圈
+        // 线圈 (T1-T5)
         for (int i = 1; i <= 5; i++) {
-            assertItemRegistered(context, "extraction_coil_t" + i);
+            assertItemRegistered(context, "factor_item_coil_t" + i);
         }
         
         // 电路
-        assertItemRegistered(context, "basic_circuit");
-        assertItemRegistered(context, "advanced_circuit");
-        assertItemRegistered(context, "elite_circuit");
+        assertItemRegistered(context, "factor_item_circuit_basic");
+        assertItemRegistered(context, "factor_item_circuit_advanced");
+        assertItemRegistered(context, "factor_item_circuit_elite");
         
         context.complete();
     }

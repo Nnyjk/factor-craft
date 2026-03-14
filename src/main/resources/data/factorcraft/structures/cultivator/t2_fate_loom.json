@@ -1,0 +1,31 @@
+{
+  "structure_id": "t2_fate_loom",
+  "name": "进阶命运织机",
+  "name_en": "Advanced Fate Loom",
+  "tier": 2,
+  "type": "cultivator",
+  "description": "给物品注入特性的进阶结构",
+  
+  "dimensions": {
+    "width": 5,
+    "height": 5,
+    "depth": 5
+  },
+  
+  "core_block": "factorcraft:factor_machine_cultivator_core_t2",
+  
+  "pattern": {
+    "comment": "多方块结构蓝图配置 - 待实现",
+    "layers": [],
+    "slots": []
+  },
+  
+  "input_slots": 2,
+  "trait_slots": 2,
+  
+  "features": {
+    "trait_slots": 2,
+    "cost_multiplier": 0.85,
+    "cost_formula": "base_value * 8.5^(n-1)"
+  }
+}

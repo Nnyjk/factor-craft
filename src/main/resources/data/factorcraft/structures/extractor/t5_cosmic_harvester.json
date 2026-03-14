@@ -1,0 +1,37 @@
+{
+  "structure_id": "t5_cosmic_harvester",
+  "name": "宇宙收割者",
+  "name_en": "Cosmic Harvester",
+  "tier": 5,
+  "type": "extractor",
+  "description": "从宇宙本源提取 Factor 的终极结构",
+  
+  "dimensions": {
+    "width": 9,
+    "height": 9,
+    "depth": 9
+  },
+  
+  "core_block": "factorcraft:factor_machine_extractor_core_t5",
+  
+  "pattern": {
+    "comment": "多方块结构蓝图配置 - 待实现",
+    "layers": [],
+    "slots": []
+  },
+  
+  "requirements": {
+    "min_factor_concentration": 0.005,
+    "recommended_dimension": "minecraft:the_end"
+  },
+  
+  "features": {
+    "extraction_rate": 25.0,
+    "range_chunks": 16,
+    "dimension_bonus": {
+      "minecraft:overworld": 1.0,
+      "minecraft:the_nether": 2.0,
+      "minecraft:the_end": 4.0
+    }
+  }
+}

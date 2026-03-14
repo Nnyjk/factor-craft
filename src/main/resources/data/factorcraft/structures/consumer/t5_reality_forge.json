@@ -1,0 +1,34 @@
+{
+  "structure_id": "t5_reality_forge",
+  "name": "现实熔炉",
+  "name_en": "Reality Forge",
+  "tier": 5,
+  "type": "consumer",
+  "description": "消耗物品获得 Factor 的终极结构",
+  
+  "dimensions": {
+    "width": 9,
+    "height": 9,
+    "depth": 9
+  },
+  
+  "core_block": "factorcraft:factor_machine_consumer_core_t5",
+  
+  "pattern": {
+    "comment": "多方块结构蓝图配置 - 待实现",
+    "layers": [],
+    "slots": []
+  },
+  
+  "input_slots": 16,
+  "fuel_types": ["block", "material", "gem", "artifact", "dimensional", "cosmic"],
+  
+  "features": {
+    "base_output": 5000,
+    "dimension_multiplier": {
+      "minecraft:overworld": 1.0,
+      "minecraft:the_nether": 3.0,
+      "minecraft:the_end": 5.0
+    }
+  }
+}

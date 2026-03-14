@@ -1,7 +1,7 @@
 {
   "display": {
     "icon": {
-      "id": "factorcraft:factor_crystal"
+      "id": "factorcraft:factor_item_crystal_sharp"
     },
     "title": "Factor Craft",
     "description": "开始探索 Factor 的世界",
@@ -16,7 +16,7 @@
       "conditions": {
         "items": [
           {
-            "items": ["factorcraft:factor_crystal"]
+            "items": ["factorcraft:factor_item_crystal_sharp"]
           }
         ]
       }

@@ -1,0 +1,20 @@
+{
+  "id": "factorcraft:synthesizer_t1",
+  "name": "一阶合成器祭坛",
+  "description": "基础 Factor 合成结构",
+  "tier": 1,
+  "type": "synthesizer",
+  "size": [3, 3, 1],
+  "structure": [
+    ["###", "#C#", "###"]
+  ],
+  "legend": {
+    "#": "factorcraft:factor_block_building_t1",
+    "C": "factorcraft:factor_machine_synthesizer_core_t1"
+  },
+  "properties": {
+    "synthesisRate": 1.0,
+    "powerConsumption": 30,
+    "bufferSize": 1000
+  }
+}
