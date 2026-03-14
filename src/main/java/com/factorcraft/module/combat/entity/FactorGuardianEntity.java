@@ -1,4 +1,4 @@
-package com.factorcraft.entity;
+package com.factorcraft.module.combat.entity;
 
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;

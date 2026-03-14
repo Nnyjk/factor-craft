@@ -1,4 +1,4 @@
-package com.factorcraft.advancement;
+package com.factorcraft.module.advancement;
 
 import com.factorcraft.module.material.trait.TraitInstance;
 import com.factorcraft.module.material.trait.TraitService;

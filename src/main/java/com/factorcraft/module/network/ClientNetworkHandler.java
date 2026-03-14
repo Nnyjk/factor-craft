@@ -1,4 +1,4 @@
-package com.factorcraft.network;
+package com.factorcraft.module.network;
 
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 

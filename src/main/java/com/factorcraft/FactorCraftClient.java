@@ -3,7 +3,7 @@ package com.factorcraft;
 import com.factorcraft.client.KeyBindings;
 import com.factorcraft.dynamic.DynamicBundle;
 import com.factorcraft.dynamic.DynamicContentManager;
-import com.factorcraft.network.ClientNetworkHandler;
+import com.factorcraft.module.network.ClientNetworkHandler;
 import net.fabricmc.api.ClientModInitializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,7 +1,7 @@
 package com.factorcraft.performance;
 
-import com.factorcraft.network.FactorSyncPayload;
-import com.factorcraft.network.TraitSyncPayload;
+import com.factorcraft.module.network.FactorSyncPayload;
+import com.factorcraft.module.network.TraitSyncPayload;
 import com.factorcraft.module.material.trait.TraitInstance;
 import io.netty.channel.ChannelFuture;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;

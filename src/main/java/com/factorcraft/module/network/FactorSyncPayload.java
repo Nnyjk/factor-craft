@@ -1,4 +1,4 @@
-package com.factorcraft.network;
+package com.factorcraft.module.network;
 
 import com.factorcraft.module.factor.management.ChunkFactorManager;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;

@@ -10,6 +10,8 @@ import com.factorcraft.module.gear.GearModule;
 import com.factorcraft.module.integration.NonCoreIntegrationModule;
 import com.factorcraft.module.material.MaterialsModule;
 import com.factorcraft.module.technology.TechnologyModule;
+import com.factorcraft.module.social.SocialModule;
+import com.factorcraft.module.advancement.AdvancementModule;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -30,6 +32,8 @@ public final class ModuleBootstrap {
                 (FactorCraftModule) new TechnologyModule(),
                 (FactorCraftModule) new GearModule(),
                 (FactorCraftModule) new BuildingModule(),
+                (FactorCraftModule) new SocialModule(),
+                (FactorCraftModule) new AdvancementModule(),
                 (FactorCraftModule) new NonCoreIntegrationModule()
         );
     }

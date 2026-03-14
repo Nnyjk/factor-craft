@@ -1,4 +1,4 @@
-package com.factorcraft.permission;
+package com.factorcraft.module.social.manager;
 
 import java.util.*;
 

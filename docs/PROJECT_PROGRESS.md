@@ -181,13 +181,9 @@ Factor Craft 是一个基于 Fabric 1.21.4 的 Minecraft Mod，引入 Factor 能
 
 **实现内容：**
 - 区域保护系统（每玩家 3 个区域）
-- Factor 物品交易（24h 过期）
-- 排行榜系统（5 个类型）
 
 **核心文件：**
 - `RegionProtectionManager.java`
-- `TradingManager.java`
-- `LeaderboardManager.java`
 
 ---
 
@@ -213,7 +209,6 @@ Factor Craft 是一个基于 Fabric 1.21.4 的 Minecraft Mod，引入 Factor 能
 2. **Boss 设计：** 简化版实现，保留扩展空间
 3. **任务系统：** 4 个核心任务，后续可扩展
 4. **区域保护：** 每玩家限制 3 个区域，避免滥用
-5. **交易系统：** 24 小时过期，自动清理机制
 
 ---
 

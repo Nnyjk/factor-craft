@@ -1,4 +1,4 @@
-package com.factorcraft.multiplayer;
+package com.factorcraft.module.social.manager;
 
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
