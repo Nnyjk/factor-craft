@@ -14,6 +14,11 @@ import static org.junit.jupiter.api.Assertions.*;
  * - 状态转换
  * - 峰值/谷值预测
  * - 多维度行为
+ * 
+ * 维度基准值体系：
+ * - 主世界：0.5（范围 0.3-0.7）
+ * - 下界：1.5（范围 0.9-2.1）
+ * - 末地：3.0（范围 1.8-4.2）
  */
 @DisplayName("潮汐系统机制测试")
 public class TideSystemMechanicsTest {
@@ -43,7 +48,7 @@ public class TideSystemMechanicsTest {
             
             for (long tick = 1; tick <= period; tick += period / 100) {
                 double factor = type.calculateFactor(tick);
-                if (Math.abs(factor - prevFactor) > 0.01) {
+                if (Math.abs(factor - prevFactor) > 0.001) {
                     changes++;
                 }
                 prevFactor = factor;
@@ -75,8 +80,6 @@ public class TideSystemMechanicsTest {
             double halfDeviation = type.calculateFactor(halfPeriod) - type.baseValue();
             
             // sin(π) = 0, 所以半周期时偏差应该接近 0
-            // 但实际上 sin(π) = 0，所以半周期时 Factor 也等于基准值
-            // 让我们验证这个特性
             assertEquals(0, halfDeviation, 0.001, 
                 "At half period, sin(π) = 0, so deviation should be 0");
         }
@@ -163,34 +166,35 @@ public class TideSystemMechanicsTest {
         @Test
         @DisplayName("基准值偏离度为 0")
         void testZeroDeviation() {
-            assertEquals(0, TideSystem.calculateDeviation(50, 50), 0.001);
-            assertEquals(0, TideSystem.calculateDeviation(80, 80), 0.001);
+            assertEquals(0, TideSystem.calculateDeviation(0.5, 0.5), 0.001);
+            assertEquals(0, TideSystem.calculateDeviation(1.5, 1.5), 0.001);
+            assertEquals(0, TideSystem.calculateDeviation(3.0, 3.0), 0.001);
         }
         
         @Test
         @DisplayName("正向偏离计算正确")
         void testPositiveDeviation() {
             // 比基准值高 20%
-            assertEquals(0.2, TideSystem.calculateDeviation(60, 50), 0.001);
+            assertEquals(0.2, TideSystem.calculateDeviation(0.6, 0.5), 0.001);
             // 比基准值高 50%
-            assertEquals(0.5, TideSystem.calculateDeviation(75, 50), 0.001);
+            assertEquals(0.5, TideSystem.calculateDeviation(0.75, 0.5), 0.001);
             // 比基准值高 100%
-            assertEquals(1.0, TideSystem.calculateDeviation(100, 50), 0.001);
+            assertEquals(1.0, TideSystem.calculateDeviation(1.0, 0.5), 0.001);
         }
         
         @Test
         @DisplayName("负向偏离计算正确")
         void testNegativeDeviation() {
-            assertEquals(-0.2, TideSystem.calculateDeviation(40, 50), 0.001);
-            assertEquals(-0.5, TideSystem.calculateDeviation(25, 50), 0.001);
-            assertEquals(-0.6, TideSystem.calculateDeviation(20, 50), 0.001);
+            assertEquals(-0.2, TideSystem.calculateDeviation(0.4, 0.5), 0.001);
+            assertEquals(-0.5, TideSystem.calculateDeviation(0.25, 0.5), 0.001);
+            assertEquals(-0.6, TideSystem.calculateDeviation(0.2, 0.5), 0.001);
         }
         
         @Test
         @DisplayName("基准值为 0 时返回 0")
         void testZeroBaseValue() {
-            assertEquals(0, TideSystem.calculateDeviation(100, 0), 0.001);
-            assertEquals(0, TideSystem.calculateDeviation(-50, 0), 0.001);
+            assertEquals(0, TideSystem.calculateDeviation(1.0, 0), 0.001);
+            assertEquals(0, TideSystem.calculateDeviation(-0.5, 0), 0.001);
         }
     }
     
@@ -278,20 +282,22 @@ public class TideSystemMechanicsTest {
             double netherFactor = DimensionType.NETHER.calculateFactor(tick);
             double endFactor = DimensionType.END.calculateFactor(tick);
             
-            // 由于周期和基准值不同，同一时刻的 Factor 通常不同
-            // 至少验证它们都是有效值
-            assertTrue(overworldFactor >= 0 && overworldFactor <= 100);
-            assertTrue(netherFactor >= 0 && netherFactor <= 100);
-            assertTrue(endFactor >= 0 && endFactor <= 100);
+            // 验证它们都在各自的有效范围内
+            assertTrue(overworldFactor >= DimensionType.OVERWORLD.getMinFactor());
+            assertTrue(overworldFactor <= DimensionType.OVERWORLD.getMaxFactor());
+            assertTrue(netherFactor >= DimensionType.NETHER.getMinFactor());
+            assertTrue(netherFactor <= DimensionType.NETHER.getMaxFactor());
+            assertTrue(endFactor >= DimensionType.END.getMinFactor());
+            assertTrue(endFactor <= DimensionType.END.getMaxFactor());
         }
         
         @Test
-        @DisplayName("周期比例正确（减半后）")
+        @DisplayName("周期比例正确")
         void testPeriodRatios() {
-            // 主世界 : 下界 : 末地 = 4 : 2 : 6
+            // 主世界 : 下界 : 末地 = 8 : 4 : 12 天
             assertEquals(2, DimensionType.OVERWORLD.periodTicks() / 
                         DimensionType.NETHER.periodTicks());
-            assertEquals(2 / 3.0, DimensionType.OVERWORLD.periodTicks() / 
+            assertEquals(2.0 / 3.0, DimensionType.OVERWORLD.periodTicks() / 
                         (double) DimensionType.END.periodTicks(), 0.001);
         }
     }
@@ -327,8 +333,6 @@ public class TideSystemMechanicsTest {
             double changeRate = (afterZero - atZero) / 100;
             
             // 变化率应该接近 amplitude * 2π / period
-            double expectedRate = type.amplitude() * 2 * Math.PI / type.periodTicks();
-            // 由于角度原因，实际变化率应该与预期接近
             assertTrue(Math.abs(changeRate) > 0);
         }
     }

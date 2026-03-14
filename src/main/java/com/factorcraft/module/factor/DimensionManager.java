@@ -10,6 +10,11 @@ import java.util.concurrent.ConcurrentHashMap;
  * 维度管理器 - 管理所有维度的 Factor 状态
  * 
  * 基于 docs/16_dimensions_and_biomes.md
+ * 
+ * 维度基准值体系：
+ * - 主世界：0.5
+ * - 下界：1.5
+ * - 末地：3.0
  */
 public class DimensionManager {
     
@@ -46,7 +51,7 @@ public class DimensionManager {
                 type.baseValue(),
                 currentFactor, // dayAverage 初始化为当前值
                 0.0, // trend 初始化为 0
-                FactorTier.fromFactor(currentFactor).level(),
+                FactorTier.fromFactor(currentFactor, type.baseValue()).level(),
                 currentTick
             );
         });
@@ -76,7 +81,7 @@ public class DimensionManager {
             type.baseValue(),
             dayAverage,
             trend,
-            FactorTier.fromFactor(currentFactor).level(),
+            FactorTier.fromFactor(currentFactor, type.baseValue()).level(),
             currentTick
         );
         

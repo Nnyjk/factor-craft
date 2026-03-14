@@ -13,87 +13,73 @@ TideSystem 已实现完整的潮汐计算逻辑，但未接入主系统。Factor
 
 ---
 
-## Phase 1: 统一维度参数
+## Phase 1: 统一维度参数 ✅ 已完成
 
 ### 1.1 标准化 DimensionType 参数
 
-当前问题：
-- FactorService 使用基准值 50/80/20
-- DimensionType 使用基准值 0.5/1.5/3.0
+**决策：采用设计文档的参数体系**
 
-**决策：采用 FactorService 的参数体系**（0-100 范围）
+| 维度 | 基准值 | 幅度 | 周期(ticks) | Factor 范围 |
+|------|--------|------|-------------|-------------|
+| 主世界 | 0.5 | 0.2 | 192000 (8天) | 0.3 - 0.7 |
+| 下界 | 1.5 | 0.6 | 96000 (4天) | 0.9 - 2.1 |
+| 末地 | 3.0 | 1.2 | 288000 (12天) | 1.8 - 4.2 |
 
-| 维度 | 基准值 | 幅度 | 周期(ticks) |
-|------|--------|------|-------------|
-| 主世界 | 50 | ±12 | 192000 (8天) |
-| 下界 | 80 | ±8 | 96000 (4天) |
-| 末地 | 20 | ±5 | 288000 (12天) |
-
-### 1.2 更新 DimensionType
+### 1.2 DimensionType 实现
 
 ```java
 public enum DimensionType {
-    OVERWORLD("minecraft:overworld", 50, 12, 192000),
-    NETHER("minecraft:the_nether", 80, 8, 96000),
-    END("minecraft:the_end", 20, 5, 288000);
+    OVERWORLD("minecraft:overworld", 0.5, 0.2, 192000),
+    NETHER("minecraft:the_nether", 1.5, 0.6, 96000),
+    END("minecraft:the_end", 3.0, 1.2, 288000);
 }
 ```
 
 ---
 
-## Phase 2: 整合 TideSystem 到 FactorService
+## Phase 2: 整合 TideSystem 到 FactorService ✅ 已完成
 
-### 2.1 重构 FactorService
+### 2.1 FactorService 重构
 
-将 TideSystem 的功能作为 FactorService 的方法：
+FactorService 使用 DimensionType 计算潮汐：
 
 ```java
 public final class FactorService implements FactorApi {
     
-    // 使用 DimensionType 计算潮汐
-    public double getTideValue(ServerWorld world) {
-        DimensionType type = DimensionType.fromKey(world...);
-        return type.calculateFactor(world.getTime());
+    // 使用 DimensionType 计算潮汐变化
+    private double calculateTideDelta(DimensionType type, long tick) {
+        double currentTide = type.calculateFactor(tick);
+        double nextTide = type.calculateFactor(tick + 1);
+        return nextTide - currentTide;
     }
     
-    // Factor 状态判断
-    public TideSystem.FactorStatus getStatus(ServerWorld world) {
-        double current = getFactor(world);
-        double base = DimensionType.fromKey(...).baseValue();
-        return TideSystem.getStatusFromDeviation(
-            TideSystem.calculateDeviation(current, base)
-        );
-    }
-    
-    // 预测功能
-    public long getNextPeakTick(ServerWorld world) {
+    // 获取潮汐状态
+    public TideStatus getTideStatus(ServerWorld world) {
         DimensionType type = DimensionType.fromKey(...);
-        return TideSystem.findNextPeakTick(type, world.getTime());
+        double deviation = calculateDeviation(currentFactor, type.baseValue());
+        return getTideStatus(deviation);
     }
 }
 ```
 
-### 2.2 保留 TideSystem 作为工具类
+### 2.2 TideSystem 作为工具类
 
-将 TideSystem 改为纯工具类，被 FactorService 调用：
+TideSystem 改为纯静态工具类：
 
 ```java
 public final class TideSystem {
-    // 私有构造，纯静态工具
-    private TideSystem() {}
-    
-    public static double calculateDeviation(...) {}
-    public static FactorStatus getStatusFromDeviation(...) {}
-    public static long findNextPeakTick(...) {}
-    public static boolean isOutbreakTime(...) {}
+    public static double calculateDeviation(double current, double base) {}
+    public static TideStatus getStatusFromDeviation(double deviation) {}
+    public static long findNextPeakTick(DimensionType type, long tick) {}
+    public static long findNextTroughTick(DimensionType type, long tick) {}
 }
 ```
 
 ---
 
-## Phase 3: 接入游戏循环
+## Phase 3: 接入游戏循环 ✅ 已完成
 
-### 3.1 在 FactorSystemModule 中调用潮汐效果
+### 3.1 FactorSystemModule 中调用潮汐效果
 
 ```java
 @Override
@@ -103,51 +89,63 @@ public void initialize() {
         
         // 每 1200 ticks (60秒) 检查潮汐效果
         if (world.getTime() % 1200 == 0) {
-            TideSystem.applyTideEffects(world);
+            checkTideEffects(world, state, dimensionType);
         }
     });
 }
 ```
 
-### 3.2 实现 applyTideEffects
-
-根据 FactorStatus 触发效果：
-
-| 状态 | 偏离度 | 效果 |
-|------|--------|------|
-| STABLE | ±10% | 无 |
-| DEVIATED | ±10-30% | 低概率事件 |
-| FLUCTUATING | ±30-50% | 中概率事件 + 环境效果 |
-| VOLATILE | ±50%+ | 高概率灾害 + 视觉效果 |
-
 ---
 
-## Phase 4: 扩展 API
+## Phase 4: 扩展 API ✅ 已完成
 
-### 4.1 扩展 FactorApi 接口
+### 4.1 FactorApi 接口
 
 ```java
 public interface FactorApi {
-    // 现有方法
+    // 基础查询
     double getFactor(ServerWorld world);
     int getTier(ServerWorld world);
     OptionalLong predictCrossing(ServerWorld world, double target);
-    void addFactorOffset(ServerWorld world, double offset, long durationTicks);
     
-    // 新增潮汐相关
-    TideSystem.FactorStatus getStatus(ServerWorld world);
+    // 潮汐相关
+    TideStatus getTideStatus(ServerWorld world);
     double getDeviation(ServerWorld world);
     long getNextPeakTick(ServerWorld world);
     long getNextTroughTick(ServerWorld world);
     boolean isOutbreakTime(ServerWorld world);
+    double getTideCycleProgress(ServerWorld world);
 }
 ```
 
 ---
 
-## Phase 5: 区块级扩散接入
+## Phase 5: FactorTier 偏离度体系 ✅ 已完成
 
-### 5.1 接入 DiffusionSystem
+### 5.1 FactorTier 重构
+
+Tier 由偏离度决定，而非绝对值：
+
+```java
+public enum FactorTier {
+    DEPLETED(0, -1.0, -0.5),    // 偏离 < -50%
+    LOW_ENERGY(1, -0.5, -0.2),  // 偏离 -50% ~ -20%
+    STABLE(2, -0.2, 0.2),       // 偏离 -20% ~ +20%
+    HIGH_ENERGY(3, 0.2, 0.5),   // 偏离 +20% ~ +50%
+    OVERLOAD(4, 0.5, INF);      // 偏离 > +50%
+    
+    public static FactorTier fromFactor(double factor, double baseValue) {
+        double deviation = (factor - baseValue) / baseValue;
+        return fromDeviation(deviation);
+    }
+}
+```
+
+---
+
+## Phase 6: 区块级扩散接入 ✅ 已完成
+
+### 6.1 DiffusionSystem
 
 ```java
 // 在 FactorSystemModule 中
@@ -156,41 +154,38 @@ if (world.getTime() % 100 == 0) { // 每 5 秒
 }
 ```
 
-### 5.2 可选：使用 OptimizedDiffusion
+---
 
-如果区块数量大，切换到高性能版本：
+## 实施状态
 
-```java
-OptimizedDiffusion.processBatch(chunkStates);
-```
+| Phase | 任务 | 状态 |
+|-------|------|------|
+| 1 | 统一 DimensionType 参数 | ✅ 完成 |
+| 2 | 整合 TideSystem 到 FactorService | ✅ 完成 |
+| 3 | 接入游戏循环 | ✅ 完成 |
+| 4 | 扩展 FactorApi 接口 | ✅ 完成 |
+| 5 | FactorTier 偏离度体系 | ✅ 完成 |
+| 6 | 区块级扩散接入 | ✅ 完成 |
 
 ---
 
-## 实施顺序
+## 传输倍率参考
 
-1. ✅ 分析现有代码
-2. 🔲 统一 DimensionType 参数
-3. 🔲 重构 FactorService 使用 DimensionType
-4. 🔲 整合 TideSystem 工具方法
-5. 🔲 扩展 FactorApi 接口
-6. 🔲 接入游戏循环（潮汐效果）
-7. 🔲 接入扩散系统
-8. 🔲 测试验证
+| 传输方向 | 倍率 |
+|----------|------|
+| 下界 → 主世界 | 3.0x |
+| 末地 → 主世界 | 6.0x |
+| 末地 → 下界 | 2.0x |
+| 主世界 → 下界 | 0.33x |
+| 主世界 → 末地 | 0.17x |
+| 下界 → 末地 | 0.5x |
 
 ---
 
-## 预期成果
+## 验收标准
 
-1. **统一潮汐计算** - 一套参数，一个实现
-2. **完整 API** - 支持查询、预测、状态判断
-3. **游戏效果** - 潮汐周期影响游戏玩法
-4. **区块扩散** - Factor 在区块间自然流动
-5. **可观测性** - 日志、调试 HUD
-
-## 风险
-
-| 风险 | 缓解措施 |
-|------|----------|
-| 参数变更影响现有平衡 | 测试后微调 |
-| 扩散性能问题 | 使用批处理 |
-| 事件过于频繁 | 增加冷却机制 |
+- [x] 维度基准值符合设计文档
+- [x] 传输倍率计算正确
+- [x] 潮汐周期正确
+- [x] FactorTier 基于偏离度
+- [x] 所有测试通过

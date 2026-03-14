@@ -29,6 +29,11 @@ import java.util.concurrent.ConcurrentHashMap;
  * - 日切结算（Tier 变更）
  * - 阈值事件 / 灾害冷却
  * - 区块级 Factor 扩散
+ * 
+ * 维度基准值体系：
+ * - 主世界：0.5（基准）
+ * - 下界：1.5（高活性）
+ * - 末地：3.0（超高活性）
  */
 public final class FactorService implements FactorApi {
     
@@ -44,23 +49,28 @@ public final class FactorService implements FactorApi {
     // ==================== 常量 ====================
     
     private static final long WORLD_DAY_TICKS = 24_000;
-    private static final double FACTOR_MIN = 0;
-    private static final double FACTOR_MAX = 100;
-    private static final double CHANGE_EVENT_EPSILON = 0.001;
-    private static final double SLOPE_EPSILON = 0.0001;
-    private static final double DAMPING = 0.04;
+    private static final double CHANGE_EVENT_EPSILON = 0.0001;
+    private static final double SLOPE_EPSILON = 0.00001;
+    
+    // 阻尼系数（相对于基准值的比例）
+    private static final double DAMPING_RATIO = 0.04;
+    
+    // 趋势权重
     private static final double TREND_WEIGHT = 0.35;
-    private static final double HYSTERESIS = 2.0;
+    
+    // 迟滞阈值（偏离度）
+    private static final double HYSTERESIS = 0.1;
 
     private static final long DISASTER_COOLDOWN_TICKS = WORLD_DAY_TICKS;
     private static final String DISASTER_EVENT_ID = "factor_disaster";
     private static final int DISASTER_BASE_SEVERITY = 2;
     private static final int DISASTER_MAX_SEVERITY = 5;
 
+    // 噪声参数（相对于基准值的比例）
     private static final double NOISE_DIMENSION_MULTIPLIER = 31.0;
     private static final double NOISE_TICK_MULTIPLIER = 17.0;
     private static final double NOISE_SINE_SCALE = 0.01;
-    private static final double NOISE_AMPLITUDE = 0.45;
+    private static final double NOISE_RATIO = 0.02; // 噪声幅度 = 基准值 × 2%
     
     // 潮汐效果检查间隔 (1200 ticks = 60秒)
     private static final long TIDE_EFFECT_INTERVAL = 1200;
@@ -80,7 +90,7 @@ public final class FactorService implements FactorApi {
         
         DimensionType dimensionType = DimensionType.fromKey(dimensionKey);
         RuntimeState state = states.computeIfAbsent(dimensionKey, 
-            k -> new RuntimeState(dimensionType.baseValue(), day));
+            k -> new RuntimeState(dimensionType, day));
 
         state.expireOffsets(tick);
 
@@ -89,11 +99,14 @@ public final class FactorService implements FactorApi {
         // 使用 DimensionType 计算潮汐变化
         double tideDelta = calculateTideDelta(dimensionType, tick);
         double playerDelta = state.activeOffsetTotal();
-        double randomDelta = pseudoNoise(dimensionKey, tick);
+        double randomDelta = pseudoNoise(dimensionKey, tick, dimensionType.baseValue());
 
-        double nextFactor = previousFactor + tideDelta + playerDelta + randomDelta 
-            - DAMPING * (previousFactor - state.baseFactor);
-        state.currentFactor = clamp(nextFactor, FACTOR_MIN, FACTOR_MAX);
+        // 阻尼：使 Factor 趋向基准值
+        double damping = DAMPING_RATIO * (previousFactor - state.baseFactor);
+        double nextFactor = previousFactor + tideDelta + playerDelta + randomDelta - damping;
+        
+        // 使用维度的 Factor 范围进行 clamp
+        state.currentFactor = clamp(nextFactor, dimensionType.getMinFactor(), dimensionType.getMaxFactor());
 
         state.dayFactorSum += state.currentFactor;
         state.daySampleCount++;
@@ -112,7 +125,7 @@ public final class FactorService implements FactorApi {
 
         // 日切结算
         if (tick % WORLD_DAY_TICKS == 0 && day > state.lastSettledDay) {
-            settleDay(world, state, day);
+            settleDay(world, state, day, dimensionType);
         }
     }
     
@@ -198,16 +211,7 @@ public final class FactorService implements FactorApi {
      */
     public long getNextPeakTick(ServerWorld world) {
         DimensionType type = DimensionType.fromKey(world.getRegistryKey().getValue().toString());
-        long currentTick = world.getTime();
-        long period = type.periodTicks();
-        long cyclePosition = currentTick % period;
-        long quarterPeriod = period / 4;
-        
-        if (cyclePosition < quarterPeriod) {
-            return currentTick + (quarterPeriod - cyclePosition);
-        } else {
-            return currentTick + (period - cyclePosition) + quarterPeriod;
-        }
+        return TideSystem.findNextPeakTick(type, world.getTime());
     }
     
     /**
@@ -215,16 +219,7 @@ public final class FactorService implements FactorApi {
      */
     public long getNextTroughTick(ServerWorld world) {
         DimensionType type = DimensionType.fromKey(world.getRegistryKey().getValue().toString());
-        long currentTick = world.getTime();
-        long period = type.periodTicks();
-        long cyclePosition = currentTick % period;
-        long threeQuarterPeriod = (period * 3) / 4;
-        
-        if (cyclePosition < threeQuarterPeriod) {
-            return currentTick + (threeQuarterPeriod - cyclePosition);
-        } else {
-            return currentTick + (period - cyclePosition) + threeQuarterPeriod;
-        }
+        return TideSystem.findNextTroughTick(type, world.getTime());
     }
     
     /**
@@ -250,18 +245,17 @@ public final class FactorService implements FactorApi {
         String key = world.getRegistryKey().getValue().toString();
         RuntimeState state = states.get(key);
         if (state == null) {
-            return "factor=0.00 tier=0 tide=STABLE";
+            DimensionType type = DimensionType.fromKey(key);
+            return String.format("factor=%.2f tier=2 tide=STABLE", type.baseValue());
         }
         
         DimensionType type = DimensionType.fromKey(key);
-        double dayAvg = state.daySampleCount == 0 ? state.currentFactor : 
-            state.dayFactorSum / state.daySampleCount;
         
         return String.format(
             "factor=%.2f tier=%d tide=%s deviation=%.1f%% cycle=%.1f%%",
             state.currentFactor,
             state.currentTier,
-            state.lastTideStatus,
+            state.lastTideStatus.getName(),
             calculateDeviation(state.currentFactor, type.baseValue()) * 100,
             getTideCycleProgress(world)
         );
@@ -312,7 +306,7 @@ public final class FactorService implements FactorApi {
         String key = world.getRegistryKey().getValue().toString();
         RuntimeState state = states.get(key);
         DimensionType type = DimensionType.fromKey(key);
-        return state == null ? FactorTier.fromFactor(type.baseValue()).level() : state.currentTier;
+        return state == null ? FactorTier.STABLE.level() : state.currentTier;
     }
 
     @Override
@@ -346,7 +340,7 @@ public final class FactorService implements FactorApi {
         String key = world.getRegistryKey().getValue().toString();
         DimensionType type = DimensionType.fromKey(key);
         RuntimeState state = states.computeIfAbsent(key, 
-            k -> new RuntimeState(type.baseValue(), world.getTime() / WORLD_DAY_TICKS));
+            k -> new RuntimeState(type, world.getTime() / WORLD_DAY_TICKS));
         state.offsets.add(new TimedOffset(offset, world.getTime() + durationTicks));
     }
     
@@ -384,14 +378,14 @@ public final class FactorService implements FactorApi {
 
     // ==================== 日切结算 ====================
 
-    private void settleDay(ServerWorld world, RuntimeState state, long dayIndex) {
+    private void settleDay(ServerWorld world, RuntimeState state, long dayIndex, DimensionType dimensionType) {
         double dayAverage = state.daySampleCount == 0 ? state.currentFactor : 
             state.dayFactorSum / state.daySampleCount;
         double trend = dayAverage - state.previousDayAverage;
         double predicted = dayAverage + TREND_WEIGHT * trend;
 
         int previousTier = state.currentTier;
-        int nextTier = DayTierDecider.resolveTier(predicted, previousTier, HYSTERESIS);
+        int nextTier = DayTierDecider.resolveTier(predicted, dimensionType.baseValue(), previousTier, HYSTERESIS);
 
         DayTierSnapshot snapshot = new DayTierSnapshot(
             dayIndex, dayAverage, trend, HYSTERESIS, previousTier, nextTier);
@@ -437,10 +431,10 @@ public final class FactorService implements FactorApi {
 
     // ==================== 工具方法 ====================
 
-    private static double pseudoNoise(String dimensionKey, long tick) {
+    private static double pseudoNoise(String dimensionKey, long tick, double baseValue) {
         double seed = dimensionKey.hashCode() * NOISE_DIMENSION_MULTIPLIER + 
             tick * NOISE_TICK_MULTIPLIER;
-        return Math.sin(seed * NOISE_SINE_SCALE) * NOISE_AMPLITUDE;
+        return Math.sin(seed * NOISE_SINE_SCALE) * baseValue * NOISE_RATIO;
     }
 
     private static double clamp(double value, double min, double max) {
@@ -462,11 +456,11 @@ public final class FactorService implements FactorApi {
         private int overloadStreakDays;
         private TideStatus lastTideStatus = TideStatus.STABLE;
 
-        private RuntimeState(double baseFactor, long dayIndex) {
-            this.baseFactor = baseFactor;
-            this.currentFactor = baseFactor;
-            this.previousDayAverage = baseFactor;
-            this.currentTier = FactorTier.fromFactor(baseFactor).level();
+        private RuntimeState(DimensionType dimensionType, long dayIndex) {
+            this.baseFactor = dimensionType.baseValue();
+            this.currentFactor = dimensionType.baseValue();
+            this.previousDayAverage = dimensionType.baseValue();
+            this.currentTier = FactorTier.STABLE.level(); // 初始为稳定状态
             this.lastSettledDay = Math.max(0, dayIndex - 1);
         }
 
