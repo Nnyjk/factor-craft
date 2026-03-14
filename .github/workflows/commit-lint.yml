@@ -13,76 +13,56 @@ jobs:
       with:
         fetch-depth: 0
     
-    - name: Set up locale
-      run: |
-        sudo locale-gen en_US.UTF-8
-        sudo locale-gen C.UTF-8
-        echo "LANG=C.UTF-8" >> $GITHUB_ENV
-        echo "LC_ALL=C.UTF-8" >> $GITHUB_ENV
-    
     - name: Check commit format
       run: |
-        # Get the base branch
-        BASE="${{ github.base_ref }}"
-        HEAD="${{ github.head_ref }}"
+        python3 << 'EOF'
+        import re
+        import subprocess
+        import os
         
-        # Skip lint for develop -> main merges (historical commits)
-        if [[ "$BASE" == "main" && "$HEAD" == "develop" ]]; then
-          echo "⏭️ Skipping commit lint for develop → main merge (historical commits)"
-          exit 0
-        fi
+        base = os.environ.get('GITHUB_BASE_REF', 'main')
+        head = os.environ.get('GITHUB_HEAD_REF', 'HEAD')
         
-        # Get all commits in the PR
-        COMMITS=$(git log origin/$BASE..origin/$HEAD --pretty=format:"%s")
+        # Skip for develop -> main merges
+        if base == 'main' and head == 'develop':
+            print("⏭️ Skipping commit lint for develop → main merge")
+            exit(0)
         
-        # Valid types
-        VALID_TYPES="feat|fix|docs|style|refactor|test|chore|revert|perf|ci|build"
+        # Get commits
+        result = subprocess.run(
+            ['git', 'log', f'origin/{base}..origin/{head}', '--pretty=format:%s'],
+            capture_output=True, text=True
+        )
+        commits = result.stdout.strip().split('\n') if result.stdout.strip() else []
         
-        # Valid scopes
-        VALID_SCOPES="combat|cycle|factor|material|technology|quest|creature|loot|cultivation|ui|network|multiblock|command|config|api|core"
+        # Pattern
+        valid_types = 'feat|fix|docs|style|refactor|test|chore|revert|perf|ci|build'
+        valid_scopes = 'combat|cycle|factor|material|technology|quest|creature|loot|cultivation|ui|network|multiblock|command|config|api|core'
+        pattern = rf'^({valid_types})(\({valid_scopes}\))?:\s.+(\s\(PR #[0-9]+\))?$'
         
-        # Pattern (allow optional PR reference suffix like "(PR #41)")
-        # Use [[:space:]] for better locale support
-        PATTERN="^($VALID_TYPES)(\($VALID_SCOPES\))?:[[:space:]].+(\s\(PR\s#[0-9]+\))?$"
+        print("Checking commit messages...\n")
+        failed = False
         
-        FAILED=0
+        for commit in commits:
+            # Skip merge commits and version tags
+            if commit.startswith(('Merge branch', 'Merge pull', 'Merge PR:', 'v')):
+                continue
+            
+            if re.match(pattern, commit, re.UNICODE):
+                print(f"✅ Valid:   {commit}")
+            else:
+                print(f"❌ Invalid: {commit}")
+                failed = True
         
-        echo "Checking commit messages..."
-        echo ""
+        if failed:
+            print("\nCommit message format requirements:")
+            print("  Format: <type>(<scope>): <subject>")
+            print("  Types: feat, fix, docs, style, refactor, test, chore, revert, perf, ci, build")
+            print("  Scopes (optional): combat, cycle, factor, material, technology, quest, creature, loot, cultivation, ui, network, multiblock, command, config, api, core")
+            exit(1)
         
-        while IFS= read -r COMMIT; do
-          # Skip merge commits
-          if [[ "$COMMIT" =~ ^Merge\ branch|^Merge\ pull\ request|^Merge\ PR: ]]; then
-            continue
-          fi
-          
-          # Skip version tags
-          if [[ "$COMMIT" =~ ^v[0-9]+\.[0-9]+\.[0-9]+ ]]; then
-            continue
-          fi
-          
-          if [[ ! "$COMMIT" =~ $PATTERN ]]; then
-            echo "❌ Invalid: $COMMIT"
-            FAILED=1
-          else
-            echo "✅ Valid:   $COMMIT"
-          fi
-        done <<< "$COMMITS"
-        
-        echo ""
-        
-        if [ $FAILED -eq 1 ]; then
-          echo ""
-          echo "Commit message format requirements:"
-          echo "  Format: <type>(<scope>): <subject>"
-          echo "  Types: feat, fix, docs, style, refactor, test, chore, revert, perf, ci, build"
-          echo "  Scopes (optional): combat, cycle, factor, material, technology, quest, creature, loot, cultivation, ui, network, multiblock, command, config, api, core"
-          echo ""
-          echo "Examples:"
-          echo "  feat(combat): add T6 weapon system"
-          echo "  fix: resolve registration issue"
-          echo "  docs: update installation guide"
-          exit 1
-        fi
-        
-        echo "✅ All commits follow the format!"
+        print("\n✅ All commits follow the format!")
+        EOF
+      env:
+        GITHUB_BASE_REF: ${{ github.base_ref }}
+        GITHUB_HEAD_REF: ${{ github.head_ref }}
