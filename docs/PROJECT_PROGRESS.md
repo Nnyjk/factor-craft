@@ -177,13 +177,13 @@ Factor Craft 是一个基于 Fabric 1.21.4 的 Minecraft Mod，引入 Factor 能
 
 ### Phase 11: 多人优化 ✅
 
-**目标：** 实现多人游戏优化
+**目标：** 实现多人游戏功能
 
 **实现内容：**
-- 区域保护系统（每玩家 3 个区域）
+- 权限管理系统
 
 **核心文件：**
-- `RegionProtectionManager.java`
+- `PermissionManager.java`
 
 ---
 
@@ -208,7 +208,6 @@ Factor Craft 是一个基于 Fabric 1.21.4 的 Minecraft Mod，引入 Factor 能
 1. **世界生成策略：** 采用球形晶体簇生成，符合视觉美感
 2. **Boss 设计：** 简化版实现，保留扩展空间
 3. **任务系统：** 4 个核心任务，后续可扩展
-4. **区域保护：** 每玩家限制 3 个区域，避免滥用
 
 ---
 

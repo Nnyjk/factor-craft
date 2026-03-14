@@ -9,7 +9,6 @@ import java.util.List;
  * 社交模块 - 多人游戏功能
  * 
  * 功能:
- * - 区域保护
  * - 权限管理
  */
 public final class SocialModule implements FactorCraftModule {
@@ -37,6 +36,6 @@ public final class SocialModule implements FactorCraftModule {
     @Override
     public void initialize() {
         FactorCraftMod.LOGGER.info("[FactorCraft:Social] 社交模块已加载");
-        FactorCraftMod.LOGGER.info("[FactorCraft:Social] 功能: 区域保护、权限管理");
+        FactorCraftMod.LOGGER.info("[FactorCraft:Social] 功能: 权限管理");
     }
 }
