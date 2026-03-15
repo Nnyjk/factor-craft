@@ -4,6 +4,10 @@
   "category.factorcraft.general": "Factor Craft",
   "key.factorcraft.open_guide": "打开引导书",
   
+  "block.factorcraft.factor_sink": "Factor 吸收器",
+  "block.factorcraft.factor_source": "Factor 释放器",
+  "block.factorcraft.factor_transmitter": "Factor 传递器",
+  
   "block.factorcraft.factor_machine_extractor_core_t1": "提取核心 T1",
   "block.factorcraft.factor_machine_extractor_core_t2": "提取核心 T2",
   "block.factorcraft.factor_machine_extractor_core_t3": "提取核心 T3",
@@ -65,5 +69,31 @@
   
   "item.factorcraft.factor_item_circuit_basic": "基础电路",
   "item.factorcraft.factor_item_circuit_advanced": "进阶电路",
-  "item.factorcraft.factor_item_circuit_elite": "精英电路"
+  "item.factorcraft.factor_item_circuit_elite": "精英电路",
+  
+  "item.factorcraft.factor_shard_t1": "因子碎片 T1",
+  "item.factorcraft.factor_shard_t2": "因子碎片 T2",
+  "item.factorcraft.factor_shard_t3": "因子碎片 T3",
+  "item.factorcraft.factor_shard_t4": "因子碎片 T4",
+  "item.factorcraft.factor_shard_t5": "因子碎片 T5",
+  
+  "item.factorcraft.resonance_core": "共振核心",
+  
+  "item.factorcraft.resonance_bow_t1": "共振弓 T1",
+  "item.factorcraft.resonance_bow_t2": "共振弓 T2",
+  "item.factorcraft.resonance_bow_t3": "共振弓 T3",
+  "item.factorcraft.resonance_bow_t4": "共振弓 T4",
+  "item.factorcraft.resonance_bow_t5": "共振弓 T5",
+  
+  "item.factorcraft.dimension_hammer_t1": "维度锤 T1",
+  "item.factorcraft.dimension_hammer_t2": "维度锤 T2",
+  "item.factorcraft.dimension_hammer_t3": "维度锤 T3",
+  "item.factorcraft.dimension_hammer_t4": "维度锤 T4",
+  "item.factorcraft.dimension_hammer_t5": "维度锤 T5",
+  
+  "item.factorcraft.factor_sword_t1": "因子剑 T1",
+  "item.factorcraft.factor_sword_t2": "因子剑 T2",
+  "item.factorcraft.factor_sword_t3": "因子剑 T3",
+  "item.factorcraft.factor_sword_t4": "因子剑 T4",
+  "item.factorcraft.factor_sword_t5": "因子剑 T5"
 }

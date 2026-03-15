@@ -8,6 +8,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.Identifier;
 
 /**
@@ -26,6 +28,7 @@ public class ResonanceBowItem extends BowItem implements CombatApi.FactorWeapon 
     
     public ResonanceBowItem(int tier) {
         super(new Item.Settings()
+            .registryKey(RegistryKey.of(RegistryKeys.ITEM, Identifier.of("factorcraft", "resonance_bow_t" + tier)))
             .maxCount(1)
             .maxDamage(ModToolMaterial.getDurability(tier))
         );
@@ -43,12 +46,10 @@ public class ResonanceBowItem extends BowItem implements CombatApi.FactorWeapon 
     public static void registerAll() {
         for (int tier = 1; tier <= 5; tier++) {
             String name = "resonance_bow_t" + tier;
-            register(name, new ResonanceBowItem(tier));
+            Identifier id = Identifier.of("factorcraft", name);
+            RegistryKey<Item> key = RegistryKey.of(RegistryKeys.ITEM, id);
+            Registry.register(Registries.ITEM, id, new ResonanceBowItem(tier));
         }
-    }
-    
-    private static void register(String name, ResonanceBowItem bow) {
-        Registry.register(Registries.ITEM, Identifier.of("factorcraft", name), bow);
     }
     
     @Override
