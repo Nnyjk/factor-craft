@@ -3,6 +3,38 @@
   
   "category.factorcraft.general": "Factor Craft",
   "key.factorcraft.open_guide": "Open Guide",
+  "key.factorcraft.view_traits": "View Traits",
+  "key.factorcraft.view_factor": "View Factor",
+  
+  "factorcraft.screen.traits.title": "Trait Information",
+  "factorcraft.screen.traits.no_item": "No Item",
+  "factorcraft.screen.traits.no_traits": "This item has no traits",
+  "factorcraft.screen.traits.hint": "Hold an item with traits and press J to view",
+  "factorcraft.trait.level": "Lv.%s",
+  "factorcraft.trait.type": "Type: %s",
+  
+  "factorcraft.screen.monitor.title": "Factor Monitor",
+  "factorcraft.screen.monitor.chunk": "Chunk: %s, %s",
+  "factorcraft.screen.monitor.concentration": "Factor Concentration",
+  "factorcraft.screen.monitor.concentration.value": "%s",
+  "factorcraft.screen.monitor.tier": "Tier: %s",
+  "factorcraft.screen.monitor.initial": "Initial: %s",
+  "factorcraft.screen.monitor.floor": "Floor: %s",
+  "factorcraft.screen.monitor.anchored": "Anchored (Radius: %s)",
+  "factorcraft.screen.monitor.unanchored": "Not Anchored",
+  "factorcraft.screen.monitor.no_data": "No Factor Data",
+  "factorcraft.screen.monitor.hint": "This chunk has not loaded Factor information yet",
+  
+  "factorcraft.tier.depleted": "Depleted",
+  "factorcraft.tier.low_energy": "Low Energy",
+  "factorcraft.tier.stable": "Stable",
+  "factorcraft.tier.high_energy": "High Energy",
+  "factorcraft.tier.overload": "Overload",
+  
+  "factorcraft.tooltip.concentration": "Factor Concentration Details",
+  "factorcraft.tooltip.concentration.current": "Current: %s",
+  "factorcraft.tooltip.concentration.initial": "Initial: %s",
+  "factorcraft.tooltip.concentration.floor": "Floor: %s",
   
   "block.factorcraft.factor_sink": "Factor Sink",
   "block.factorcraft.factor_source": "Factor Source",
