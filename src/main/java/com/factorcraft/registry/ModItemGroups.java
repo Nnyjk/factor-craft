@@ -7,6 +7,7 @@ import com.factorcraft.module.technology.machine.ModMachines;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
@@ -24,8 +25,17 @@ public class ModItemGroups {
     public static final RegistryKey<ItemGroup> FACTOR_CRAFT_KEY = 
         RegistryKey.of(RegistryKeys.ITEM_GROUP, Identifier.of(MOD_ID, "general"));
     
+    // 延迟初始化图标，避免静态初始化顺序问题
+    private static ItemStack getIcon() {
+        try {
+            return new ItemStack(ModMachines.EXTRACTOR_CORE_T1);
+        } catch (Exception e) {
+            return new ItemStack(Items.BEACON);
+        }
+    }
+    
     public static final ItemGroup FACTOR_CRAFT = FabricItemGroup.builder()
-        .icon(() -> new ItemStack(ModMachines.EXTRACTOR_CORE_T1))
+        .icon(() -> getIcon())
         .displayName(Text.translatable("itemGroup.factorcraft.general"))
         .entries((displayContext, entries) -> {
             // ========== 核心机器 ==========
