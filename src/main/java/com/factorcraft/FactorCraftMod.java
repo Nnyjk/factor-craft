@@ -5,6 +5,7 @@ import com.factorcraft.module.quest.QuestCommands;
 import com.factorcraft.config.ConfigManager;
 import com.factorcraft.datapack.DataPackManager;
 import com.factorcraft.module.ModuleBootstrap;
+import com.factorcraft.module.network.NetworkPackets;
 import com.factorcraft.registry.ModInitialization;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
@@ -32,6 +33,10 @@ public class FactorCraftMod implements ModInitializer {
         
         // 注册游戏内容
         ModInitialization.initialize();
+        
+        // 注册网络包
+        NetworkPackets.register();
+        LOGGER.info("[FactorCraft] 网络包注册完成");
         
         // 注册命令
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
