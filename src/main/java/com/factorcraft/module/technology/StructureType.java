@@ -51,27 +51,40 @@ public enum StructureType {
         
         String lower = patternId.toLowerCase();
         
-        // 新命名规范
-        if (lower.startsWith("extractor_") || lower.contains("collector") || 
-            lower.contains("array") || lower.contains("siphon") ||
-            lower.contains("resonator") || lower.contains("vortex")) {
+        // 新命名规范 - 优先检查前缀
+        if (lower.startsWith("extractor_")) {
+            return EXTRACTOR;
+        }
+        if (lower.startsWith("consumer_")) {
+            return CONSUMER;
+        }
+        if (lower.startsWith("synthesizer_")) {
+            return SYNTHESIZER;
+        }
+        if (lower.startsWith("breeder_")) {
+            return BREEDER;
+        }
+        
+        // 名称包含检查
+        if (lower.contains("collector") || lower.contains("star_array") || 
+            lower.contains("siphon") || lower.contains("resonator") || 
+            lower.contains("vortex")) {
             return EXTRACTOR;
         }
         
-        if (lower.startsWith("consumer_") || lower.contains("burner") || 
-            lower.contains("furnace") || lower.contains("devourer") ||
-            lower.contains("rift") || lower.contains("core")) {
+        if (lower.contains("burner") || lower.contains("devourer") ||
+            lower.contains("rift") || lower.contains("eternal_core")) {
             return CONSUMER;
         }
         
-        if (lower.startsWith("synthesizer_") || lower.contains("synthesis") || 
-            lower.contains("forge") || lower.contains("foundry") ||
-            lower.contains("altar")) {
+        if (lower.contains("ancient_synthesis") || lower.contains("ancient_forge") ||
+            lower.contains("fate_foundry") || lower.contains("creation_furnace") ||
+            lower.contains("origin_altar")) {
             return SYNTHESIZER;
         }
         
-        if (lower.startsWith("breeder_") || lower.contains("loom") || 
-            lower.contains("weaver") || lower.contains("sanctuary") ||
+        if (lower.contains("loom") || lower.contains("weaver") || 
+            lower.contains("fate_altar") || lower.contains("sanctuary") ||
             lower.contains("reincarnation")) {
             return BREEDER;
         }
