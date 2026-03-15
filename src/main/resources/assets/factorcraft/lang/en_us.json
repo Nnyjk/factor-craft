@@ -4,6 +4,10 @@
   "category.factorcraft.general": "Factor Craft",
   "key.factorcraft.open_guide": "Open Guide",
   
+  "block.factorcraft.factor_sink": "Factor Sink",
+  "block.factorcraft.factor_source": "Factor Source",
+  "block.factorcraft.factor_transmitter": "Factor Transmitter",
+  
   "block.factorcraft.factor_machine_extractor_core_t1": "Extractor Core T1",
   "block.factorcraft.factor_machine_extractor_core_t2": "Extractor Core T2",
   "block.factorcraft.factor_machine_extractor_core_t3": "Extractor Core T3",
@@ -65,5 +69,31 @@
   
   "item.factorcraft.factor_item_circuit_basic": "Basic Circuit",
   "item.factorcraft.factor_item_circuit_advanced": "Advanced Circuit",
-  "item.factorcraft.factor_item_circuit_elite": "Elite Circuit"
+  "item.factorcraft.factor_item_circuit_elite": "Elite Circuit",
+  
+  "item.factorcraft.factor_shard_t1": "Factor Shard T1",
+  "item.factorcraft.factor_shard_t2": "Factor Shard T2",
+  "item.factorcraft.factor_shard_t3": "Factor Shard T3",
+  "item.factorcraft.factor_shard_t4": "Factor Shard T4",
+  "item.factorcraft.factor_shard_t5": "Factor Shard T5",
+  
+  "item.factorcraft.resonance_core": "Resonance Core",
+  
+  "item.factorcraft.resonance_bow_t1": "Resonance Bow T1",
+  "item.factorcraft.resonance_bow_t2": "Resonance Bow T2",
+  "item.factorcraft.resonance_bow_t3": "Resonance Bow T3",
+  "item.factorcraft.resonance_bow_t4": "Resonance Bow T4",
+  "item.factorcraft.resonance_bow_t5": "Resonance Bow T5",
+  
+  "item.factorcraft.dimension_hammer_t1": "Dimension Hammer T1",
+  "item.factorcraft.dimension_hammer_t2": "Dimension Hammer T2",
+  "item.factorcraft.dimension_hammer_t3": "Dimension Hammer T3",
+  "item.factorcraft.dimension_hammer_t4": "Dimension Hammer T4",
+  "item.factorcraft.dimension_hammer_t5": "Dimension Hammer T5",
+  
+  "item.factorcraft.factor_sword_t1": "Factor Sword T1",
+  "item.factorcraft.factor_sword_t2": "Factor Sword T2",
+  "item.factorcraft.factor_sword_t3": "Factor Sword T3",
+  "item.factorcraft.factor_sword_t4": "Factor Sword T4",
+  "item.factorcraft.factor_sword_t5": "Factor Sword T5"
 }
