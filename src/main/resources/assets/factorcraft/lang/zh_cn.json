@@ -1,6 +1,9 @@
 {
   "itemGroup.factorcraft.general": "Factor Craft",
   
+  "category.factorcraft.general": "Factor Craft",
+  "key.factorcraft.open_guide": "打开引导书",
+  
   "block.factorcraft.factor_machine_extractor_core_t1": "提取核心 T1",
   "block.factorcraft.factor_machine_extractor_core_t2": "提取核心 T2",
   "block.factorcraft.factor_machine_extractor_core_t3": "提取核心 T3",
