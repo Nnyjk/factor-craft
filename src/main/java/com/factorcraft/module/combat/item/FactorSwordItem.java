@@ -9,6 +9,8 @@ import net.minecraft.item.SwordItem;
 import net.minecraft.item.ToolMaterial;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.Identifier;
 
 /**
@@ -30,6 +32,7 @@ public class FactorSwordItem extends SwordItem implements CombatApi.FactorWeapon
             WeaponAttributes.Sword.ATTACK_SPEED[tier - 1],
             WeaponAttributes.Sword.DAMAGE[tier - 1],
             new Item.Settings()
+                .registryKey(RegistryKey.of(RegistryKeys.ITEM, Identifier.of("factorcraft", "factor_sword_t" + tier)))
                 .maxCount(1)
                 .maxDamage(ModToolMaterial.getDurability(tier))
         );
@@ -57,12 +60,9 @@ public class FactorSwordItem extends SwordItem implements CombatApi.FactorWeapon
     public static void registerAll() {
         for (int tier = 1; tier <= 5; tier++) {
             String name = "factor_sword_t" + tier;
-            register(name, new FactorSwordItem(tier));
+            Identifier id = Identifier.of("factorcraft", name);
+            Registry.register(Registries.ITEM, id, new FactorSwordItem(tier));
         }
-    }
-    
-    private static void register(String name, FactorSwordItem sword) {
-        Registry.register(Registries.ITEM, Identifier.of("factorcraft", name), sword);
     }
     
     @Override

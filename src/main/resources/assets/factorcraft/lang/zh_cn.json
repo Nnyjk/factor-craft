@@ -3,6 +3,42 @@
   
   "category.factorcraft.general": "Factor Craft",
   "key.factorcraft.open_guide": "打开引导书",
+  "key.factorcraft.view_traits": "查看特性",
+  "key.factorcraft.view_factor": "查看 Factor",
+  
+  "factorcraft.screen.traits.title": "特性信息",
+  "factorcraft.screen.traits.no_item": "无物品",
+  "factorcraft.screen.traits.no_traits": "此物品没有特性",
+  "factorcraft.screen.traits.hint": "手持带有特性的物品后按 J 查看",
+  "factorcraft.trait.level": "Lv.%s",
+  "factorcraft.trait.type": "类型: %s",
+  
+  "factorcraft.screen.monitor.title": "Factor 监控",
+  "factorcraft.screen.monitor.chunk": "区块: %s, %s",
+  "factorcraft.screen.monitor.concentration": "Factor 浓度",
+  "factorcraft.screen.monitor.concentration.value": "%s",
+  "factorcraft.screen.monitor.tier": "等级: %s",
+  "factorcraft.screen.monitor.initial": "初始浓度: %s",
+  "factorcraft.screen.monitor.floor": "浓度下限: %s",
+  "factorcraft.screen.monitor.anchored": "已锚定 (半径: %s)",
+  "factorcraft.screen.monitor.unanchored": "未锚定",
+  "factorcraft.screen.monitor.no_data": "无 Factor 数据",
+  "factorcraft.screen.monitor.hint": "此区块尚未加载 Factor 信息",
+  
+  "factorcraft.tier.depleted": "枯竭",
+  "factorcraft.tier.low_energy": "低能",
+  "factorcraft.tier.stable": "稳定",
+  "factorcraft.tier.high_energy": "高能",
+  "factorcraft.tier.overload": "过载",
+  
+  "factorcraft.tooltip.concentration": "Factor 浓度详情",
+  "factorcraft.tooltip.concentration.current": "当前: %s",
+  "factorcraft.tooltip.concentration.initial": "初始: %s",
+  "factorcraft.tooltip.concentration.floor": "下限: %s",
+  
+  "block.factorcraft.factor_sink": "Factor 吸收器",
+  "block.factorcraft.factor_source": "Factor 释放器",
+  "block.factorcraft.factor_transmitter": "Factor 传递器",
   
   "block.factorcraft.factor_machine_extractor_core_t1": "提取核心 T1",
   "block.factorcraft.factor_machine_extractor_core_t2": "提取核心 T2",
@@ -65,5 +101,31 @@
   
   "item.factorcraft.factor_item_circuit_basic": "基础电路",
   "item.factorcraft.factor_item_circuit_advanced": "进阶电路",
-  "item.factorcraft.factor_item_circuit_elite": "精英电路"
+  "item.factorcraft.factor_item_circuit_elite": "精英电路",
+  
+  "item.factorcraft.factor_shard_t1": "因子碎片 T1",
+  "item.factorcraft.factor_shard_t2": "因子碎片 T2",
+  "item.factorcraft.factor_shard_t3": "因子碎片 T3",
+  "item.factorcraft.factor_shard_t4": "因子碎片 T4",
+  "item.factorcraft.factor_shard_t5": "因子碎片 T5",
+  
+  "item.factorcraft.resonance_core": "共振核心",
+  
+  "item.factorcraft.resonance_bow_t1": "共振弓 T1",
+  "item.factorcraft.resonance_bow_t2": "共振弓 T2",
+  "item.factorcraft.resonance_bow_t3": "共振弓 T3",
+  "item.factorcraft.resonance_bow_t4": "共振弓 T4",
+  "item.factorcraft.resonance_bow_t5": "共振弓 T5",
+  
+  "item.factorcraft.dimension_hammer_t1": "维度锤 T1",
+  "item.factorcraft.dimension_hammer_t2": "维度锤 T2",
+  "item.factorcraft.dimension_hammer_t3": "维度锤 T3",
+  "item.factorcraft.dimension_hammer_t4": "维度锤 T4",
+  "item.factorcraft.dimension_hammer_t5": "维度锤 T5",
+  
+  "item.factorcraft.factor_sword_t1": "因子剑 T1",
+  "item.factorcraft.factor_sword_t2": "因子剑 T2",
+  "item.factorcraft.factor_sword_t3": "因子剑 T3",
+  "item.factorcraft.factor_sword_t4": "因子剑 T4",
+  "item.factorcraft.factor_sword_t5": "因子剑 T5"
 }

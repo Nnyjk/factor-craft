@@ -13,12 +13,15 @@ import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.Identifier;
 
 /**
  * Cycle 模块方块注册
  * 
  * Fabric 1.21.4 最佳实践：
+ * - 使用 RegistryKey 注册方块和物品
  * - 使用 FabricBlockEntityTypeBuilder 创建 BlockEntityType
  * - 延迟初始化避免循环依赖
  */
@@ -33,8 +36,7 @@ public class CycleBlocks {
      */
     public static Block getFactorSink() {
         if (factorSink == null) {
-            factorSink = registerBlock("factor_sink",
-                new Block(AbstractBlock.Settings.create().strength(3.0f).requiresTool()));
+            factorSink = registerBlock("factor_sink", 3.0f);
         }
         return factorSink;
     }
@@ -44,8 +46,7 @@ public class CycleBlocks {
      */
     public static Block getFactorSource() {
         if (factorSource == null) {
-            factorSource = registerBlock("factor_source",
-                new Block(AbstractBlock.Settings.create().strength(3.0f).requiresTool()));
+            factorSource = registerBlock("factor_source", 3.0f);
         }
         return factorSource;
     }
@@ -55,25 +56,33 @@ public class CycleBlocks {
      */
     public static Block getFactorTransmitter() {
         if (factorTransmitter == null) {
-            factorTransmitter = registerBlock("factor_transmitter",
-                new Block(AbstractBlock.Settings.create().strength(3.0f).requiresTool()));
+            factorTransmitter = registerBlock("factor_transmitter", 3.0f);
         }
         return factorTransmitter;
     }
     
     /**
-     * 注册方块（带 BlockItem）
+     * 注册方块（带 BlockItem）- Fabric 1.21.4 最佳实践
      */
-    private static Block registerBlock(String name, Block block) {
+    private static Block registerBlock(String name, float hardness) {
+        Identifier id = Identifier.of(FactorCraftMod.MOD_ID, name);
+        RegistryKey<Block> blockKey = RegistryKey.of(RegistryKeys.BLOCK, id);
+        RegistryKey<Item> itemKey = RegistryKey.of(RegistryKeys.ITEM, id);
+        
+        // 创建方块
+        Block block = new Block(AbstractBlock.Settings.create()
+            .registryKey(blockKey)
+            .strength(hardness)
+            .requiresTool());
+        
         // 注册方块
-        Block registeredBlock = Registry.register(Registries.BLOCK, 
-            Identifier.of(FactorCraftMod.MOD_ID, name), block);
+        Registry.register(Registries.BLOCK, id, block);
         
         // 注册 BlockItem
-        Item blockItem = new BlockItem(registeredBlock, new Item.Settings());
-        Registry.register(Registries.ITEM, Identifier.of(FactorCraftMod.MOD_ID, name), blockItem);
+        Item blockItem = new BlockItem(block, new Item.Settings().registryKey(itemKey));
+        Registry.register(Registries.ITEM, id, blockItem);
         
-        return registeredBlock;
+        return block;
     }
     
     /**

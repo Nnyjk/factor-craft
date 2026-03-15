@@ -12,7 +12,7 @@ import net.minecraft.screen.slot.Slot;
 public class FactorExtractorScreenHandler extends ScreenHandler {
     
     public FactorExtractorScreenHandler(int syncId, PlayerInventory playerInventory) {
-        super(null, syncId);
+        super(ModScreens.FACTOR_EXTRACTOR, syncId);
         
         // 添加玩家物品栏槽位
         for (int i = 0; i < 3; ++i) {
