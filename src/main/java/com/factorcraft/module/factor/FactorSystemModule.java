@@ -7,6 +7,7 @@ import com.factorcraft.module.event.FactorTideEvent;
 import com.factorcraft.module.event.bus.EventPriority;
 import com.factorcraft.module.event.bus.SimpleFactorEventBus;
 import com.factorcraft.module.factor.api.FactorApiProvider;
+import com.factorcraft.module.factor.management.ChunkFactorEventHandler;
 import com.factorcraft.module.factor.management.DiffusionSystem;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 
@@ -44,6 +45,9 @@ public final class FactorSystemModule implements FactorCraftModule {
         FactorApiProvider.set(SERVICE);
         
         if (REGISTERED.compareAndSet(false, true)) {
+            // 注册区块 Factor 事件处理器
+            ChunkFactorEventHandler.register();
+            
             // 注册世界 tick 处理
             ServerTickEvents.END_WORLD_TICK.register(world -> {
                 // Factor 系统核心 tick
