@@ -39,7 +39,7 @@ public class ExtractorCoreBlockEntity extends MachineBlockEntity {
     private static final long STRUCTURE_CHECK_INTERVAL = 100; // 5 秒检查一次结构
     
     public ExtractorCoreBlockEntity(BlockPos pos, BlockState state) {
-        super(null, pos, state);
+        super(ModMachines.EXTRACTOR_CORE, pos, state);
         this.extractProgress = 0;
         this.factorStorage = 0.0;
         this.maxStorage = ExtractionConfig.MAX_STORAGE_T1;
@@ -184,10 +184,61 @@ public class ExtractorCoreBlockEntity extends MachineBlockEntity {
     public int getExtractProgress() { return extractProgress; }
     
     /**
-     * 获取存储百分比
+     * 获取存储百分比 (0-100)
      */
     public double getStoragePercentage() {
         return maxStorage > 0 ? (factorStorage / maxStorage) * 100 : 0;
+    }
+    
+    /**
+     * 获取当前结构效率
+     */
+    public double getStructureEfficiency() {
+        return ExtractionConfig.getEfficiency(currentTier);
+    }
+    
+    /**
+     * 获取当前维度效率
+     */
+    public double getDimensionEfficiency(World world) {
+        if (world == null) return 1.0;
+        String dimensionKey = world.getRegistryKey().getValue().toString();
+        return ExtractionConfig.getDimensionEfficiency(dimensionKey, currentTier);
+    }
+    
+    /**
+     * 获取推荐维度名称
+     */
+    public String getRecommendedDimensionName() {
+        String key = ExtractionConfig.getRecommendedDimension(currentTier);
+        if (key == null) return "任意";
+        return switch (key) {
+            case "minecraft:overworld" -> "主世界";
+            case "minecraft:the_nether" -> "下界";
+            case "minecraft:the_end" -> "末地";
+            default -> key;
+        };
+    }
+    
+    /**
+     * 获取结构名称
+     */
+    public String getStructureName() {
+        return switch (currentTier) {
+            case 1 -> "星辰收集器";
+            case 2 -> "星辰阵列";
+            case 3 -> "星云汲取器";
+            case 4 -> "宇宙共鸣器";
+            case 5 -> "虚空漩涡";
+            default -> "基础结构";
+        };
+    }
+    
+    /**
+     * 获取进度百分比 (0-100)
+     */
+    public int getProgressPercentage() {
+        return (extractProgress * 100) / ExtractionConfig.EXTRACTION_INTERVAL;
     }
     
     /**

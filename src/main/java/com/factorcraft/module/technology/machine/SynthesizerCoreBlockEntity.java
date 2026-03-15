@@ -45,7 +45,7 @@ public class SynthesizerCoreBlockEntity extends MachineBlockEntity {
     private static final long STRUCTURE_CHECK_INTERVAL = 100;
     
     public SynthesizerCoreBlockEntity(BlockPos pos, BlockState state) {
-        super(null, pos, state);
+        super(ModMachines.SYNTHESIZER_CORE, pos, state);
         this.factorBuffer = 0.0;
         this.maxBuffer = SynthesisConfig.MAX_BUFFER_T1;
         this.currentTier = 1;
@@ -249,6 +249,40 @@ public class SynthesizerCoreBlockEntity extends MachineBlockEntity {
      */
     public double getBufferPercentage() {
         return maxBuffer > 0 ? (factorBuffer / maxBuffer) * 100 : 0;
+    }
+    
+    /**
+     * 获取结构名称
+     */
+    public String getStructureName() {
+        return switch (currentTier) {
+            case 1 -> "远古合成阵";
+            case 2 -> "远古锻造台";
+            case 3 -> "命运铸造炉";
+            case 4 -> "创世熔炉";
+            case 5 -> "本源祭坛";
+            default -> "基础结构";
+        };
+    }
+    
+    /**
+     * 获取当前配方名称（本地化）
+     */
+    public String getRecipeDisplayName() {
+        if (currentRecipeId == null) return "无";
+        SynthesisConfig.UpgradeRecipe recipe = SynthesisConfig.UPGRADE_RECIPES.get(currentRecipeId);
+        if (recipe == null) return currentRecipeId;
+        // 使用 id 作为显示名称，未来可以添加翻译
+        return recipe.id();
+    }
+    
+    /**
+     * 获取所有可用配方
+     */
+    public java.util.List<SynthesisConfig.UpgradeRecipe> getAvailableRecipes() {
+        return SynthesisConfig.UPGRADE_RECIPES.values().stream()
+            .filter(r -> r.fromTier() == currentTier)
+            .toList();
     }
     
     /**

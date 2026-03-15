@@ -1,6 +1,7 @@
 package com.factorcraft.module.technology.machine;
 
 import com.factorcraft.FactorCraftMod;
+import com.factorcraft.module.technology.block.*;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
@@ -23,32 +24,32 @@ public class ModMachines {
     private static final String MOD_ID = "factorcraft";
     
     // ========== 提取核心 T1-T5 ==========
-    public static final Block EXTRACTOR_CORE_T1 = registerMachineBlock("factor_machine_extractor_core_t1", 3.0f);
-    public static final Block EXTRACTOR_CORE_T2 = registerMachineBlock("factor_machine_extractor_core_t2", 3.5f);
-    public static final Block EXTRACTOR_CORE_T3 = registerMachineBlock("factor_machine_extractor_core_t3", 4.0f);
-    public static final Block EXTRACTOR_CORE_T4 = registerMachineBlock("factor_machine_extractor_core_t4", 4.5f);
-    public static final Block EXTRACTOR_CORE_T5 = registerMachineBlock("factor_machine_extractor_core_t5", 5.0f);
+    public static final Block EXTRACTOR_CORE_T1 = registerExtractorCore("factor_machine_extractor_core_t1", 3.0f);
+    public static final Block EXTRACTOR_CORE_T2 = registerExtractorCore("factor_machine_extractor_core_t2", 3.5f);
+    public static final Block EXTRACTOR_CORE_T3 = registerExtractorCore("factor_machine_extractor_core_t3", 4.0f);
+    public static final Block EXTRACTOR_CORE_T4 = registerExtractorCore("factor_machine_extractor_core_t4", 4.5f);
+    public static final Block EXTRACTOR_CORE_T5 = registerExtractorCore("factor_machine_extractor_core_t5", 5.0f);
     
     // ========== 消耗核心 T1-T5 ==========
-    public static final Block CONSUMER_CORE_T1 = registerMachineBlock("factor_machine_consumer_core_t1", 3.0f);
-    public static final Block CONSUMER_CORE_T2 = registerMachineBlock("factor_machine_consumer_core_t2", 3.5f);
-    public static final Block CONSUMER_CORE_T3 = registerMachineBlock("factor_machine_consumer_core_t3", 4.0f);
-    public static final Block CONSUMER_CORE_T4 = registerMachineBlock("factor_machine_consumer_core_t4", 4.5f);
-    public static final Block CONSUMER_CORE_T5 = registerMachineBlock("factor_machine_consumer_core_t5", 5.0f);
+    public static final Block CONSUMER_CORE_T1 = registerConsumerCore("factor_machine_consumer_core_t1", 3.0f);
+    public static final Block CONSUMER_CORE_T2 = registerConsumerCore("factor_machine_consumer_core_t2", 3.5f);
+    public static final Block CONSUMER_CORE_T3 = registerConsumerCore("factor_machine_consumer_core_t3", 4.0f);
+    public static final Block CONSUMER_CORE_T4 = registerConsumerCore("factor_machine_consumer_core_t4", 4.5f);
+    public static final Block CONSUMER_CORE_T5 = registerConsumerCore("factor_machine_consumer_core_t5", 5.0f);
     
     // ========== 合成核心 T1-T5 ==========
-    public static final Block SYNTHESIZER_CORE_T1 = registerMachineBlock("factor_machine_synthesizer_core_t1", 3.0f);
-    public static final Block SYNTHESIZER_CORE_T2 = registerMachineBlock("factor_machine_synthesizer_core_t2", 3.5f);
-    public static final Block SYNTHESIZER_CORE_T3 = registerMachineBlock("factor_machine_synthesizer_core_t3", 4.0f);
-    public static final Block SYNTHESIZER_CORE_T4 = registerMachineBlock("factor_machine_synthesizer_core_t4", 4.5f);
-    public static final Block SYNTHESIZER_CORE_T5 = registerMachineBlock("factor_machine_synthesizer_core_t5", 5.0f);
+    public static final Block SYNTHESIZER_CORE_T1 = registerSynthesizerCore("factor_machine_synthesizer_core_t1", 3.0f);
+    public static final Block SYNTHESIZER_CORE_T2 = registerSynthesizerCore("factor_machine_synthesizer_core_t2", 3.5f);
+    public static final Block SYNTHESIZER_CORE_T3 = registerSynthesizerCore("factor_machine_synthesizer_core_t3", 4.0f);
+    public static final Block SYNTHESIZER_CORE_T4 = registerSynthesizerCore("factor_machine_synthesizer_core_t4", 4.5f);
+    public static final Block SYNTHESIZER_CORE_T5 = registerSynthesizerCore("factor_machine_synthesizer_core_t5", 5.0f);
     
     // ========== 培育核心 T1-T5 ==========
-    public static final Block CULTIVATOR_CORE_T1 = registerMachineBlock("factor_machine_cultivator_core_t1", 3.0f);
-    public static final Block CULTIVATOR_CORE_T2 = registerMachineBlock("factor_machine_cultivator_core_t2", 3.5f);
-    public static final Block CULTIVATOR_CORE_T3 = registerMachineBlock("factor_machine_cultivator_core_t3", 4.0f);
-    public static final Block CULTIVATOR_CORE_T4 = registerMachineBlock("factor_machine_cultivator_core_t4", 4.5f);
-    public static final Block CULTIVATOR_CORE_T5 = registerMachineBlock("factor_machine_cultivator_core_t5", 5.0f);
+    public static final Block CULTIVATOR_CORE_T1 = registerCultivatorCore("factor_machine_cultivator_core_t1", 3.0f);
+    public static final Block CULTIVATOR_CORE_T2 = registerCultivatorCore("factor_machine_cultivator_core_t2", 3.5f);
+    public static final Block CULTIVATOR_CORE_T3 = registerCultivatorCore("factor_machine_cultivator_core_t3", 4.0f);
+    public static final Block CULTIVATOR_CORE_T4 = registerCultivatorCore("factor_machine_cultivator_core_t4", 4.5f);
+    public static final Block CULTIVATOR_CORE_T5 = registerCultivatorCore("factor_machine_cultivator_core_t5", 5.0f);
     
     // ========== BlockEntity 类型 ==========
     public static BlockEntityType<ExtractorCoreBlockEntity> EXTRACTOR_CORE;
@@ -57,15 +58,77 @@ public class ModMachines {
     public static BlockEntityType<CultivatorCoreBlockEntity> CULTIVATOR_CORE;
     
     /**
-     * 注册机器核心方块
+     * 注册提取核心方块（带 GUI）
      */
-    private static Block registerMachineBlock(String name, float hardness) {
+    private static Block registerExtractorCore(String name, float hardness) {
         Identifier id = Identifier.of(MOD_ID, name);
         RegistryKey<Block> key = RegistryKey.of(RegistryKeys.BLOCK, id);
         
-        Block block = new Block(AbstractBlock.Settings.create()
-            .registryKey(key)
-            .strength(hardness));
+        Block block = new ExtractorCoreBlock(
+            AbstractBlock.Settings.create()
+                .registryKey(key)
+                .strength(hardness)
+        );
+        
+        Registry.register(Registries.BLOCK, id, block);
+        Registry.register(Registries.ITEM, id, new BlockItem(block, new Item.Settings()
+            .registryKey(RegistryKey.of(RegistryKeys.ITEM, id))));
+        
+        return block;
+    }
+    
+    /**
+     * 注册消耗核心方块（带 GUI）
+     */
+    private static Block registerConsumerCore(String name, float hardness) {
+        Identifier id = Identifier.of(MOD_ID, name);
+        RegistryKey<Block> key = RegistryKey.of(RegistryKeys.BLOCK, id);
+        
+        Block block = new ConsumerCoreBlock(
+            AbstractBlock.Settings.create()
+                .registryKey(key)
+                .strength(hardness)
+        );
+        
+        Registry.register(Registries.BLOCK, id, block);
+        Registry.register(Registries.ITEM, id, new BlockItem(block, new Item.Settings()
+            .registryKey(RegistryKey.of(RegistryKeys.ITEM, id))));
+        
+        return block;
+    }
+    
+    /**
+     * 注册合成核心方块（带 GUI）
+     */
+    private static Block registerSynthesizerCore(String name, float hardness) {
+        Identifier id = Identifier.of(MOD_ID, name);
+        RegistryKey<Block> key = RegistryKey.of(RegistryKeys.BLOCK, id);
+        
+        Block block = new SynthesizerCoreBlock(
+            AbstractBlock.Settings.create()
+                .registryKey(key)
+                .strength(hardness)
+        );
+        
+        Registry.register(Registries.BLOCK, id, block);
+        Registry.register(Registries.ITEM, id, new BlockItem(block, new Item.Settings()
+            .registryKey(RegistryKey.of(RegistryKeys.ITEM, id))));
+        
+        return block;
+    }
+    
+    /**
+     * 注册培育核心方块（带 GUI）
+     */
+    private static Block registerCultivatorCore(String name, float hardness) {
+        Identifier id = Identifier.of(MOD_ID, name);
+        RegistryKey<Block> key = RegistryKey.of(RegistryKeys.BLOCK, id);
+        
+        Block block = new CultivatorCoreBlock(
+            AbstractBlock.Settings.create()
+                .registryKey(key)
+                .strength(hardness)
+        );
         
         Registry.register(Registries.BLOCK, id, block);
         Registry.register(Registries.ITEM, id, new BlockItem(block, new Item.Settings()
@@ -78,7 +141,7 @@ public class ModMachines {
      * 注册所有 BlockEntity
      */
     public static void register() {
-        // 提取核心 BlockEntity（支持 T1-T5 方块）
+        // 提取核心 BlockEntity
         EXTRACTOR_CORE = FabricBlockEntityTypeBuilder.create(
             ExtractorCoreBlockEntity::new,
             EXTRACTOR_CORE_T1, EXTRACTOR_CORE_T2, EXTRACTOR_CORE_T3, EXTRACTOR_CORE_T4, EXTRACTOR_CORE_T5

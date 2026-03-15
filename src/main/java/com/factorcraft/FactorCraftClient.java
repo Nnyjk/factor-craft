@@ -4,6 +4,7 @@ import com.factorcraft.client.KeyBindings;
 import com.factorcraft.dynamic.DynamicBundle;
 import com.factorcraft.dynamic.DynamicContentManager;
 import com.factorcraft.module.network.ClientNetworkHandler;
+import com.factorcraft.module.technology.screen.ModScreens;
 import net.fabricmc.api.ClientModInitializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +27,10 @@ public class FactorCraftClient implements ClientModInitializer {
         // 注册客户端网络处理器
         ClientNetworkHandler.register();
         LOGGER.info("[FactorCraft:Client] 网络处理器注册完成");
+        
+        // 注册 Screen 客户端渲染
+        ModScreens.initClient();
+        LOGGER.info("[FactorCraft:Client] Screen 客户端注册完成");
         
         // 动态内容信息
         DynamicBundle bundle = DynamicContentManager.getInstance().current();

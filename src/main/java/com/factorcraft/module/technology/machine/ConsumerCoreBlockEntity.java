@@ -41,7 +41,7 @@ public class ConsumerCoreBlockEntity extends MachineBlockEntity {
     private static final long STRUCTURE_CHECK_INTERVAL = 100;
     
     public ConsumerCoreBlockEntity(BlockPos pos, BlockState state) {
-        super(null, pos, state);
+        super(ModMachines.CONSUMER_CORE, pos, state);
         this.factorStorage = 0.0;
         this.maxStorage = ConsumptionConfig.MAX_STORAGE_T1;
         this.currentTier = 1;
