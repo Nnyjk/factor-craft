@@ -14,6 +14,6 @@ public final class NonCoreIntegrationModule implements FactorCraftModule {
 
     @Override
     public void initialize() {
-        FactorCraftMod.LOGGER.info("非核心模块接入标准已启用（tools/weapons/armor/furniture）");
+        FactorCraftMod.LOGGER.info("[FactorCraft:Integration] 非核心模块接入标准已启用（tools/weapons/armor/furniture）");
     }
 }

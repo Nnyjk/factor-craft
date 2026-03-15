@@ -31,7 +31,7 @@ public class BlueprintLoader {
      * 加载所有蓝图
      */
     public static void loadAll() {
-        FactorCraftMod.LOGGER.info("[BlueprintLoader] 加载多方块结构蓝图...");
+        FactorCraftMod.LOGGER.info("[FactorCraft:Structure] 加载多方块结构蓝图...");
         
         // 加载内置蓝图
         loadInternalBlueprints();
@@ -39,7 +39,7 @@ public class BlueprintLoader {
         // 加载外部数据包蓝图
         loadExternalBlueprints();
         
-        FactorCraftMod.LOGGER.info("[BlueprintLoader] 加载完成，共 {} 个蓝图", BLUEPRINTS.size());
+        FactorCraftMod.LOGGER.info("[FactorCraft:Structure] 加载完成，共 {} 个蓝图", BLUEPRINTS.size());
     }
     
     /**
@@ -56,7 +56,7 @@ public class BlueprintLoader {
             try {
                 loadInternalBlueprint(name);
             } catch (Exception e) {
-                FactorCraftMod.LOGGER.warn("[BlueprintLoader] 无法加载内置蓝图 {}: {}", name, e.getMessage());
+                FactorCraftMod.LOGGER.warn("[FactorCraft:Structure] 无法加载内置蓝图 {}: {}", name, e.getMessage());
             }
         }
     }
@@ -76,7 +76,7 @@ public class BlueprintLoader {
             JsonObject json = JsonParser.parseReader(reader).getAsJsonObject();
             Blueprint blueprint = parseBlueprint(json);
             BLUEPRINTS.put(blueprint.getId(), blueprint);
-            FactorCraftMod.LOGGER.debug("[BlueprintLoader] 加载蓝图: {}", blueprint.getId());
+            FactorCraftMod.LOGGER.debug("[FactorCraft:Structure] 加载蓝图: {}", blueprint.getId());
         }
     }
     
@@ -88,9 +88,9 @@ public class BlueprintLoader {
         if (!Files.exists(configDir)) {
             try {
                 Files.createDirectories(configDir);
-                FactorCraftMod.LOGGER.info("[BlueprintLoader] 创建配置目录: {}", configDir.toAbsolutePath());
+                FactorCraftMod.LOGGER.info("[FactorCraft:Structure] 创建配置目录: {}", configDir.toAbsolutePath());
             } catch (IOException e) {
-                FactorCraftMod.LOGGER.error("[BlueprintLoader] 无法创建配置目录: {}", e.getMessage());
+                FactorCraftMod.LOGGER.error("[FactorCraft:Structure] 无法创建配置目录: {}", e.getMessage());
                 return;
             }
             return; // 新创建的目录是空的
@@ -100,7 +100,7 @@ public class BlueprintLoader {
             stream.filter(p -> p.toString().endsWith(".json"))
                   .forEach(BlueprintLoader::loadExternalBlueprint);
         } catch (IOException e) {
-            FactorCraftMod.LOGGER.error("[BlueprintLoader] 扫描配置目录失败: {}", e.getMessage());
+            FactorCraftMod.LOGGER.error("[FactorCraft:Structure] 扫描配置目录失败: {}", e.getMessage());
         }
     }
     
@@ -112,10 +112,10 @@ public class BlueprintLoader {
             JsonObject json = JsonParser.parseReader(reader).getAsJsonObject();
             Blueprint blueprint = parseBlueprint(json);
             BLUEPRINTS.put(blueprint.getId(), blueprint);
-            FactorCraftMod.LOGGER.info("[BlueprintLoader] 加载外部蓝图: {} from {}", 
+            FactorCraftMod.LOGGER.info("[FactorCraft:Structure] 加载外部蓝图: {} from {}", 
                 blueprint.getId(), path.getFileName());
         } catch (Exception e) {
-            FactorCraftMod.LOGGER.warn("[BlueprintLoader] 加载外部蓝图失败 {}: {}", 
+            FactorCraftMod.LOGGER.warn("[FactorCraft:Structure] 加载外部蓝图失败 {}: {}", 
                 path.getFileName(), e.getMessage());
         }
     }

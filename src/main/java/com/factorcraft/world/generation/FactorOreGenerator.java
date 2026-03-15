@@ -11,6 +11,13 @@ import java.util.Random;
 /**
  * Factor 矿脉生成器
  * 在新区块生成时初始化 Factor 状态
+ * 
+ * TODO: 需要接入世界生成系统
+ * 接入方式：
+ * 1. 实现 ChunkGenerator 或使用 Fabric API 的世界生成事件
+ * 2. 在 fabric.mod.json 中注册
+ * 
+ * @see net.fabricmc.fabric.api.event.lifecycle.v1.ServerChunkEvents
  */
 public class FactorOreGenerator {
     

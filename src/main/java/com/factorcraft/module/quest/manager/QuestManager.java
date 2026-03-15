@@ -27,7 +27,7 @@ public class QuestManager {
     
     public void registerTemplate(QuestTemplate template) {
         this.templates.put(template.getId(), template);
-        FactorCraftMod.LOGGER.debug("[QuestManager] 注册任务模板：{}", template.getId());
+        FactorCraftMod.LOGGER.debug("[FactorCraft:Quest] 注册任务模板：{}", template.getId());
     }
     
     public QuestTemplate getTemplate(Identifier id) {
@@ -41,12 +41,12 @@ public class QuestManager {
     public boolean startQuest(PlayerEntity player, Identifier questId) {
         QuestTemplate template = this.templates.get(questId);
         if (template == null) {
-            FactorCraftMod.LOGGER.warn("[QuestManager] 尝试开始不存在的任务：{}", questId);
+            FactorCraftMod.LOGGER.warn("[FactorCraft:Quest] 尝试开始不存在的任务：{}", questId);
             return false;
         }
         
         if (isQuestCompleted(player.getUuid(), questId)) {
-            FactorCraftMod.LOGGER.warn("[QuestManager] 任务已完成：{}", questId);
+            FactorCraftMod.LOGGER.warn("[FactorCraft:Quest] 任务已完成：{}", questId);
             return false;
         }
         
@@ -54,14 +54,14 @@ public class QuestManager {
             this.activeQuests.computeIfAbsent(player.getUuid(), k -> new ConcurrentHashMap<>());
         
         if (playerQuests.containsKey(questId)) {
-            FactorCraftMod.LOGGER.warn("[QuestManager] 任务已在进行中：{}", questId);
+            FactorCraftMod.LOGGER.warn("[FactorCraft:Quest] 任务已在进行中：{}", questId);
             return false;
         }
         
         QuestInstance instance = new QuestInstance(template, player.getUuid());
         playerQuests.put(questId, instance);
         
-        FactorCraftMod.LOGGER.info("[QuestManager] 玩家 {} 开始任务：{}", 
+        FactorCraftMod.LOGGER.info("[FactorCraft:Quest] 玩家 {} 开始任务：{}", 
             player.getName().getString(), questId);
         return true;
     }
@@ -89,7 +89,7 @@ public class QuestManager {
             template.getRewards().forEach(reward -> reward.give(player));
         }
         
-        FactorCraftMod.LOGGER.info("[QuestManager] 玩家 {} 完成任务：{}", 
+        FactorCraftMod.LOGGER.info("[FactorCraft:Quest] 玩家 {} 完成任务：{}", 
             player.getName().getString(), questId);
     }
     

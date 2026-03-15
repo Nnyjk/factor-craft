@@ -4,6 +4,7 @@ import com.factorcraft.module.event.FactorChangeEvent;
 import com.factorcraft.module.event.FactorDisasterEvent;
 import com.factorcraft.module.event.FactorThresholdEvent;
 import com.factorcraft.module.event.FactorTierChangeEvent;
+import com.factorcraft.module.event.FactorTideEvent;
 import com.factorcraft.module.event.bus.SimpleFactorEventBus;
 import com.factorcraft.module.factor.api.FactorApi;
 import com.factorcraft.module.factor.state.DayTierSnapshot;
@@ -21,106 +22,242 @@ import java.util.OptionalLong;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * M1 因子系统运行时服务：实时更新 + 日切结算 + 阈值事件/灾害冷却。
+ * Factor 系统运行时服务
+ * 
+ * 核心功能：
+ * - 实时 Factor 更新（基于潮汐系统）
+ * - 日切结算（Tier 变更）
+ * - 阈值事件 / 灾害冷却
+ * - 区块级 Factor 扩散
+ * 
+ * 维度基准值体系：
+ * - 主世界：0.5（基准）
+ * - 下界：1.5（高活性）
+ * - 末地：3.0（超高活性）
  */
 public final class FactorService implements FactorApi {
     
     private static FactorService instance;
     
-    /**
-     * 获取 FactorService 实例（用于 BlockEntity 等）
-     */
     public static FactorService getInstance() {
         if (instance == null) {
-            // 从 FactorApiProvider 获取
             instance = (FactorService) com.factorcraft.module.factor.api.FactorApiProvider.get();
         }
         return instance;
     }
     
+    // ==================== 常量 ====================
+    
     private static final long WORLD_DAY_TICKS = 24_000;
-    private static final double FACTOR_MIN = 0;
-    private static final double FACTOR_MAX = 100;
-    private static final double CHANGE_EVENT_EPSILON = 0.001;
-    private static final double SLOPE_EPSILON = 0.0001;
-
-    private static final double TIDE_AMPLITUDE_A = 12;
-    private static final double TIDE_AMPLITUDE_B = 6;
-    private static final long TIDE_PERIOD_A = 96_000;
-    private static final long TIDE_PERIOD_B = 192_000;
-    // 第二个潮汐波加入固定相位差，避免双周期始终同相叠加造成规律过强。
-    private static final double TIDE_PHASE_SHIFT = 0.8;
-
-    private static final double DAMPING = 0.04;
+    private static final double CHANGE_EVENT_EPSILON = 0.0001;
+    private static final double SLOPE_EPSILON = 0.00001;
+    
+    // 阻尼系数（相对于基准值的比例）
+    private static final double DAMPING_RATIO = 0.04;
+    
+    // 趋势权重
     private static final double TREND_WEIGHT = 0.35;
-    private static final double HYSTERESIS = 2.0;
+    
+    // 迟滞阈值（偏离度）
+    private static final double HYSTERESIS = 0.1;
 
     private static final long DISASTER_COOLDOWN_TICKS = WORLD_DAY_TICKS;
     private static final String DISASTER_EVENT_ID = "factor_disaster";
-    private static final String DISASTER_TYPE_UNSTABLE_RESONANCE = "unstable_resonance";
     private static final int DISASTER_BASE_SEVERITY = 2;
     private static final int DISASTER_MAX_SEVERITY = 5;
 
-    private static final String HUD_LINE_EMPTY = "factor=0.00 dayAvg=0.00 trend=0.00 tier=0 next=0";
-
-    private static final double BASE_FACTOR_OVERWORLD = 50;
-    private static final double BASE_FACTOR_NETHER = 80;
-    private static final double BASE_FACTOR_END = 20;
-
+    // 噪声参数（相对于基准值的比例）
     private static final double NOISE_DIMENSION_MULTIPLIER = 31.0;
     private static final double NOISE_TICK_MULTIPLIER = 17.0;
     private static final double NOISE_SINE_SCALE = 0.01;
-    private static final double NOISE_AMPLITUDE = 0.45;
+    private static final double NOISE_RATIO = 0.02; // 噪声幅度 = 基准值 × 2%
+    
+    // 潮汐效果检查间隔 (1200 ticks = 60秒)
+    private static final long TIDE_EFFECT_INTERVAL = 1200;
+
+    // ==================== 状态存储 ====================
 
     private final Map<String, RuntimeState> states = new ConcurrentHashMap<>();
     private final Map<String, DayTierSnapshot> snapshots = new ConcurrentHashMap<>();
     private final Map<String, Map<String, Long>> cooldowns = new ConcurrentHashMap<>();
 
+    // ==================== 核心逻辑 ====================
+
     public void tick(ServerWorld world) {
         String dimensionKey = world.getRegistryKey().getValue().toString();
         long tick = world.getTime();
         long day = tick / WORLD_DAY_TICKS;
-        RuntimeState state = states.computeIfAbsent(dimensionKey, k -> new RuntimeState(baseForDimension(k), day));
+        
+        DimensionType dimensionType = DimensionType.fromKey(dimensionKey);
+        RuntimeState state = states.computeIfAbsent(dimensionKey, 
+            k -> new RuntimeState(dimensionType, day));
 
         state.expireOffsets(tick);
 
         double previousFactor = state.currentFactor;
-        double tideDelta = tideAt(tick + 1) - tideAt(tick);
+        
+        // 使用 DimensionType 计算潮汐变化
+        double tideDelta = calculateTideDelta(dimensionType, tick);
         double playerDelta = state.activeOffsetTotal();
-        double randomDelta = pseudoNoise(dimensionKey, tick);
+        double randomDelta = pseudoNoise(dimensionKey, tick, dimensionType.baseValue());
 
-        double nextFactor = previousFactor + tideDelta + playerDelta + randomDelta - DAMPING * (previousFactor - state.baseFactor);
-        state.currentFactor = clamp(nextFactor, FACTOR_MIN, FACTOR_MAX);
+        // 阻尼：使 Factor 趋向基准值
+        double damping = DAMPING_RATIO * (previousFactor - state.baseFactor);
+        double nextFactor = previousFactor + tideDelta + playerDelta + randomDelta - damping;
+        
+        // 使用维度的 Factor 范围进行 clamp
+        state.currentFactor = clamp(nextFactor, dimensionType.getMinFactor(), dimensionType.getMaxFactor());
 
         state.dayFactorSum += state.currentFactor;
         state.daySampleCount++;
         state.lastUpdatedTick = tick;
 
+        // Factor 变化事件
         if (Math.abs(state.currentFactor - previousFactor) > CHANGE_EVENT_EPSILON) {
-            SimpleFactorEventBus.getInstance().publish(new FactorChangeEvent(world, previousFactor, state.currentFactor));
+            SimpleFactorEventBus.getInstance().publish(
+                new FactorChangeEvent(world, previousFactor, state.currentFactor));
+        }
+        
+        // 潮汐效果检查（每 60 秒）
+        if (tick % TIDE_EFFECT_INTERVAL == 0) {
+            checkTideEffects(world, state, dimensionType);
         }
 
+        // 日切结算
         if (tick % WORLD_DAY_TICKS == 0 && day > state.lastSettledDay) {
-            settleDay(world, state, day);
+            settleDay(world, state, day, dimensionType);
         }
     }
+    
+    /**
+     * 计算潮汐变化量（使用 DimensionType）
+     */
+    private double calculateTideDelta(DimensionType type, long tick) {
+        double currentTide = type.calculateFactor(tick);
+        double nextTide = type.calculateFactor(tick + 1);
+        return nextTide - currentTide;
+    }
+    
+    /**
+     * 检查并触发潮汐效果
+     */
+    private void checkTideEffects(ServerWorld world, RuntimeState state, DimensionType type) {
+        double currentFactor = state.currentFactor;
+        double deviation = calculateDeviation(currentFactor, type.baseValue());
+        TideStatus status = getTideStatus(deviation);
+        
+        // 发布潮汐事件（供其他模块监听）
+        SimpleFactorEventBus.getInstance().publish(
+            new FactorTideEvent(world, currentFactor, deviation, status, type));
+        
+        // 更新状态记录
+        state.lastTideStatus = status;
+    }
+
+    // ==================== 潮汐相关 API ====================
+    
+    /**
+     * 计算偏离基准值的百分比
+     */
+    public double calculateDeviation(double currentFactor, double baseValue) {
+        if (baseValue == 0) return 0;
+        return (currentFactor - baseValue) / baseValue;
+    }
+    
+    /**
+     * 根据偏离度获取潮汐状态
+     */
+    public TideStatus getTideStatus(double deviation) {
+        double absDeviation = Math.abs(deviation);
+        
+        if (absDeviation <= 0.1) {
+            return TideStatus.STABLE;
+        } else if (absDeviation <= 0.3) {
+            return TideStatus.DEVIATED;
+        } else if (absDeviation <= 0.5) {
+            return TideStatus.FLUCTUATING;
+        } else {
+            return TideStatus.VOLATILE;
+        }
+    }
+    
+    /**
+     * 获取世界的潮汐状态
+     */
+    public TideStatus getTideStatus(ServerWorld world) {
+        String key = world.getRegistryKey().getValue().toString();
+        RuntimeState state = states.get(key);
+        if (state == null) return TideStatus.STABLE;
+        
+        DimensionType type = DimensionType.fromKey(key);
+        double deviation = calculateDeviation(state.currentFactor, type.baseValue());
+        return getTideStatus(deviation);
+    }
+    
+    /**
+     * 获取当前偏离度
+     */
+    public double getDeviation(ServerWorld world) {
+        String key = world.getRegistryKey().getValue().toString();
+        RuntimeState state = states.get(key);
+        if (state == null) return 0;
+        
+        DimensionType type = DimensionType.fromKey(key);
+        return calculateDeviation(state.currentFactor, type.baseValue());
+    }
+    
+    /**
+     * 预测下一个潮汐峰值 tick
+     */
+    public long getNextPeakTick(ServerWorld world) {
+        DimensionType type = DimensionType.fromKey(world.getRegistryKey().getValue().toString());
+        return TideSystem.findNextPeakTick(type, world.getTime());
+    }
+    
+    /**
+     * 预测下一个潮汐谷值 tick
+     */
+    public long getNextTroughTick(ServerWorld world) {
+        DimensionType type = DimensionType.fromKey(world.getRegistryKey().getValue().toString());
+        return TideSystem.findNextTroughTick(type, world.getTime());
+    }
+    
+    /**
+     * 判断是否为爆发时间（Factor 处于高位）
+     */
+    public boolean isOutbreakTime(ServerWorld world) {
+        double deviation = getDeviation(world);
+        return deviation > 0.5;
+    }
+    
+    /**
+     * 获取潮汐周期进度 (0-100%)
+     */
+    public double getTideCycleProgress(ServerWorld world) {
+        DimensionType type = DimensionType.fromKey(world.getRegistryKey().getValue().toString());
+        long currentTick = world.getTime();
+        return (currentTick % type.periodTicks()) / (double) type.periodTicks() * 100;
+    }
+
+    // ==================== 基础 API 实现 ====================
 
     public String debugHudLine(ServerWorld world) {
         String key = world.getRegistryKey().getValue().toString();
         RuntimeState state = states.get(key);
         if (state == null) {
-            return HUD_LINE_EMPTY;
+            DimensionType type = DimensionType.fromKey(key);
+            return String.format("factor=%.2f tier=2 tide=STABLE", type.baseValue());
         }
-        double dayAvg = state.daySampleCount == 0 ? state.currentFactor : state.dayFactorSum / state.daySampleCount;
-        double predicted = dayAvg + TREND_WEIGHT * (dayAvg - state.previousDayAverage);
-        int predictedTier = DayTierDecider.resolveTier(predicted, state.currentTier, HYSTERESIS);
+        
+        DimensionType type = DimensionType.fromKey(key);
+        
         return String.format(
-                "factor=%.2f dayAvg=%.2f trend=%.2f tier=%d next=%d",
-                state.currentFactor,
-                dayAvg,
-                dayAvg - state.previousDayAverage,
-                state.currentTier,
-                predictedTier
+            "factor=%.2f tier=%d tide=%s deviation=%.1f%% cycle=%.1f%%",
+            state.currentFactor,
+            state.currentTier,
+            state.lastTideStatus.getName(),
+            calculateDeviation(state.currentFactor, type.baseValue()) * 100,
+            getTideCycleProgress(world)
         );
     }
 
@@ -132,17 +269,20 @@ public final class FactorService implements FactorApi {
         Map<String, FactorWorldState> view = new LinkedHashMap<>();
         List<Map.Entry<String, RuntimeState>> entries = new ArrayList<>(states.entrySet());
         entries.sort(Comparator.comparing(Map.Entry::getKey));
+        
         for (Map.Entry<String, RuntimeState> entry : entries) {
             RuntimeState state = entry.getValue();
-            double dayAverage = state.daySampleCount == 0 ? state.currentFactor : state.dayFactorSum / state.daySampleCount;
+            double dayAverage = state.daySampleCount == 0 ? state.currentFactor : 
+                state.dayFactorSum / state.daySampleCount;
+            
             view.put(entry.getKey(), new FactorWorldState(
-                    entry.getKey(),
-                    state.currentFactor,
-                    state.baseFactor,
-                    dayAverage,
-                    dayAverage - state.previousDayAverage,
-                    state.currentTier,
-                    state.lastUpdatedTick
+                entry.getKey(),
+                state.currentFactor,
+                state.baseFactor,
+                dayAverage,
+                dayAverage - state.previousDayAverage,
+                state.currentTier,
+                state.lastUpdatedTick
             ));
         }
         return Collections.unmodifiableMap(view);
@@ -157,14 +297,16 @@ public final class FactorService implements FactorApi {
     public double getFactor(ServerWorld world) {
         String key = world.getRegistryKey().getValue().toString();
         RuntimeState state = states.get(key);
-        return state == null ? baseForDimension(key) : state.currentFactor;
+        DimensionType type = DimensionType.fromKey(key);
+        return state == null ? type.baseValue() : state.currentFactor;
     }
 
     @Override
     public int getTier(ServerWorld world) {
         String key = world.getRegistryKey().getValue().toString();
         RuntimeState state = states.get(key);
-        return state == null ? FactorTier.fromFactor(baseForDimension(key)).level() : state.currentTier;
+        DimensionType type = DimensionType.fromKey(key);
+        return state == null ? FactorTier.STABLE.level() : state.currentTier;
     }
 
     @Override
@@ -176,10 +318,13 @@ public final class FactorService implements FactorApi {
         }
 
         double current = state.currentFactor;
-        double slope = (state.daySampleCount == 0 ? 0 : state.dayFactorSum / state.daySampleCount) - state.previousDayAverage;
+        double slope = (state.daySampleCount == 0 ? 0 : 
+            state.dayFactorSum / state.daySampleCount) - state.previousDayAverage;
+        
         if (Math.abs(slope) < SLOPE_EPSILON) {
             return OptionalLong.empty();
         }
+        
         double ticks = (target - current) / slope;
         if (ticks <= 0) {
             return OptionalLong.empty();
@@ -193,75 +338,64 @@ public final class FactorService implements FactorApi {
             return;
         }
         String key = world.getRegistryKey().getValue().toString();
-        RuntimeState state = states.computeIfAbsent(key, k -> new RuntimeState(baseForDimension(k), world.getTime() / WORLD_DAY_TICKS));
+        DimensionType type = DimensionType.fromKey(key);
+        RuntimeState state = states.computeIfAbsent(key, 
+            k -> new RuntimeState(type, world.getTime() / WORLD_DAY_TICKS));
         state.offsets.add(new TimedOffset(offset, world.getTime() + durationTicks));
     }
     
-    /**
-     * 向维度添加 Factor（用于 BlockEntity）
-     */
+    // ==================== BlockEntity 便捷方法 ====================
+    
     public void addFactor(net.minecraft.util.math.BlockPos pos, int amount) {
-        // 简化实现：直接添加到当前维度
-        // 实际应该根据位置找到对应的世界
-        // 这里只是一个占位实现
+        // 占位实现
     }
     
-    /**
-     * 从维度消耗 Factor（用于 BlockEntity）
-     */
     public void consumeFactor(net.minecraft.util.math.BlockPos pos, int amount) {
-        // 简化实现：直接从当前维度消耗
-        // 实际应该根据位置找到对应的世界
-        // 这里只是一个占位实现
+        // 占位实现
     }
     
-    /**
-     * 向世界添加 Factor (API 实现)
-     */
-    public void addFactor(net.minecraft.server.world.ServerWorld world, 
-                         net.minecraft.util.math.BlockPos pos, int amount) {
-        addFactorOffset(world, amount, 1200); // 持续 60 秒
+    public void addFactor(ServerWorld world, net.minecraft.util.math.BlockPos pos, int amount) {
+        addFactorOffset(world, amount, 1200);
     }
     
-    /**
-     * 从世界消耗 Factor (API 实现)
-     */
-    public void consumeFactor(net.minecraft.server.world.ServerWorld world,
-                             net.minecraft.util.math.BlockPos pos, int amount) {
-        addFactorOffset(world, -amount, 1200); // 持续 60 秒
+    public void consumeFactor(ServerWorld world, net.minecraft.util.math.BlockPos pos, int amount) {
+        addFactorOffset(world, -amount, 1200);
     }
     
-    /**
-     * 获取维度基准值 (API 实现)
-     */
-    public double getDimensionBaseValue(net.minecraft.server.world.ServerWorld world) {
-        return baseForDimension(world.getRegistryKey().getValue().toString());
+    public double getDimensionBaseValue(ServerWorld world) {
+        return DimensionType.fromKey(world.getRegistryKey().getValue().toString()).baseValue();
     }
     
-    /**
-     * 计算跨维度传输倍率 (API 实现)
-     */
-    public double calculateTransferMultiplier(net.minecraft.server.world.ServerWorld fromWorld,
-                                             net.minecraft.server.world.ServerWorld toWorld) {
-        double fromBase = getDimensionBaseValue(fromWorld);
-        double toBase = getDimensionBaseValue(toWorld);
-        return fromBase / toBase;
+    public double calculateTransferMultiplier(ServerWorld fromWorld, ServerWorld toWorld) {
+        DimensionType from = DimensionType.fromKey(fromWorld.getRegistryKey().getValue().toString());
+        DimensionType to = DimensionType.fromKey(toWorld.getRegistryKey().getValue().toString());
+        return from.calculateTransferMultiplierTo(to);
+    }
+    
+    public static double baseForDimension(String dimensionKey) {
+        return DimensionType.fromKey(dimensionKey).baseValue();
     }
 
-    private void settleDay(ServerWorld world, RuntimeState state, long dayIndex) {
-        double dayAverage = state.daySampleCount == 0 ? state.currentFactor : state.dayFactorSum / state.daySampleCount;
+    // ==================== 日切结算 ====================
+
+    private void settleDay(ServerWorld world, RuntimeState state, long dayIndex, DimensionType dimensionType) {
+        double dayAverage = state.daySampleCount == 0 ? state.currentFactor : 
+            state.dayFactorSum / state.daySampleCount;
         double trend = dayAverage - state.previousDayAverage;
         double predicted = dayAverage + TREND_WEIGHT * trend;
 
         int previousTier = state.currentTier;
-        int nextTier = DayTierDecider.resolveTier(predicted, previousTier, HYSTERESIS);
+        int nextTier = DayTierDecider.resolveTier(predicted, dimensionType.baseValue(), previousTier, HYSTERESIS);
 
-        DayTierSnapshot snapshot = new DayTierSnapshot(dayIndex, dayAverage, trend, HYSTERESIS, previousTier, nextTier);
+        DayTierSnapshot snapshot = new DayTierSnapshot(
+            dayIndex, dayAverage, trend, HYSTERESIS, previousTier, nextTier);
         snapshots.put(world.getRegistryKey().getValue().toString(), snapshot);
 
         if (nextTier != previousTier) {
-            SimpleFactorEventBus.getInstance().publish(new FactorTierChangeEvent(world, previousTier, nextTier, dayIndex));
-            SimpleFactorEventBus.getInstance().publish(new FactorThresholdEvent(world, previousTier, nextTier, dayIndex));
+            SimpleFactorEventBus.getInstance().publish(
+                new FactorTierChangeEvent(world, previousTier, nextTier, dayIndex));
+            SimpleFactorEventBus.getInstance().publish(
+                new FactorThresholdEvent(world, previousTier, nextTier, dayIndex));
         }
 
         triggerDisasterIfNeeded(world, state, nextTier);
@@ -275,7 +409,8 @@ public final class FactorService implements FactorApi {
 
     private void triggerDisasterIfNeeded(ServerWorld world, RuntimeState state, int tier) {
         String dim = world.getRegistryKey().getValue().toString();
-        Map<String, Long> worldCooldown = cooldowns.computeIfAbsent(dim, ignored -> new ConcurrentHashMap<>());
+        Map<String, Long> worldCooldown = cooldowns.computeIfAbsent(dim, 
+            ignored -> new ConcurrentHashMap<>());
         long now = world.getTime();
         long cooldownEnd = worldCooldown.getOrDefault(DISASTER_EVENT_ID, 0L);
 
@@ -286,36 +421,27 @@ public final class FactorService implements FactorApi {
         }
 
         if (state.overloadStreakDays > 0 && now >= cooldownEnd) {
-            int severity = Math.min(DISASTER_MAX_SEVERITY, DISASTER_BASE_SEVERITY + state.overloadStreakDays);
-            SimpleFactorEventBus.getInstance().publish(new FactorDisasterEvent(world, DISASTER_TYPE_UNSTABLE_RESONANCE, severity));
+            int severity = Math.min(DISASTER_MAX_SEVERITY, 
+                DISASTER_BASE_SEVERITY + state.overloadStreakDays);
+            SimpleFactorEventBus.getInstance().publish(
+                new FactorDisasterEvent(world, "unstable_resonance", severity));
             worldCooldown.put(DISASTER_EVENT_ID, now + DISASTER_COOLDOWN_TICKS);
         }
     }
 
-    public static double baseForDimension(String dimensionKey) {
-        if (dimensionKey.contains("the_nether")) {
-            return BASE_FACTOR_NETHER;
-        }
-        if (dimensionKey.contains("the_end")) {
-            return BASE_FACTOR_END;
-        }
-        return BASE_FACTOR_OVERWORLD;
-    }
+    // ==================== 工具方法 ====================
 
-    private static double tideAt(long tick) {
-        double thetaA = (Math.PI * 2 * tick) / TIDE_PERIOD_A;
-        double thetaB = (Math.PI * 2 * tick) / TIDE_PERIOD_B;
-        return TIDE_AMPLITUDE_A * Math.sin(thetaA) + TIDE_AMPLITUDE_B * Math.sin(thetaB + TIDE_PHASE_SHIFT);
-    }
-
-    private static double pseudoNoise(String dimensionKey, long tick) {
-        double seed = dimensionKey.hashCode() * NOISE_DIMENSION_MULTIPLIER + tick * NOISE_TICK_MULTIPLIER;
-        return Math.sin(seed * NOISE_SINE_SCALE) * NOISE_AMPLITUDE;
+    private static double pseudoNoise(String dimensionKey, long tick, double baseValue) {
+        double seed = dimensionKey.hashCode() * NOISE_DIMENSION_MULTIPLIER + 
+            tick * NOISE_TICK_MULTIPLIER;
+        return Math.sin(seed * NOISE_SINE_SCALE) * baseValue * NOISE_RATIO;
     }
 
     private static double clamp(double value, double min, double max) {
         return Math.max(min, Math.min(max, value));
     }
+
+    // ==================== 内部状态类 ====================
 
     private static final class RuntimeState {
         private final double baseFactor;
@@ -328,12 +454,13 @@ public final class FactorService implements FactorApi {
         private long lastUpdatedTick;
         private long lastSettledDay;
         private int overloadStreakDays;
+        private TideStatus lastTideStatus = TideStatus.STABLE;
 
-        private RuntimeState(double baseFactor, long dayIndex) {
-            this.baseFactor = baseFactor;
-            this.currentFactor = baseFactor;
-            this.previousDayAverage = baseFactor;
-            this.currentTier = FactorTier.fromFactor(baseFactor).level();
+        private RuntimeState(DimensionType dimensionType, long dayIndex) {
+            this.baseFactor = dimensionType.baseValue();
+            this.currentFactor = dimensionType.baseValue();
+            this.previousDayAverage = dimensionType.baseValue();
+            this.currentTier = FactorTier.STABLE.level(); // 初始为稳定状态
             this.lastSettledDay = Math.max(0, dayIndex - 1);
         }
 

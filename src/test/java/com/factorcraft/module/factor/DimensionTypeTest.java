@@ -5,6 +5,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * DimensionType 单元测试
+ * 
+ * 维度基准值体系：
+ * - 主世界：0.5（范围 0.3-0.7）
+ * - 下界：1.5（范围 0.9-2.1）
+ * - 末地：3.0（范围 1.8-4.2）
  */
 public class DimensionTypeTest {
 
@@ -27,9 +32,9 @@ public class DimensionTypeTest {
     @Test
     public void testPeriods() {
         // 验证周期正确
-        assertEquals(192000L, DimensionType.OVERWORLD.periodTicks());
-        assertEquals(96000L, DimensionType.NETHER.periodTicks());
-        assertEquals(288000L, DimensionType.END.periodTicks());
+        assertEquals(192000L, DimensionType.OVERWORLD.periodTicks());  // 8 游戏日
+        assertEquals(96000L, DimensionType.NETHER.periodTicks());       // 4 游戏日
+        assertEquals(288000L, DimensionType.END.periodTicks());         // 12 游戏日
     }
 
     @Test
@@ -79,19 +84,35 @@ public class DimensionTypeTest {
         // 下界→主世界：1.5 / 0.5 = 3.0
         assertEquals(3.0, DimensionType.NETHER.calculateTransferMultiplierTo(DimensionType.OVERWORLD), 0.001);
         
+        // 主世界→下界：0.5 / 1.5 = 0.333
+        assertEquals(0.333, DimensionType.OVERWORLD.calculateTransferMultiplierTo(DimensionType.NETHER), 0.01);
+        
         // 末地→主世界：3.0 / 0.5 = 6.0
         assertEquals(6.0, DimensionType.END.calculateTransferMultiplierTo(DimensionType.OVERWORLD), 0.001);
         
+        // 主世界→末地：0.5 / 3.0 = 0.167
+        assertEquals(0.167, DimensionType.OVERWORLD.calculateTransferMultiplierTo(DimensionType.END), 0.01);
+        
         // 末地→下界：3.0 / 1.5 = 2.0
         assertEquals(2.0, DimensionType.END.calculateTransferMultiplierTo(DimensionType.NETHER), 0.001);
+        
+        // 下界→末地：1.5 / 3.0 = 0.5
+        assertEquals(0.5, DimensionType.NETHER.calculateTransferMultiplierTo(DimensionType.END), 0.001);
     }
 
     @Test
     public void testFromKey() {
         // 测试从 key 获取 DimensionType
+        assertEquals(DimensionType.OVERWORLD, DimensionType.fromKey("minecraft:overworld"));
+        assertEquals(DimensionType.NETHER, DimensionType.fromKey("minecraft:the_nether"));
+        assertEquals(DimensionType.END, DimensionType.fromKey("minecraft:the_end"));
+        
+        // 测试部分匹配
         assertEquals(DimensionType.OVERWORLD, DimensionType.fromKey("overworld"));
         assertEquals(DimensionType.NETHER, DimensionType.fromKey("the_nether"));
-        assertEquals(DimensionType.END, DimensionType.fromKey("the_end"));
-        assertEquals(DimensionType.OVERWORLD, DimensionType.fromKey("unknown")); // 默认
+        
+        // 默认值
+        assertEquals(DimensionType.OVERWORLD, DimensionType.fromKey("unknown"));
+        assertEquals(DimensionType.OVERWORLD, DimensionType.fromKey(null));
     }
 }

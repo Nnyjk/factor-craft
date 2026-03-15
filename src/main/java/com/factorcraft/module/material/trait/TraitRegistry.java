@@ -9,7 +9,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class TraitRegistry {
-    private static final Logger LOGGER = LoggerFactory.getLogger(TraitRegistry.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger("FactorCraft:Trait");
     private static final Map<String, TraitDefinition> TRAITS = new ConcurrentHashMap<>();
     private static final Map<com.factorcraft.module.material.model.TraitCategory, List<TraitDefinition>> BY_CATEGORY = new ConcurrentHashMap<>();
     
@@ -23,7 +23,7 @@ public class TraitRegistry {
         Objects.requireNonNull(trait, "Trait cannot be null");
         TRAITS.put(trait.id(), trait);
         BY_CATEGORY.get(trait.category()).add(trait);
-        LOGGER.debug("Registered trait: {}", trait.id());
+        LOGGER.debug("[FactorCraft:Trait] Registered trait: {}", trait.id());
     }
     
     public static Optional<TraitDefinition> get(String traitId) {
@@ -65,9 +65,9 @@ public class TraitRegistry {
                 );
                 register(trait);
             }
-            LOGGER.info("Loaded {} traits from {}", definitions.size(), configPath);
+            LOGGER.info("[FactorCraft:Trait] Loaded {} traits from {}", definitions.size(), configPath);
         } catch (Exception e) {
-            LOGGER.error("Failed to load traits from config: {}", configPath, e);
+            LOGGER.error("[FactorCraft:Trait] Failed to load traits from config: {}", configPath, e);
         }
     }
     

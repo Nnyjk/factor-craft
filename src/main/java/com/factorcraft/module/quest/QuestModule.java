@@ -2,9 +2,12 @@ package com.factorcraft.module.quest;
 
 import com.factorcraft.FactorCraftMod;
 import com.factorcraft.module.FactorCraftModule;
+import com.factorcraft.module.quest.generator.QuestGenerator;
 import com.factorcraft.module.quest.manager.QuestManager;
 import com.factorcraft.module.quest.template.QuestTemplateLoader;
 import com.factorcraft.module.quest.data.PlayerQuestData;
+
+import net.minecraft.entity.player.PlayerEntity;
 
 import java.util.List;
 
@@ -16,6 +19,7 @@ import java.util.List;
  * - 条件系统支持动态组合
  * - 奖励系统可配置
  * - 任务追踪 UI
+ * - 每日任务生成
  * - 支持数据包扩展
  */
 public final class QuestModule implements FactorCraftModule {
@@ -45,23 +49,41 @@ public final class QuestModule implements FactorCraftModule {
     
     @Override
     public void initialize() {
-        FactorCraftMod.LOGGER.info("[QuestModule] 正在初始化任务系统...");
+        FactorCraftMod.LOGGER.info("[FactorCraft:Quest] 正在初始化任务系统...");
         
         this.templateLoader = new QuestTemplateLoader();
         this.questManager = new QuestManager();
         this.templateLoader.loadAll();
         PlayerQuestData.register();
         
-        FactorCraftMod.LOGGER.info("[QuestModule] 任务系统已初始化");
-        FactorCraftMod.LOGGER.info("[QuestModule] 已加载 {} 个任务模板", 
+        FactorCraftMod.LOGGER.info("[FactorCraft:Quest] 任务系统已初始化");
+        FactorCraftMod.LOGGER.info("[FactorCraft:Quest] 已加载 {} 个任务模板", 
             this.templateLoader.getLoadedCount());
     }
     
     @Override
     public void reload() {
-        FactorCraftMod.LOGGER.info("[QuestModule] 正在重新加载任务配置...");
+        FactorCraftMod.LOGGER.info("[FactorCraft:Quest] 正在重新加载任务配置...");
         this.templateLoader.reload();
-        FactorCraftMod.LOGGER.info("[QuestModule] 任务配置已重新加载");
+        FactorCraftMod.LOGGER.info("[FactorCraft:Quest] 任务配置已重新加载");
+    }
+    
+    /**
+     * 为玩家生成每日任务
+     */
+    public void generateDailyQuests(PlayerEntity player) {
+        QuestGenerator.generateDailyQuests(player, questManager, 
+            List.copyOf(questManager.getAllTemplates()));
+        FactorCraftMod.LOGGER.debug("[FactorCraft:Quest] 已为玩家 {} 生成每日任务", 
+            player.getName().getString());
+    }
+    
+    /**
+     * 为玩家生成推荐任务
+     */
+    public void generateRecommendedQuests(PlayerEntity player) {
+        QuestGenerator.generateRecommendedQuests(player, questManager, 
+            List.copyOf(questManager.getAllTemplates()));
     }
     
     public QuestManager getQuestManager() {

@@ -10,6 +10,8 @@ import com.factorcraft.module.gear.GearModule;
 import com.factorcraft.module.integration.NonCoreIntegrationModule;
 import com.factorcraft.module.material.MaterialsModule;
 import com.factorcraft.module.technology.TechnologyModule;
+import com.factorcraft.module.social.SocialModule;
+import com.factorcraft.module.advancement.AdvancementModule;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -30,6 +32,8 @@ public final class ModuleBootstrap {
                 (FactorCraftModule) new TechnologyModule(),
                 (FactorCraftModule) new GearModule(),
                 (FactorCraftModule) new BuildingModule(),
+                (FactorCraftModule) new SocialModule(),
+                (FactorCraftModule) new AdvancementModule(),
                 (FactorCraftModule) new NonCoreIntegrationModule()
         );
     }
@@ -44,14 +48,14 @@ public final class ModuleBootstrap {
         validateDependencies(DEFAULT_MODULES);
         for (FactorCraftModule module : DEFAULT_MODULES) {
             module.initialize();
-            FactorCraftMod.LOGGER.info("模块已初始化: {}", module.moduleId());
+            FactorCraftMod.LOGGER.info("[FactorCraft:Bootstrap] 模块已初始化: {}", module.moduleId());
         }
     }
 
     public static void reloadDefaults() {
         for (FactorCraftModule module : DEFAULT_MODULES) {
             module.reload();
-            FactorCraftMod.LOGGER.info("模块已重载: {}", module.moduleId());
+            FactorCraftMod.LOGGER.info("[FactorCraft:Bootstrap] 模块已重载: {}", module.moduleId());
         }
     }
 
@@ -59,7 +63,7 @@ public final class ModuleBootstrap {
         for (int i = DEFAULT_MODULES.size() - 1; i >= 0; i--) {
             FactorCraftModule module = DEFAULT_MODULES.get(i);
             module.shutdown();
-            FactorCraftMod.LOGGER.info("模块已关闭: {}", module.moduleId());
+            FactorCraftMod.LOGGER.info("[FactorCraft:Bootstrap] 模块已关闭: {}", module.moduleId());
         }
     }
 

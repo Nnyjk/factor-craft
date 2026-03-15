@@ -36,9 +36,9 @@ public class ConfigManager {
         
         try {
             Files.createDirectories(configDir);
-            FactorCraftMod.LOGGER.info("[ConfigManager] 配置目录: {}", configDir.toAbsolutePath());
+            FactorCraftMod.LOGGER.info("[FactorCraft:Config] 配置目录: {}", configDir.toAbsolutePath());
         } catch (IOException e) {
-            FactorCraftMod.LOGGER.error("[ConfigManager] 无法创建配置目录", e);
+            FactorCraftMod.LOGGER.error("[FactorCraft:Config] 无法创建配置目录", e);
         }
         
         // 加载默认配置
@@ -62,7 +62,7 @@ public class ConfigManager {
             try {
                 loadInternalConfig(name);
             } catch (Exception e) {
-                FactorCraftMod.LOGGER.debug("[ConfigManager] 无默认配置: {}", name);
+                FactorCraftMod.LOGGER.debug("[FactorCraft:Config] 无默认配置: {}", name);
             }
         }
     }
@@ -81,7 +81,7 @@ public class ConfigManager {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(stream))) {
             JsonObject json = JsonParser.parseReader(reader).getAsJsonObject();
             CONFIGS.put(name.replace(".json", ""), json);
-            FactorCraftMod.LOGGER.debug("[ConfigManager] 加载内部配置: {}", name);
+            FactorCraftMod.LOGGER.debug("[FactorCraft:Config] 加载内部配置: {}", name);
         }
     }
     
@@ -99,7 +99,7 @@ public class ConfigManager {
                 .filter(p -> p.toString().endsWith(".json"))
                 .forEach(ConfigManager::loadConfigFile);
         } catch (IOException e) {
-            FactorCraftMod.LOGGER.error("[ConfigManager] 无法遍历配置目录", e);
+            FactorCraftMod.LOGGER.error("[FactorCraft:Config] 无法遍历配置目录", e);
         }
     }
     
@@ -111,9 +111,9 @@ public class ConfigManager {
             JsonObject json = JsonParser.parseReader(reader).getAsJsonObject();
             String name = path.getFileName().toString().replace(".json", "");
             CONFIGS.put(name, json);
-            FactorCraftMod.LOGGER.info("[ConfigManager] 加载外部配置: {}", name);
+            FactorCraftMod.LOGGER.info("[FactorCraft:Config] 加载外部配置: {}", name);
         } catch (Exception e) {
-            FactorCraftMod.LOGGER.error("[ConfigManager] 无法加载配置: {}", path, e);
+            FactorCraftMod.LOGGER.error("[FactorCraft:Config] 无法加载配置: {}", path, e);
         }
     }
     
@@ -161,10 +161,10 @@ public class ConfigManager {
      * 热重载配置
      */
     public static void reload() {
-        FactorCraftMod.LOGGER.info("[ConfigManager] 重载配置...");
+        FactorCraftMod.LOGGER.info("[FactorCraft:Config] 重载配置...");
         CONFIGS.clear();
         loadDefaultConfigs();
         loadExternalConfigs();
-        FactorCraftMod.LOGGER.info("[ConfigManager] 配置重载完成");
+        FactorCraftMod.LOGGER.info("[FactorCraft:Config] 配置重载完成");
     }
 }

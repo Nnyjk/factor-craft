@@ -1,7 +1,9 @@
 package com.factorcraft;
 
-import com.factorcraft.module.technology.block.ModBlocks;
-import com.factorcraft.module.technology.item.ModItems;
+import com.factorcraft.client.KeyBindings;
+import com.factorcraft.dynamic.DynamicBundle;
+import com.factorcraft.dynamic.DynamicContentManager;
+import com.factorcraft.module.network.ClientNetworkHandler;
 import net.fabricmc.api.ClientModInitializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,13 +13,28 @@ import org.slf4j.LoggerFactory;
  */
 public class FactorCraftClient implements ClientModInitializer {
     
-    public static final Logger LOGGER = LoggerFactory.getLogger("FactorCraftClient");
+    public static final Logger LOGGER = LoggerFactory.getLogger("FactorCraft:Client");
     
     @Override
     public void onInitializeClient() {
-        LOGGER.info("[FactorCraftClient] 客户端初始化开始...");
+        LOGGER.info("[FactorCraft:Client] 客户端初始化开始...");
         
-        // 客户端资源加载完成
-        LOGGER.info("[FactorCraftClient] 客户端初始化完成");
+        // 注册按键绑定
+        KeyBindings.register();
+        LOGGER.info("[FactorCraft:Client] 按键绑定注册完成");
+        
+        // 注册客户端网络处理器
+        ClientNetworkHandler.register();
+        LOGGER.info("[FactorCraft:Client] 网络处理器注册完成");
+        
+        // 动态内容信息
+        DynamicBundle bundle = DynamicContentManager.getInstance().current();
+        LOGGER.info("[FactorCraft:Client] 动态资源: textures={}, models={}, languages={}, commands={}",
+                bundle.textures().size(),
+                bundle.models().size(),
+                bundle.languages().size(),
+                bundle.commands().size());
+        
+        LOGGER.info("[FactorCraft:Client] 客户端初始化完成");
     }
 }

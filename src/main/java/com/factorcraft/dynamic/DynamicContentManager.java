@@ -52,7 +52,7 @@ public final class DynamicContentManager {
         bundleRef.set(bundle);
 
         FactorCraftMod.LOGGER.info(
-                "动态资源重载完成: configs={}, materialsM2Keys={}, textures={}, models={}, languages={}, commands={}",
+                "[FactorCraft:Dynamic] 动态资源重载完成: configs={}, materialsM2Keys={}, textures={}, models={}, languages={}, commands={}",
                 bundle.configs().size(),
                 bundle.materialsM2().size(),
                 bundle.textures().size(),
@@ -89,7 +89,7 @@ public final class DynamicContentManager {
                     String name = event.context().toString();
                     if (name.endsWith(".json")) {
                         changed = true;
-                        FactorCraftMod.LOGGER.info("检测到动态配置变更: {} ({})", name, event.kind().name());
+                        FactorCraftMod.LOGGER.info("[FactorCraft:Dynamic] 检测到动态配置变更: {} ({})", name, event.kind().name());
                     }
                 }
 
@@ -102,7 +102,7 @@ public final class DynamicContentManager {
                 }
             }
         } catch (IOException | InterruptedException e) {
-            FactorCraftMod.LOGGER.warn("动态配置监听已停止: {}", e.getMessage());
+            FactorCraftMod.LOGGER.warn("[FactorCraft:Dynamic] 动态配置监听已停止: {}", e.getMessage());
             Thread.currentThread().interrupt();
         }
     }

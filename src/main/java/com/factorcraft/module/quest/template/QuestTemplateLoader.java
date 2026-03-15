@@ -31,7 +31,7 @@ public class QuestTemplateLoader {
      * 从 data/factorcraft/quests/*.json 加载
      */
     public void loadAll() {
-        FactorCraftMod.LOGGER.info("[QuestTemplateLoader] 开始加载任务模板...");
+        FactorCraftMod.LOGGER.info("[FactorCraft:Quest] 开始加载任务模板...");
         
         this.loadedCount = 0;
         
@@ -39,7 +39,7 @@ public class QuestTemplateLoader {
         // 待扩充：从 JSON 文件加载更多任务
         loadDefaultTemplates();
         
-        FactorCraftMod.LOGGER.info("[QuestTemplateLoader] 加载完成，共 {} 个模板", this.loadedCount);
+        FactorCraftMod.LOGGER.info("[FactorCraft:Quest] 加载完成，共 {} 个模板", this.loadedCount);
     }
     
     /**
@@ -79,11 +79,11 @@ public class QuestTemplateLoader {
                     
                     reader.close();
                 } catch (Exception e) {
-                    FactorCraftMod.LOGGER.warn("[QuestTemplateLoader] 加载任务失败: {}", e.getMessage());
+                    FactorCraftMod.LOGGER.warn("[FactorCraft:Quest] 加载任务失败: {}", e.getMessage());
                 }
             }
         } catch (Exception e) {
-            FactorCraftMod.LOGGER.error("[QuestTemplateLoader] 任务加载错误: {}", e.getMessage());
+            FactorCraftMod.LOGGER.error("[FactorCraft:Quest] 任务加载错误: {}", e.getMessage());
         }
     }
     
@@ -114,7 +114,7 @@ public class QuestTemplateLoader {
                 List.of()  // nextQuests
             );
         } catch (Exception e) {
-            FactorCraftMod.LOGGER.warn("[QuestTemplateLoader] 解析任务模板失败: {}", e.getMessage());
+            FactorCraftMod.LOGGER.warn("[FactorCraft:Quest] 解析任务模板失败: {}", e.getMessage());
             return null;
         }
     }
@@ -124,14 +124,14 @@ public class QuestTemplateLoader {
      */
     private void registerTemplate(QuestTemplate template) {
         // 待实现：注册到 QuestManager
-        FactorCraftMod.LOGGER.info("[QuestTemplateLoader] 注册任务: {}", template.getId());
+        FactorCraftMod.LOGGER.info("[FactorCraft:Quest] 注册任务: {}", template.getId());
     }
     
     /**
      * 重新加载任务模板 (支持热重载)
      */
     public void reload() {
-        FactorCraftMod.LOGGER.info("[QuestTemplateLoader] 重新加载任务模板...");
+        FactorCraftMod.LOGGER.info("[FactorCraft:Quest] 重新加载任务模板...");
         loadAll();
     }
     

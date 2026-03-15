@@ -104,6 +104,6 @@ public class ModItemGroups {
     
     public static void register() {
         Registry.register(Registries.ITEM_GROUP, FACTOR_CRAFT_KEY, FACTOR_CRAFT);
-        FactorCraftMod.LOGGER.info("[ModItemGroups] 创造模式标签页已注册");
+        FactorCraftMod.LOGGER.info("[FactorCraft:Registry] 创造模式标签页已注册");
     }
 }

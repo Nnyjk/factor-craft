@@ -1,6 +1,6 @@
 package com.factorcraft.module.cultivation.blockentity;
 
-import com.factorcraft.advancement.AdvancementManager;
+import com.factorcraft.module.advancement.AdvancementManager;
 import com.factorcraft.module.factor.management.ChunkFactorManager;
 import com.factorcraft.module.material.trait.TraitInstance;
 import com.factorcraft.module.material.trait.TraitService;

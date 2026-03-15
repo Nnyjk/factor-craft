@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
  */
 public class LootModule {
     
-    private static final Logger LOGGER = LoggerFactory.getLogger("FactorCraft/Loot");
+    private static final Logger LOGGER = LoggerFactory.getLogger("FactorCraft:Loot");
     
     /**
      * 战利品表路径定义
@@ -34,8 +34,8 @@ public class LootModule {
     }
     
     public void initialize() {
-        LOGGER.info("LootModule 已加载 - 战利品表通过 JSON 文件注册");
-        LOGGER.info("已定义战利品表: 5 个 (维度宝箱 3 + 实体 1 + 结构 1)");
+        LOGGER.info("[FactorCraft:Loot] LootModule 已加载 - 战利品表通过 JSON 文件注册");
+        LOGGER.info("[FactorCraft:Loot] 已定义战利品表: 5 个 (维度宝箱 3 + 实体 1 + 结构 1)");
     }
     
     /**
@@ -53,6 +53,6 @@ public class LootModule {
     
     private void registerTable(Registry<LootTable> registry, Identifier id) {
         RegistryKey<LootTable> key = RegistryKey.of(RegistryKeys.LOOT_TABLE, id);
-        LOGGER.debug("注册战利品表：{}", id);
+        LOGGER.debug("[FactorCraft:Loot] 注册战利品表：{}", id);
     }
 }
