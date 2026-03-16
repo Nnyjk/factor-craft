@@ -2,11 +2,19 @@ package com.factorcraft.module.technology.machine;
 
 import com.factorcraft.module.technology.MultiblockDetector;
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.Inventories;
+import net.minecraft.inventory.Inventory;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtList;
+import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.slf4j.Logger;
@@ -17,14 +25,26 @@ import java.util.Optional;
 /**
  * 合成核心 - 用 Factor 合成物品（材料升级）
  * 
- * 结构: 远古合成阵 T1 → 远古锻造台 T2 → 命运铸造炉 T3 → 创世熔炉 T4 → 本源祭坛 T5
+ * 结构：远古合成阵 T1 → 远古锻造台 T2 → 命运铸造炉 T3 → 创世熔炉 T4 → 本源祭坛 T5
  * 
  * 合成公式:
  * 实际合成时间 = 基础时间 / (结构效率 × 维度效率)
+ * 
+ * 物品槽布局:
+ * - 槽位 0: 输入槽 (64 格，存放待升级材料)
+ * - 槽位 1: 输出槽 (64 格，存放合成产物)
  */
-public class SynthesizerCoreBlockEntity extends MachineBlockEntity {
+public class SynthesizerCoreBlockEntity extends MachineBlockEntity implements Inventory {
     
     private static final Logger LOGGER = LoggerFactory.getLogger("FactorCraft/Synthesizer");
+    
+    // ==================== 物品槽 ====================
+    
+    private static final int INPUT_SLOT = 0;
+    private static final int OUTPUT_SLOT = 1;
+    private static final int NUM_SLOTS = 2;
+    
+    private final DefaultedList<ItemStack> inventory;
     
     // ==================== 状态 ====================
     
@@ -46,6 +66,7 @@ public class SynthesizerCoreBlockEntity extends MachineBlockEntity {
     
     public SynthesizerCoreBlockEntity(BlockPos pos, BlockState state) {
         super(ModMachines.SYNTHESIZER_CORE, pos, state);
+        this.inventory = DefaultedList.ofSize(NUM_SLOTS, ItemStack.EMPTY);
         this.factorBuffer = 0.0;
         this.maxBuffer = SynthesisConfig.MAX_BUFFER_T1;
         this.currentTier = 1;
@@ -69,8 +90,13 @@ public class SynthesizerCoreBlockEntity extends MachineBlockEntity {
                 currentTier = detectedTier;
                 structureValid = true;
                 updateStatsByTier(currentTier);
-                LOGGER.debug("合成结构等级变更: T{} at {}", currentTier, pos);
+                LOGGER.debug("合成结构等级变更：T{} at {}", currentTier, pos);
             }
+        }
+        
+        // 自动开始合成（如果有输入且没有进行中的合成）
+        if (currentRecipeId == null && !getStack(INPUT_SLOT).isEmpty()) {
+            tryStartCrafting(world);
         }
         
         // 处理合成进度
@@ -82,6 +108,27 @@ public class SynthesizerCoreBlockEntity extends MachineBlockEntity {
     }
     
     /**
+     * 尝试根据输入物品自动开始合成
+     */
+    private void tryStartCrafting(World world) {
+        ItemStack inputStack = getStack(INPUT_SLOT);
+        if (inputStack.isEmpty()) return;
+        
+        String itemId = Registries.ITEM.getId(inputStack.getItem()).toString();
+        SynthesisConfig.UpgradeRecipe recipe = SynthesisConfig.getRecipeForInput(itemId);
+        
+        if (recipe != null && recipe.fromTier() == currentTier) {
+            // 检查输入数量是否足够
+            if (inputStack.getCount() >= recipe.inputCount()) {
+                // 检查输出槽是否有空间
+                if (canInsertOutput(recipe.outputItem(), recipe.outputCount())) {
+                    startCrafting(recipe.id());
+                }
+            }
+        }
+    }
+    
+    /**
      * 处理合成进度
      */
     private void tickCrafting(World world) {
@@ -89,6 +136,27 @@ public class SynthesizerCoreBlockEntity extends MachineBlockEntity {
         if (recipe == null) {
             cancelCrafting();
             return;
+        }
+        
+        // 检查输入物品是否仍然存在且数量足够
+        ItemStack inputStack = getStack(INPUT_SLOT);
+        String itemId = Registries.ITEM.getId(inputStack.getItem()).toString();
+        if (!itemId.equals(recipe.inputItem()) || inputStack.getCount() < recipe.inputCount()) {
+            LOGGER.debug("输入物品不足，取消合成");
+            cancelCrafting();
+            return;
+        }
+        
+        // 获取维度并计算实际合成时间
+        String dimension = world.getRegistryKey().getValue().toString();
+        int actualCraftTime = SynthesisConfig.getActualCraftTime(currentTier, dimension);
+        
+        // 更新总时间（如果维度效率变化）
+        if (craftTimeTotal != actualCraftTime) {
+            // 按比例调整当前进度
+            double progressRatio = (double) craftProgress / craftTimeTotal;
+            craftProgress = (int) (actualCraftTime * progressRatio);
+            craftTimeTotal = actualCraftTime;
         }
         
         // 检查是否有足够 Factor
@@ -111,7 +179,29 @@ public class SynthesizerCoreBlockEntity extends MachineBlockEntity {
      * 完成合成
      */
     private void completeCrafting(World world, SynthesisConfig.UpgradeRecipe recipe) {
-        LOGGER.info("合成完成: {} x{}", recipe.outputItem(), recipe.outputCount());
+        LOGGER.info("合成完成：{} x{} → {} x{}", 
+            recipe.inputItem(), recipe.inputCount(),
+            recipe.outputItem(), recipe.outputCount());
+        
+        // 消耗输入物品
+        ItemStack inputStack = getStack(INPUT_SLOT);
+        inputStack.decrement(recipe.inputCount());
+        
+        // 产出物品到输出槽
+        ItemStack outputStack = getStack(OUTPUT_SLOT);
+        Item outputItem = Registries.ITEM.get(Identifier.of(recipe.outputItem()));
+        
+        if (outputStack.isEmpty()) {
+            // 输出槽为空，直接放入
+            setStack(OUTPUT_SLOT, new ItemStack(outputItem, recipe.outputCount()));
+        } else if (outputStack.getItem() == outputItem) {
+            // 输出槽已有相同物品，堆叠
+            outputStack.increment(recipe.outputCount());
+        } else {
+            // 输出槽物品不匹配，丢弃（不应该发生）
+            LOGGER.warn("输出槽物品不匹配，丢弃产物：{}", recipe.outputItem());
+            setStack(OUTPUT_SLOT, new ItemStack(outputItem, recipe.outputCount()));
+        }
         
         // 重置状态
         currentRecipeId = null;
@@ -120,8 +210,25 @@ public class SynthesizerCoreBlockEntity extends MachineBlockEntity {
         factorNeeded = 0;
         factorConsumed = 0;
         
-        // TODO: 产出物品（需要物品槽位系统）
-        // 实际实现中，这里会将输出物品放入输出槽
+        markDirty();
+    }
+    
+    /**
+     * 检查输出槽是否可以插入指定物品
+     */
+    private boolean canInsertOutput(String itemId, int count) {
+        ItemStack outputStack = getStack(OUTPUT_SLOT);
+        
+        if (outputStack.isEmpty()) {
+            return true;
+        }
+        
+        Item item = Registries.ITEM.get(Identifier.of(itemId));
+        if (outputStack.getItem() == item) {
+            return outputStack.getCount() + count <= outputStack.getMaxCount();
+        }
+        
+        return false;
     }
     
     /**
@@ -154,21 +261,42 @@ public class SynthesizerCoreBlockEntity extends MachineBlockEntity {
         
         // 检查 Tier 是否匹配
         if (recipe.fromTier() != currentTier) {
-            LOGGER.debug("配方 Tier 不匹配: 需要 T{}, 当前 T{}", recipe.fromTier(), currentTier);
+            LOGGER.debug("配方 Tier 不匹配：需要 T{}, 当前 T{}", recipe.fromTier(), currentTier);
             return false;
         }
+        
+        // 检查输入物品
+        ItemStack inputStack = getStack(INPUT_SLOT);
+        String itemId = Registries.ITEM.getId(inputStack.getItem()).toString();
+        if (!itemId.equals(recipe.inputItem()) || inputStack.getCount() < recipe.inputCount()) {
+            LOGGER.debug("输入物品不足：需要 {} x{}, 当前 {}", 
+                recipe.inputItem(), recipe.inputCount(), 
+                inputStack.isEmpty() ? "空" : inputStack.getCount());
+            return false;
+        }
+        
+        // 检查输出槽空间
+        if (!canInsertOutput(recipe.outputItem(), recipe.outputCount())) {
+            LOGGER.debug("输出槽空间不足");
+            return false;
+        }
+        
+        // 获取维度并计算实际合成时间
+        String dimension = "minecraft:overworld";
+        if (world != null) {
+            dimension = world.getRegistryKey().getValue().toString();
+        }
+        int actualCraftTime = SynthesisConfig.getActualCraftTime(currentTier, dimension);
+        double dimensionEfficiency = SynthesisConfig.getDimensionEfficiency(dimension, currentTier);
         
         this.currentRecipeId = recipeId;
         this.craftProgress = 0;
         this.factorNeeded = recipe.factorCost();
         this.factorConsumed = 0;
+        this.craftTimeTotal = actualCraftTime;
         
-        // 计算实际合成时间
-        // 注意：这里需要维度信息，实际实现中需要传入
-        this.craftTimeTotal = recipe.craftTime();
-        
-        LOGGER.debug("开始合成: {}, Factor: {}, 时间: {} ticks", 
-            recipeId, factorNeeded, craftTimeTotal);
+        LOGGER.info("开始合成：{} (T{}), Factor: {}, 时间：{} ticks (维度效率：{:.1f}%)", 
+            recipeId, currentTier, factorNeeded, craftTimeTotal, dimensionEfficiency * 100);
         
         return true;
     }
@@ -223,6 +351,73 @@ public class SynthesizerCoreBlockEntity extends MachineBlockEntity {
         maxBuffer = SynthesisConfig.getMaxBuffer(tier);
     }
     
+    // ==================== Inventory 接口实现 ====================
+    
+    @Override
+    public int size() {
+        return NUM_SLOTS;
+    }
+    
+    @Override
+    public boolean isEmpty() {
+        return inventory.stream().allMatch(ItemStack::isEmpty);
+    }
+    
+    @Override
+    public ItemStack getStack(int slot) {
+        if (slot < 0 || slot >= NUM_SLOTS) return ItemStack.EMPTY;
+        return inventory.get(slot);
+    }
+    
+    @Override
+    public ItemStack removeStack(int slot, int amount) {
+        if (slot < 0 || slot >= NUM_SLOTS) return ItemStack.EMPTY;
+        ItemStack stack = inventory.get(slot);
+        if (stack.isEmpty()) return ItemStack.EMPTY;
+        
+        ItemStack removed = stack.split(amount);
+        markDirty();
+        return removed;
+    }
+    
+    @Override
+    public ItemStack removeStack(int slot) {
+        if (slot < 0 || slot >= NUM_SLOTS) return ItemStack.EMPTY;
+        ItemStack stack = inventory.get(slot);
+        if (stack.isEmpty()) return ItemStack.EMPTY;
+        
+        inventory.set(slot, ItemStack.EMPTY);
+        markDirty();
+        return stack;
+    }
+    
+    @Override
+    public void setStack(int slot, ItemStack stack) {
+        if (slot < 0 || slot >= NUM_SLOTS) return;
+        inventory.set(slot, stack);
+        markDirty();
+    }
+    
+    @Override
+    public void markDirty() {
+        super.markDirty();
+    }
+    
+    @Override
+    public boolean canPlayerUse(net.minecraft.entity.player.PlayerEntity player) {
+        if (world == null || pos == null) return false;
+        return player.squaredDistanceTo(
+            (double) pos.getX() + 0.5,
+            (double) pos.getY() + 0.5,
+            (double) pos.getZ() + 0.5
+        ) <= 64.0;
+    }
+    
+    public void clear() {
+        inventory.clear();
+        markDirty();
+    }
+    
     // ==================== Getters ====================
     
     public double getFactorBuffer() { return factorBuffer; }
@@ -272,7 +467,6 @@ public class SynthesizerCoreBlockEntity extends MachineBlockEntity {
         if (currentRecipeId == null) return "无";
         SynthesisConfig.UpgradeRecipe recipe = SynthesisConfig.UPGRADE_RECIPES.get(currentRecipeId);
         if (recipe == null) return currentRecipeId;
-        // 使用 id 作为显示名称，未来可以添加翻译
         return recipe.id();
     }
     
@@ -308,6 +502,9 @@ public class SynthesizerCoreBlockEntity extends MachineBlockEntity {
         nbt.putBoolean("StructureValid", structureValid);
         nbt.putLong("LastStructureCheck", lastStructureCheck);
         
+        // 物品栏
+        Inventories.writeNbt(nbt, inventory, registries);
+        
         // 合成状态
         if (currentRecipeId != null) {
             nbt.putString("CurrentRecipeId", currentRecipeId);
@@ -326,6 +523,9 @@ public class SynthesizerCoreBlockEntity extends MachineBlockEntity {
         currentTier = nbt.getInt("CurrentTier");
         structureValid = nbt.getBoolean("StructureValid");
         lastStructureCheck = nbt.getLong("LastStructureCheck");
+        
+        // 物品栏
+        Inventories.readNbt(nbt, inventory, registries);
         
         // 合成状态
         if (nbt.contains("CurrentRecipeId")) {

@@ -5,6 +5,7 @@ import com.factorcraft.module.technology.machine.SynthesisConfig;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
+import net.minecraft.screen.slot.Slot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -96,6 +97,12 @@ public class SynthesizerCoreScreenHandler extends MachineCoreScreenHandler {
         super(ModScreens.SYNTHESIZER_CORE, syncId, playerInventory, blockEntity);
         this.synthesizer = blockEntity;
         this.availableRecipes = new ArrayList<>();
+        
+        // 添加机器物品槽
+        // 输入槽 (0)
+        addSlot(new Slot(blockEntity, 0, 53, 35));
+        // 输出槽 (1)
+        addSlot(new Slot(blockEntity, 1, 107, 35));
         
         syncFromBlockEntity();
         updateAvailableRecipes();
