@@ -4,25 +4,55 @@ import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.StructureWorldAccess;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Factor 祭坛结构生成器
  * 
- * TODO: 需要接入结构生成系统
- * 接入方式：
- * 1. 使用 Fabric API 的 StructurePool Based Generation
- * 2. 或实现自定义 Structure 并在 fabric.mod.json 中注册
+ * 生成一个神秘的祭坛结构，用于 Factor 相关仪式
  * 
- * @see net.fabricmc.fabric.api.structure.v1.FabricStructure
+ * 生成规则：
+ * - 生成几率：1/1000 区块
+ * - 最小 Y 高度：60
+ * - 群系限制：非海洋、非末地
  */
 public class FactorAltarGenerator {
     
+    private static final Logger LOGGER = LoggerFactory.getLogger(FactorAltarGenerator.class);
+    
     public static final int SPAWN_CHANCE = 1000; // 1/1000 区块
+    public static final int MIN_Y_LEVEL = 60;
+    
+    /**
+     * 检查是否应该生成祭坛
+     */
+    public static boolean shouldGenerate(StructureWorldAccess world, BlockPos pos, Random random) {
+        // 检查高度
+        if (pos.getY() < MIN_Y_LEVEL) {
+            return false;
+        }
+        
+        // 检查群系
+        String biomeId = world.getBiome(pos).getKey()
+            .map(k -> k.getValue().toString())
+            .orElse("");
+        
+        if (biomeId.contains("ocean") || biomeId.contains("river") || 
+            biomeId.contains("end") || biomeId.contains("nether")) {
+            return false;
+        }
+        
+        // 随机几率
+        return random.nextInt(SPAWN_CHANCE) == 0;
+    }
     
     /**
      * 生成 Factor 祭坛
      */
     public static void generate(StructureWorldAccess world, BlockPos center, Random random) {
+        LOGGER.debug("生成 Factor 祭坛 @ {}", center);
+        
         // 清理地面
         clearArea(world, center, 7, 5, 7);
         

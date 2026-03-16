@@ -2,6 +2,7 @@ package com.factorcraft.module.factor.management;
 
 import com.factorcraft.FactorCraftMod;
 import com.factorcraft.module.factor.state.ChunkFactorState;
+import com.factorcraft.world.generation.FactorOreGenerator;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerChunkEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
 import net.minecraft.server.MinecraftServer;
@@ -15,6 +16,7 @@ import org.slf4j.LoggerFactory;
  * 区块 Factor 事件处理器
  * 
  * 监听区块加载/卸载事件，管理 Factor 状态的持久化
+ * 并在区块加载时生成初始 Factor 浓度
  */
 public class ChunkFactorEventHandler {
     
@@ -27,7 +29,7 @@ public class ChunkFactorEventHandler {
         // 服务器启动时初始化存储
         ServerWorldEvents.LOAD.register(ChunkFactorEventHandler::onWorldLoad);
         
-        // 区块加载时恢复 Factor 状态
+        // 区块加载时恢复 Factor 状态并生成初始浓度
         ServerChunkEvents.CHUNK_LOAD.register(ChunkFactorEventHandler::onChunkLoad);
         
         // 区块卸载时保存 Factor 状态

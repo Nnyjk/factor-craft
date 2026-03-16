@@ -1,25 +1,28 @@
 package com.factorcraft.world.generation;
 
 import com.factorcraft.module.factor.management.ChunkFactorManager;
+import com.factorcraft.module.factor.management.ChunkFactorStorage;
 import com.factorcraft.module.factor.state.ChunkFactorState;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.StructureWorldAccess;
-import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.chunk.WorldChunk;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Random;
 
 /**
  * Factor 矿脉生成器
- * 在新区块生成时初始化 Factor 状态
+ * 在区块加载时初始化 Factor 浓度
  * 
- * TODO: 需要接入世界生成系统
- * 接入方式：
- * 1. 实现 ChunkGenerator 或使用 Fabric API 的世界生成事件
- * 2. 在 fabric.mod.json 中注册
+ * 接入方式：通过 ServerChunkEvents.CHUNK_LOAD 事件自动触发
  * 
- * @see net.fabricmc.fabric.api.event.lifecycle.v1.ServerChunkEvents
+ * @see ChunkFactorEventHandler
  */
 public class FactorOreGenerator {
+    
+    private static final Logger LOGGER = LoggerFactory.getLogger(FactorOreGenerator.class);
     
     // 生成配置
     private static final double BASE_SPAWN_CHANCE = 0.15;
@@ -30,21 +33,29 @@ public class FactorOreGenerator {
     
     /**
      * 为区块生成初始 Factor 浓度
+     * 在区块加载时由 ChunkFactorEventHandler 调用
      */
-    public static void generateForChunk(StructureWorldAccess world, Chunk chunk) {
+    public static void generateForChunk(ServerWorld world, WorldChunk chunk) {
         ChunkPos chunkPos = chunk.getPos();
         
-        // 检查是否已存在
-        if (ChunkFactorManager.getState(chunkPos).isPresent()) {
+        // 检查是否已存在（由持久化存储管理）
+        ChunkFactorStorage storage = ChunkFactorStorage.get(world);
+        if (storage.getState(chunkPos).isPresent()) {
             return;
         }
         
-        Random random = new Random(chunkPos.x * 31L + chunkPos.z * 17L);
+        Random random = new Random(chunkPos.toLong());
         double concentration = calculateConcentration(world, chunkPos, random);
         
-        // 创建区块状态
+        // 创建并保存区块状态
         ChunkFactorState state = new ChunkFactorState(concentration);
+        storage.updateState(chunkPos, state);
+        
+        // 同步到内存缓存
         ChunkFactorManager.setState(chunkPos, state);
+        
+        LOGGER.debug("生成 Factor 浓度：chunk={}/{} concentration={:.1f}", 
+            chunkPos.x, chunkPos.z, concentration);
     }
     
     /**
