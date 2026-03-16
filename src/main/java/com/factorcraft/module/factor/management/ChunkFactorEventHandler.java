@@ -58,6 +58,9 @@ public class ChunkFactorEventHandler {
         ChunkPos pos = chunk.getPos();
         ChunkFactorStorage storage = ChunkFactorStorage.get(world);
         
+        // 为新区块生成初始 Factor 浓度（如果尚未存在）
+        FactorOreGenerator.generateForChunk(world, chunk);
+        
         // 获取或创建区块状态
         ChunkFactorState state = storage.getOrCreateState(world, pos);
         
@@ -67,7 +70,7 @@ public class ChunkFactorEventHandler {
         // 同步到内存缓存（用于快速访问）
         ChunkFactorManager.setState(pos, state);
         
-        LOGGER.debug("[ChunkFactor] 区块 {}/{} 加载，Factor 浓度: {}", 
+        LOGGER.debug("[ChunkFactor] 区块 {}/{} 加载，Factor 浓度：{}", 
             pos.x, pos.z, state.getCurrentConcentration());
     }
     
@@ -83,7 +86,7 @@ public class ChunkFactorEventHandler {
             ChunkFactorStorage storage = ChunkFactorStorage.get(world);
             storage.updateState(pos, state);
             
-            LOGGER.debug("[ChunkFactor] 区块 {}/{} 卸载，Factor 浓度: {}", 
+            LOGGER.debug("[ChunkFactor] 区块 {}/{} 卸载，Factor 浓度：{}", 
                 pos.x, pos.z, state.getCurrentConcentration());
         });
     }

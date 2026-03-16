@@ -1,6 +1,7 @@
 package com.factorcraft;
 
 import com.factorcraft.command.FactorCraftCommands;
+import com.factorcraft.module.factor.management.DiffusionSystem;
 import com.factorcraft.module.quest.QuestCommands;
 import com.factorcraft.config.ConfigManager;
 import com.factorcraft.datapack.DataPackManager;
@@ -9,6 +10,8 @@ import com.factorcraft.module.network.NetworkPackets;
 import com.factorcraft.registry.ModInitialization;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
+import net.minecraft.server.world.ServerWorld;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,6 +22,9 @@ public class FactorCraftMod implements ModInitializer {
     
     public static final String MOD_ID = "factorcraft";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
+    
+    // 扩散间隔 (tick)
+    private static final int DIFFUSION_INTERVAL = 100;
     
     @Override
     public void onInitialize() {
@@ -49,6 +55,20 @@ public class FactorCraftMod implements ModInitializer {
         DataPackManager.initialize();
         LOGGER.info("[FactorCraft] 数据包系统初始化完成");
         
+        // 接入 Factor 扩散系统到世界 tick 循环
+        ServerTickEvents.END_WORLD_TICK.register(this::onWorldTick);
+        LOGGER.info("[FactorCraft] Factor 扩散系统已接入世界 tick 循环 (间隔：{} ticks)", DIFFUSION_INTERVAL);
+        
         LOGGER.info("[FactorCraft] Factor Craft Mod initialized successfully!");
+    }
+    
+    /**
+     * 世界 tick 事件处理
+     */
+    private void onWorldTick(ServerWorld world) {
+        // 每 DIFFUSION_INTERVAL tick 执行一次扩散计算
+        if (world.getTime() % DIFFUSION_INTERVAL == 0) {
+            DiffusionSystem.processAllDiffusion(world);
+        }
     }
 }
