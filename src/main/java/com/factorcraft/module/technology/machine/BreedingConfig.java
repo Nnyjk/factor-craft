@@ -289,4 +289,16 @@ public final class BreedingConfig {
         };
         return (int) (baseTime * speedMultiplier);
     }
+    
+    /**
+     * 根据 Tier 获取可用配方（返回第一个匹配的）
+     */
+    public static BreedingRecipe getRecipeForTier(int tier) {
+        for (BreedingRecipe recipe : BREEDING_RECIPES.values()) {
+            if (recipe.minTier() == tier) {
+                return recipe;
+            }
+        }
+        return null;
+    }
 }
