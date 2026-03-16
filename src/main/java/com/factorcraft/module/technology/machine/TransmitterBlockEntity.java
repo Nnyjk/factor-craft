@@ -1,14 +1,22 @@
 package com.factorcraft.module.technology.machine;
 
+import com.factorcraft.module.factor.management.ChunkFactorManager;
+import com.factorcraft.module.factor.state.ChunkFactorState;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -120,11 +128,21 @@ public class TransmitterBlockEntity extends MachineBlockEntity {
             received = TransmitterConfig.calculateTransfer(actualAmount, fromDimension, linkedDimension, tier, 0);
         }
         
-        // 执行传输
-        ServerWorld targetWorld = ((ServerWorld) world).getServer().getWorld(
-            net.minecraft.util.Identifier.tryParse(linkedDimension) != null ?
-                world.getRegistryKey() : world.getRegistryKey()
-        );
+        // 获取目标维度世界
+        RegistryKey<World> targetKey = RegistryKey.of(RegistryKeys.WORLD, Identifier.of(linkedDimension));
+        ServerWorld targetWorld = ((ServerWorld) world).getServer().getWorld(targetKey);
+        
+        if (targetWorld == null) {
+            LOGGER.warn("目标维度 {} 未加载，传输失败", linkedDimension);
+            buffer += actualAmount; // 退回缓冲区
+            return 0;
+        }
+        
+        // 从缓冲区扣除
+        buffer -= actualAmount;
+        
+        // 在目标位置添加 Factor
+        deliverFactorToWorld(targetWorld, received);
         
         // 从缓冲区扣除
         buffer -= actualAmount;
@@ -139,11 +157,40 @@ public class TransmitterBlockEntity extends MachineBlockEntity {
         LOGGER.info("传输完成: {} Factor (发送) → {} Factor (接收), 维度: {} → {}", 
             actualAmount, received, fromDimension, linkedDimension);
         
-        // TODO: 在目标位置添加 Factor
-        // 需要查找目标维度的 TransmitterBlockEntity 并调用其 receive()
-        
         markDirty();
         return received;
+    }
+    
+    /**
+     * 在目标世界添加 Factor
+     * 优先添加到链接的传递器，如果没有则直接添加到区块 Factor 状态
+     */
+    private void deliverFactorToWorld(ServerWorld world, double amount) {
+        if (linkedPos == null) {
+            // 没有链接位置，直接添加到当前区块
+            ChunkPos pos = new ChunkPos(this.pos);
+            ChunkFactorState state = ChunkFactorManager.getOrCreateState(world, pos);
+            double newConcentration = state.getCurrentConcentration() + amount;
+            state.setCurrentConcentration(newConcentration);
+            LOGGER.debug("传递器：Factor 已添加到区块 {}/{}", this.pos.getX(), this.pos.getZ());
+            return;
+        }
+        
+        // 尝试获取目标位置的 BlockEntity
+        BlockEntity targetEntity = world.getBlockEntity(linkedPos);
+        
+        if (targetEntity instanceof TransmitterBlockEntity) {
+            // 目标是另一个传递器，调用其 receive 方法
+            ((TransmitterBlockEntity) targetEntity).receive(amount);
+            LOGGER.debug("传递器：Factor 已传输到目标传递器 {}/{}", linkedPos.getX(), linkedPos.getZ());
+        } else {
+            // 没有传递器，直接添加到区块 Factor 状态
+            ChunkPos pos = new ChunkPos(linkedPos);
+            ChunkFactorState state = ChunkFactorManager.getOrCreateState(world, pos);
+            double newConcentration = state.getCurrentConcentration() + amount;
+            state.setCurrentConcentration(newConcentration);
+            LOGGER.debug("传递器：Factor 已添加到目标区块 {}/{}", linkedPos.getX(), linkedPos.getZ());
+        }
     }
     
     /**
