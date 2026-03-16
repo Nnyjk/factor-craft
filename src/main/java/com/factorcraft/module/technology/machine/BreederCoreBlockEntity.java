@@ -2,13 +2,19 @@ package com.factorcraft.module.technology.machine;
 
 import com.factorcraft.module.technology.MultiblockDetector;
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.ItemEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtList;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 培育核心 - 消耗 Factor 产出物品
@@ -21,6 +27,14 @@ import org.slf4j.LoggerFactory;
 public class BreederCoreBlockEntity extends MachineBlockEntity {
     
     private static final Logger LOGGER = LoggerFactory.getLogger("FactorCraft/Breeder");
+    
+    // ==================== 物品槽 ====================
+    
+    private static final int INPUT_SLOT = 0;
+    private static final int OUTPUT_SLOT = 1;
+    private static final int NUM_SLOTS = 2;
+    
+    private final List<ItemStack> inventory;
     
     // ==================== 状态 ====================
     
@@ -42,6 +56,10 @@ public class BreederCoreBlockEntity extends MachineBlockEntity {
     
     public BreederCoreBlockEntity(BlockPos pos, BlockState state) {
         super(null, pos, state);
+        this.inventory = new ArrayList<>(NUM_SLOTS);
+        for (int i = 0; i < NUM_SLOTS; i++) {
+            inventory.add(ItemStack.EMPTY);
+        }
         this.factorBuffer = 0.0;
         this.maxBuffer = BreedingConfig.MAX_BUFFER_T1;
         this.currentTier = 1;
@@ -231,6 +249,36 @@ public class BreederCoreBlockEntity extends MachineBlockEntity {
     
     // ==================== Getters ====================
     
+    // ==================== 物品槽接口 ====================
+    
+    public ItemStack getStack(int slot) {
+        if (slot < 0 || slot >= NUM_SLOTS) return ItemStack.EMPTY;
+        return inventory.get(slot);
+    }
+    
+    public void setStack(int slot, ItemStack stack) {
+        if (slot < 0 || slot >= NUM_SLOTS) return;
+        inventory.set(slot, stack);
+        markDirty();
+    }
+    
+    public boolean canInsert(int slot, ItemStack stack) {
+        if (slot != INPUT_SLOT) return false;
+        // 只允许种子/植物类物品作为输入
+        return !stack.isEmpty() && stack.getItem().toString().contains("seed");
+    }
+    
+    public void clearInventory() {
+        for (int i = 0; i < NUM_SLOTS; i++) {
+            inventory.set(i, ItemStack.EMPTY);
+        }
+        currentRecipeId = null;
+        breedProgress = 0;
+        markDirty();
+    }
+    
+    // ==================== Getters ====================
+    
     public double getFactorBuffer() { return factorBuffer; }
     public double getMaxBuffer() { return maxBuffer; }
     public int getCurrentTier() { return currentTier; }
@@ -280,6 +328,18 @@ public class BreederCoreBlockEntity extends MachineBlockEntity {
         nbt.putBoolean("StructureValid", structureValid);
         nbt.putLong("LastStructureCheck", lastStructureCheck);
         
+        // 物品栏
+        NbtList itemsNbt = new NbtList();
+        for (int i = 0; i < NUM_SLOTS; i++) {
+            ItemStack stack = inventory.get(i);
+            if (!stack.isEmpty()) {
+                NbtCompound itemNbt = (NbtCompound) stack.toNbt(registries);
+                itemNbt.putByte("Slot", (byte) i);
+                itemsNbt.add(itemNbt);
+            }
+        }
+        nbt.put("Items", itemsNbt);
+        
         // 培育状态
         if (currentRecipeId != null) {
             nbt.putString("CurrentRecipeId", currentRecipeId);
@@ -298,6 +358,21 @@ public class BreederCoreBlockEntity extends MachineBlockEntity {
         currentTier = nbt.getInt("CurrentTier");
         structureValid = nbt.getBoolean("StructureValid");
         lastStructureCheck = nbt.getLong("LastStructureCheck");
+        
+        // 物品栏
+        inventory.clear();
+        for (int i = 0; i < NUM_SLOTS; i++) {
+            inventory.add(ItemStack.EMPTY);
+        }
+        
+        NbtList itemsNbt = nbt.getList("Items", net.minecraft.nbt.NbtElement.COMPOUND_TYPE);
+        for (int i = 0; i < itemsNbt.size(); i++) {
+            NbtCompound itemNbt = itemsNbt.getCompound(i);
+            byte slot = itemNbt.getByte("Slot");
+            if (slot >= 0 && slot < NUM_SLOTS) {
+                inventory.set(slot, ItemStack.fromNbt(registries, itemNbt).orElse(ItemStack.EMPTY));
+            }
+        }
         
         // 培育状态
         if (nbt.contains("CurrentRecipeId")) {
