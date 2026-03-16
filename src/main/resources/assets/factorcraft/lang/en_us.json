@@ -141,11 +141,26 @@
   
   "factorcraft.gui.extractor.rate": "Extraction Rate: %s/t",
   
+  "factorcraft.gui.consumer.consuming": "Consuming...",
+  "factorcraft.gui.consumer.idle": "Idle - Insert items to consume",
+  "factorcraft.gui.consumer.output": "Expected Output: %s Factor",
+  
+  "factorcraft.gui.cultivator.trait_slots": "Trait Slots: %s",
+  "factorcraft.gui.cultivator.buffer": "Factor Buffer",
+  "factorcraft.gui.cultivator.ready": "Ready",
+  
+  "factorcraft.gui.slot.input": "Input",
+  "factorcraft.gui.slot.output": "Output",
+  
   "factorcraft.gui.synthesizer.buffer": "Factor Buffer",
   "factorcraft.gui.synthesizer.crafting": "Crafting...",
   "factorcraft.gui.synthesizer.idle": "Idle",
   "factorcraft.gui.synthesizer.recipes": "Available Recipes",
   "factorcraft.gui.synthesizer.factor_cost": "Factor Cost: %s",
+  "factorcraft.gui.synthesizer.start": "Start Crafting",
+  "factorcraft.gui.synthesizer.cancel": "Cancel",
+  "factorcraft.gui.synthesizer.selected": "Selected: %s",
+  "factorcraft.gui.synthesizer.no_recipes": "No recipes available",
   
   "factorcraft.tooltip.factor.storage": "Factor Storage Info",
   "factorcraft.tooltip.factor.current": "Current: %s",

@@ -149,11 +149,18 @@
   "factorcraft.gui.cultivator.buffer": "Factor 缓冲区",
   "factorcraft.gui.cultivator.ready": "准备就绪",
   
+  "factorcraft.gui.slot.input": "输入",
+  "factorcraft.gui.slot.output": "输出",
+  
   "factorcraft.gui.synthesizer.buffer": "Factor 缓冲区",
   "factorcraft.gui.synthesizer.crafting": "正在合成...",
   "factorcraft.gui.synthesizer.idle": "空闲中",
   "factorcraft.gui.synthesizer.recipes": "可用配方",
   "factorcraft.gui.synthesizer.factor_cost": "Factor 消耗: %s",
+  "factorcraft.gui.synthesizer.start": "开始合成",
+  "factorcraft.gui.synthesizer.cancel": "取消",
+  "factorcraft.gui.synthesizer.selected": "已选择: %s",
+  "factorcraft.gui.synthesizer.no_recipes": "无可用配方",
   
   "factorcraft.tooltip.factor.storage": "Factor 存储信息",
   "factorcraft.tooltip.factor.current": "当前存储: %s",

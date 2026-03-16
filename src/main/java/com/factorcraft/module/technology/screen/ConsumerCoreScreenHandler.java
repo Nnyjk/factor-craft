@@ -2,6 +2,7 @@ package com.factorcraft.module.technology.screen;
 
 import com.factorcraft.module.technology.machine.ConsumerCoreBlockEntity;
 import com.factorcraft.module.technology.machine.ConsumptionConfig;
+import com.factorcraft.module.technology.machine.MachineInventory;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -9,6 +10,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.ScreenHandlerType;
+import net.minecraft.screen.slot.Slot;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
@@ -16,7 +18,7 @@ import net.minecraft.util.math.BlockPos;
 /**
  * 消耗核心 ScreenHandler
  * 
- * 显示 Factor 产出、消耗进度
+ * 显示 Factor 产出、消耗进度，支持物品输入
  */
 public class ConsumerCoreScreenHandler extends ScreenHandler {
     
@@ -49,8 +51,37 @@ public class ConsumerCoreScreenHandler extends ScreenHandler {
         this.world = (playerInventory.player instanceof ServerPlayerEntity sp) 
             ? sp.getServerWorld() : null;
         
+        // 添加机器物品槽
+        if (blockEntity instanceof MachineInventory inventory) {
+            // 输入槽
+            addSlot(new Slot(inventory, ConsumerCoreBlockEntity.INPUT_SLOT, 56, 35));
+            // 输出槽
+            addSlot(new Slot(inventory, ConsumerCoreBlockEntity.OUTPUT_SLOT, 116, 35));
+        }
+        
+        // 添加玩家物品栏
+        addPlayerInventorySlots(playerInventory);
+        
         if (blockEntity instanceof ConsumerCoreBlockEntity consumer) {
             updateFromBlockEntity(consumer);
+        }
+    }
+    
+    /**
+     * 添加玩家物品栏槽位
+     */
+    private void addPlayerInventorySlots(PlayerInventory playerInventory) {
+        // 玩家背包 (3x9)
+        for (int row = 0; row < 3; ++row) {
+            for (int col = 0; col < 9; ++col) {
+                addSlot(new Slot(playerInventory, col + row * 9 + 9, 
+                    8 + col * 18, 84 + row * 18));
+            }
+        }
+        
+        // 玩家快捷栏 (1x9)
+        for (int col = 0; col < 9; ++col) {
+            addSlot(new Slot(playerInventory, col, 8 + col * 18, 142));
         }
     }
     
@@ -61,8 +92,35 @@ public class ConsumerCoreScreenHandler extends ScreenHandler {
     }
     
     @Override
-    public ItemStack quickMove(PlayerEntity player, int slot) {
-        return ItemStack.EMPTY;
+    public ItemStack quickMove(PlayerEntity player, int invSlot) {
+        ItemStack newStack = ItemStack.EMPTY;
+        Slot slot = this.slots.get(invSlot);
+        
+        if (slot != null && slot.hasStack()) {
+            ItemStack originalStack = slot.getStack();
+            newStack = originalStack.copy();
+            
+            // 机器槽位: 0-1, 玩家背包: 2-37
+            if (invSlot < 2) {
+                // 从机器移到玩家背包
+                if (!this.insertItem(originalStack, 2, 38, true)) {
+                    return ItemStack.EMPTY;
+                }
+            } else {
+                // 从玩家背包移到机器输入槽
+                if (!this.insertItem(originalStack, 0, 1, false)) {
+                    return ItemStack.EMPTY;
+                }
+            }
+            
+            if (originalStack.isEmpty()) {
+                slot.setStack(ItemStack.EMPTY);
+            } else {
+                slot.markDirty();
+            }
+        }
+        
+        return newStack;
     }
     
     private void updateFromBlockEntity(ConsumerCoreBlockEntity consumer) {
@@ -104,4 +162,7 @@ public class ConsumerCoreScreenHandler extends ScreenHandler {
             default -> "基础结构";
         };
     }
+    
+    public BlockPos getPos() { return pos; }
+    public BlockEntity getBlockEntity() { return blockEntity; }
 }

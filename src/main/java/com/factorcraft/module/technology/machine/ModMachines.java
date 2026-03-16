@@ -51,11 +51,18 @@ public class ModMachines {
     public static final Block CULTIVATOR_CORE_T4 = registerCultivatorCore("factor_machine_cultivator_core_t4", 4.5f);
     public static final Block CULTIVATOR_CORE_T5 = registerCultivatorCore("factor_machine_cultivator_core_t5", 5.0f);
     
+    // ========== 传递器 T1-T4 ==========
+    public static final Block TRANSMITTER_T1 = registerMachineBlock("factor_machine_transmitter_t1", 3.0f);
+    public static final Block TRANSMITTER_T2 = registerMachineBlock("factor_machine_transmitter_t2", 3.5f);
+    public static final Block TRANSMITTER_T3 = registerMachineBlock("factor_machine_transmitter_t3", 4.0f);
+    public static final Block TRANSMITTER_T4 = registerMachineBlock("factor_machine_transmitter_t4", 4.5f);
+    
     // ========== BlockEntity 类型 ==========
     public static BlockEntityType<ExtractorCoreBlockEntity> EXTRACTOR_CORE;
     public static BlockEntityType<ConsumerCoreBlockEntity> CONSUMER_CORE;
     public static BlockEntityType<SynthesizerCoreBlockEntity> SYNTHESIZER_CORE;
     public static BlockEntityType<CultivatorCoreBlockEntity> CULTIVATOR_CORE;
+    public static BlockEntityType<TransmitterBlockEntity> TRANSMITTER;
     
     /**
      * 注册提取核心方块（带 GUI）
@@ -138,6 +145,27 @@ public class ModMachines {
     }
     
     /**
+     * 注册普通机器方块（无 GUI，用于传递器等）
+     */
+    @SuppressWarnings("deprecation")
+    private static Block registerMachineBlock(String name, float hardness) {
+        Identifier id = Identifier.of(MOD_ID, name);
+        RegistryKey<Block> key = RegistryKey.of(RegistryKeys.BLOCK, id);
+        
+        Block block = new net.minecraft.block.Block(
+            AbstractBlock.Settings.create()
+                .registryKey(key)
+                .strength(hardness)
+        );
+        
+        Registry.register(Registries.BLOCK, id, block);
+        Registry.register(Registries.ITEM, id, new BlockItem(block, new Item.Settings()
+            .registryKey(RegistryKey.of(RegistryKeys.ITEM, id))));
+        
+        return block;
+    }
+    
+    /**
      * 注册所有 BlockEntity
      */
     public static void register() {
@@ -165,6 +193,12 @@ public class ModMachines {
             CULTIVATOR_CORE_T1, CULTIVATOR_CORE_T2, CULTIVATOR_CORE_T3, CULTIVATOR_CORE_T4, CULTIVATOR_CORE_T5
         ).build(null);
         
+        // 传递器 BlockEntity
+        TRANSMITTER = FabricBlockEntityTypeBuilder.create(
+            TransmitterBlockEntity::new,
+            TRANSMITTER_T1, TRANSMITTER_T2, TRANSMITTER_T3, TRANSMITTER_T4
+        ).build(null);
+        
         // 注册 BlockEntity 类型
         Registry.register(Registries.BLOCK_ENTITY_TYPE, 
             Identifier.of(MOD_ID, "extractor_core"), EXTRACTOR_CORE);
@@ -174,7 +208,9 @@ public class ModMachines {
             Identifier.of(MOD_ID, "synthesizer_core"), SYNTHESIZER_CORE);
         Registry.register(Registries.BLOCK_ENTITY_TYPE, 
             Identifier.of(MOD_ID, "cultivator_core"), CULTIVATOR_CORE);
+        Registry.register(Registries.BLOCK_ENTITY_TYPE, 
+            Identifier.of(MOD_ID, "transmitter"), TRANSMITTER);
         
-        FactorCraftMod.LOGGER.info("[ModMachines] 已注册 20 个核心方块, 4 个 BlockEntity 类型");
+        FactorCraftMod.LOGGER.info("[ModMachines] 已注册 24 个核心方块, 5 个 BlockEntity 类型");
     }
 }

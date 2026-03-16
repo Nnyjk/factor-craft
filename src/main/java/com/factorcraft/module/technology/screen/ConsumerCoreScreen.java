@@ -5,16 +5,20 @@ import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 
 /**
  * 消耗核心 GUI 界面
  * 
- * 显示 Factor 产出、消耗进度
+ * 显示 Factor 产出、消耗进度、物品槽
  */
 public class ConsumerCoreScreen extends HandledScreen<ConsumerCoreScreenHandler> {
     
-    private static final int WIDTH = 200;
-    private static final int HEIGHT = 160;
+    private static final Identifier BACKGROUND = Identifier.of("factorcraft", "textures/gui/consumer_core.png");
+    private static final Identifier SLOT_TEXTURE = Identifier.of("minecraft", "textures/gui/container/slot.png");
+    
+    private static final int WIDTH = 176;
+    private static final int HEIGHT = 166;
     
     public ConsumerCoreScreen(ConsumerCoreScreenHandler handler, PlayerInventory inventory, Text title) {
         super(handler, inventory, title);
@@ -28,11 +32,6 @@ public class ConsumerCoreScreen extends HandledScreen<ConsumerCoreScreenHandler>
         
         this.titleX = 10;
         this.titleY = 6;
-        
-        this.addDrawableChild(ButtonWidget.builder(
-            Text.translatable("gui.close"),
-            button -> this.close()
-        ).dimensions(x + WIDTH - 60, y + HEIGHT - 20, 50, 16).build());
     }
     
     @Override
@@ -43,8 +42,12 @@ public class ConsumerCoreScreen extends HandledScreen<ConsumerCoreScreenHandler>
         drawStructureInfo(context);
         drawFactorStorage(context);
         drawConsumeProgress(context);
+        drawSlotIndicators(context);
         
         super.render(context, mouseX, mouseY, delta);
+        
+        // 渲染提示
+        drawTooltips(context, mouseX, mouseY);
     }
     
     private void drawPanel(DrawContext context) {
@@ -55,7 +58,7 @@ public class ConsumerCoreScreen extends HandledScreen<ConsumerCoreScreenHandler>
     }
     
     private void drawStructureInfo(DrawContext context) {
-        int statusY = y + 20;
+        int statusY = y + 18;
         
         boolean valid = handler.isStructureValid();
         Text statusText = valid 
@@ -71,50 +74,48 @@ public class ConsumerCoreScreen extends HandledScreen<ConsumerCoreScreenHandler>
         context.fill(badgeX, statusY - 2, badgeX + 40, statusY + 12, tierColor);
         Text tierText = Text.translatable("factorcraft.gui.tier", handler.getTier());
         context.drawCenteredTextWithShadow(this.textRenderer, tierText, badgeX + 20, statusY, 0xFFFFFF);
-        
-        // 结构名称
-        if (valid) {
-            Text structName = Text.literal(handler.getStructureName());
-            context.drawTextWithShadow(this.textRenderer, structName, x + 10, statusY + 15, 0xAAAAAA);
-        }
     }
     
     private void drawFactorStorage(DrawContext context) {
-        int storageY = y + 50;
+        int storageY = y + 35;
         
-        Text label = Text.translatable("factorcraft.gui.factor.storage");
-        context.drawTextWithShadow(this.textRenderer, label, x + 10, storageY, 0xAAAAAA);
-        
-        int barX = x + 10;
-        int barY = storageY + 12;
-        int barWidth = WIDTH - 20;
-        int barHeight = 18;
+        // Factor 存储条（垂直显示在右侧）
+        int barX = x + 150;
+        int barY = storageY;
+        int barWidth = 16;
+        int barHeight = 40;
         
         double percentage = handler.getStoragePercentage();
         int fillColor = getBarColor(percentage);
         
+        // 背景
         context.fill(barX, barY, barX + barWidth, barY + barHeight, 0xFF333333);
-        int fillWidth = (int) (barWidth * percentage / 100.0);
-        context.fill(barX, barY, barX + fillWidth, barY + barHeight, fillColor);
+        
+        // 填充（从下往上）
+        int fillHeight = (int) (barHeight * percentage / 100.0);
+        context.fill(barX, barY + barHeight - fillHeight, barX + barWidth, barY + barHeight, fillColor);
+        
+        // 边框
         context.drawBorder(barX, barY, barWidth, barHeight, 0xFF666666);
         
-        Text valueText = Text.literal(String.format("%.0f / %.0f", 
-            handler.getFactorStorage(), handler.getMaxStorage()));
-        context.drawCenteredTextWithShadow(this.textRenderer, valueText, barX + barWidth / 2, barY + 5, 0xFFFFFF);
+        // 标签
+        Text label = Text.literal("F");
+        context.drawCenteredTextWithShadow(this.textRenderer, label, barX + barWidth / 2, barY - 10, 0xAAAAAA);
+        
+        // 数值
+        Text valueText = Text.literal(String.format("%.0f", handler.getFactorStorage()));
+        context.drawCenteredTextWithShadow(this.textRenderer, valueText, barX + barWidth / 2, barY + barHeight + 4, 0xFFFFFF);
     }
     
     private void drawConsumeProgress(DrawContext context) {
-        int progressY = y + 95;
+        int progressY = y + 58;
         
         if (handler.isConsuming()) {
-            Text recipeLabel = Text.translatable("factorcraft.gui.consumer.consuming");
-            context.drawTextWithShadow(this.textRenderer, recipeLabel, x + 10, progressY, 0xFFAA00);
-            
-            // 进度条
-            int barX = x + 10;
-            int barY = progressY + 12;
-            int barWidth = WIDTH - 20;
-            int barHeight = 12;
+            // 进度条（在物品槽之间）
+            int barX = x + 76;
+            int barY = progressY;
+            int barWidth = 24;
+            int barHeight = 8;
             
             double progress = handler.getConsumeProgressPercentage();
             context.fill(barX, barY, barX + barWidth, barY + barHeight, 0xFF333333);
@@ -122,16 +123,46 @@ public class ConsumerCoreScreen extends HandledScreen<ConsumerCoreScreenHandler>
             context.fill(barX, barY, barX + fillWidth, barY + barHeight, 0xFFFF8800);
             context.drawBorder(barX, barY, barWidth, barHeight, 0xFF666666);
             
-            Text progressText = Text.literal(String.format("%.0f%%", progress));
-            context.drawCenteredTextWithShadow(this.textRenderer, progressText, barX + barWidth / 2, barY + 2, 0xFFFFFF);
+            // 箭头动画
+            Text arrow = Text.literal("→");
+            context.drawCenteredTextWithShadow(this.textRenderer, arrow, barX + barWidth / 2, barY, 0xFFFFFF);
             
             // 产出信息
             Text outputText = Text.translatable("factorcraft.gui.consumer.output", 
                 String.format("%.1f", handler.getFactorToOutput()));
-            context.drawTextWithShadow(this.textRenderer, outputText, x + 10, progressY + 28, 0x55FF55);
+            context.drawTextWithShadow(this.textRenderer, outputText, x + 10, progressY + 15, 0x55FF55);
         } else {
             Text idleText = Text.translatable("factorcraft.gui.consumer.idle");
-            context.drawTextWithShadow(this.textRenderer, idleText, x + 10, progressY, 0x888888);
+            context.drawTextWithShadow(this.textRenderer, idleText, x + 50, progressY, 0x888888);
+        }
+    }
+    
+    private void drawSlotIndicators(DrawContext context) {
+        // 输入槽标签
+        Text inputLabel = Text.translatable("factorcraft.gui.slot.input");
+        context.drawCenteredTextWithShadow(this.textRenderer, inputLabel, x + 56, y + 55, 0xAAAAAA);
+        
+        // 输出槽标签
+        Text outputLabel = Text.translatable("factorcraft.gui.slot.output");
+        context.drawCenteredTextWithShadow(this.textRenderer, outputLabel, x + 116, y + 55, 0xAAAAAA);
+    }
+    
+    private void drawTooltips(DrawContext context, int mouseX, int mouseY) {
+        // Factor 存储提示
+        int barX = x + 150;
+        int barY = y + 35;
+        int barWidth = 16;
+        int barHeight = 40;
+        
+        if (mouseX >= barX && mouseX < barX + barWidth && 
+            mouseY >= barY && mouseY < barY + barHeight) {
+            java.util.List<Text> tooltip = new java.util.ArrayList<>();
+            tooltip.add(Text.translatable("factorcraft.tooltip.factor.storage"));
+            tooltip.add(Text.translatable("factorcraft.tooltip.factor.current", 
+                String.format("%.2f", handler.getFactorStorage())));
+            tooltip.add(Text.translatable("factorcraft.tooltip.factor.max", 
+                String.format("%.0f", handler.getMaxStorage())));
+            context.drawTooltip(this.textRenderer, tooltip, mouseX, mouseY);
         }
     }
     
@@ -155,5 +186,7 @@ public class ConsumerCoreScreen extends HandledScreen<ConsumerCoreScreenHandler>
     }
     
     @Override
-    protected void drawBackground(DrawContext context, float delta, int mouseX, int mouseY) {}
+    protected void drawBackground(DrawContext context, float delta, int mouseX, int mouseY) {
+        // 不使用纹理背景
+    }
 }

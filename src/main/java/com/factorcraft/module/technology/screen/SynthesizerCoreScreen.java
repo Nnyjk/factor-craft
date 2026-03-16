@@ -1,5 +1,6 @@
 package com.factorcraft.module.technology.screen;
 
+import com.factorcraft.module.technology.machine.SynthesisConfig;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -17,12 +18,18 @@ import java.util.List;
  */
 public class SynthesizerCoreScreen extends HandledScreen<SynthesizerCoreScreenHandler> {
     
+    private static final Identifier BACKGROUND = Identifier.of("factorcraft", "textures/gui/synthesizer_core.png");
+    
     private static final int WIDTH = 280;
     private static final int HEIGHT = 200;
     
     // 配方列表滚动
     private int recipeScrollOffset = 0;
     private int selectedRecipeIndex = -1;
+    
+    // 按钮
+    private ButtonWidget startButton;
+    private ButtonWidget cancelButton;
     
     public SynthesizerCoreScreen(SynthesizerCoreScreenHandler handler, PlayerInventory inventory, Text title) {
         super(handler, inventory, title);
@@ -42,6 +49,29 @@ public class SynthesizerCoreScreen extends HandledScreen<SynthesizerCoreScreenHa
             Text.translatable("gui.close"),
             button -> this.close()
         ).dimensions(x + WIDTH - 60, y + HEIGHT - 20, 50, 16).build());
+        
+        // 开始合成按钮
+        startButton = ButtonWidget.builder(
+            Text.translatable("factorcraft.gui.synthesizer.start"),
+            button -> {
+                if (selectedRecipeIndex >= 0) {
+                    var recipes = handler.getAvailableRecipes();
+                    if (selectedRecipeIndex < recipes.size()) {
+                        handler.startCrafting(recipes.get(selectedRecipeIndex).id());
+                    }
+                }
+            }
+        ).dimensions(x + 10, y + HEIGHT - 45, 80, 18).build();
+        startButton.active = false;
+        this.addDrawableChild(startButton);
+        
+        // 取消合成按钮
+        cancelButton = ButtonWidget.builder(
+            Text.translatable("factorcraft.gui.synthesizer.cancel"),
+            button -> handler.cancelCrafting()
+        ).dimensions(x + 95, y + HEIGHT - 45, 50, 18).build();
+        cancelButton.active = false;
+        this.addDrawableChild(cancelButton);
     }
     
     @Override
@@ -53,6 +83,9 @@ public class SynthesizerCoreScreen extends HandledScreen<SynthesizerCoreScreenHa
         drawFactorBuffer(context);
         drawCraftingProgress(context);
         drawRecipeList(context, mouseX, mouseY);
+        
+        // 更新按钮状态
+        updateButtonStates();
         
         super.render(context, mouseX, mouseY, delta);
     }
@@ -80,7 +113,7 @@ public class SynthesizerCoreScreen extends HandledScreen<SynthesizerCoreScreenHa
         context.drawTextWithShadow(this.textRenderer, statusText, x + 10, statusY, statusColor);
         
         // Tier 徽章
-        int badgeX = x + WIDTH - 50;
+        int badgeX = x + 100;
         int tier = handler.getTier();
         int tierColor = getTierColor(tier);
         
@@ -147,20 +180,32 @@ public class SynthesizerCoreScreen extends HandledScreen<SynthesizerCoreScreenHa
             Text factorText = Text.translatable("factorcraft.gui.synthesizer.factor_cost",
                 String.format("%.1f / %.1f", handler.getFactorConsumed(), handler.getFactorNeeded()));
             context.drawTextWithShadow(this.textRenderer, factorText, x + 10, craftY + 28, 0xAAAAAA);
-            
-            // 取消按钮
-            // 在 init() 中添加
         } else {
             Text idleText = Text.translatable("factorcraft.gui.synthesizer.idle");
             context.drawTextWithShadow(this.textRenderer, idleText, x + 10, craftY, 0x888888);
+            
+            // 提示选择配方
+            if (selectedRecipeIndex >= 0) {
+                var recipes = handler.getAvailableRecipes();
+                if (selectedRecipeIndex < recipes.size()) {
+                    var recipe = recipes.get(selectedRecipeIndex);
+                    Text selectedText = Text.translatable("factorcraft.gui.synthesizer.selected", 
+                        recipe.id());
+                    context.drawTextWithShadow(this.textRenderer, selectedText, x + 10, craftY + 15, 0xFFFF55);
+                    
+                    // 显示 Factor 需求
+                    Text costText = Text.literal(String.format("Factor: %.0f", recipe.factorCost()));
+                    context.drawTextWithShadow(this.textRenderer, costText, x + 10, craftY + 28, 0xAAAAAA);
+                }
+            }
         }
     }
     
     private void drawRecipeList(DrawContext context, int mouseX, int mouseY) {
         int listX = x + 150;
-        int listY = y + 45;
+        int listY = y + 20;
         int listWidth = 120;
-        int listHeight = 140;
+        int listHeight = 160;
         
         // 背景
         context.fill(listX, listY, listX + listWidth, listY + listHeight, 0x80000000);
@@ -191,26 +236,40 @@ public class SynthesizerCoreScreen extends HandledScreen<SynthesizerCoreScreenHa
             }
             
             // 配方名称
-            Text recipeName = Text.translatable("factorcraft.recipe." + recipe.id());
+            Text recipeName = Text.translatable("factorcraft.recipe." + recipe.id(), recipe.id());
             context.drawTextWithShadow(this.textRenderer, recipeName, listX + 4, itemStartY + 2, 0xFFFFFF);
             
             // Factor 成本
-            Text costText = Text.literal(String.format("Factor: %.0f", recipe.factorCost()));
+            Text costText = Text.literal(String.format("F: %.0f", recipe.factorCost()));
             context.drawTextWithShadow(this.textRenderer, costText, listX + 4, itemStartY + 12, 0xAAAAAA);
+        }
+        
+        // 空列表提示
+        if (recipes.isEmpty()) {
+            Text emptyText = Text.translatable("factorcraft.gui.synthesizer.no_recipes");
+            context.drawCenteredTextWithShadow(this.textRenderer, emptyText, listX + listWidth / 2, listY + 60, 0x888888);
         }
         
         // 滚动提示
         if (recipes.size() > 5) {
-            Text scrollHint = Text.literal("↓");
+            Text scrollHint = Text.literal("↓ ↑");
             context.drawCenteredTextWithShadow(this.textRenderer, scrollHint, listX + listWidth / 2, listY + listHeight - 12, 0x888888);
         }
+    }
+    
+    private void updateButtonStates() {
+        // 开始按钮：有选中配方且当前未在合成
+        startButton.active = selectedRecipeIndex >= 0 && !handler.isCrafting();
+        
+        // 取消按钮：当前正在合成
+        cancelButton.active = handler.isCrafting();
     }
     
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         // 配方列表点击选择
         int listX = x + 150;
-        int listY = y + 45;
+        int listY = y + 20;
         int listWidth = 120;
         int itemY = listY + 18;
         int itemHeight = 24;
@@ -235,9 +294,9 @@ public class SynthesizerCoreScreen extends HandledScreen<SynthesizerCoreScreenHa
     public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
         // 配方列表滚动
         int listX = x + 150;
-        int listY = y + 45;
+        int listY = y + 20;
         int listWidth = 120;
-        int listHeight = 140;
+        int listHeight = 160;
         
         if (mouseX >= listX && mouseX < listX + listWidth &&
             mouseY >= listY && mouseY < listY + listHeight) {

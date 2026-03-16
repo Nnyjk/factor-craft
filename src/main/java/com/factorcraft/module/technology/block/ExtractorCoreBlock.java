@@ -2,9 +2,7 @@ package com.factorcraft.module.technology.block;
 
 import com.factorcraft.module.technology.machine.ExtractorCoreBlockEntity;
 import com.factorcraft.module.technology.machine.ModMachines;
-import com.factorcraft.module.technology.machine.SynthesizerCoreBlockEntity;
 import com.factorcraft.module.technology.screen.ExtractorCoreScreenHandler;
-import com.factorcraft.module.technology.screen.SynthesizerCoreScreenHandler;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
@@ -62,10 +60,10 @@ public class ExtractorCoreBlock extends BlockWithEntity {
     @Override
     protected NamedScreenHandlerFactory createScreenHandlerFactory(BlockState state, World world, BlockPos pos) {
         BlockEntity blockEntity = world.getBlockEntity(pos);
-        if (blockEntity instanceof ExtractorCoreBlockEntity) {
+        if (blockEntity instanceof ExtractorCoreBlockEntity extractor) {
             return new SimpleNamedScreenHandlerFactory(
                 (syncId, inventory, p) -> new ExtractorCoreScreenHandler(
-                    syncId, inventory, blockEntity, 
+                    syncId, inventory, extractor, 
                     ScreenHandlerContext.create(world, pos),
                     pos
                 ),
