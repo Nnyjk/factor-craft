@@ -1,15 +1,19 @@
 package com.factorcraft.module.quest.ui;
 
+import com.factorcraft.FactorCraftMod;
 import com.factorcraft.module.quest.instance.QuestInstance;
 import com.factorcraft.module.quest.manager.QuestManager;
+import com.factorcraft.module.quest.template.QuestTemplate;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.ColorHelper;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -64,15 +68,37 @@ public class QuestTrackerScreen extends Screen {
     }
     
     private void loadQuestData() {
-        // TODO: 从服务端同步任务数据
-        // 模拟数据
-        activeQuests = createDemoQuests();
-        completedQuests = List.of();
-    }
-    
-    private List<QuestInstance> createDemoQuests() {
-        // 返回模拟数据
-        return List.of();
+        // 从 QuestManager 获取玩家的任务数据
+        // 在单人游戏中，QuestManager 已经包含当前玩家的数据
+        // 在多人游戏中，需要通过网络包从服务端同步
+        try {
+            // 获取当前玩家（如果是单人游戏或本地）
+            if (client != null && client.player != null) {
+                UUID playerId = client.player.getUuid();
+                
+                // 获取活跃任务
+                activeQuests = new ArrayList<>(questManager.getActiveQuests(playerId));
+                
+                // 获取已完成任务
+                Set<Identifier> completedIds = questManager.getCompletedQuests(playerId);
+                completedQuests = new ArrayList<>();
+                for (Identifier id : completedIds) {
+                    QuestTemplate template = questManager.getTemplate(id);
+                    if (template != null) {
+                        // 创建已完成的任务实例（用于显示）
+                        QuestInstance completedInstance = new QuestInstance(template, playerId);
+                        completedQuests.add(completedInstance);
+                    }
+                }
+                
+                FactorCraftMod.LOGGER.debug("加载任务数据：{} 个活跃，{} 个已完成", 
+                    activeQuests.size(), completedQuests.size());
+            }
+        } catch (Exception e) {
+            FactorCraftMod.LOGGER.warn("无法从服务端同步任务数据，使用空列表", e);
+            activeQuests = new ArrayList<>();
+            completedQuests = new ArrayList<>();
+        }
     }
     
     private void createFilterButtons() {
