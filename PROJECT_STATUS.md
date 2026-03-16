@@ -89,16 +89,18 @@
 ### 已关闭 Issue
 - ✅ **#87** - SynthesizerCoreBlockEntity 产出物品逻辑实现
 - ✅ **#73** - TransmitterBlockEntity 跨维度 Factor 传输
+- ✅ **#70** - Quest 数据同步 - QuestTrackerScreen 服务端数据同步
 
 ### PR #88 更新
-现在包含 4 个 Issue 的工作：
+现在包含 5 个 Issue 的工作：
+- #70 - Quest 数据同步 ✅
 - #71 - CultivatorCoreBlockEntity 特性注入逻辑 ✅
 - #73 - TransmitterBlockEntity 跨维度传输 ✅
 - #86 - BreederCoreBlockEntity 产出逻辑 ✅
 - #87 - SynthesizerCoreBlockEntity 产出逻辑 ✅
 
 ### 剩余 TODO
-- QuestTrackerScreen - 从服务端同步任务数据 (#70, 中优先级)
+- ✅ 所有 // TODO 注释已清除！
 
 ---
 
