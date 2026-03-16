@@ -6,6 +6,7 @@ import com.factorcraft.module.technology.item.ModItems;
 import com.factorcraft.module.technology.machine.ModMachines;
 import com.factorcraft.module.technology.multiblock.AltarStructureLoader;
 import com.factorcraft.module.technology.multiblock.BlueprintLoader;
+import com.factorcraft.module.technology.screen.ModScreens;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,6 +58,10 @@ public class TechnologyModule implements FactorCraftModule {
         // 注册 BlockEntity
         ModMachines.register();
         LOGGER.info("[FactorCraft:Technology] BlockEntity 注册完成");
+        
+        // 注册 Screen
+        ModScreens.register();
+        LOGGER.info("[FactorCraft:Technology] Screen 注册完成");
         
         // 加载蓝图系统
         BlueprintLoader.loadAll();

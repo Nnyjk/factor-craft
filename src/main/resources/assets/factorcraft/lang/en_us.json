@@ -127,5 +127,51 @@
   "item.factorcraft.factor_sword_t2": "Factor Sword T2",
   "item.factorcraft.factor_sword_t3": "Factor Sword T3",
   "item.factorcraft.factor_sword_t4": "Factor Sword T4",
-  "item.factorcraft.factor_sword_t5": "Factor Sword T5"
+  "item.factorcraft.factor_sword_t5": "Factor Sword T5",
+  
+  "factorcraft.gui.tier": "T%s",
+  "factorcraft.gui.structure.valid": "Structure Valid",
+  "factorcraft.gui.structure.invalid": "Structure Invalid",
+  
+  "factorcraft.gui.factor.storage": "Factor Storage",
+  "factorcraft.gui.efficiency.structure": "Structure Efficiency: %s",
+  "factorcraft.gui.efficiency.dimension": "Dimension Efficiency: %s",
+  "factorcraft.gui.dimension.current": "Current Dimension: %s",
+  "factorcraft.gui.dimension.recommended": "Recommended Dimension: %s",
+  
+  "factorcraft.gui.extractor.rate": "Extraction Rate: %s/t",
+  
+  "factorcraft.gui.consumer.consuming": "Consuming...",
+  "factorcraft.gui.consumer.idle": "Idle - Insert items to consume",
+  "factorcraft.gui.consumer.output": "Expected Output: %s Factor",
+  
+  "factorcraft.gui.cultivator.trait_slots": "Trait Slots: %s",
+  "factorcraft.gui.cultivator.buffer": "Factor Buffer",
+  "factorcraft.gui.cultivator.ready": "Ready",
+  
+  "factorcraft.gui.slot.input": "Input",
+  "factorcraft.gui.slot.output": "Output",
+  
+  "factorcraft.gui.synthesizer.buffer": "Factor Buffer",
+  "factorcraft.gui.synthesizer.crafting": "Crafting...",
+  "factorcraft.gui.synthesizer.idle": "Idle",
+  "factorcraft.gui.synthesizer.recipes": "Available Recipes",
+  "factorcraft.gui.synthesizer.factor_cost": "Factor Cost: %s",
+  "factorcraft.gui.synthesizer.start": "Start Crafting",
+  "factorcraft.gui.synthesizer.cancel": "Cancel",
+  "factorcraft.gui.synthesizer.selected": "Selected: %s",
+  "factorcraft.gui.synthesizer.no_recipes": "No recipes available",
+  
+  "factorcraft.tooltip.factor.storage": "Factor Storage Info",
+  "factorcraft.tooltip.factor.current": "Current: %s",
+  "factorcraft.tooltip.factor.max": "Max Capacity: %s",
+  "factorcraft.tooltip.factor.percentage": "Fill Rate: %s",
+  
+  "factorcraft.structure.extractor.t1": "Extractor Structure T1",
+  "factorcraft.structure.extractor.t2": "Extractor Structure T2",
+  "factorcraft.structure.extractor.t3": "Extractor Structure T3",
+  "factorcraft.structure.extractor.t4": "Extractor Structure T4",
+  "factorcraft.structure.extractor.t5": "Extractor Structure T5",
+  
+  "gui.close": "Close"
 }

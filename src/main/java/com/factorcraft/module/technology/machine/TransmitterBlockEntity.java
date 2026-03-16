@@ -45,7 +45,7 @@ public class TransmitterBlockEntity extends MachineBlockEntity {
     private int transferCount;
     
     public TransmitterBlockEntity(BlockPos pos, BlockState state) {
-        super(null, pos, state);
+        super(ModMachines.TRANSMITTER, pos, state);
         this.buffer = 0.0;
         this.maxBuffer = TransmitterConfig.BUFFER_T1;
         this.tier = 1;

@@ -6,6 +6,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.slf4j.Logger;
@@ -19,12 +20,16 @@ import org.slf4j.LoggerFactory;
  * 消耗公式:
  * 实际产出 = 基础产出 × 结构效率 × 维度倍率 × 维度效率
  */
-public class ConsumerCoreBlockEntity extends MachineBlockEntity {
+public class ConsumerCoreBlockEntity extends MachineBlockEntity implements MachineInventory {
     
     private static final Logger LOGGER = LoggerFactory.getLogger("FactorCraft/Consumer");
     
-    // ==================== 状态 ====================
+    // 物品槽
+    private final DefaultedList<ItemStack> items = DefaultedList.ofSize(2, ItemStack.EMPTY);
+    public static final int INPUT_SLOT = 0;
+    public static final int OUTPUT_SLOT = 1;
     
+    // 状态
     private double factorStorage;
     private double maxStorage;
     private int currentTier;
@@ -41,13 +46,18 @@ public class ConsumerCoreBlockEntity extends MachineBlockEntity {
     private static final long STRUCTURE_CHECK_INTERVAL = 100;
     
     public ConsumerCoreBlockEntity(BlockPos pos, BlockState state) {
-        super(null, pos, state);
+        super(ModMachines.CONSUMER_CORE, pos, state);
         this.factorStorage = 0.0;
         this.maxStorage = ConsumptionConfig.MAX_STORAGE_T1;
         this.currentTier = 1;
         this.structureValid = false;
         this.lastStructureCheck = 0;
         this.consumeProgress = 0;
+    }
+    
+    @Override
+    public DefaultedList<ItemStack> getItems() {
+        return items;
     }
     
     @Override
@@ -69,12 +79,49 @@ public class ConsumerCoreBlockEntity extends MachineBlockEntity {
             }
         }
         
+        // 自动从输入槽开始消耗
+        if (currentRecipeId == null && !getStack(INPUT_SLOT).isEmpty()) {
+            tryStartConsumingFromInput(world);
+        }
+        
         // 处理消耗进度
         if (currentRecipeId != null) {
             tickConsuming();
         }
         
         markDirty();
+    }
+    
+    /**
+     * 尝试从输入槽开始消耗
+     */
+    private void tryStartConsumingFromInput(World world) {
+        ItemStack inputStack = getStack(INPUT_SLOT);
+        if (inputStack.isEmpty()) return;
+        
+        String itemId = inputStack.getItem().toString();
+        String dimension = world.getRegistryKey().getValue().toString();
+        
+        ConsumptionConfig.ConsumptionRecipe recipe = ConsumptionConfig.getRecipeForInput(itemId);
+        if (recipe == null) return;
+        
+        // 检查 Tier
+        if (currentTier < recipe.minTier()) return;
+        
+        // 检查存储空间
+        double output = ConsumptionConfig.calculateActualOutput(recipe, currentTier, dimension);
+        if (factorStorage + output > maxStorage) return;
+        
+        // 开始消耗
+        this.currentRecipeId = recipe.id();
+        this.consumeProgress = 0;
+        this.consumeTimeTotal = recipe.consumeTime();
+        this.factorToOutput = output;
+        
+        // 消耗一个物品
+        inputStack.decrement(1);
+        
+        LOGGER.debug("开始消耗: {}, 产出: {} Factor", itemId, output);
     }
     
     /**
@@ -97,61 +144,10 @@ public class ConsumerCoreBlockEntity extends MachineBlockEntity {
     }
     
     /**
-     * 开始消耗物品
-     * 
-     * @param itemId 物品 ID
-     * @param count 物品数量
-     * @param dimension 当前维度
-     * @return 实际消耗的数量（0 表示无法消耗）
-     */
-    public int startConsuming(String itemId, int count, String dimension) {
-        if (currentRecipeId != null) {
-            return 0; // 已有消耗进行中
-        }
-        
-        ConsumptionConfig.ConsumptionRecipe recipe = ConsumptionConfig.getRecipeForInput(itemId);
-        if (recipe == null) {
-            LOGGER.debug("无配方: {}", itemId);
-            return 0;
-        }
-        
-        // 检查 Tier
-        if (currentTier < recipe.minTier()) {
-            LOGGER.debug("Tier 不足: 需要 T{}, 当前 T{}", recipe.minTier(), currentTier);
-            return 0;
-        }
-        
-        // 检查存储空间
-        double outputPerItem = ConsumptionConfig.calculateActualOutput(recipe, currentTier, dimension) / recipe.inputCount();
-        double totalOutput = outputPerItem * count;
-        
-        if (factorStorage + totalOutput > maxStorage) {
-            // 调整数量以适应存储
-            double space = maxStorage - factorStorage;
-            count = (int) Math.floor(space / outputPerItem);
-            if (count <= 0) {
-                LOGGER.debug("存储已满");
-                return 0;
-            }
-            totalOutput = outputPerItem * count;
-        }
-        
-        // 开始消耗
-        this.currentRecipeId = recipe.id();
-        this.consumeProgress = 0;
-        this.consumeTimeTotal = recipe.consumeTime();
-        this.factorToOutput = totalOutput;
-        
-        LOGGER.debug("开始消耗: {} x{}, 产出: {} Factor", itemId, count, totalOutput);
-        
-        return count;
-    }
-    
-    /**
      * 取消当前消耗
      */
     public void cancelConsuming() {
-        // 注意：取消不返还物品（已被消耗）
+        // 取消不返还物品（已被消耗）
         currentRecipeId = null;
         consumeProgress = 0;
         consumeTimeTotal = 0;
@@ -160,9 +156,6 @@ public class ConsumerCoreBlockEntity extends MachineBlockEntity {
     
     /**
      * 提取存储的 Factor
-     * 
-     * @param amount 请求量
-     * @return 实际提取量
      */
     public double extractFactor(double amount) {
         double actual = Math.min(factorStorage, amount);
@@ -185,7 +178,6 @@ public class ConsumerCoreBlockEntity extends MachineBlockEntity {
     private int detectStructureTier(World world, BlockPos pos) {
         for (var pattern : MultiblockDetector.getAllPatterns()) {
             String patternId = pattern.getId();
-            // 匹配消耗器相关的蓝图
             if ((patternId.contains("consumer") || patternId.contains("furnace") || 
                  patternId.contains("burner") || patternId.contains("incinerator"))
                 && MultiblockDetector.detect(world, pos, pattern)) {
@@ -214,31 +206,12 @@ public class ConsumerCoreBlockEntity extends MachineBlockEntity {
     public int getConsumeTimeTotal() { return consumeTimeTotal; }
     public double getFactorToOutput() { return factorToOutput; }
     
-    /**
-     * 获取消耗进度百分比
-     */
     public double getConsumeProgressPercentage() {
-        if (consumeTimeTotal == 0) return 0;
-        return (consumeProgress * 100.0) / consumeTimeTotal;
+        return consumeTimeTotal == 0 ? 0 : (consumeProgress * 100.0) / consumeTimeTotal;
     }
     
-    /**
-     * 获取存储百分比
-     */
     public double getStoragePercentage() {
         return maxStorage > 0 ? (factorStorage / maxStorage) * 100 : 0;
-    }
-    
-    /**
-     * 获取调试信息
-     */
-    public String getDebugInfo() {
-        if (currentRecipeId != null) {
-            return String.format("T%d | %s | %.0f/%.0f F | %.1f%%",
-                currentTier, currentRecipeId, factorStorage, maxStorage, getConsumeProgressPercentage());
-        }
-        return String.format("T%d | %.0f/%.0f F | Idle",
-            currentTier, factorStorage, maxStorage);
     }
     
     // ==================== NBT ====================
@@ -251,6 +224,9 @@ public class ConsumerCoreBlockEntity extends MachineBlockEntity {
         nbt.putInt("CurrentTier", currentTier);
         nbt.putBoolean("StructureValid", structureValid);
         nbt.putLong("LastStructureCheck", lastStructureCheck);
+        
+        // 物品库存
+        writeInventoryNbt(nbt, registries);
         
         // 消耗状态
         if (currentRecipeId != null) {
@@ -270,6 +246,9 @@ public class ConsumerCoreBlockEntity extends MachineBlockEntity {
         structureValid = nbt.getBoolean("StructureValid");
         lastStructureCheck = nbt.getLong("LastStructureCheck");
         
+        // 物品库存
+        readInventoryNbt(nbt, registries);
+        
         // 消耗状态
         if (nbt.contains("CurrentRecipeId")) {
             currentRecipeId = nbt.getString("CurrentRecipeId");
@@ -278,7 +257,6 @@ public class ConsumerCoreBlockEntity extends MachineBlockEntity {
             factorToOutput = nbt.getDouble("FactorToOutput");
         }
         
-        // 兼容旧数据
         if (maxStorage == 0) {
             maxStorage = ConsumptionConfig.getMaxStorage(currentTier);
         }

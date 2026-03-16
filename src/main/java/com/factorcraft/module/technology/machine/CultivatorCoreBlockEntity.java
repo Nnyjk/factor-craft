@@ -20,7 +20,7 @@ public class CultivatorCoreBlockEntity extends MachineBlockEntity {
     private int traitSlots = 1;
     
     public CultivatorCoreBlockEntity(BlockPos pos, BlockState state) {
-        super(null, pos, state);
+        super(ModMachines.CULTIVATOR_CORE, pos, state);
         this.infusionProgress = 0;
         this.factorBuffer = 0.0;
     }

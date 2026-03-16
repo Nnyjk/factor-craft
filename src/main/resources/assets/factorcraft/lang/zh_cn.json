@@ -127,5 +127,51 @@
   "item.factorcraft.factor_sword_t2": "因子剑 T2",
   "item.factorcraft.factor_sword_t3": "因子剑 T3",
   "item.factorcraft.factor_sword_t4": "因子剑 T4",
-  "item.factorcraft.factor_sword_t5": "因子剑 T5"
+  "item.factorcraft.factor_sword_t5": "因子剑 T5",
+  
+  "factorcraft.gui.tier": "T%s",
+  "factorcraft.gui.structure.valid": "结构完整",
+  "factorcraft.gui.structure.invalid": "结构不完整",
+  
+  "factorcraft.gui.factor.storage": "Factor 存储",
+  "factorcraft.gui.efficiency.structure": "结构效率: %s",
+  "factorcraft.gui.efficiency.dimension": "维度效率: %s",
+  "factorcraft.gui.dimension.current": "当前维度: %s",
+  "factorcraft.gui.dimension.recommended": "推荐维度: %s",
+  
+  "factorcraft.gui.extractor.rate": "提取速率: %s/t",
+  
+  "factorcraft.gui.consumer.consuming": "正在消耗...",
+  "factorcraft.gui.consumer.idle": "空闲中 - 放入物品以消耗",
+  "factorcraft.gui.consumer.output": "预计产出: %s Factor",
+  
+  "factorcraft.gui.cultivator.trait_slots": "特性槽位: %s",
+  "factorcraft.gui.cultivator.buffer": "Factor 缓冲区",
+  "factorcraft.gui.cultivator.ready": "准备就绪",
+  
+  "factorcraft.gui.slot.input": "输入",
+  "factorcraft.gui.slot.output": "输出",
+  
+  "factorcraft.gui.synthesizer.buffer": "Factor 缓冲区",
+  "factorcraft.gui.synthesizer.crafting": "正在合成...",
+  "factorcraft.gui.synthesizer.idle": "空闲中",
+  "factorcraft.gui.synthesizer.recipes": "可用配方",
+  "factorcraft.gui.synthesizer.factor_cost": "Factor 消耗: %s",
+  "factorcraft.gui.synthesizer.start": "开始合成",
+  "factorcraft.gui.synthesizer.cancel": "取消",
+  "factorcraft.gui.synthesizer.selected": "已选择: %s",
+  "factorcraft.gui.synthesizer.no_recipes": "无可用配方",
+  
+  "factorcraft.tooltip.factor.storage": "Factor 存储信息",
+  "factorcraft.tooltip.factor.current": "当前存储: %s",
+  "factorcraft.tooltip.factor.max": "最大容量: %s",
+  "factorcraft.tooltip.factor.percentage": "填充率: %s",
+  
+  "factorcraft.structure.extractor.t1": "提取器结构 T1",
+  "factorcraft.structure.extractor.t2": "提取器结构 T2",
+  "factorcraft.structure.extractor.t3": "提取器结构 T3",
+  "factorcraft.structure.extractor.t4": "提取器结构 T4",
+  "factorcraft.structure.extractor.t5": "提取器结构 T5",
+  
+  "gui.close": "关闭"
 }
