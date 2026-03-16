@@ -77,9 +77,11 @@ public class TransmitterBlockEntity extends MachineBlockEntity {
             return 0;
         }
         
+        ServerWorld fromWorld = (ServerWorld) world;
+        
         // 检查冷却
         if (cooldownRemaining > 0) {
-            LOGGER.debug("传递器冷却中: {} ticks 剩余", cooldownRemaining);
+            LOGGER.debug("传递器冷却中：{} ticks 剩余", cooldownRemaining);
             return 0;
         }
         
@@ -98,7 +100,7 @@ public class TransmitterBlockEntity extends MachineBlockEntity {
         }
         
         // 获取维度信息
-        String fromDimension = world.getRegistryKey().getValue().toString();
+        String fromDimension = fromWorld.getRegistryKey().getValue().toString();
         
         // 检查是否可以传输
         if (!TransmitterConfig.canTransfer(tier, fromDimension, linkedDimension)) {
@@ -120,30 +122,96 @@ public class TransmitterBlockEntity extends MachineBlockEntity {
             received = TransmitterConfig.calculateTransfer(actualAmount, fromDimension, linkedDimension, tier, 0);
         }
         
-        // 执行传输
-        ServerWorld targetWorld = ((ServerWorld) world).getServer().getWorld(
-            net.minecraft.util.Identifier.tryParse(linkedDimension) != null ?
-                world.getRegistryKey() : world.getRegistryKey()
-        );
+        // 获取目标维度世界
+        ServerWorld toWorld = getTargetWorld(fromWorld);
+        if (toWorld == null) {
+            LOGGER.error("无法找到目标维度：{}", linkedDimension);
+            markDirty();
+            return 0;
+        }
         
         // 从缓冲区扣除
         buffer -= actualAmount;
         
-        // 更新统计
-        totalTransmitted += received;
-        transferCount++;
+        // 在目标位置添加 Factor
+        boolean delivered = deliverFactorToWorld(toWorld, received);
         
-        // 设置冷却
-        cooldownRemaining = TransmitterConfig.getCooldown(tier);
-        
-        LOGGER.info("传输完成: {} Factor (发送) → {} Factor (接收), 维度: {} → {}", 
-            actualAmount, received, fromDimension, linkedDimension);
-        
-        // TODO: 在目标位置添加 Factor
-        // 需要查找目标维度的 TransmitterBlockEntity 并调用其 receive()
+        if (delivered) {
+            // 更新统计
+            totalTransmitted += received;
+            transferCount++;
+            
+            // 设置冷却
+            cooldownRemaining = TransmitterConfig.getCooldown(tier);
+            
+            LOGGER.info("传输完成：{} Factor (发送) → {} Factor (接收), 维度：{} → {}", 
+                actualAmount, received, fromDimension, linkedDimension);
+        } else {
+            // 传输失败，返还 Factor
+            buffer += actualAmount;
+            LOGGER.warn("传输失败：无法在目标位置添加 Factor");
+        }
         
         markDirty();
-        return received;
+        return delivered ? received : 0;
+    }
+    
+    /**
+     * 获取目标维度世界
+     */
+    private ServerWorld getTargetWorld(ServerWorld currentWorld) {
+        if (linkedDimension == null) {
+            return null;
+        }
+        
+        net.minecraft.util.Identifier dimId = net.minecraft.util.Identifier.tryParse(linkedDimension);
+        if (dimId == null) {
+            return null;
+        }
+        
+        net.minecraft.registry.RegistryKey<net.minecraft.world.World> worldKey = 
+            net.minecraft.registry.RegistryKey.of(net.minecraft.registry.RegistryKeys.WORLD, dimId);
+        
+        return currentWorld.getServer().getWorld(worldKey);
+    }
+    
+    /**
+     * 在目标世界添加 Factor
+     * 
+     * @param world 目标世界
+     * @param amount Factor 数量
+     * @return 是否成功添加
+     */
+    private boolean deliverFactorToWorld(ServerWorld world, double amount) {
+        if (world == null || linkedPos == null) {
+            return false;
+        }
+        
+        // 尝试在目标位置找到 TransmitterBlockEntity
+        net.minecraft.block.entity.BlockEntity blockEntity = world.getBlockEntity(linkedPos);
+        
+        if (blockEntity instanceof TransmitterBlockEntity targetTransmitter) {
+            // 验证链接是否匹配（双向链接检查）
+            if (targetTransmitter.getLinkedPos() != null && 
+                targetTransmitter.getLinkedDimension() != null &&
+                targetTransmitter.getLinkedPos().equals(this.pos) &&
+                targetTransmitter.getLinkedDimension().equals(world.getRegistryKey().getValue().toString())) {
+                
+                // 链接匹配，添加 Factor
+                targetTransmitter.receive(amount);
+                LOGGER.debug("Factor 已添加到目标传递器：{}", amount);
+                return true;
+            } else {
+                LOGGER.warn("目标传递器链接不匹配");
+                return false;
+            }
+        } else {
+            // 目标位置没有传递器，直接添加到区块 Factor 浓度
+            LOGGER.debug("目标位置无传递器，直接添加到区块 Factor 浓度");
+            net.minecraft.util.math.ChunkPos chunkPos = new net.minecraft.util.math.ChunkPos(linkedPos);
+            com.factorcraft.module.factor.management.ChunkFactorManager.injectFactor(world, chunkPos, amount);
+            return true;
+        }
     }
     
     /**
@@ -191,7 +259,7 @@ public class TransmitterBlockEntity extends MachineBlockEntity {
         this.linkedDimension = targetDimension;
         this.linkedTransmitterId = UUID.randomUUID(); // 生成新的链接 ID
         
-        LOGGER.info("传递器已链接: {} → {} @ {}", pos, targetPos, targetDimension);
+        LOGGER.info("传递器已链接：{} → {} @ {}", pos, targetPos, targetDimension);
         markDirty();
         return true;
     }
@@ -256,7 +324,7 @@ public class TransmitterBlockEntity extends MachineBlockEntity {
         String linkInfo = isLinked() ? 
             String.format("→ %s @ %s", linkedPos, linkedDimension) : "未链接";
         String cooldownInfo = cooldownRemaining > 0 ? 
-            String.format(" (冷却: %d)", cooldownRemaining) : "";
+            String.format(" (冷却：%d)", cooldownRemaining) : "";
         
         return String.format("T%d | %.0f/%.0f F | %s%s",
             tier, buffer, maxBuffer, linkInfo, cooldownInfo);
