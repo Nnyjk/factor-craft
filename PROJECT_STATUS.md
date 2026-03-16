@@ -15,7 +15,7 @@
 | Phase C: 传递系统 | ✅ 完成 | 传递器网络 |
 | Phase D: 引导书 | ✅ 完成 | Patchouli 集成 |
 | Phase E: 机器完善 | 🔄 进行中 | GUI、物品槽、逻辑完善 |
-| Phase F: 世界生成 | ⏳ 待开始 | 矿石、祭坛生成 |
+| Phase F: 世界生成 | 🔄 进行中 | 矿石、祭坛生成 |
 | Phase G: 任务系统 | ⏳ 待开始 | 任务追踪 UI |
 
 ---
@@ -29,6 +29,12 @@
   - 集成 OptimizedDiffusion 高性能方案
   - 添加扩散间隔控制（100 tick）
   - 测试全部通过
+
+- ✅ **Issue #67** - 世界生成系统接入
+  - PR #80 已创建
+  - FactorOreGenerator 接入 ServerChunkEvents.CHUNK_LOAD
+  - FactorAltarGenerator 完善生成规则
+  - 使用 ChunkFactorStorage 持久化管理
 
 ---
 
