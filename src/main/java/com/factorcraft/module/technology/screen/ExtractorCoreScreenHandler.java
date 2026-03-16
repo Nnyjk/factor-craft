@@ -24,7 +24,7 @@ public class ExtractorCoreScreenHandler extends ScreenHandler {
     private final ScreenHandlerContext context;
     private final BlockPos pos;
     
-    // 客户端缓存数据
+    // 同步数据
     private double factorStorage = 0;
     private double maxStorage = 1000;
     private double efficiency = 1.0;

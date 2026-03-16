@@ -62,6 +62,15 @@ public class ModScreens {
      */
     public static void register() {
         // 已通过 Registry.register 完成
+        // 注册客户端网络包处理器
+        registerClientNetworking();
+    }
+    
+    /**
+     * 注册客户端网络包处理
+     */
+    private static void registerClientNetworking() {
+        // 这部分需要在客户端初始化时调用
     }
     
     /**
@@ -86,7 +95,7 @@ public class ModScreens {
                             payload.efficiency(),
                             payload.dimensionEfficiency(),
                             payload.extractRate(),
-                            (int) payload.progress(),
+                            payload.progress(),
                             payload.tier(),
                             payload.structureValid(),
                             payload.dimension(),
