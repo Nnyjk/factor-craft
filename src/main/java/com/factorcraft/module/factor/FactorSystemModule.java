@@ -2,6 +2,7 @@ package com.factorcraft.module.factor;
 
 import com.factorcraft.FactorCraftMod;
 import com.factorcraft.module.FactorCraftModule;
+import com.factorcraft.module.creature.CreatureMutationModule;
 import com.factorcraft.module.cycle.network.FactorNetworkManager;
 import com.factorcraft.module.event.FactorTierChangeEvent;
 import com.factorcraft.module.event.FactorTideEvent;
@@ -63,6 +64,9 @@ public final class FactorSystemModule implements FactorCraftModule {
                 
                 // Factor 网络传输 tick
                 FactorNetworkManager.getInstance().tick(world);
+                
+                // 生物变异系统 tick
+                CreatureMutationModule.tick(world);
                 
                 // 区块扩散处理
                 long time = world.getTime();
