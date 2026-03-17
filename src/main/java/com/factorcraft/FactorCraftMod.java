@@ -6,6 +6,7 @@ import com.factorcraft.config.ConfigManager;
 import com.factorcraft.datapack.DataPackManager;
 import com.factorcraft.module.ModuleBootstrap;
 import com.factorcraft.module.network.NetworkPackets;
+import com.factorcraft.module.vfx.particle.FactorParticleTypes;
 import com.factorcraft.registry.ModInitialization;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
@@ -33,6 +34,10 @@ public class FactorCraftMod implements ModInitializer {
         
         // 注册游戏内容
         ModInitialization.initialize();
+        
+        // 注册粒子类型
+        FactorParticleTypes.register();
+        LOGGER.info("[FactorCraft] 粒子类型注册完成");
         
         // 注册网络包
         NetworkPackets.register();
