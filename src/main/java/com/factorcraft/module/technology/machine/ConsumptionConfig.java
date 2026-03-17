@@ -275,7 +275,19 @@ public final class ConsumptionConfig {
         };
     }
     
+    // ==================== 输出配置 ====================
+    
     /**
+     * 输出阈值：存储量达到此比例时开始输出
+     */
+    public static final double OUTPUT_THRESHOLD = 0.8;
+    
+    /**
+     * 输出比例：每次输出存储量的此比例
+     */
+    public static final double OUTPUT_RATIO = 0.5;
+    
+        /**
      * 计算实际 Factor 产出
      * 
      * @param recipe 消耗配方

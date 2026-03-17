@@ -1,5 +1,7 @@
 package com.factorcraft.module.technology.machine;
 
+import com.factorcraft.module.factor.management.ChunkFactorManager;
+import com.factorcraft.module.factor.state.ChunkFactorState;
 import com.factorcraft.module.technology.MultiblockDetector;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
@@ -86,7 +88,7 @@ public class ConsumerCoreBlockEntity extends MachineBlockEntity implements Machi
         
         // 处理消耗进度
         if (currentRecipeId != null) {
-            tickConsuming();
+            tickConsuming(serverWorld);
         }
         
         markDirty();
@@ -127,21 +129,51 @@ public class ConsumerCoreBlockEntity extends MachineBlockEntity implements Machi
     /**
      * 处理消耗进度
      */
-    private void tickConsuming() {
+    /**
+     * 处理消耗进度
+     */
+    private void tickConsuming(ServerWorld world) {
         consumeProgress++;
         
         if (consumeProgress >= consumeTimeTotal) {
             // 完成消耗，产出 Factor
             factorStorage = Math.min(maxStorage, factorStorage + factorToOutput);
-            LOGGER.debug("消耗完成: +{} Factor, 存储: {}/{}", factorToOutput, factorStorage, maxStorage);
+            LOGGER.debug("消耗完成：+{} Factor, 存储：{}/{}", factorToOutput, factorStorage, maxStorage);
             
             // 重置
             currentRecipeId = null;
             consumeProgress = 0;
             consumeTimeTotal = 0;
             factorToOutput = 0;
+            
+            // 尝试输出 Factor 到区块
+            tryOutputFactorToChunk(world);
         }
     }
+    
+    /**
+     * 尝试输出 Factor 到区块
+     * 当存储量达到阈值时，自动输出一部分到所在区块
+     */
+    private void tryOutputFactorToChunk(ServerWorld world) {
+        double threshold = maxStorage * ConsumptionConfig.OUTPUT_THRESHOLD;
+        if (factorStorage < threshold) return;
+        
+        // 计算输出量
+        double toOutput = factorStorage * ConsumptionConfig.OUTPUT_RATIO;
+        if (toOutput <= 0) return;
+        
+        // 输出到区块 Factor 状态
+        ChunkFactorState state = ChunkFactorManager.getOrCreateState(world, new net.minecraft.util.math.ChunkPos(pos));
+        state.setCurrentConcentration(state.getCurrentConcentration() + toOutput);
+        factorStorage -= toOutput;
+        
+        LOGGER.info("消耗器输出 Factor 到区块：+{} (剩余：{}/{})", 
+                    toOutput, factorStorage, maxStorage);
+        
+        markDirty();
+    }
+    
     
     /**
      * 取消当前消耗
