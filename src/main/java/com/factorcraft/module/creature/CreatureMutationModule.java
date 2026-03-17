@@ -1,8 +1,10 @@
 package com.factorcraft.module.creature;
 
+import com.factorcraft.module.creature.mutation.MutationDropRegistry;
 import com.factorcraft.module.creature.mutation.MutationManager;
 import com.factorcraft.module.creature.mutation.MutationRegistry;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.server.world.ServerWorld;
 
@@ -13,6 +15,7 @@ import net.minecraft.server.world.ServerWorld;
  * - 高浓度区域变异生物生成
  * - 变异状态管理
  * - 变异效果应用
+ * - 变异生物掉落
  */
 public class CreatureMutationModule {
     
@@ -25,6 +28,9 @@ public class CreatureMutationModule {
     public static void init() {
         // 注册变异效果
         MutationRegistry.init();
+        
+        // 注册变异掉落
+        MutationDropRegistry.init();
         
         // 创建管理器
         mutationManager = new MutationManager();

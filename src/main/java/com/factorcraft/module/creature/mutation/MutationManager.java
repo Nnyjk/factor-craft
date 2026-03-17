@@ -5,10 +5,13 @@ import com.factorcraft.module.factor.FactorService;
 import com.factorcraft.module.factor.TideStatus;
 import com.factorcraft.module.vfx.particle.FactorParticleTypes;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttributeInstance;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
@@ -271,6 +274,54 @@ public class MutationManager {
                 offsetX * 0.02, 0.01, offsetZ * 0.02, 0.0
             );
         }
+    }
+    
+    /**
+     * 处理生物死亡，生成变异掉落物
+     */
+    public void handleCreatureDeath(LivingEntity creature, ServerWorld world, PlayerEntity killer) {
+        UUID creatureId = creature.getUuid();
+        MutatedCreatureState state = creatureStates.get(creatureId);
+        
+        if (state == null || !state.hasMutations()) {
+            return;
+        }
+        
+        Random random = world.getRandom();
+        Vec3d pos = creature.getPos();
+        
+        // 为每个变异生成掉落
+        for (Identifier mutationId : state.getActiveMutations()) {
+            List<MutationDropRegistry.MutationDropEntry> drops = MutationDropRegistry.getDrops(mutationId);
+            
+            for (MutationDropRegistry.MutationDropEntry entry : drops) {
+                ItemStack drop = entry.generateDrop(random);
+                if (drop != null && !drop.isEmpty()) {
+                    // 生成掉落物实体
+                    ItemEntity itemEntity = new ItemEntity(
+                        world,
+                        pos.x, pos.y + 0.5, pos.z,
+                        drop
+                    );
+                    
+                    // 设置拾取延迟
+                    itemEntity.setPickupDelay(10);
+                    
+                    // 如果有玩家击杀，设置所有者
+                    if (killer != null) {
+                        itemEntity.setThrower(killer);
+                    }
+                    
+                    world.spawnEntity(itemEntity);
+                    
+                    FactorCraftMod.LOGGER.debug("Spawned mutation drop: {} x{} at {}", 
+                        drop.getName().getString(), drop.getCount(), pos);
+                }
+            }
+        }
+        
+        // 移除变异状态
+        creatureStates.remove(creatureId);
     }
     
     /**
