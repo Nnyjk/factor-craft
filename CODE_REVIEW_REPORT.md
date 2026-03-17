@@ -27,7 +27,7 @@
 ### 审查时间线
 ```
 BASE_SHA: 6d326b5 (feat/ui-screen-handlers 合并前)
-HEAD_SHA: 01d2610 (当前 HEAD - 创建配置系统完善设计文档)
+HEAD_SHA: a211640 (当前 HEAD - 完善 CultivationCore GUI 系统)
 ```
 
 ### 审查结论
