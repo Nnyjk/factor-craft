@@ -168,10 +168,16 @@ public class ExtractorCoreBlockEntity extends MachineBlockEntity {
     
     /**
      * 向存储中添加 Factor
+     * 
+     * @param amount 添加量
+     * @return 实际添加的量
      */
-    public void addFactor(double amount) {
+    public double addFactor(double amount) {
+        double oldStorage = factorStorage;
         factorStorage = Math.min(maxStorage, factorStorage + amount);
+        double actual = factorStorage - oldStorage;
         markDirty();
+        return actual;
     }
     
     // ==================== Getters ====================

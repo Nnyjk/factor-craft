@@ -1,7 +1,9 @@
 package com.factorcraft.module.technology.item;
 
+import com.factorcraft.api.IFactorContainer;
 import com.factorcraft.component.FactorCraftDataComponents;
 import com.factorcraft.component.type.FactorStorage;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -11,6 +13,8 @@ import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
 /**
@@ -55,6 +59,8 @@ public class FactorBatteryItem extends Item {
     public ActionResult useOnBlock(ItemUsageContext context) {
         World world = context.getWorld();
         PlayerEntity player = context.getPlayer();
+        ItemStack stack = context.getStack();
+        BlockPos pos = context.getBlockPos();
         
         if (world.isClient) {
             return ActionResult.SUCCESS;
@@ -64,17 +70,96 @@ public class FactorBatteryItem extends Item {
             return ActionResult.PASS;
         }
         
+        BlockEntity blockEntity = world.getBlockEntity(pos);
+        if (!(blockEntity instanceof IFactorContainer container)) {
+            player.sendMessage(Text.literal("此方块不是 Factor 容器").formatted(Formatting.RED), false);
+            return ActionResult.PASS;
+        }
+        
         // Shift+右键：从机器抽取 Factor
         if (player.isSneaking()) {
-            // TODO: 实现从相邻机器抽取 Factor
-            player.sendMessage(Text.literal("从机器抽取 Factor...").formatted(Formatting.YELLOW), false);
-            return ActionResult.SUCCESS;
+            return extractFactorFromMachine(player, stack, container);
         }
         
         // 右键：向机器注入 Factor
-        // TODO: 实现向相邻机器注入 Factor
-        player.sendMessage(Text.literal("向机器注入 Factor...").formatted(Formatting.YELLOW), false);
-        return ActionResult.SUCCESS;
+        return insertFactorToMachine(player, stack, container);
+    }
+    
+    /**
+     * 从机器抽取 Factor 到电池
+     * 
+     * @param player 玩家
+     * @param stack 电池物品
+     * @param container Factor 容器
+     * @return ActionResult
+     */
+    private ActionResult extractFactorFromMachine(PlayerEntity player, ItemStack stack, IFactorContainer container) {
+        if (!container.canExtractFactor()) {
+            player.sendMessage(Text.literal("机器中没有可抽取的 Factor").formatted(Formatting.RED), false);
+            return ActionResult.FAIL;
+        }
+        
+        double remainingCapacity = getRemainingCapacity(stack);
+        if (remainingCapacity <= 0) {
+            player.sendMessage(Text.literal("电池已满").formatted(Formatting.RED), false);
+            return ActionResult.FAIL;
+        }
+        
+        double machineStorage = container.getFactorStorage();
+        double amountToExtract = Math.min(machineStorage, remainingCapacity);
+        
+        double extracted = container.extractFactor(amountToExtract);
+        if (extracted > 0) {
+            double charged = charge(stack, extracted);
+            player.sendMessage(
+                Text.literal("抽取了 " + formatNumber(charged) + " Factor").formatted(Formatting.GREEN),
+                false
+            );
+            return ActionResult.SUCCESS;
+        }
+        
+        player.sendMessage(Text.literal("未能抽取 Factor").formatted(Formatting.RED), false);
+        return ActionResult.FAIL;
+    }
+    
+    /**
+     * 从电池注入 Factor 到机器
+     * 
+     * @param player 玩家
+     * @param stack 电池物品
+     * @param container Factor 容器
+     * @return ActionResult
+     */
+    private ActionResult insertFactorToMachine(PlayerEntity player, ItemStack stack, IFactorContainer container) {
+        double storedAmount = getStoredAmount(stack);
+        if (storedAmount <= 0) {
+            player.sendMessage(Text.literal("电池已空").formatted(Formatting.RED), false);
+            return ActionResult.FAIL;
+        }
+        
+        if (!container.canReceiveFactor()) {
+            player.sendMessage(Text.literal("机器 Factor 存储已满").formatted(Formatting.RED), false);
+            return ActionResult.FAIL;
+        }
+        
+        double maxCapacity = container.getMaxFactorStorage();
+        double currentStorage = container.getFactorStorage();
+        double spaceAvailable = maxCapacity - currentStorage;
+        
+        double amountToInsert = Math.min(storedAmount, spaceAvailable);
+        
+        double inserted = container.addFactor(amountToInsert);
+        if (inserted > 0) {
+            double discharged = discharge(stack, inserted);
+            player.sendMessage(
+                Text.literal("注入了 " + formatNumber(discharged) + " Factor").formatted(Formatting.GREEN),
+                false
+            );
+            return ActionResult.SUCCESS;
+        }
+        
+        player.sendMessage(Text.literal("未能注入 Factor").formatted(Formatting.RED), false);
+        return ActionResult.FAIL;
     }
     
     /**
@@ -154,8 +239,8 @@ public class FactorBatteryItem extends Item {
         player.sendMessage(Text.literal("电量：" + String.format("%.1f", percentage) + "%").formatted(percentColor), false);
         player.sendMessage(Text.literal("").formatted(Formatting.RESET), false);
         player.sendMessage(Text.literal("提示：").formatted(Formatting.GRAY), false);
-        player.sendMessage(Text.literal("  - Shift+右键机器：抽取 Factor").formatted(Formatting.GRAY), false);
-        player.sendMessage(Text.literal("  - 右键机器：注入 Factor").formatted(Formatting.GRAY), false);
+        player.sendMessage(Text.literal("  - Shift+右键机器：抽取 Factor").formatted(Formatting.GREEN), false);
+        player.sendMessage(Text.literal("  - 右键机器：注入 Factor").formatted(Formatting.GREEN), false);
     }
     
     /**
