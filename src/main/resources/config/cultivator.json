@@ -1,0 +1,18 @@
+{
+  "version": "1.0.0",
+  "schema": "factorcraft:machines/cultivator/1.0",
+  "machines": {
+    "cultivator_t1": {
+      "infusion_speed": 1.0,
+      "capacity": 3000,
+      "energy_consumption": 30,
+      "trait_slots": 3
+    },
+    "cultivator_t2": {
+      "infusion_speed": 2.5,
+      "capacity": 15000,
+      "energy_consumption": 75,
+      "trait_slots": 5
+    }
+  }
+}

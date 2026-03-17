@@ -1,0 +1,18 @@
+{
+  "version": "1.0.0",
+  "schema": "factorcraft:machines/transmitter/1.0",
+  "machines": {
+    "transmitter_t1": {
+      "transfer_rate": 10,
+      "capacity": 500,
+      "range": 16,
+      "dimension_transfer": false
+    },
+    "transmitter_t2": {
+      "transfer_rate": 50,
+      "capacity": 2500,
+      "range": 32,
+      "dimension_transfer": true
+    }
+  }
+}

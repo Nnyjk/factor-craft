@@ -1,0 +1,16 @@
+{
+  "version": "1.0.0",
+  "schema": "factorcraft:machines/consumer/1.0",
+  "machines": {
+    "consumer_t1": {
+      "consumption_rate": 5,
+      "capacity": 1000,
+      "output_factor": 1.0
+    },
+    "consumer_t2": {
+      "consumption_rate": 25,
+      "capacity": 5000,
+      "output_factor": 2.5
+    }
+  }
+}
