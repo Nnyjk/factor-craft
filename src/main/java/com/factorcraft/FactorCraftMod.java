@@ -7,9 +7,11 @@ import com.factorcraft.datapack.DataPackManager;
 import com.factorcraft.module.ModuleBootstrap;
 import com.factorcraft.module.network.NetworkPackets;
 import com.factorcraft.module.vfx.particle.FactorParticleTypes;
+import com.factorcraft.network.ConfigSyncHandler;
 import com.factorcraft.registry.ModInitialization;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,6 +30,9 @@ public class FactorCraftMod implements ModInitializer {
         // 初始化配置系统
         ConfigManager.initialize();
         LOGGER.info("[FactorCraft] 配置系统初始化完成");
+        
+        // 注册配置同步网络包
+        ConfigSyncHandler.register();
         
         // 使用 ModuleBootstrap 初始化所有模块
         ModuleBootstrap.initializeDefaults();
@@ -53,6 +58,11 @@ public class FactorCraftMod implements ModInitializer {
         // 初始化数据包系统
         DataPackManager.initialize();
         LOGGER.info("[FactorCraft] 数据包系统初始化完成");
+        
+        // 注册玩家加入事件（用于配置同步）
+        ServerLifecycleEvents.SERVER_STARTED.register(server -> {
+            LOGGER.info("[FactorCraft] 服务器已启动，配置同步已就绪");
+        });
         
         LOGGER.info("[FactorCraft] Factor Craft Mod initialized successfully!");
     }

@@ -4,6 +4,7 @@ import com.factorcraft.client.KeyBindings;
 import com.factorcraft.dynamic.DynamicBundle;
 import com.factorcraft.dynamic.DynamicContentManager;
 import com.factorcraft.module.network.ClientNetworkHandler;
+import com.factorcraft.network.ConfigSyncHandler;
 import com.factorcraft.module.technology.screen.ModScreens;
 import net.fabricmc.api.ClientModInitializer;
 import org.slf4j.Logger;
@@ -24,6 +25,9 @@ public class FactorCraftClient implements ClientModInitializer {
         KeyBindings.register();
         LOGGER.info("[FactorCraft:Client] 按键绑定注册完成");
         
+        // 注册配置同步接收器
+        ConfigSyncHandler.registerClientReceiver();
+        
         // 注册客户端网络处理器
         ClientNetworkHandler.register();
         LOGGER.info("[FactorCraft:Client] 网络处理器注册完成");
@@ -34,7 +38,7 @@ public class FactorCraftClient implements ClientModInitializer {
         
         // 动态内容信息
         DynamicBundle bundle = DynamicContentManager.getInstance().current();
-        LOGGER.info("[FactorCraft:Client] 动态资源: textures={}, models={}, languages={}, commands={}",
+        LOGGER.info("[FactorCraft:Client] 动态资源：textures={}, models={}, languages={}, commands={}",
                 bundle.textures().size(),
                 bundle.models().size(),
                 bundle.languages().size(),
