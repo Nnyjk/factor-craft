@@ -1,0 +1,30 @@
+{
+  "id": "chain_main_06",
+  "title": "T3 材料 [6/10]",
+  "description": "解锁 T3 材料星尘合金，科技飞跃。",
+  "category": "chain",
+  "chain": "main_story",
+  "difficulty": "hard",
+  "objectives": [
+    {
+      "type": "craft_item",
+      "item": "factorcraft:stardust_ingot",
+      "count": 1,
+      "description": "制作 T3 星尘合金"
+    }
+  ],
+  "rewards": [
+    {
+      "type": "item",
+      "item": "factorcraft:stardust_ingot",
+      "count": 4
+    },
+    {
+      "type": "quest_xp",
+      "amount": 500
+    }
+  ],
+  "prerequisites": ["chain_main_05"],
+  "repeatable": false,
+  "hidden": false
+}

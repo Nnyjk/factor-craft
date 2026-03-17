@@ -1,0 +1,29 @@
+{
+  "id": "chain_auto_01",
+  "title": "自动化入门 [1/5]",
+  "description": "建造第一台自动化提取器。",
+  "category": "chain",
+  "chain": "automation",
+  "difficulty": "easy",
+  "objectives": [
+    {
+      "type": "build_multiblock",
+      "structure": "factorcraft:extractor",
+      "count": 1,
+      "description": "建造自动化提取器"
+    }
+  ],
+  "rewards": [
+    {
+      "type": "factor",
+      "amount": 500.0
+    },
+    {
+      "type": "quest_xp",
+      "amount": 300
+    }
+  ],
+  "prerequisites": [],
+  "repeatable": false,
+  "hidden": false
+}

@@ -1,0 +1,36 @@
+{
+  "id": "chain_auto_03",
+  "title": "自动升级 [3/5]",
+  "description": "建造自动化材料升级生产线。",
+  "category": "chain",
+  "chain": "automation",
+  "difficulty": "hard",
+  "objectives": [
+    {
+      "type": "build_multiblock",
+      "structure": "factorcraft:synthesizer",
+      "count": 1,
+      "description": "建造自动化合成器"
+    },
+    {
+      "type": "craft_item",
+      "item": "factorcraft:stardust_ingot",
+      "count": 8,
+      "description": "生产 8 个 T3 材料"
+    }
+  ],
+  "rewards": [
+    {
+      "type": "item",
+      "item": "factorcraft:stardust_ingot",
+      "count": 8
+    },
+    {
+      "type": "quest_xp",
+      "amount": 600
+    }
+  ],
+  "prerequisites": ["chain_auto_02"],
+  "repeatable": false,
+  "hidden": false
+}

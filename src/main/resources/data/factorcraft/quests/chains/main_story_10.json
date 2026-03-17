@@ -1,0 +1,37 @@
+{
+  "id": "chain_main_10",
+  "title": "Factor 大师 [10/10]",
+  "description": "完成主线任务链，成为真正的 Factor 大师！",
+  "category": "chain",
+  "chain": "main_story",
+  "difficulty": "extreme",
+  "objectives": [
+    {
+      "type": "complete_quest_chain",
+      "chain": "main_story",
+      "description": "完成所有主线任务"
+    }
+  ],
+  "rewards": [
+    {
+      "type": "item",
+      "item": "factorcraft:void_crystal",
+      "count": 8
+    },
+    {
+      "type": "factor",
+      "amount": 10000.0
+    },
+    {
+      "type": "quest_xp",
+      "amount": 3000
+    },
+    {
+      "type": "achievement",
+      "achievement": "factorcraft:master"
+    }
+  ],
+  "prerequisites": ["chain_main_09"],
+  "repeatable": false,
+  "hidden": false
+}

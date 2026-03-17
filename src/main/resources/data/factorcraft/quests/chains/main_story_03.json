@@ -1,0 +1,36 @@
+{
+  "id": "chain_main_03",
+  "title": "材料升级 [3/10]",
+  "description": "解锁 T2 材料，进入新的科技阶段。",
+  "category": "chain",
+  "chain": "main_story",
+  "difficulty": "medium",
+  "objectives": [
+    {
+      "type": "craft_item",
+      "item": "factorcraft:synthesizer_core",
+      "count": 1,
+      "description": "制作合成器核心"
+    },
+    {
+      "type": "craft_item",
+      "item": "factorcraft:shadow_steel_ingot",
+      "count": 1,
+      "description": "制作 T2 材料"
+    }
+  ],
+  "rewards": [
+    {
+      "type": "item",
+      "item": "factorcraft:shadow_steel_ingot",
+      "count": 8
+    },
+    {
+      "type": "quest_xp",
+      "amount": 200
+    }
+  ],
+  "prerequisites": ["chain_main_02"],
+  "repeatable": false,
+  "hidden": false
+}

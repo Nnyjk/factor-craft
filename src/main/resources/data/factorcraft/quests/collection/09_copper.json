@@ -1,0 +1,29 @@
+{
+  "id": "collection_09",
+  "title": "铜矿工人",
+  "description": "收集铜锭用于基础电路。",
+  "category": "collection",
+  "difficulty": "easy",
+  "objectives": [
+    {
+      "type": "collect_item",
+      "item": "minecraft:copper_ingot",
+      "count": 256,
+      "description": "收集 256 个铜锭"
+    }
+  ],
+  "rewards": [
+    {
+      "type": "item",
+      "item": "factorcraft:factor_crystal",
+      "count": 8
+    },
+    {
+      "type": "quest_xp",
+      "amount": 250
+    }
+  ],
+  "prerequisites": [],
+  "repeatable": true,
+  "hidden": false
+}

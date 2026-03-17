@@ -1,0 +1,48 @@
+{
+  "id": "chain_combat_04",
+  "title": "T3 战甲 [4/5]",
+  "description": "制作 T3 星尘合金全套装备。",
+  "category": "chain",
+  "chain": "combat",
+  "difficulty": "hard",
+  "objectives": [
+    {
+      "type": "craft_item",
+      "item": "factorcraft:stardust_helmet",
+      "count": 1,
+      "description": "制作星尘头盔"
+    },
+    {
+      "type": "craft_item",
+      "item": "factorcraft:stardust_chestplate",
+      "count": 1,
+      "description": "制作星尘胸甲"
+    },
+    {
+      "type": "craft_item",
+      "item": "factorcraft:stardust_leggings",
+      "count": 1,
+      "description": "制作星尘护腿"
+    },
+    {
+      "type": "craft_item",
+      "item": "factorcraft:stardust_boots",
+      "count": 1,
+      "description": "制作星尘靴子"
+    }
+  ],
+  "rewards": [
+    {
+      "type": "item",
+      "item": "factorcraft:stardust_ingot",
+      "count": 16
+    },
+    {
+      "type": "quest_xp",
+      "amount": 800
+    }
+  ],
+  "prerequisites": ["chain_combat_03"],
+  "repeatable": false,
+  "hidden": false
+}

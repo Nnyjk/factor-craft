@@ -1,0 +1,35 @@
+{
+  "id": "chain_main_02",
+  "title": "初识机器 [2/10]",
+  "description": "建造第一台提取器，学习 Factor 提取。",
+  "category": "chain",
+  "chain": "main_story",
+  "difficulty": "easy",
+  "objectives": [
+    {
+      "type": "craft_item",
+      "item": "factorcraft:extractor_core",
+      "count": 1,
+      "description": "制作提取器核心"
+    },
+    {
+      "type": "extract_factor",
+      "amount": 50.0,
+      "description": "提取 50 点 Factor"
+    }
+  ],
+  "rewards": [
+    {
+      "type": "item",
+      "item": "minecraft:coal",
+      "count": 16
+    },
+    {
+      "type": "quest_xp",
+      "amount": 100
+    }
+  ],
+  "prerequisites": ["chain_main_01"],
+  "repeatable": false,
+  "hidden": false
+}

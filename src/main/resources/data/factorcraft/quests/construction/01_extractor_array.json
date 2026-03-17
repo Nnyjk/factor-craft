@@ -1,0 +1,28 @@
+{
+  "id": "construction_01",
+  "title": "提取器阵列",
+  "description": "建造 4 台提取器形成生产阵列。",
+  "category": "construction",
+  "difficulty": "medium",
+  "objectives": [
+    {
+      "type": "place_block",
+      "block": "factorcraft:extractor_core",
+      "count": 4,
+      "description": "放置 4 台提取器"
+    }
+  ],
+  "rewards": [
+    {
+      "type": "factor",
+      "amount": 1000.0
+    },
+    {
+      "type": "quest_xp",
+      "amount": 500
+    }
+  ],
+  "prerequisites": [],
+  "repeatable": false,
+  "hidden": false
+}

@@ -1,0 +1,28 @@
+{
+  "id": "tutorial_03",
+  "title": "Factor 提取",
+  "description": "使用提取器从煤炭中提取 Factor。",
+  "category": "tutorial",
+  "difficulty": "easy",
+  "objectives": [
+    {
+      "type": "extract_factor",
+      "factor_type": "any",
+      "amount": 100.0,
+      "description": "提取 100 点 Factor"
+    }
+  ],
+  "rewards": [
+    {
+      "type": "factor",
+      "amount": 200.0
+    },
+    {
+      "type": "quest_xp",
+      "amount": 100
+    }
+  ],
+  "prerequisites": ["tutorial_02"],
+  "repeatable": false,
+  "hidden": false
+}

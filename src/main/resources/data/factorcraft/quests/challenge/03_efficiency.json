@@ -1,0 +1,29 @@
+{
+  "id": "challenge_03",
+  "title": "效率专家",
+  "description": "建造一个每小时生产 1000 点 Factor 的提取系统。",
+  "category": "challenge",
+  "difficulty": "very_hard",
+  "objectives": [
+    {
+      "type": "achieve_production_rate",
+      "rate": 1000.0,
+      "unit": "per_hour",
+      "description": "达到每小时 1000 点 Factor 产量"
+    }
+  ],
+  "rewards": [
+    {
+      "type": "item",
+      "item": "factorcraft:ancient_alloy",
+      "count": 8
+    },
+    {
+      "type": "quest_xp",
+      "amount": 1500
+    }
+  ],
+  "prerequisites": [],
+  "repeatable": true,
+  "hidden": false
+}

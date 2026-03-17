@@ -1,0 +1,29 @@
+{
+  "id": "collection_02",
+  "title": "铁矿石大亨",
+  "description": "收集大量的铁矿石。",
+  "category": "collection",
+  "difficulty": "easy",
+  "objectives": [
+    {
+      "type": "collect_item",
+      "item": "minecraft:iron_ingot",
+      "count": 256,
+      "description": "收集 256 个铁锭"
+    }
+  ],
+  "rewards": [
+    {
+      "type": "item",
+      "item": "factorcraft:factor_crystal",
+      "count": 10
+    },
+    {
+      "type": "quest_xp",
+      "amount": 300
+    }
+  ],
+  "prerequisites": [],
+  "repeatable": true,
+  "hidden": false
+}

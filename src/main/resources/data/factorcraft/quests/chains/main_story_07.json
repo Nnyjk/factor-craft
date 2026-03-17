@@ -1,0 +1,34 @@
+{
+  "id": "chain_main_07",
+  "title": "跨维度传输 [7/10]",
+  "description": "建造传递器网络，实现跨维度 Factor 传输。",
+  "category": "chain",
+  "chain": "main_story",
+  "difficulty": "hard",
+  "objectives": [
+    {
+      "type": "craft_item",
+      "item": "factorcraft:transmitter_core",
+      "count": 4,
+      "description": "制作 4 个传递器核心"
+    },
+    {
+      "type": "transfer_factor",
+      "dimensions": 2,
+      "description": "在 2 个维度间传输 Factor"
+    }
+  ],
+  "rewards": [
+    {
+      "type": "factor",
+      "amount": 2000.0
+    },
+    {
+      "type": "quest_xp",
+      "amount": 600
+    }
+  ],
+  "prerequisites": ["chain_main_06"],
+  "repeatable": false,
+  "hidden": false
+}

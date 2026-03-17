@@ -1,0 +1,30 @@
+{
+  "id": "chain_combat_02",
+  "title": "强化装备 [2/5]",
+  "description": "制作 T2 等级的 Factor 装备。",
+  "category": "chain",
+  "chain": "combat",
+  "difficulty": "medium",
+  "objectives": [
+    {
+      "type": "craft_item",
+      "item": "factorcraft:shadow_steel_chestplate",
+      "count": 1,
+      "description": "制作 T2 胸甲"
+    }
+  ],
+  "rewards": [
+    {
+      "type": "item",
+      "item": "factorcraft:shadow_steel_ingot",
+      "count": 8
+    },
+    {
+      "type": "quest_xp",
+      "amount": 400
+    }
+  ],
+  "prerequisites": ["chain_combat_01"],
+  "repeatable": false,
+  "hidden": false
+}

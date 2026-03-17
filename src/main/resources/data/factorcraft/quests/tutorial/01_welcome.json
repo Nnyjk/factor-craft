@@ -1,0 +1,29 @@
+{
+  "id": "tutorial_01",
+  "title": "欢迎来到 Factor Craft",
+  "description": "初次见面！制作一个 Factor 晶体来开始你的旅程。",
+  "category": "tutorial",
+  "difficulty": "easy",
+  "objectives": [
+    {
+      "type": "craft_item",
+      "item": "factorcraft:factor_crystal",
+      "count": 1,
+      "description": "制作 Factor 晶体"
+    }
+  ],
+  "rewards": [
+    {
+      "type": "item",
+      "item": "factorcraft:factor_crystal",
+      "count": 5
+    },
+    {
+      "type": "quest_xp",
+      "amount": 50
+    }
+  ],
+  "prerequisites": [],
+  "repeatable": false,
+  "hidden": false
+}

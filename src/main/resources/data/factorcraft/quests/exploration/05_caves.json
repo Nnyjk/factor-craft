@@ -1,0 +1,34 @@
+{
+  "id": "exploration_05",
+  "title": "洞穴探险家",
+  "description": "探索深层洞穴并收集稀有矿物。",
+  "category": "exploration",
+  "difficulty": "hard",
+  "objectives": [
+    {
+      "type": "reach_depth",
+      "depth": -50,
+      "description": "到达 Y=-50 深度"
+    },
+    {
+      "type": "collect_item",
+      "item": "minecraft:diamond_ore",
+      "count": 8,
+      "description": "收集 8 个钻石矿石"
+    }
+  ],
+  "rewards": [
+    {
+      "type": "item",
+      "item": "factorcraft:stardust_ingot",
+      "count": 4
+    },
+    {
+      "type": "quest_xp",
+      "amount": 700
+    }
+  ],
+  "prerequisites": [],
+  "repeatable": false,
+  "hidden": false
+}

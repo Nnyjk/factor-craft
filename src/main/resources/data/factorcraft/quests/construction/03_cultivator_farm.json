@@ -1,0 +1,29 @@
+{
+  "id": "construction_03",
+  "title": "培育农场",
+  "description": "建造 4 台培育器用于特性注入。",
+  "category": "construction",
+  "difficulty": "medium",
+  "objectives": [
+    {
+      "type": "place_block",
+      "block": "factorcraft:cultivator_core",
+      "count": 4,
+      "description": "放置 4 台培育器"
+    }
+  ],
+  "rewards": [
+    {
+      "type": "item",
+      "item": "factorcraft:factor_crystal",
+      "count": 50
+    },
+    {
+      "type": "quest_xp",
+      "amount": 600
+    }
+  ],
+  "prerequisites": [],
+  "repeatable": false,
+  "hidden": false
+}

@@ -1,0 +1,29 @@
+{
+  "id": "construction_02",
+  "title": "合成器网络",
+  "description": "建造 3 台合成器用于材料升级。",
+  "category": "construction",
+  "difficulty": "medium",
+  "objectives": [
+    {
+      "type": "place_block",
+      "block": "factorcraft:synthesizer_core",
+      "count": 3,
+      "description": "放置 3 台合成器"
+    }
+  ],
+  "rewards": [
+    {
+      "type": "item",
+      "item": "factorcraft:shadow_steel_ingot",
+      "count": 16
+    },
+    {
+      "type": "quest_xp",
+      "amount": 600
+    }
+  ],
+  "prerequisites": [],
+  "repeatable": false,
+  "hidden": false
+}
