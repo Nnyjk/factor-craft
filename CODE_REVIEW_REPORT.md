@@ -27,14 +27,14 @@
 ### 审查时间线
 ```
 BASE_SHA: 6d326b5 (feat/ui-screen-handlers 合并前)
-HEAD_SHA: cdc8390 (当前 HEAD - Factor 粒子效果系统)
+HEAD_SHA: b743b25 (当前 HEAD - 数据驱动配方系统)
 ```
 
 ### 审查结论
 **全部建议合并** - 代码质量优秀，无严重问题，无需添加 `status:blocked` 标签
 
 ### PR 合并状态
-**已合并 PR (7 个):**
+**已合并 PR (8 个):**
 - #101: ConsumerCoreBlockEntity Factor 输出到区块 ✅
 - #102: OptimizedDiffusion 高性能扩散算法接入 ✅
 - #111: 任务成就关联支持 ✅
@@ -42,6 +42,7 @@ HEAD_SHA: cdc8390 (当前 HEAD - Factor 粒子效果系统)
 - #88: BreederCoreBlockEntity 完整产出逻辑 ✅
 - #114: 机器工作动画系统基础框架 ✅
 - #115: Factor 粒子效果系统基础框架 ✅
+- #117: 数据驱动配方系统 - JSON 配方支持 ✅
 
 ---
 
@@ -430,7 +431,8 @@ HEAD_SHA: cdc8390 (当前 HEAD - Factor 粒子效果系统)
 #### 本次审查更新
 **新增 PR #95, #96, #97** - 专门修复之前审查中发现的 TODO 问题  
 **新增 PR #101, #102** - ConsumerCore Factor 输出 + OptimizedDiffusion 性能优化  
-**新增 PR #116** - 任务数据服务端同步
+**新增 PR #116** - 任务数据服务端同步  
+**新增 PR #117** - 数据驱动配方系统
 
 | 文件 | 行号 | 描述 | 优先级 | 状态 | 关联 PR |
 |------|------|------|--------|------|---------|
@@ -457,6 +459,8 @@ PR 合并后需清理以下已实现功能的 TODO 注释：
 
 **剩余待实现 TODO (1 个):**
 1. `TideStatus.java:8` - Tide 具体效果 (低优先级)
+
+**TODO 清理进度:** 8/9 (89%)
 
 ---
 
