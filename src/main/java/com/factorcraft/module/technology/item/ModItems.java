@@ -38,14 +38,45 @@ public class ModItems {
     public static final Item CIRCUIT_ADVANCED = register("factor_item_circuit_advanced");
     public static final Item CIRCUIT_ELITE = register("factor_item_circuit_elite");
     
+    // ========== Factor 电池 ==========
+    
+    public static final Item BATTERY_T1 = register(
+        "factor_item_battery_t1",
+        new FactorBatteryItem(FactorBatteryItem.BatteryTier.T1, new Item.Settings())
+    );
+    public static final Item BATTERY_T2 = register(
+        "factor_item_battery_t2",
+        new FactorBatteryItem(FactorBatteryItem.BatteryTier.T2, new Item.Settings())
+    );
+    public static final Item BATTERY_T3 = register(
+        "factor_item_battery_t3",
+        new FactorBatteryItem(FactorBatteryItem.BatteryTier.T3, new Item.Settings())
+    );
+    public static final Item BATTERY_T4 = register(
+        "factor_item_battery_t4",
+        new FactorBatteryItem(FactorBatteryItem.BatteryTier.T4, new Item.Settings())
+    );
+    public static final Item BATTERY_T5 = register(
+        "factor_item_battery_t5",
+        new FactorBatteryItem(FactorBatteryItem.BatteryTier.T5, new Item.Settings())
+    );
+    
     /**
-     * 注册物品
+     * 注册物品（基础版本）
      */
     private static Item register(String name) {
         Identifier id = Identifier.of(MOD_ID, name);
         RegistryKey<Item> key = RegistryKey.of(RegistryKeys.ITEM, id);
         
         Item item = new Item(new Item.Settings().registryKey(key));
+        return Registry.register(Registries.ITEM, id, item);
+    }
+    
+    /**
+     * 注册物品（自定义 Item 子类）
+     */
+    private static Item register(String name, Item item) {
+        Identifier id = Identifier.of(MOD_ID, name);
         return Registry.register(Registries.ITEM, id, item);
     }
     
