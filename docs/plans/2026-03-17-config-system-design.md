@@ -2,7 +2,7 @@
 
 **创建日期**: 2026-03-17  
 **Issue**: #150  
-**状态**: 设计中
+**状态**: 阶段 A/B 已完成，阶段 C 进行中
 
 ---
 
@@ -19,13 +19,14 @@
 - ✅ `ConfigHotReloader` - 文件监听和热重载
 - ✅ `TraitsConfigParser` / `MaterialsM2ConfigParser` - 配置解析器
 - ✅ 10 个配置文件（traits.json, materials.json, weapons.json 等）
+- ✅ `ConfigValidator` - 配置验证器（版本/必填字段/数值范围/类型检查）
+- ✅ `ConfigVersionChecker` - 版本兼容性检查（语义化版本比较/升级建议）
+- ✅ `ConfigDefaults` - 默认值管理器（内嵌默认值/合并回退机制）
+- ✅ 5 个机器配置文件（extractor/synthesizer/transmitter/consumer/cultivator）
 
 ### 缺失功能
-- ❌ 配置验证和默认值处理
-- ❌ 配置版本兼容性检查
-- ❌ 服务端 - 客户端配置同步
+- ❌ 服务端 - 客户端配置同步（阶段 C）
 - ❌ 配置文档和注释
-- ❌ 机器配置外部化（目前是 Java 类：ExtractionConfig, SynthesisConfig 等）
 
 ---
 
@@ -153,21 +154,21 @@ public class ConfigDefaults {
 
 ## 4. 实施计划
 
-### 阶段 A：配置验证与版本控制（核心基础）
-- [ ] 创建 `ConfigValidator` 类
-- [ ] 创建 `ConfigVersionChecker` 类
-- [ ] 为所有配置文件添加 `version` 字段
-- [ ] 创建 `ConfigDefaults` 默认值系统
-- [ ] 集成到 `ConfigManager`
+### 阶段 A：配置验证与版本控制（核心基础）✅ 已完成
+- [x] 创建 `ConfigValidator` 类
+- [x] 创建 `ConfigVersionChecker` 类
+- [x] 为所有配置文件添加 `version` 字段
+- [x] 创建 `ConfigDefaults` 默认值系统
+- [x] 集成到 `ConfigManager`
 
-### 阶段 B：机器配置外部化（功能完善）
-- [ ] 创建 `config/machines/` 目录
-- [ ] 创建 5 个机器配置文件
-- [ ] 创建 `MachineConfigLoader` 统一加载
+### 阶段 B：机器配置外部化（功能完善）✅ 已完成
+- [x] 创建 `config/machines/` 目录
+- [x] 创建 5 个机器配置文件
+- [x] 创建 `MachineConfigLoader` 统一加载
 - [ ] 修改机器 BlockEntity 使用 JSON 配置
 - [ ] 移除旧的 Java 配置类
 
-### 阶段 C：服务端 - 客户端同步（多人游戏支持）
+### 阶段 C：服务端 - 客户端同步（多人游戏支持）🔄 进行中
 - [ ] 创建 `ConfigSyncPayload` 网络包
 - [ ] 实现服务器端同步逻辑
 - [ ] 实现客户端接收逻辑
