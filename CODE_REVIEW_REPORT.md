@@ -27,7 +27,7 @@
 ### 审查时间线
 ```
 BASE_SHA: 6d326b5 (feat/ui-screen-handlers 合并前)
-HEAD_SHA: 65f8a5b (当前 HEAD - TideStatus 游戏效果)
+HEAD_SHA: e4b920f (当前 HEAD - 模组兼容性测试报告模板)
 ```
 
 ### 审查结论
