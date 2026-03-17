@@ -11,15 +11,11 @@
 ### 开放 PR 状态
 **9 个开放 PR** - 均已添加审查意见，全部 ✅ 通过
 
-#### 最新 PR (任务系统同步)
-| PR | 标题 | 分支 | 状态 | 审查评论 |
-|----|------|------|------|----------|
-| **#116** | feat(quest): 实现任务数据服务端同步 | `feat/quest-server-sync` | ✅ 通过 | [新增评论](https://github.com/Nnyjk/factor-craft/pull/116#issuecomment-4072141491) |
-| **#110** | feat(quest): 实现任务奖励发放机制与客户端通知 | `feat/quest-reward-mechanism` | ✅ 通过 | [评论](https://github.com/Nnyjk/factor-craft/pull/110#issuecomment-4071970120) |
-
 #### 原有 PR (已完成审查)
 | PR | 标题 | 分支 | 状态 | 审查评论 |
 |----|------|------|------|----------|
+| **#116** | feat(quest): 实现任务数据服务端同步 | `feat/quest-server-sync` | ✅ 通过 | [评论](https://github.com/Nnyjk/factor-craft/pull/116#issuecomment-4072141491) |
+| **#110** | feat(quest): 实现任务奖励发放机制与客户端通知 | `feat/quest-reward-mechanism` | ✅ 通过 | [评论](https://github.com/Nnyjk/factor-craft/pull/110#issuecomment-4071970120) |
 | **#97** | fix(technology): 实现 SynthesizerCoreBlockEntity 产出物品逻辑 | `fix/synthesizer-core-output` | ✅ 通过 | [评论](https://github.com/Nnyjk/factor-craft/pull/97#issuecomment-4071356072) |
 | **#96** | fix(technology): 实现 BreederCoreBlockEntity 产出物品到库存逻辑 | `fix/breeder-core-output` | ✅ 通过 | [评论](https://github.com/Nnyjk/factor-craft/pull/96#issuecomment-4071356528) |
 | **#95** | fix(network): 实现 TransmitterBlockEntity 在目标位置添加 Factor | `fix/transmitter-factor-delivery` | ✅ 通过 | [评论](https://github.com/Nnyjk/factor-craft/pull/95#issuecomment-4071357194) |
@@ -31,20 +27,21 @@
 ### 审查时间线
 ```
 BASE_SHA: 6d326b5 (feat/ui-screen-handlers 合并前)
-HEAD_SHA: 3ecde61 (当前 HEAD - 机器动画系统审查报告)
+HEAD_SHA: cdc8390 (当前 HEAD - Factor 粒子效果系统)
 ```
 
 ### 审查结论
 **全部建议合并** - 代码质量优秀，无严重问题，无需添加 `status:blocked` 标签
 
 ### PR 合并状态
-**已合并 PR (6 个):**
+**已合并 PR (7 个):**
 - #101: ConsumerCoreBlockEntity Factor 输出到区块 ✅
 - #102: OptimizedDiffusion 高性能扩散算法接入 ✅
 - #111: 任务成就关联支持 ✅
 - #84: CultivatorCoreBlockEntity 特性注入逻辑 ✅
 - #88: BreederCoreBlockEntity 完整产出逻辑 ✅
 - #114: 机器工作动画系统基础框架 ✅
+- #115: Factor 粒子效果系统基础框架 ✅
 
 ---
 
@@ -659,7 +656,7 @@ sed -i '/TODO: 需要接入世界生成系统/d' src/main/java/com/factorcraft/w
 - **审查模式:** 定期代码审查
 - **审查工具:** gh CLI, requesting-code-review skill, refactor skill, github-issues skill
 - **仓库:** Nnyjk/factor-craft
-- **审查分支:** main (HEAD: 3ecde61)
+- **审查分支:** main (HEAD: cdc8390)
 - **审查日期:** 2026-03-17 (更新)
 - **审查 PR 数量:** 9 个 (全部通过)
 - **创建 Issue 数:** 0 个 (无严重问题)
@@ -669,22 +666,24 @@ sed -i '/TODO: 需要接入世界生成系统/d' src/main/java/com/factorcraft/w
 **审查结论:** 全部 9 个 PR 代码质量优秀，建议立即合并 🚀
 
 **本次审查亮点:**
+- 所有 PR 已完成审查，无新增问题
 - PR #116 实现任务数据服务端同步（完整任务系统闭环）
 - PR #110, #111 实现完整的任务奖励系统（成就关联 + 客户端通知）
 - PR #95, #96, #97 专门修复之前审查中发现的 TODO 问题
-- PR #101, #102, #111, #114 已合并
+- PR #101, #102, #111, #114, #115 已合并
 - TODO 清理进度：8/9 已完成，剩余 1 个低优先级项 (TideStatus)
 
-**已合并 PR (6 个):**
+**已合并 PR (7 个):**
 - #101: ConsumerCoreBlockEntity Factor 输出到区块 ✅
 - #102: OptimizedDiffusion 高性能扩散算法接入 ✅
 - #111: 任务成就关联支持 ✅
 - #114: 机器工作动画系统基础框架 ✅
+- #115: Factor 粒子效果系统基础框架 ✅
 - #84: CultivatorCoreBlockEntity 特性注入逻辑 ✅
 - #88: BreederCoreBlockEntity 完整产出逻辑 ✅
 
 **待合并 PR (9 个):**
-- #116: 任务数据服务端同步 (最新)
+- #116: 任务数据服务端同步
 - #110: 任务奖励发放机制与客户端通知
 - #97, #96, #95: TODO 修复
 - #85, #82, #80, #79: 基础功能接入
