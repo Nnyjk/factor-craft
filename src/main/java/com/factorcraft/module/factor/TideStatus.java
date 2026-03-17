@@ -191,4 +191,25 @@ public enum TideStatus {
     public boolean hasOverloadRisk() {
         return this == OVERLOAD;
     }
+    
+    /**
+     * 是否应该触发效果（非稳定状态）
+     */
+    public boolean shouldTriggerEffects() {
+        return this != STABLE;
+    }
+    
+    /**
+     * 获取基础效果触发概率
+     * @return 0.0-1.0 之间的概率值
+     */
+    public double baseEffectChance() {
+        return switch (this) {
+            case DEPLETED -> 0.1;
+            case LOW_ENERGY -> 0.2;
+            case STABLE -> 0.0;
+            case HIGH_ENERGY -> 0.3;
+            case OVERLOAD -> 0.5;
+        };
+    }
 }

@@ -1,6 +1,6 @@
 package com.factorcraft.module.factor;
 
-import com.factorcraft.FactorCraft;
+import com.factorcraft.FactorCraftMod;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
@@ -60,7 +60,7 @@ public class TideEffectManager {
         }
         
         // 获取当前区域的潮汐状态
-        FactorService factorService = FactorService.getInstance(world.getServer());
+        FactorService factorService = FactorService.getInstance();
         if (factorService == null) {
             return;
         }
@@ -86,7 +86,7 @@ public class TideEffectManager {
             
             // 获取当前区块的 Factor 浓度
             ChunkPos chunkPos = new ChunkPos(player.getBlockPos());
-            double concentration = factorService.getConcentration(world, chunkPos);
+            double concentration = factorService.getFactor(world);
             
             // 获取潮汐状态
             TideStatus newStatus = TideStatus.fromConcentration(concentration);
@@ -166,8 +166,8 @@ public class TideEffectManager {
         }
         
         // 发送状态更新通知（可选）
-        if (oldStatus != null && player.getWorld().isClient()) {
-            FactorCraft.LOGGER.debug("Tide status changed for {}: {} -> {}", 
+        if (oldStatus != null && !player.getWorld().isClient()) {
+            FactorCraftMod.LOGGER.debug("Tide status changed for {}: {} -> {}", 
                 player.getName().getString(), oldStatus.getName(), newStatus.getName());
         }
     }
@@ -216,12 +216,12 @@ public class TideEffectManager {
      * @return 修正后的效率
      */
     public double calculateMachineEfficiency(double baseEfficiency, ServerWorld world, ChunkPos chunkPos) {
-        FactorService factorService = FactorService.getInstance(world.getServer());
+        FactorService factorService = FactorService.getInstance();
         if (factorService == null) {
             return baseEfficiency;
         }
         
-        double concentration = factorService.getConcentration(world, chunkPos);
+        double concentration = factorService.getFactor(world);
         TideStatus status = TideStatus.fromConcentration(concentration);
         return status.applyMachineEfficiency(baseEfficiency);
     }
@@ -234,12 +234,12 @@ public class TideEffectManager {
      * @return 修正后的提取量
      */
     public double calculateExtractionAmount(double baseAmount, ServerWorld world, ChunkPos chunkPos) {
-        FactorService factorService = FactorService.getInstance(world.getServer());
+        FactorService factorService = FactorService.getInstance();
         if (factorService == null) {
             return baseAmount;
         }
         
-        double concentration = factorService.getConcentration(world, chunkPos);
+        double concentration = factorService.getFactor(world);
         TideStatus status = TideStatus.fromConcentration(concentration);
         return status.applyExtractionAmount(baseAmount);
     }
@@ -251,12 +251,12 @@ public class TideEffectManager {
      * @return 修正系数
      */
     public float getSpawnRateModifier(ServerWorld world, ChunkPos chunkPos) {
-        FactorService factorService = FactorService.getInstance(world.getServer());
+        FactorService factorService = FactorService.getInstance();
         if (factorService == null) {
             return 1.0f;
         }
         
-        double concentration = factorService.getConcentration(world, chunkPos);
+        double concentration = factorService.getFactor(world);
         TideStatus status = TideStatus.fromConcentration(concentration);
         return (float) (1.0 + status.getSpawnRateModifier());
     }
@@ -268,12 +268,12 @@ public class TideEffectManager {
      * @return 是否有过载风险
      */
     public boolean hasOverloadRisk(ServerWorld world, ChunkPos chunkPos) {
-        FactorService factorService = FactorService.getInstance(world.getServer());
+        FactorService factorService = FactorService.getInstance();
         if (factorService == null) {
             return false;
         }
         
-        double concentration = factorService.getConcentration(world, chunkPos);
+        double concentration = factorService.getFactor(world);
         TideStatus status = TideStatus.fromConcentration(concentration);
         return status.hasOverloadRisk();
     }

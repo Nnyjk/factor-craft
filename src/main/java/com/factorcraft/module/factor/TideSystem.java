@@ -28,17 +28,10 @@ public final class TideSystem {
      */
     @Deprecated
     public static TideStatus getStatusFromDeviation(double deviation) {
-        double absDeviation = Math.abs(deviation);
-        
-        if (absDeviation <= 0.1) {
-            return TideStatus.STABLE;
-        } else if (absDeviation <= 0.3) {
-            return TideStatus.DEVIATED;
-        } else if (absDeviation <= 0.5) {
-            return TideStatus.FLUCTUATING;
-        } else {
-            return TideStatus.VOLATILE;
-        }
+        // 兼容旧 API，转换为浓度
+        double concentration = 0.5 + (deviation * 0.5);
+        concentration = Math.max(0.0, Math.min(1.0, concentration));
+        return TideStatus.fromConcentration(concentration);
     }
     
     /**

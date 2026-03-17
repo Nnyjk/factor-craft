@@ -72,24 +72,40 @@ public class TideSystemTest {
 
     @Test
     public void testGetStatusFromDeviation() {
-        // 测试状态判断
-        assertEquals(TideStatus.STABLE, TideSystem.getStatusFromDeviation(0.05)); // ±5%
-        assertEquals(TideStatus.DEVIATED, TideSystem.getStatusFromDeviation(0.2)); // ±20%
-        assertEquals(TideStatus.FLUCTUATING, TideSystem.getStatusFromDeviation(0.4)); // ±40%
-        assertEquals(TideStatus.VOLATILE, TideSystem.getStatusFromDeviation(0.6)); // ±60%
+        // 测试状态判断（使用浓度 API）
+        // 浓度 0.5（基准）-> STABLE
+        assertEquals(TideStatus.STABLE, TideStatus.fromConcentration(0.5));
+        // 浓度 0.1 -> DEPLETED
+        assertEquals(TideStatus.DEPLETED, TideStatus.fromConcentration(0.1));
+        // 浓度 0.3 -> LOW_ENERGY
+        assertEquals(TideStatus.LOW_ENERGY, TideStatus.fromConcentration(0.3));
+        // 浓度 0.7 -> HIGH_ENERGY
+        assertEquals(TideStatus.HIGH_ENERGY, TideStatus.fromConcentration(0.7));
+        // 浓度 0.9 -> OVERLOAD
+        assertEquals(TideStatus.OVERLOAD, TideStatus.fromConcentration(0.9));
+        
+        // 兼容旧 API（偏离度转浓度）
+        assertEquals(TideStatus.STABLE, TideSystem.getStatusFromDeviation(0.0)); // 0% 偏离
+        assertEquals(TideStatus.HIGH_ENERGY, TideSystem.getStatusFromDeviation(0.4)); // +40% 偏离
     }
     
     @Test
     public void testTideStatusProperties() {
         // 测试状态属性
         assertTrue(TideStatus.STABLE.isStable());
-        assertFalse(TideStatus.DEVIATED.isStable());
+        assertFalse(TideStatus.DEPLETED.isStable());
+        assertFalse(TideStatus.OVERLOAD.isStable());
         
         assertFalse(TideStatus.STABLE.shouldTriggerEffects());
-        assertTrue(TideStatus.VOLATILE.shouldTriggerEffects());
+        assertTrue(TideStatus.DEPLETED.shouldTriggerEffects());
+        assertTrue(TideStatus.HIGH_ENERGY.shouldTriggerEffects());
+        assertTrue(TideStatus.OVERLOAD.shouldTriggerEffects());
         
         assertEquals(0.0, TideStatus.STABLE.baseEffectChance(), 0.001);
-        assertEquals(0.30, TideStatus.VOLATILE.baseEffectChance(), 0.001);
+        assertEquals(0.1, TideStatus.DEPLETED.baseEffectChance(), 0.001);
+        assertEquals(0.2, TideStatus.LOW_ENERGY.baseEffectChance(), 0.001);
+        assertEquals(0.3, TideStatus.HIGH_ENERGY.baseEffectChance(), 0.001);
+        assertEquals(0.5, TideStatus.OVERLOAD.baseEffectChance(), 0.001);
     }
 
     @Test
