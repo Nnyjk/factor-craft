@@ -27,7 +27,7 @@
 ### 审查时间线
 ```
 BASE_SHA: 6d326b5 (feat/ui-screen-handlers 合并前)
-HEAD_SHA: 036e373 (当前 HEAD - 更新代码审查报告)
+HEAD_SHA: 6e9728c (当前 HEAD - 更新 ROADMAP 反映 Issue #138 核心框架完成)
 ```
 
 ### 审查结论
@@ -554,14 +554,18 @@ PR 合并后需清理以下已实现功能的 TODO 注释：
 8. `QuestTrackerScreen.java:67` - PR #116
 9. `TideStatus.java:8` - PR #143
 
-**剩余待实现 TODO:** 无
+**剩余待实现 TODO:** 4 个 (生物系统、Factor 浓度集成)
 
 **TODO 清理进度:** 9/9 (100%) ✅
 
-**当前剩余 TODO (3 个):**
+**当前剩余 TODO (7 个):**
 - `FactorAltarGenerator.java:11` - 待清理（PR #80 已实现）
 - `FactorOreGenerator.java:15` - 待清理（PR #80 已实现）
-- `TraitEffectApplier.java:169` - 集成 Factor 浓度系统 (新功能 TODO)
+- `MutationManager.java:157` - 恢复原始属性 (生物系统新功能)
+- `MutationManager.java:190` - 集成 FactorService 获取真实浓度 (生物系统新功能)
+- `CreatureApi.java:17` - 实现生物生成规则 (生物系统新功能)
+- `CreatureApi.java:24` - 实现掉落池 (生物系统新功能)
+- `TraitEffectApplier.java:169` - 集成 Factor 浓度系统 (特性效果增强)
 
 ---
 
