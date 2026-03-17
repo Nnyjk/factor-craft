@@ -1,6 +1,7 @@
 package com.factorcraft.registry;
 
 import com.factorcraft.FactorCraftMod;
+import com.factorcraft.recipe.RecipeLoader;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 
 /**
@@ -13,8 +14,11 @@ public class ModInitialization {
         // 注册创造模式标签页
         ModItemGroups.register();
         
-        // 注册配方类型
+        // 注册配方类型（仅用于 JEI/REI 显示）
         ModRecipes.register();
+        
+        // 初始化配方加载器
+        RecipeLoader.initialize();
         
         // 服务器启动时的初始化
         ServerLifecycleEvents.SERVER_STARTING.register(server -> {
