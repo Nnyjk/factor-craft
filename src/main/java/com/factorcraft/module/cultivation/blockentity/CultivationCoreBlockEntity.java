@@ -16,6 +16,7 @@ import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.screen.ScreenHandler;
+import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
@@ -159,9 +160,14 @@ public class CultivationCoreBlockEntity extends BlockEntity implements NamedScre
     @Override
     @Nullable
     public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
-        // 需要传入 BlockEntity 和 propertyDelegate
-        // ScreenHandler 需要支持 propertyDelegate
-        return new CultivationScreenHandler(syncId, playerInventory, this, propertyDelegate);
+        // 使用 ScreenHandlerContext 和 propertyDelegate
+        return new CultivationScreenHandler(
+            syncId, 
+            playerInventory, 
+            this, 
+            ScreenHandlerContext.create(world, pos),
+            propertyDelegate
+        );
     }
     
     // ============ NBT 保存/加载 ============

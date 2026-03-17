@@ -34,6 +34,10 @@ public class FactorCraftClient implements ClientModInitializer {
         
         // 注册 Screen 客户端渲染
         ModScreens.initClient();
+        
+        // 注册培育系统客户端
+        com.factorcraft.module.cultivation.ModCultivation.initClient();
+        
         LOGGER.info("[FactorCraft:Client] Screen 客户端注册完成");
         
         // 动态内容信息

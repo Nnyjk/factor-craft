@@ -40,6 +40,9 @@ public class FactorCraftMod implements ModInitializer {
         // 注册游戏内容
         ModInitialization.initialize();
         
+        // 注册培育系统
+        com.factorcraft.module.cultivation.ModCultivation.register();
+        
         // 注册粒子类型
         FactorParticleTypes.register();
         LOGGER.info("[FactorCraft] 粒子类型注册完成");

@@ -1,6 +1,7 @@
 package com.factorcraft.module.ui.handler;
 
 import com.factorcraft.module.cultivation.blockentity.CultivationCoreBlockEntity;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
@@ -8,6 +9,7 @@ import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.screen.ScreenHandler;
+import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.slot.Slot;
 
 /**
@@ -16,16 +18,30 @@ import net.minecraft.screen.slot.Slot;
 public class CultivationScreenHandler extends ScreenHandler {
     
     private final Inventory inventory;
-    private final CultivationCoreBlockEntity blockEntity;
+    private final BlockEntity blockEntity;
+    private final ScreenHandlerContext context;
     private final PropertyDelegate propertyDelegate;
     
-    public CultivationScreenHandler(int syncId, PlayerInventory playerInventory, CultivationCoreBlockEntity blockEntity, PropertyDelegate propertyDelegate) {
+    /**
+     * 客户端构造函数
+     */
+    public CultivationScreenHandler(int syncId, PlayerInventory playerInventory) {
+        this(syncId, playerInventory, null, ScreenHandlerContext.EMPTY, null);
+    }
+    
+    /**
+     * 服务端构造函数
+     */
+    public CultivationScreenHandler(int syncId, PlayerInventory playerInventory, 
+                                    BlockEntity blockEntity, ScreenHandlerContext context, 
+                                    PropertyDelegate propertyDelegate) {
         super(null, syncId);
         this.inventory = new SimpleInventory(1);
         this.blockEntity = blockEntity;
+        this.context = context;
         this.propertyDelegate = propertyDelegate;
         
-        // 输入槽（目标物品）- 使用 SimpleInventory 作为中间层
+        // 输入槽（目标物品）
         this.addSlot(new Slot(inventory, 0, 80, 35));
         
         // 玩家背包
@@ -41,7 +57,9 @@ public class CultivationScreenHandler extends ScreenHandler {
         }
         
         // 添加属性委托（用于进度同步）
-        this.addProperties(propertyDelegate);
+        if (propertyDelegate != null) {
+            this.addProperties(propertyDelegate);
+        }
     }
     
     @Override
@@ -77,27 +95,28 @@ public class CultivationScreenHandler extends ScreenHandler {
     
     @Override
     public boolean canUse(PlayerEntity player) {
-        return blockEntity != null && !blockEntity.isRemoved();
+        if (blockEntity == null) return false;
+        return !blockEntity.isRemoved();
     }
     
     /**
      * 获取当前进度
      */
     public int getProgress() {
-        return propertyDelegate.get(0);
+        return propertyDelegate != null ? propertyDelegate.get(0) : 0;
     }
     
     /**
      * 获取最大进度
      */
     public int getMaxProgress() {
-        return propertyDelegate.get(1);
+        return propertyDelegate != null ? propertyDelegate.get(1) : 200;
     }
     
     /**
      * 获取 BlockEntity
      */
-    public CultivationCoreBlockEntity getBlockEntity() {
+    public BlockEntity getBlockEntity() {
         return blockEntity;
     }
 }
