@@ -144,7 +144,8 @@ public final class FactorService implements FactorApi {
     private void checkTideEffects(ServerWorld world, RuntimeState state, DimensionType type) {
         double currentFactor = state.currentFactor;
         double deviation = calculateDeviation(currentFactor, type.baseValue());
-        TideStatus status = getTideStatus(deviation);
+        // 使用浓度获取潮汐状态（新 API）
+        TideStatus status = TideStatus.fromConcentration(currentFactor);
         
         // 发布潮汐事件（供其他模块监听）
         SimpleFactorEventBus.getInstance().publish(
@@ -165,8 +166,10 @@ public final class FactorService implements FactorApi {
     }
     
     /**
-     * 根据偏离度获取潮汐状态
+     * 根据偏离度获取潮汐状态（旧 API，兼容用）
+     * @deprecated 使用 TideStatus.fromConcentration() 替代
      */
+    @Deprecated
     public TideStatus getTideStatus(double deviation) {
         double absDeviation = Math.abs(deviation);
         
@@ -182,16 +185,15 @@ public final class FactorService implements FactorApi {
     }
     
     /**
-     * 获取世界的潮汐状态
+     * 获取世界的潮汐状态（基于浓度）
      */
     public TideStatus getTideStatus(ServerWorld world) {
         String key = world.getRegistryKey().getValue().toString();
         RuntimeState state = states.get(key);
         if (state == null) return TideStatus.STABLE;
         
-        DimensionType type = DimensionType.fromKey(key);
-        double deviation = calculateDeviation(state.currentFactor, type.baseValue());
-        return getTideStatus(deviation);
+        // 使用浓度获取潮汐状态（新 API）
+        return TideStatus.fromConcentration(state.currentFactor);
     }
     
     /**

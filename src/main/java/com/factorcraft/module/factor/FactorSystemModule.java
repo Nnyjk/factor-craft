@@ -57,6 +57,9 @@ public final class FactorSystemModule implements FactorCraftModule {
                 // Factor 系统核心 tick
                 SERVICE.tick(world);
                 
+                // 潮汐效果管理器 tick（玩家效果、机器效率修正等）
+                TideEffectManager.getInstance().tick(world);
+                
                 // 区块扩散处理
                 long time = world.getTime();
                 if (time % DIFFUSION_INTERVAL == 0) {
