@@ -1,0 +1,29 @@
+{
+  "id": "collection_04",
+  "title": "钻石猎人",
+  "description": "收集珍贵的钻石。",
+  "category": "collection",
+  "difficulty": "hard",
+  "objectives": [
+    {
+      "type": "collect_item",
+      "item": "minecraft:diamond",
+      "count": 64,
+      "description": "收集 64 个钻石"
+    }
+  ],
+  "rewards": [
+    {
+      "type": "item",
+      "item": "factorcraft:shadow_steel_ingot",
+      "count": 8
+    },
+    {
+      "type": "quest_xp",
+      "amount": 600
+    }
+  ],
+  "prerequisites": [],
+  "repeatable": true,
+  "hidden": false
+}

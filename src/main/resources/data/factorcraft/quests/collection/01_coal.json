@@ -1,0 +1,28 @@
+{
+  "id": "collection_01",
+  "title": "煤炭收集者",
+  "description": "收集大量的煤炭用于 Factor 提取。",
+  "category": "collection",
+  "difficulty": "easy",
+  "objectives": [
+    {
+      "type": "collect_item",
+      "item": "minecraft:coal",
+      "count": 512,
+      "description": "收集 512 个煤炭"
+    }
+  ],
+  "rewards": [
+    {
+      "type": "factor",
+      "amount": 500.0
+    },
+    {
+      "type": "quest_xp",
+      "amount": 200
+    }
+  ],
+  "prerequisites": [],
+  "repeatable": true,
+  "hidden": false
+}

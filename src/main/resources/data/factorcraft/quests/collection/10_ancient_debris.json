@@ -1,0 +1,33 @@
+{
+  "id": "collection_10",
+  "title": "远古残骸猎手",
+  "description": "收集稀有的远古残骸。",
+  "category": "collection",
+  "difficulty": "very_hard",
+  "objectives": [
+    {
+      "type": "collect_item",
+      "item": "minecraft:ancient_debris",
+      "count": 32,
+      "description": "收集 32 个远古残骸"
+    }
+  ],
+  "rewards": [
+    {
+      "type": "item",
+      "item": "factorcraft:stardust_ingot",
+      "count": 4
+    },
+    {
+      "type": "factor",
+      "amount": 2000.0
+    },
+    {
+      "type": "quest_xp",
+      "amount": 1000
+    }
+  ],
+  "prerequisites": [],
+  "repeatable": true,
+  "hidden": false
+}

@@ -1,0 +1,30 @@
+{
+  "id": "chain_combat_01",
+  "title": "战斗准备 [1/5]",
+  "description": "制作基础 Factor 武器。",
+  "category": "chain",
+  "chain": "combat",
+  "difficulty": "medium",
+  "objectives": [
+    {
+      "type": "craft_item",
+      "item": "factorcraft:factor_sword",
+      "count": 1,
+      "description": "制作 Factor 剑"
+    }
+  ],
+  "rewards": [
+    {
+      "type": "item",
+      "item": "factorcraft:factor_crystal",
+      "count": 10
+    },
+    {
+      "type": "quest_xp",
+      "amount": 300
+    }
+  ],
+  "prerequisites": [],
+  "repeatable": false,
+  "hidden": false
+}

@@ -1,0 +1,28 @@
+{
+  "id": "construction_04",
+  "title": "传输网络",
+  "description": "建造 8 台传递器形成 Factor 传输网络。",
+  "category": "construction",
+  "difficulty": "hard",
+  "objectives": [
+    {
+      "type": "place_block",
+      "block": "factorcraft:transmitter_core",
+      "count": 8,
+      "description": "放置 8 台传递器"
+    }
+  ],
+  "rewards": [
+    {
+      "type": "factor",
+      "amount": 1500.0
+    },
+    {
+      "type": "quest_xp",
+      "amount": 700
+    }
+  ],
+  "prerequisites": [],
+  "repeatable": false,
+  "hidden": false
+}

@@ -1,0 +1,30 @@
+{
+  "id": "chain_combat_03",
+  "title": "特性武器 [3/5]",
+  "description": "为武器注入战斗特性。",
+  "category": "chain",
+  "chain": "combat",
+  "difficulty": "hard",
+  "objectives": [
+    {
+      "type": "infuse_trait",
+      "item": "factorcraft:sharp_factor_sword",
+      "count": 1,
+      "description": "制作锋利 Factor 剑"
+    }
+  ],
+  "rewards": [
+    {
+      "type": "item",
+      "item": "factorcraft:resonance_crystal",
+      "count": 4
+    },
+    {
+      "type": "quest_xp",
+      "amount": 500
+    }
+  ],
+  "prerequisites": ["chain_combat_02"],
+  "repeatable": false,
+  "hidden": false
+}

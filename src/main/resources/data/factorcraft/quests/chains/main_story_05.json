@@ -1,0 +1,30 @@
+{
+  "id": "chain_main_05",
+  "title": "多方块结构 [5/10]",
+  "description": "建造第一个多方块机器，解锁高级生产。",
+  "category": "chain",
+  "chain": "main_story",
+  "difficulty": "hard",
+  "objectives": [
+    {
+      "type": "build_multiblock",
+      "structure": "factorcraft:extractor",
+      "count": 1,
+      "description": "建造多方块提取器"
+    }
+  ],
+  "rewards": [
+    {
+      "type": "item",
+      "item": "factorcraft:shadow_steel_ingot",
+      "count": 16
+    },
+    {
+      "type": "quest_xp",
+      "amount": 400
+    }
+  ],
+  "prerequisites": ["chain_main_04"],
+  "repeatable": false,
+  "hidden": false
+}

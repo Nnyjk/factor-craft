@@ -1,0 +1,28 @@
+{
+  "id": "challenge_02",
+  "title": "资源大师",
+  "description": "在不使用提取器的情况下收集 1000 点 Factor。",
+  "category": "challenge",
+  "difficulty": "hard",
+  "objectives": [
+    {
+      "type": "collect_factor",
+      "amount": 1000.0,
+      "restriction": "no_extractor",
+      "description": "收集 1000 点 Factor（不使用提取器）"
+    }
+  ],
+  "rewards": [
+    {
+      "type": "factor",
+      "amount": 2000.0
+    },
+    {
+      "type": "quest_xp",
+      "amount": 1200
+    }
+  ],
+  "prerequisites": [],
+  "repeatable": true,
+  "hidden": false
+}

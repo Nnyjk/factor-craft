@@ -1,0 +1,38 @@
+{
+  "id": "exploration_06",
+  "title": "古城探险",
+  "description": "探索远古城市并收集珍贵遗物。",
+  "category": "exploration",
+  "difficulty": "very_hard",
+  "objectives": [
+    {
+      "type": "visit_structure",
+      "structure": "minecraft:ancient_city",
+      "description": "发现远古城市"
+    },
+    {
+      "type": "collect_item",
+      "item": "minecraft:sculk_catalyst",
+      "count": 4,
+      "description": "收集 4 个幽匿催发体"
+    }
+  ],
+  "rewards": [
+    {
+      "type": "item",
+      "item": "factorcraft:ancient_alloy",
+      "count": 4
+    },
+    {
+      "type": "factor",
+      "amount": 2000.0
+    },
+    {
+      "type": "quest_xp",
+      "amount": 1000
+    }
+  ],
+  "prerequisites": ["exploration_05"],
+  "repeatable": false,
+  "hidden": true
+}

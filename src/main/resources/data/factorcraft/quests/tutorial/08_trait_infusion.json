@@ -1,0 +1,29 @@
+{
+  "id": "tutorial_08",
+  "title": "特性注入",
+  "description": "使用培育器为小麦注入特性。",
+  "category": "tutorial",
+  "difficulty": "medium",
+  "objectives": [
+    {
+      "type": "infuse_trait",
+      "item": "factorcraft:energized_wheat",
+      "count": 1,
+      "description": "制作 energized_wheat"
+    }
+  ],
+  "rewards": [
+    {
+      "type": "item",
+      "item": "factorcraft:factor_crystal",
+      "count": 15
+    },
+    {
+      "type": "quest_xp",
+      "amount": 300
+    }
+  ],
+  "prerequisites": ["tutorial_07"],
+  "repeatable": false,
+  "hidden": false
+}

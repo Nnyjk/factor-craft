@@ -1,0 +1,28 @@
+{
+  "id": "challenge_04",
+  "title": "特性大师",
+  "description": "成功注入 10 次特性（无论成功与否）。",
+  "category": "challenge",
+  "difficulty": "medium",
+  "objectives": [
+    {
+      "type": "infuse_trait",
+      "count": 10,
+      "description": "进行 10 次特性注入"
+    }
+  ],
+  "rewards": [
+    {
+      "type": "item",
+      "item": "factorcraft:resonance_crystal",
+      "count": 8
+    },
+    {
+      "type": "quest_xp",
+      "amount": 800
+    }
+  ],
+  "prerequisites": [],
+  "repeatable": true,
+  "hidden": false
+}

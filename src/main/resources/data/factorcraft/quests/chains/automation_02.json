@@ -1,0 +1,30 @@
+{
+  "id": "chain_auto_02",
+  "title": "物流网络 [2/5]",
+  "description": "建造传递器网络连接所有机器。",
+  "category": "chain",
+  "chain": "automation",
+  "difficulty": "medium",
+  "objectives": [
+    {
+      "type": "place_block",
+      "block": "factorcraft:transmitter_core",
+      "count": 8,
+      "description": "放置 8 个传递器核心"
+    }
+  ],
+  "rewards": [
+    {
+      "type": "item",
+      "item": "factorcraft:factor_crystal",
+      "count": 20
+    },
+    {
+      "type": "quest_xp",
+      "amount": 400
+    }
+  ],
+  "prerequisites": ["chain_auto_01"],
+  "repeatable": false,
+  "hidden": false
+}

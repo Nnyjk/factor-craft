@@ -1,0 +1,28 @@
+{
+  "id": "collection_05",
+  "title": "绿宝石商人",
+  "description": "收集绿宝石用于交易。",
+  "category": "collection",
+  "difficulty": "hard",
+  "objectives": [
+    {
+      "type": "collect_item",
+      "item": "minecraft:emerald",
+      "count": 128,
+      "description": "收集 128 个绿宝石"
+    }
+  ],
+  "rewards": [
+    {
+      "type": "factor",
+      "amount": 1000.0
+    },
+    {
+      "type": "quest_xp",
+      "amount": 700
+    }
+  ],
+  "prerequisites": [],
+  "repeatable": true,
+  "hidden": false
+}

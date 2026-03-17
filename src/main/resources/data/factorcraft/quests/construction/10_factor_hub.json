@@ -1,0 +1,33 @@
+{
+  "id": "construction_10",
+  "title": "Factor 网络中心",
+  "description": "建造 Factor 网络的核心枢纽。",
+  "category": "construction",
+  "difficulty": "very_hard",
+  "objectives": [
+    {
+      "type": "build_structure",
+      "structure": "factor_hub",
+      "count": 1,
+      "description": "建造 Factor 枢纽"
+    }
+  ],
+  "rewards": [
+    {
+      "type": "item",
+      "item": "factorcraft:void_crystal",
+      "count": 4
+    },
+    {
+      "type": "factor",
+      "amount": 10000.0
+    },
+    {
+      "type": "quest_xp",
+      "amount": 3000
+    }
+  ],
+  "prerequisites": ["construction_09"],
+  "repeatable": false,
+  "hidden": true
+}

@@ -1,0 +1,29 @@
+{
+  "id": "challenge_06",
+  "title": "多方块建造者",
+  "description": "建造 5 个不同的多方块结构。",
+  "category": "challenge",
+  "difficulty": "hard",
+  "objectives": [
+    {
+      "type": "build_multiblock",
+      "count": 5,
+      "unique": true,
+      "description": "建造 5 种不同的多方块结构"
+    }
+  ],
+  "rewards": [
+    {
+      "type": "item",
+      "item": "factorcraft:void_crystal",
+      "count": 2
+    },
+    {
+      "type": "quest_xp",
+      "amount": 1500
+    }
+  ],
+  "prerequisites": [],
+  "repeatable": false,
+  "hidden": false
+}

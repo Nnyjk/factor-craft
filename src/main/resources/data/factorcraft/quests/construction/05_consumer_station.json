@@ -1,0 +1,29 @@
+{
+  "id": "construction_05",
+  "title": "消耗器能源站",
+  "description": "建造 2 台消耗器用于 Factor 生产。",
+  "category": "construction",
+  "difficulty": "medium",
+  "objectives": [
+    {
+      "type": "place_block",
+      "block": "factorcraft:consumer_core",
+      "count": 2,
+      "description": "放置 2 台消耗器"
+    }
+  ],
+  "rewards": [
+    {
+      "type": "item",
+      "item": "factorcraft:concentrated_factor",
+      "count": 8
+    },
+    {
+      "type": "quest_xp",
+      "amount": 500
+    }
+  ],
+  "prerequisites": [],
+  "repeatable": false,
+  "hidden": false
+}

@@ -1,0 +1,34 @@
+{
+  "id": "exploration_01",
+  "title": "下界探索",
+  "description": "前往下界并收集下界特有的资源。",
+  "category": "exploration",
+  "difficulty": "medium",
+  "objectives": [
+    {
+      "type": "visit_dimension",
+      "dimension": "minecraft:the_nether",
+      "description": "到达下界"
+    },
+    {
+      "type": "collect_item",
+      "item": "minecraft:netherrack",
+      "count": 64,
+      "description": "收集 64 个下界岩"
+    }
+  ],
+  "rewards": [
+    {
+      "type": "item",
+      "item": "factorcraft:factor_crystal",
+      "count": 20
+    },
+    {
+      "type": "quest_xp",
+      "amount": 400
+    }
+  ],
+  "prerequisites": [],
+  "repeatable": false,
+  "hidden": false
+}

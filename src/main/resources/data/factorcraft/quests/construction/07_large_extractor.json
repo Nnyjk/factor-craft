@@ -1,0 +1,29 @@
+{
+  "id": "construction_07",
+  "title": "多方块提取器",
+  "description": "建造大型多方块提取器结构。",
+  "category": "construction",
+  "difficulty": "hard",
+  "objectives": [
+    {
+      "type": "build_multiblock",
+      "structure": "factorcraft:large_extractor",
+      "count": 1,
+      "description": "建造大型提取器"
+    }
+  ],
+  "rewards": [
+    {
+      "type": "item",
+      "item": "factorcraft:ancient_alloy",
+      "count": 4
+    },
+    {
+      "type": "quest_xp",
+      "amount": 800
+    }
+  ],
+  "prerequisites": ["construction_01"],
+  "repeatable": false,
+  "hidden": false
+}

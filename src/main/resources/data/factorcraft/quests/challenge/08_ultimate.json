@@ -1,0 +1,35 @@
+{
+  "id": "challenge_08",
+  "title": "终极挑战",
+  "description": "完成所有其他挑战任务。",
+  "category": "challenge",
+  "difficulty": "extreme",
+  "objectives": [
+    {
+      "type": "complete_all_challenges",
+      "description": "完成所有挑战任务"
+    }
+  ],
+  "rewards": [
+    {
+      "type": "item",
+      "item": "factorcraft:void_crystal",
+      "count": 16
+    },
+    {
+      "type": "factor",
+      "amount": 10000.0
+    },
+    {
+      "type": "quest_xp",
+      "amount": 5000
+    },
+    {
+      "type": "achievement",
+      "achievement": "factorcraft:ultimate_challenge"
+    }
+  ],
+  "prerequisites": ["challenge_01", "challenge_02", "challenge_03", "challenge_04", "challenge_05", "challenge_06", "challenge_07"],
+  "repeatable": false,
+  "hidden": true
+}

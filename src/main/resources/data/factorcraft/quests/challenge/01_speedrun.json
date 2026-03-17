@@ -1,0 +1,34 @@
+{
+  "id": "challenge_01",
+  "title": "速度挑战",
+  "description": "在 10 分钟内完成从新手到 T2 材料的全部流程。",
+  "category": "challenge",
+  "difficulty": "hard",
+  "objectives": [
+    {
+      "type": "complete_in_time",
+      "time_limit": 600,
+      "description": "在 10 分钟内完成"
+    },
+    {
+      "type": "craft_item",
+      "item": "factorcraft:shadow_steel_ingot",
+      "count": 1,
+      "description": "制作 T2 材料"
+    }
+  ],
+  "rewards": [
+    {
+      "type": "item",
+      "item": "factorcraft:stardust_ingot",
+      "count": 8
+    },
+    {
+      "type": "quest_xp",
+      "amount": 1000
+    }
+  ],
+  "prerequisites": [],
+  "repeatable": true,
+  "hidden": false
+}

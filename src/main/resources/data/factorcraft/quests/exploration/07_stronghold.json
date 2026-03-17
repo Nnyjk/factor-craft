@@ -1,0 +1,32 @@
+{
+  "id": "exploration_07",
+  "title": "要塞猎人",
+  "description": "找到末地要塞并激活传送门。",
+  "category": "exploration",
+  "difficulty": "hard",
+  "objectives": [
+    {
+      "type": "visit_structure",
+      "structure": "minecraft:stronghold",
+      "description": "发现要塞"
+    },
+    {
+      "type": "activate_portal",
+      "description": "激活末地传送门"
+    }
+  ],
+  "rewards": [
+    {
+      "type": "item",
+      "item": "factorcraft:shadow_steel_ingot",
+      "count": 24
+    },
+    {
+      "type": "quest_xp",
+      "amount": 800
+    }
+  ],
+  "prerequisites": [],
+  "repeatable": false,
+  "hidden": false
+}
