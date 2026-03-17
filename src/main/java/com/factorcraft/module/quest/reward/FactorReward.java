@@ -22,9 +22,21 @@ public class FactorReward implements QuestReward {
     
     @Override
     public void give(PlayerEntity player) {
-        // 集成到 FactorNetworkManager
-        // 待完善：实现完整的 Factor 奖励系统
-        System.out.println("[FactorReward] 给予 Factor: " + amount + " to player " + player.getName().getString());
+        if (player.getWorld().isClient) {
+            return; // 仅服务端处理
+        }
+        
+        // 获取玩家所在区块
+        var chunkPos = player.getChunkPos();
+        
+        // 注入 Factor 到区块
+        com.factorcraft.module.factor.management.ChunkFactorManager.injectFactor(
+            player.getWorld(),
+            chunkPos,
+            amount
+        );
+        
+        System.out.println("[FactorReward] 已注入 " + amount + " Factor 到区块 " + chunkPos.x + "," + chunkPos.z);
     }
     
     @Override
