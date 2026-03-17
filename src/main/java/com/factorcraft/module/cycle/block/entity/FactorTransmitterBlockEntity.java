@@ -1,5 +1,7 @@
 package com.factorcraft.module.cycle.block.entity;
 
+import com.factorcraft.api.IFactorNetworkNode;
+import com.factorcraft.module.cycle.network.FactorNetworkManager;
 import com.factorcraft.module.factor.DimensionManager;
 import com.factorcraft.module.factor.FactorService;
 import com.factorcraft.module.factor.FactorTier;
@@ -28,7 +30,7 @@ import java.util.UUID;
  * 传输公式：
  * 接收 Factor = 发送 Factor × (发送端基准 / 接收端基准) × 效率 × (1 - 距离损耗)
  */
-public class FactorTransmitterBlockEntity extends BlockEntity {
+public class FactorTransmitterBlockEntity extends BlockEntity implements IFactorNetworkNode {
     
     // NBT 键
     private static final String NBT_FACTOR_STORED = "FactorStored";
@@ -37,6 +39,7 @@ public class FactorTransmitterBlockEntity extends BlockEntity {
     private static final String NBT_TIER = "Tier";
     private static final String NBT_LINKED = "Linked";
     private static final String NBT_TRANSMIT_PROGRESS = "TransmitProgress";
+    private static final String NBT_NODE_ID = "NodeId";
     
     // 配置参数
     private int factorStored = 0;
@@ -45,6 +48,7 @@ public class FactorTransmitterBlockEntity extends BlockEntity {
     private FactorTier tier = FactorTier.LOW_ENERGY; // T1
     private boolean linked = false; // 是否已配对
     private int transmitProgress = 0;
+    private String nodeId; // 节点唯一 ID
     
     // 传输时间（ticks）
     private static final int TRANSMIT_TIME = 100; // 5 秒
@@ -55,8 +59,12 @@ public class FactorTransmitterBlockEntity extends BlockEntity {
     // 距离损耗（每 100 格）
     private static final double[] DISTANCE_LOSS_BY_TIER = {0.01, 0.008, 0.005, 0.003};
     
+    // 传输速率（每 tick）
+    private static final double[] TRANSFER_RATE_BY_TIER = {10.0, 25.0, 50.0, 100.0};
+    
     public FactorTransmitterBlockEntity(BlockPos pos, BlockState state) {
         super(CycleBlockEntities.FACTOR_TRANSMITTER, pos, state);
+        this.nodeId = UUID.randomUUID().toString();
     }
     
     @Override
@@ -68,6 +76,7 @@ public class FactorTransmitterBlockEntity extends BlockEntity {
         nbt.putInt(NBT_TIER, tier.ordinal());
         nbt.putBoolean(NBT_LINKED, linked);
         nbt.putInt(NBT_TRANSMIT_PROGRESS, transmitProgress);
+        nbt.putString(NBT_NODE_ID, nodeId);
     }
     
     @Override
@@ -79,6 +88,15 @@ public class FactorTransmitterBlockEntity extends BlockEntity {
         tier = FactorTier.values()[nbt.getInt(NBT_TIER)];
         linked = nbt.getBoolean(NBT_LINKED);
         transmitProgress = nbt.getInt(NBT_TRANSMIT_PROGRESS);
+        nodeId = nbt.getString(NBT_NODE_ID);
+    }
+    
+    @Override
+    public void markDirty() {
+        super.markDirty();
+        if (world != null) {
+            FactorNetworkManager.getInstance().registerNode(world, this);
+        }
     }
     
     /**
@@ -88,6 +106,9 @@ public class FactorTransmitterBlockEntity extends BlockEntity {
         if (world.isClient) {
             return;
         }
+        
+        // 注册到网络
+        FactorNetworkManager.getInstance().registerNode(world, entity);
         
         // 如果已配对且有 Factor，开始传输
         if (entity.linked && entity.factorStored > 0 && entity.transmitProgress < TRANSMIT_TIME) {
@@ -239,11 +260,27 @@ public class FactorTransmitterBlockEntity extends BlockEntity {
     }
     
     /**
-     * 添加 Factor
+     * 添加 Factor（IFactorNetworkNode 接口）
      */
-    public void addFactor(int amount) {
-        factorStored += amount;
+    @Override
+    public double addFactor(double amount, String from) {
+        int oldStored = factorStored;
+        int maxStorage = (int) getMaxFactorStorage();
+        factorStored = Math.min(maxStorage, factorStored + (int) amount);
+        int actual = factorStored - oldStored;
         markDirty();
+        return actual;
+    }
+    
+    /**
+     * 抽取 Factor（IFactorNetworkNode 接口）
+     */
+    @Override
+    public double extractFactor(double amount, String to) {
+        int actual = Math.min(factorStored, (int) amount);
+        factorStored -= actual;
+        markDirty();
+        return actual;
     }
     
     /**
@@ -296,5 +333,51 @@ public class FactorTransmitterBlockEntity extends BlockEntity {
     @Override
     public NbtCompound toInitialChunkDataNbt(RegistryWrapper.WrapperLookup registryLookup) {
         return createNbt(registryLookup);
+    }
+    
+    // ==================== IFactorNetworkNode 实现 ====================
+    
+    @Override
+    public String getNodeId() {
+        return nodeId;
+    }
+    
+    @Override
+    public BlockPos getNodePos() {
+        return pos;
+    }
+    
+    @Override
+    public NodeType getNodeType() {
+        return NodeType.TRANSMITTER;
+    }
+    
+    @Override
+    public double getFactorStorage() {
+        return factorStored;
+    }
+    
+    @Override
+    public double getMaxFactorStorage() {
+        return 100000.0; // 最大存储 100K
+    }
+    
+    @Override
+    public double getTransferRate() {
+        int tierLevel = tier.level();
+        if (tierLevel >= 0 && tierLevel < TRANSFER_RATE_BY_TIER.length) {
+            return TRANSFER_RATE_BY_TIER[tierLevel];
+        }
+        return TRANSFER_RATE_BY_TIER[0];
+    }
+    
+    @Override
+    public boolean canExtractFactor() {
+        return factorStored > 0;
+    }
+    
+    @Override
+    public boolean canReceiveFactor() {
+        return factorStored < getMaxFactorStorage();
     }
 }
