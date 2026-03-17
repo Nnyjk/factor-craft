@@ -9,6 +9,7 @@ import com.factorcraft.module.event.bus.SimpleFactorEventBus;
 import com.factorcraft.module.factor.api.FactorApiProvider;
 import com.factorcraft.module.factor.management.ChunkFactorEventHandler;
 import com.factorcraft.module.factor.management.DiffusionSystem;
+import com.factorcraft.performance.OptimizedDiffusion;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -30,6 +31,9 @@ public final class FactorSystemModule implements FactorCraftModule {
     // 扩散检查间隔 (100 ticks = 5秒)
     private static final long DIFFUSION_INTERVAL = 100;
     
+    
+    // 使用优化扩散算法 (默认启用)
+    public static final boolean USE_OPTIMIZED_DIFFUSION = true;
     public static FactorSystemModule getInstance() {
         if (instance == null) instance = new FactorSystemModule();
         return instance;
@@ -56,7 +60,11 @@ public final class FactorSystemModule implements FactorCraftModule {
                 // 区块扩散处理
                 long time = world.getTime();
                 if (time % DIFFUSION_INTERVAL == 0) {
-                    DiffusionSystem.processAllDiffusion(world);
+                    if (USE_OPTIMIZED_DIFFUSION) {
+                        OptimizedDiffusion.process(world);
+                    } else {
+                        DiffusionSystem.processAllDiffusion(world);
+                    }
                 }
                 
                 // 调试日志
