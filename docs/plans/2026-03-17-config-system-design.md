@@ -168,11 +168,11 @@ public class ConfigDefaults {
 - [ ] 修改机器 BlockEntity 使用 JSON 配置
 - [ ] 移除旧的 Java 配置类
 
-### 阶段 C：服务端 - 客户端同步（多人游戏支持）🔄 进行中
-- [ ] 创建 `ConfigSyncPayload` 网络包
-- [ ] 实现服务器端同步逻辑
-- [ ] 实现客户端接收逻辑
-- [ ] 配置热重载时重新同步
+### 阶段 C：服务端 - 客户端同步（多人游戏支持）✅ 已完成
+- [x] 创建 `ConfigSyncPayload` 网络包
+- [x] 实现服务器端同步逻辑
+- [x] 实现客户端接收逻辑
+- [ ] 配置热重载时重新同步（可选）
 
 ### 阶段 D：文档完善
 - [ ] 编写配置文档 `docs/configuration.md`
