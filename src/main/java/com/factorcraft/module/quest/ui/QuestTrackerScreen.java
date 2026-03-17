@@ -1,6 +1,7 @@
 package com.factorcraft.module.quest.ui;
 
 import com.factorcraft.FactorCraftMod;
+import com.factorcraft.module.network.QuestSyncPayload;
 import com.factorcraft.module.quest.instance.QuestInstance;
 import com.factorcraft.module.quest.manager.QuestManager;
 import com.factorcraft.module.quest.template.QuestTemplate;
@@ -68,32 +69,38 @@ public class QuestTrackerScreen extends Screen {
     }
     
     private void loadQuestData() {
-        // 从 QuestManager 获取玩家的任务数据
-        // 在单人游戏中，QuestManager 已经包含当前玩家的数据
-        // 在多人游戏中，需要通过网络包从服务端同步
+        // 从服务端同步的任务缓存中加载数据
+        // 在多人游戏中，数据通过 QuestSyncPayload 网络包同步
+        // 在单人游戏中，服务端也会发送同步包
         try {
-            // 获取当前玩家（如果是单人游戏或本地）
-            if (client != null && client.player != null) {
-                UUID playerId = client.player.getUuid();
-                
-                // 获取活跃任务
-                activeQuests = new ArrayList<>(questManager.getActiveQuests(playerId));
-                
-                // 获取已完成任务
-                Set<Identifier> completedIds = questManager.getCompletedQuests(playerId);
-                completedQuests = new ArrayList<>();
-                for (Identifier id : completedIds) {
-                    QuestTemplate template = questManager.getTemplate(id);
-                    if (template != null) {
-                        // 创建已完成的任务实例（用于显示）
-                        QuestInstance completedInstance = new QuestInstance(template, playerId);
-                        completedQuests.add(completedInstance);
-                    }
+            // 从缓存获取活跃任务
+            List<QuestSyncPayload.QuestData> cachedActive = QuestTrackerCache.getActiveQuests();
+            activeQuests = new ArrayList<>();
+            
+            for (QuestSyncPayload.QuestData data : cachedActive) {
+                QuestTemplate template = questManager.getTemplate(data.questId());
+                if (template != null) {
+                    // 从缓存数据重建任务实例
+                    QuestInstance instance = new QuestInstance(template, 
+                        client.player != null ? client.player.getUuid() : UUID.randomUUID());
+                    activeQuests.add(instance);
                 }
-                
-                FactorCraftMod.LOGGER.debug("加载任务数据：{} 个活跃，{} 个已完成", 
-                    activeQuests.size(), completedQuests.size());
             }
+            
+            // 从缓存获取已完成任务
+            Set<Identifier> completedIds = QuestTrackerCache.getCompletedQuests();
+            completedQuests = new ArrayList<>();
+            for (Identifier id : completedIds) {
+                QuestTemplate template = questManager.getTemplate(id);
+                if (template != null) {
+                    QuestInstance completedInstance = new QuestInstance(template, 
+                        client.player != null ? client.player.getUuid() : UUID.randomUUID());
+                    completedQuests.add(completedInstance);
+                }
+            }
+            
+            FactorCraftMod.LOGGER.debug("加载任务数据（服务端同步）：{} 个活跃，{} 个已完成", 
+                activeQuests.size(), completedQuests.size());
         } catch (Exception e) {
             FactorCraftMod.LOGGER.warn("无法从服务端同步任务数据，使用空列表", e);
             activeQuests = new ArrayList<>();
