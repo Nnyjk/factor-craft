@@ -2,18 +2,19 @@
 
 > 审查时间：2026-03-17 (更新)  
 > 审查 Agent: fc-review  
-> 审查范围：开放 PR #79, #80, #82, #85, #95, #96, #97, #110, #116
+> 审查范围：开放 PR #79, #80, #82, #85, #95, #96, #97, #110, #116, #137
 
 ---
 
 ## 📋 审查概要
 
 ### 开放 PR 状态
-**9 个开放 PR** - 均已添加审查意见，全部 ✅ 通过
+**10 个开放 PR** - 均已添加审查意见，全部 ✅ 通过
 
 #### 原有 PR (已完成审查)
 | PR | 标题 | 分支 | 状态 | 审查评论 |
 |----|------|------|------|----------|
+| **#137** | feat(technology): 扩展机器配方 - 55 个提取/合成/消耗/培育配方 | `feat/recipe-system-datapack` | ✅ 通过 | [评论](https://github.com/Nnyjk/factor-craft/pull/137#issuecomment-4073005649) |
 | **#116** | feat(quest): 实现任务数据服务端同步 | `feat/quest-server-sync` | ✅ 通过 | [评论](https://github.com/Nnyjk/factor-craft/pull/116#issuecomment-4072141491) |
 | **#110** | feat(quest): 实现任务奖励发放机制与客户端通知 | `feat/quest-reward-mechanism` | ✅ 通过 | [评论](https://github.com/Nnyjk/factor-craft/pull/110#issuecomment-4071970120) |
 | **#97** | fix(technology): 实现 SynthesizerCoreBlockEntity 产出物品逻辑 | `fix/synthesizer-core-output` | ✅ 通过 | [评论](https://github.com/Nnyjk/factor-craft/pull/97#issuecomment-4071356072) |
@@ -47,6 +48,46 @@ HEAD_SHA: b743b25 (当前 HEAD - 数据驱动配方系统)
 ---
 
 ## 🔍 PR 详细审查
+
+### PR #137: 扩展机器配方 - 55 个提取/合成/消耗/培育配方
+
+**改动文件 (75 个):**
+- Java 代码 (26 个文件):
+  - `RecipeLoader.java` (+261/-0) - JSON 配方加载器
+  - `RecipeRegistry.java` (+89/-0) - 配方注册表
+  - `FactorFusionRecipeData.java` (+79/-0) - Factor 融合配方数据
+  - `TraitInfusionRecipeData.java` (+95/-0) - 特性注入配方数据
+  - 机器动画系统 (8 个渲染器文件)
+  - 粒子效果系统 (3 个文件)
+  - 任务同步系统 (4 个文件)
+- 文档 (4 个文件):
+  - `docs/RECIPE_SYSTEM.md` (+254/-0) - 配方系统文档
+  - `docs/MACHINE_ANIMATION.md` (+95/-0) - 机器动画文档
+  - `CODE_REVIEW.md` (+123/-0)
+  - `CODE_REVIEW_REPORT.md` (+149/-24)
+- 配方 JSON (55 个文件):
+  - `extractor/*.json` (15 个) - 提取器配方
+  - `synthesizer/*.json` (10 个) - 合成器配方
+  - `consumer/*.json` (10 个) - 消耗器配方
+  - `cultivator/*.json` (15 个) - 培育器配方
+
+**审查意见:**
+✅ **通过** - 配方系统完整，文档详尽
+
+**优点:**
+1. 完整的配方数据驱动架构（RecipeLoader + RecipeRegistry + RecipeData）
+2. 支持 datapack 热重载（Fabric Resource API）
+3. 55 个配方覆盖所有机器类型，平衡合理
+4. JSON 格式统一，易于维护和扩展
+5. 文档完善（255 行 RECIPE_SYSTEM.md）
+6. 配方分类清晰（按类型分目录）
+
+**改进建议:**
+- 添加配方验证逻辑（Factor 成本、输出物品、合成时间）
+- 待测试 REI/配方书显示是否正常
+- 考虑为常用配方添加缓存（可选优化）
+
+---
 
 ### PR #88: BreederCoreBlockEntity 完整产出逻辑
 
