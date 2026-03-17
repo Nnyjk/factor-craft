@@ -27,7 +27,7 @@
 ### 审查时间线
 ```
 BASE_SHA: 6d326b5 (feat/ui-screen-handlers 合并前)
-HEAD_SHA: 033b1cd (当前 HEAD - 实现 Factor 电池基础框架)
+HEAD_SHA: c35730a (当前 HEAD - 实现 Factor 汇节点网络接收和机器输出)
 ```
 
 ### 审查结论
@@ -558,11 +558,9 @@ PR 合并后需清理以下已实现功能的 TODO 注释：
 
 **TODO 清理进度:** 9/9 (100%) ✅
 
-**当前剩余 TODO (5 个):**
+**当前剩余 TODO (3 个):**
 - `FactorAltarGenerator.java:11` - 待清理（PR #80 已实现）
 - `FactorOreGenerator.java:15` - 待清理（PR #80 已实现）
-- `FactorBatteryItem.java:69` - 实现从相邻机器抽取 Factor (新功能 TODO)
-- `FactorBatteryItem.java:75` - 实现向相邻机器注入 Factor (新功能 TODO)
 - `TraitEffectApplier.java:169` - 集成 Factor 浓度系统 (新功能 TODO)
 
 ---
