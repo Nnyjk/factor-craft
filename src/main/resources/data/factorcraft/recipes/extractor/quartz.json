@@ -1,0 +1,11 @@
+{
+  "type": "factorcraft:extractor",
+  "group": "basic_extraction",
+  "input": {
+    "item": "minecraft:quartz"
+  },
+  "input_count": 1,
+  "output_factor": 90.0,
+  "extraction_time": 350,
+  "category": "extraction"
+}

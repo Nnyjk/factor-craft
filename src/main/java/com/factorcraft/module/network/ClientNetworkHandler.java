@@ -1,5 +1,6 @@
 package com.factorcraft.module.network;
 
+import com.factorcraft.module.quest.ui.QuestTrackerCache;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.text.Text;
 
@@ -31,6 +32,17 @@ public class ClientNetworkHandler {
                 context.player().sendMessage(
                     Text.literal("🎁 任务奖励：").append(rewardText),
                     false
+                );
+            });
+        });
+        
+        // 任务数据同步
+        ClientPlayNetworking.registerGlobalReceiver(QuestSyncPayload.ID, (payload, context) -> {
+            context.client().execute(() -> {
+                // 更新客户端任务缓存
+                QuestTrackerCache.update(
+                    payload.activeQuests(),
+                    payload.completedQuests()
                 );
             });
         });

@@ -1,0 +1,11 @@
+{
+  "type": "factorcraft:consumer",
+  "group": "emergency_power",
+  "input": {
+    "item": "minecraft:ghast_tear"
+  },
+  "input_count": 1,
+  "output_factor": 450.0,
+  "conversion_time": 280,
+  "category": "emergency"
+}

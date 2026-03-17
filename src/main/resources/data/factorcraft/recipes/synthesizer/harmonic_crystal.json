@@ -1,0 +1,15 @@
+{
+  "type": "factorcraft:factor_fusion",
+  "group": "special_synthesis",
+  "input": {
+    "item": "factorcraft:resonance_crystal"
+  },
+  "input_count": 8,
+  "output": {
+    "item": "factorcraft:harmonic_crystal",
+    "count": 1
+  },
+  "factor_cost": 5000.0,
+  "craft_time": 2000,
+  "category": "special"
+}

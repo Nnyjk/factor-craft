@@ -1,0 +1,11 @@
+{
+  "type": "factorcraft:extractor",
+  "group": "basic_extraction",
+  "input": {
+    "item": "minecraft:redstone"
+  },
+  "input_count": 1,
+  "output_factor": 80.0,
+  "extraction_time": 300,
+  "category": "extraction"
+}

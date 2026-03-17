@@ -1,0 +1,15 @@
+{
+  "type": "factorcraft:factor_fusion",
+  "group": "special_synthesis",
+  "input": {
+    "item": "minecraft:blaze_powder"
+  },
+  "input_count": 8,
+  "output": {
+    "item": "factorcraft:flame_essence",
+    "count": 1
+  },
+  "factor_cost": 3000.0,
+  "craft_time": 1500,
+  "category": "special"
+}

@@ -1,0 +1,15 @@
+{
+  "type": "factorcraft:factor_fusion",
+  "group": "special_synthesis",
+  "input": {
+    "item": "minecraft:ender_pearl"
+  },
+  "input_count": 4,
+  "output": {
+    "item": "factorcraft:void_essence",
+    "count": 1
+  },
+  "factor_cost": 10000.0,
+  "craft_time": 3000,
+  "category": "special"
+}

@@ -1,0 +1,19 @@
+{
+  "type": "factorcraft:trait_infusion",
+  "group": "advanced_trait",
+  "input": {
+    "item": "minecraft:apple"
+  },
+  "input_count": 1,
+  "trait_item": {
+    "item": "factorcraft:resonance_crystal"
+  },
+  "output": {
+    "item": "factorcraft:resonant_apple",
+    "count": 1
+  },
+  "factor_cost": 1000.0,
+  "craft_time": 800,
+  "success_rate": 0.25,
+  "category": "trait"
+}

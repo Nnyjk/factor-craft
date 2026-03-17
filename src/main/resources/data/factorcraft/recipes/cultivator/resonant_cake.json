@@ -1,0 +1,19 @@
+{
+  "type": "factorcraft:trait_infusion",
+  "group": "advanced_trait",
+  "input": {
+    "item": "minecraft:cake"
+  },
+  "input_count": 1,
+  "trait_item": {
+    "item": "factorcraft:resonance_crystal"
+  },
+  "output": {
+    "item": "factorcraft:resonant_cake",
+    "count": 1
+  },
+  "factor_cost": 1500.0,
+  "craft_time": 1000,
+  "success_rate": 0.2,
+  "category": "trait"
+}

@@ -1,0 +1,11 @@
+{
+  "type": "factorcraft:extractor",
+  "group": "basic_extraction",
+  "input": {
+    "item": "minecraft:gold_ingot"
+  },
+  "input_count": 1,
+  "output_factor": 85.0,
+  "extraction_time": 350,
+  "category": "extraction"
+}
