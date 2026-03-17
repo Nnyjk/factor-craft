@@ -1,5 +1,6 @@
 package com.factorcraft.module.network.item;
 
+import com.factorcraft.module.factor.FactorService;
 import com.factorcraft.module.factor.TideStatus;
 import com.factorcraft.module.network.FactorNetworkManager;
 import net.minecraft.entity.player.PlayerEntity;
@@ -70,10 +71,19 @@ public class FactorScannerItem extends Item {
     
     /**
      * 获取 Factor 浓度
+     * 
+     * @param world 世界
+     * @param pos 位置
+     * @return Factor 浓度 (0.0-1.0)
      */
     private double getConcentration(ServerWorld world, BlockPos pos) {
-        // TODO: 集成 Factor 浓度系统
-        return Math.random();
+        // 使用 FactorService 获取世界 Factor 浓度
+        // 注意：当前实现基于世界维度，未来可扩展为区块级浓度
+        FactorService service = FactorService.getInstance();
+        double concentration = service.getFactor(world);
+        
+        // 确保浓度在有效范围内 (0.0-1.0)
+        return Math.max(0.0, Math.min(1.0, concentration));
     }
     
     /**
@@ -117,17 +127,41 @@ public class FactorScannerItem extends Item {
     
     /**
      * 获取趋势
+     * 
+     * 简化实现：基于浓度值判断趋势
+     * 完整实现需要 Data Component 系统支持
+     * 
+     * @param stack 扫描仪物品
+     * @param currentConcentration 当前浓度
+     * @return 趋势描述
      */
     private String getTrend(ItemStack stack, double currentConcentration) {
-        // TODO: 实现趋势检测
-        return "稳定";
+        // TODO: 使用 Data Component 系统实现历史数据缓存
+        // 当前简化实现：基于浓度范围给出趋势建议
+        if (currentConcentration < 0.3) {
+            return "低浓度区";
+        } else if (currentConcentration < 0.5) {
+            return "中等浓度";
+        } else if (currentConcentration < 0.7) {
+            return "良好浓度";
+        } else if (currentConcentration < 0.9) {
+            return "高浓度区";
+        } else {
+            return "极高浓度";
+        }
     }
     
     /**
      * 更新 NBT 缓存
+     * 
+     * TODO: 使用 Data Component 系统实现
+     * 
+     * @param stack 扫描仪物品
+     * @param concentration 当前浓度
      */
     private void updateNbtCache(ItemStack stack, double concentration) {
-        // TODO: 实现 NBT 缓存
+        // TODO: 实现 Data Component 缓存
+        // 需要创建自定义 DataComponentType 用于存储扫描历史
     }
     
     /**
