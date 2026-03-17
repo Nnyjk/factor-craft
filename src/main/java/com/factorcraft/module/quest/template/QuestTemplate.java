@@ -5,6 +5,7 @@ import com.factorcraft.module.quest.reward.QuestReward;
 
 import net.minecraft.util.Identifier;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -22,11 +23,20 @@ public class QuestTemplate {
     private final List<QuestCondition> conditions;
     private final List<QuestReward> rewards;
     private final List<Identifier> nextQuests;
+    private final List<Identifier> advancementIds;
     
     public QuestTemplate(Identifier id, String category, boolean repeatable, int priority,
                          String title, String description, Identifier icon,
                          List<QuestCondition> conditions, List<QuestReward> rewards,
                          List<Identifier> nextQuests) {
+        this(id, category, repeatable, priority, title, description, icon,
+             conditions, rewards, nextQuests, Collections.emptyList());
+    }
+    
+    public QuestTemplate(Identifier id, String category, boolean repeatable, int priority,
+                         String title, String description, Identifier icon,
+                         List<QuestCondition> conditions, List<QuestReward> rewards,
+                         List<Identifier> nextQuests, List<Identifier> advancementIds) {
         this.id = id;
         this.category = category;
         this.repeatable = repeatable;
@@ -37,6 +47,7 @@ public class QuestTemplate {
         this.conditions = conditions;
         this.rewards = rewards;
         this.nextQuests = nextQuests;
+        this.advancementIds = advancementIds != null ? advancementIds : Collections.emptyList();
     }
     
     public Identifier getId() { return id; }
@@ -49,4 +60,5 @@ public class QuestTemplate {
     public List<QuestCondition> getConditions() { return conditions; }
     public List<QuestReward> getRewards() { return rewards; }
     public List<Identifier> getNextQuests() { return nextQuests; }
+    public List<Identifier> getAdvancementIds() { return advancementIds; }
 }

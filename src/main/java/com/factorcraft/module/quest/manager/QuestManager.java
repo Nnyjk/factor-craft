@@ -1,12 +1,14 @@
 package com.factorcraft.module.quest.manager;
 
 import com.factorcraft.FactorCraftMod;
+import com.factorcraft.module.advancement.AdvancementManager;
 import com.factorcraft.module.network.QuestRewardPayload;
 import com.factorcraft.module.quest.template.QuestTemplate;
 import com.factorcraft.module.quest.instance.QuestInstance;
 
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 
 import java.util.*;
@@ -93,11 +95,20 @@ public class QuestManager {
                 reward.give(player);
                 // 发送客户端通知
                 QuestRewardPayload.sendToPlayer(
-                    (net.minecraft.server.network.ServerPlayerEntity) player,
+                    (ServerPlayerEntity) player,
                     reward.getType().name(),
                     reward.getDescription()
                 );
             });
+            
+            // 触发关联成就
+            if (player instanceof ServerPlayerEntity serverPlayer) {
+                template.getAdvancementIds().forEach(advancementId -> {
+                    AdvancementManager.grantAdvancement(serverPlayer, advancementId);
+                    FactorCraftMod.LOGGER.debug("[FactorCraft:Quest] 触发成就：{} for player {}", 
+                        advancementId, player.getName().getString());
+                });
+            }
         }
         
         FactorCraftMod.LOGGER.info("[FactorCraft:Quest] 玩家 {} 完成任务：{}", 
