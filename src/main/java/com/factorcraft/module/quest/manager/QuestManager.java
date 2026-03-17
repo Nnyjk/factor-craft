@@ -3,6 +3,7 @@ package com.factorcraft.module.quest.manager;
 import com.factorcraft.FactorCraftMod;
 import com.factorcraft.module.advancement.AdvancementManager;
 import com.factorcraft.module.network.QuestRewardPayload;
+import com.factorcraft.module.network.QuestSyncPayload;
 import com.factorcraft.module.quest.template.QuestTemplate;
 import com.factorcraft.module.quest.instance.QuestInstance;
 
@@ -67,6 +68,12 @@ public class QuestManager {
         
         FactorCraftMod.LOGGER.info("[FactorCraft:Quest] 玩家 {} 开始任务：{}", 
             player.getName().getString(), questId);
+        
+        // 同步到客户端
+        if (player instanceof ServerPlayerEntity serverPlayer) {
+            syncToClient(serverPlayer);
+        }
+        
         return true;
     }
     
@@ -74,6 +81,9 @@ public class QuestManager {
         QuestInstance instance = getActiveQuest(player.getUuid(), questId);
         if (instance != null && instance.isCompleted()) {
             completeQuest(player, questId);
+        } else if (instance != null && player instanceof ServerPlayerEntity serverPlayer) {
+            // 进度更新时也同步（可选，避免过度同步）
+            // syncToClient(serverPlayer);
         }
     }
     
@@ -113,6 +123,11 @@ public class QuestManager {
         
         FactorCraftMod.LOGGER.info("[FactorCraft:Quest] 玩家 {} 完成任务：{}", 
             player.getName().getString(), questId);
+        
+        // 同步到客户端
+        if (player instanceof ServerPlayerEntity serverPlayer) {
+            syncToClient(serverPlayer);
+        }
     }
     
     public boolean isQuestCompleted(UUID playerId, Identifier questId) {
@@ -138,5 +153,18 @@ public class QuestManager {
     public float getProgress(PlayerEntity player, Identifier questId) {
         QuestInstance instance = getActiveQuest(player.getUuid(), questId);
         return instance != null ? instance.getOverallProgress() : 0.0f;
+    }
+    
+    /**
+     * 同步任务数据到客户端
+     * 在任务状态变化时调用
+     */
+    public void syncToClient(ServerPlayerEntity player) {
+        List<QuestInstance> activeQuests = getActiveQuests(player.getUuid());
+        Set<Identifier> completedQuests = getCompletedQuests(player.getUuid());
+        
+        QuestSyncPayload.sendToPlayer(player, activeQuests, completedQuests);
+        FactorCraftMod.LOGGER.debug("[FactorCraft:Quest] 已同步任务数据到玩家 {}: {} 个活跃，{} 个已完成",
+            player.getName().getString(), activeQuests.size(), completedQuests.size());
     }
 }

@@ -31,9 +31,14 @@ public class NetworkPackets {
             QuestRewardPayload.CODEC
         );
         
+        PayloadTypeRegistry.playS2C().register(
+            QuestSyncPayload.ID,
+            QuestSyncPayload.CODEC
+        );
+        
         // 如果有客户端 -> 服务器的 payload，使用 playC2S()
         // PayloadTypeRegistry.playC2S().register(...);
         
-        System.out.println("[NetworkPackets] 已注册 3 个网络包类型");
+        System.out.println("[NetworkPackets] 已注册 4 个网络包类型");
     }
 }
