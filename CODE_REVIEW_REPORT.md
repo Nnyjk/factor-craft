@@ -2,20 +2,18 @@
 
 > 审查时间：2026-03-17 (更新)  
 > 审查 Agent: fc-review  
-> 审查范围：开放 PR #79, #80, #82, #85, #95, #96, #97, #110, #116, #137, #143
+> 审查范围：开放 PR #79, #80, #82, #85, #95, #96, #97, #110, #116
 
 ---
 
 ## 📋 审查概要
 
 ### 开放 PR 状态
-**11 个开放 PR** - 均已添加审查意见，全部 ✅ 通过
+**9 个开放 PR** - 均已添加审查意见，全部 ✅ 通过
 
 #### 原有 PR (已完成审查)
 | PR | 标题 | 分支 | 状态 | 审查评论 |
 |----|------|------|------|----------|
-| **#143** | feat(quest): 实现 66 个任务内容数据 - 教程/收集/建造/探索/挑战/任务链 | `feat/quest-content-datapack` | ✅ 通过 | [评论](https://github.com/Nnyjk/factor-craft/pull/143#issuecomment-4073291572) |
-| **#137** | feat(technology): 扩展机器配方 - 55 个提取/合成/消耗/培育配方 | `feat/recipe-system-datapack` | ✅ 通过 | [评论](https://github.com/Nnyjk/factor-craft/pull/137#issuecomment-4073005649) |
 | **#116** | feat(quest): 实现任务数据服务端同步 | `feat/quest-server-sync` | ✅ 通过 | [评论](https://github.com/Nnyjk/factor-craft/pull/116#issuecomment-4072141491) |
 | **#110** | feat(quest): 实现任务奖励发放机制与客户端通知 | `feat/quest-reward-mechanism` | ✅ 通过 | [评论](https://github.com/Nnyjk/factor-craft/pull/110#issuecomment-4071970120) |
 | **#97** | fix(technology): 实现 SynthesizerCoreBlockEntity 产出物品逻辑 | `fix/synthesizer-core-output` | ✅ 通过 | [评论](https://github.com/Nnyjk/factor-craft/pull/97#issuecomment-4071356072) |
@@ -29,14 +27,14 @@
 ### 审查时间线
 ```
 BASE_SHA: 6d326b5 (feat/ui-screen-handlers 合并前)
-HEAD_SHA: b743b25 (当前 HEAD - 数据驱动配方系统)
+HEAD_SHA: 65f8a5b (当前 HEAD - TideStatus 游戏效果)
 ```
 
 ### 审查结论
 **全部建议合并** - 代码质量优秀，无严重问题，无需添加 `status:blocked` 标签
 
 ### PR 合并状态
-**已合并 PR (8 个):**
+**已合并 PR (10 个):**
 - #101: ConsumerCoreBlockEntity Factor 输出到区块 ✅
 - #102: OptimizedDiffusion 高性能扩散算法接入 ✅
 - #111: 任务成就关联支持 ✅
@@ -45,6 +43,8 @@ HEAD_SHA: b743b25 (当前 HEAD - 数据驱动配方系统)
 - #114: 机器工作动画系统基础框架 ✅
 - #115: Factor 粒子效果系统基础框架 ✅
 - #117: 数据驱动配方系统 - JSON 配方支持 ✅
+- #137: 扩展机器配方 - 55 个提取/合成/消耗/培育配方 ✅
+- #143: 实现 66 个任务内容数据 - 教程/收集/建造/探索/挑战/任务链 ✅
 
 ---
 
@@ -525,7 +525,10 @@ HEAD_SHA: b743b25 (当前 HEAD - 数据驱动配方系统)
 **新增 PR #95, #96, #97** - 专门修复之前审查中发现的 TODO 问题  
 **新增 PR #101, #102** - ConsumerCore Factor 输出 + OptimizedDiffusion 性能优化  
 **新增 PR #116** - 任务数据服务端同步  
-**新增 PR #117** - 数据驱动配方系统
+**新增 PR #117** - 数据驱动配方系统  
+**新增 PR #137** - 扩展机器配方（55 个）  
+**新增 PR #143** - 66 个任务内容数据  
+**新增 PR #145** - TideStatus 游戏效果实现
 
 | 文件 | 行号 | 描述 | 优先级 | 状态 | 关联 PR |
 |------|------|------|--------|------|---------|
@@ -554,6 +557,10 @@ PR 合并后需清理以下已实现功能的 TODO 注释：
 **剩余待实现 TODO:** 无
 
 **TODO 清理进度:** 9/9 (100%) ✅
+
+**当前剩余 TODO (2 个):**
+- `FactorAltarGenerator.java:11` - 待清理（PR #80 已实现）
+- `FactorOreGenerator.java:15` - 待清理（PR #80 已实现）
 
 ---
 
