@@ -1,7 +1,10 @@
 package com.factorcraft.module.creature.mutation;
 
 import com.factorcraft.FactorCraftMod;
+import com.factorcraft.module.factor.FactorService;
 import com.factorcraft.module.factor.TideStatus;
+import com.factorcraft.module.vfx.particle.FactorParticleTypes;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttributeInstance;
 import net.minecraft.entity.attribute.EntityAttributes;
@@ -20,14 +23,27 @@ import java.util.*;
  */
 public class MutationManager {
     
+    /** Factor 服务 */
+    private final FactorService factorService;
+    
     /** 变异状态缓存 */
     private final Map<UUID, MutatedCreatureState> creatureStates = new HashMap<>();
     
     /** 清理间隔（ticks） */
     private static final int CLEANUP_INTERVAL = 100;
     
+    /** 粒子生成间隔（ticks） */
+    private static final int PARTICLE_INTERVAL = 20;
+    
     /** 上次清理时间 */
     private long lastCleanupTime = 0;
+    
+    /** 上次粒子生成时间 */
+    private long lastParticleTime = 0;
+    
+    public MutationManager() {
+        this.factorService = FactorService.getInstance();
+    }
     
     /**
      * Tick 更新
@@ -39,6 +55,12 @@ public class MutationManager {
         if (currentTime - lastCleanupTime > CLEANUP_INTERVAL) {
             cleanupExpired(world);
             lastCleanupTime = currentTime;
+        }
+        
+        // 定期生成变异粒子效果
+        if (currentTime - lastParticleTime > PARTICLE_INTERVAL) {
+            spawnMutationParticles(world);
+            lastParticleTime = currentTime;
         }
         
         // 更新所有变异生物的状态
@@ -187,10 +209,68 @@ public class MutationManager {
      * 获取世界 Factor 浓度
      */
     private double getWorldConcentration(ServerWorld world, net.minecraft.util.math.Vec3i pos) {
-        // TODO: 集成 FactorService 获取真实浓度
-        // 当前使用简化实现：基于生物位置和维度
-        // 实际应该查询世界的 Factor 浓度数据
-        return world.getRandom().nextDouble(); // 返回 0.0-1.0
+        // 使用 FactorService 获取真实浓度
+        try {
+            return factorService.getFactor(world);
+        } catch (Exception e) {
+            FactorCraftMod.LOGGER.warn("Failed to get factor concentration", e);
+            return 0.5; // 默认稳定浓度
+        }
+    }
+    
+    /**
+     * 生成变异生物粒子效果
+     */
+    private void spawnMutationParticles(ServerWorld world) {
+        // 简化实现：遍历世界中的所有生物
+        for (MutatedCreatureState state : creatureStates.values()) {
+            if (!state.hasMutations()) {
+                continue;
+            }
+            
+            // 尝试通过 UUID 获取生物
+            Entity entity = world.getEntity(state.getCreatureId());
+            if (entity instanceof LivingEntity creature) {
+                // 为每个变异生成粒子
+                for (Identifier mutationId : state.getActiveMutations()) {
+                    MutationRegistry.get(mutationId).ifPresent(mutation -> {
+                        spawnCreatureParticles(world, creature, mutation);
+                    });
+                }
+            }
+        }
+    }
+    
+    /**
+     * 为单个生物生成粒子
+     */
+    private void spawnCreatureParticles(ServerWorld world, LivingEntity creature, MutationEffect mutation) {
+        if (world.isClient) {
+            return;
+        }
+        
+        Random random = world.getRandom();
+        Vec3d pos = creature.getPos();
+        
+        // 生成环绕粒子
+        int particleCount = 3;
+        for (int i = 0; i < particleCount; i++) {
+            double angle = (i / (double) particleCount) * Math.PI * 2 + random.nextDouble() * 0.5;
+            double radius = 0.5 + random.nextDouble() * 0.3;
+            double offsetX = Math.cos(angle) * radius;
+            double offsetZ = Math.sin(angle) * radius;
+            double offsetY = 0.5 + random.nextDouble() * 1.0;
+            
+            Vec3d particlePos = pos.add(offsetX, offsetY, offsetZ);
+            
+            // 使用 Factor 粒子效果
+            world.spawnParticles(
+                FactorParticleTypes.EXTRACTION,
+                particlePos.x, particlePos.y, particlePos.z,
+                1,
+                offsetX * 0.02, 0.01, offsetZ * 0.02, 0.0
+            );
+        }
     }
     
     /**
