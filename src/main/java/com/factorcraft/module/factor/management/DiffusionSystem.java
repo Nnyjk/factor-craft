@@ -10,10 +10,11 @@ import org.slf4j.LoggerFactory;
  * Factor 扩散系统
  * 处理区块之间的 Factor 浓度扩散
  * 
- * TODO: 需要接入世界 tick 循环
- * 接入方式：在 ServerTickEvents 中调用 processAllDiffusion()
+ * 已在 FactorSystemModule 中接入世界 tick 循环
+ * 可通过 USE_OPTIMIZED_DIFFUSION 配置切换到 OptimizedDiffusion
  * 
  * @see com.factorcraft.performance.OptimizedDiffusion 高性能版本
+ * @see com.factorcraft.module.factor.FactorSystemModule
  */
 public class DiffusionSystem {
     private static final Logger LOGGER = LoggerFactory.getLogger(DiffusionSystem.class);
