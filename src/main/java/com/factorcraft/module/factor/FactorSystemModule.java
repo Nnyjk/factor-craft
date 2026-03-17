@@ -2,6 +2,7 @@ package com.factorcraft.module.factor;
 
 import com.factorcraft.FactorCraftMod;
 import com.factorcraft.module.FactorCraftModule;
+import com.factorcraft.module.cycle.network.FactorNetworkManager;
 import com.factorcraft.module.event.FactorTierChangeEvent;
 import com.factorcraft.module.event.FactorTideEvent;
 import com.factorcraft.module.event.bus.EventPriority;
@@ -59,6 +60,9 @@ public final class FactorSystemModule implements FactorCraftModule {
                 
                 // 潮汐效果管理器 tick（玩家效果、机器效率修正等）
                 TideEffectManager.getInstance().tick(world);
+                
+                // Factor 网络传输 tick
+                FactorNetworkManager.getInstance().tick(world);
                 
                 // 区块扩散处理
                 long time = world.getTime();
