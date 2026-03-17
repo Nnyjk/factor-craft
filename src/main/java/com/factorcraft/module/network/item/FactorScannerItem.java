@@ -1,5 +1,7 @@
 package com.factorcraft.module.network.item;
 
+import com.factorcraft.component.FactorCraftDataComponents;
+import com.factorcraft.component.type.ScanHistory;
 import com.factorcraft.module.factor.FactorService;
 import com.factorcraft.module.factor.TideStatus;
 import com.factorcraft.module.network.FactorNetworkManager;
@@ -128,40 +130,33 @@ public class FactorScannerItem extends Item {
     /**
      * 获取趋势
      * 
-     * 简化实现：基于浓度值判断趋势
-     * 完整实现需要 Data Component 系统支持
+     * 使用 Data Component 系统读取扫描历史，计算趋势
      * 
      * @param stack 扫描仪物品
      * @param currentConcentration 当前浓度
      * @return 趋势描述
      */
     private String getTrend(ItemStack stack, double currentConcentration) {
-        // TODO: 使用 Data Component 系统实现历史数据缓存
-        // 当前简化实现：基于浓度范围给出趋势建议
-        if (currentConcentration < 0.3) {
-            return "低浓度区";
-        } else if (currentConcentration < 0.5) {
-            return "中等浓度";
-        } else if (currentConcentration < 0.7) {
-            return "良好浓度";
-        } else if (currentConcentration < 0.9) {
-            return "高浓度区";
-        } else {
-            return "极高浓度";
+        ScanHistory history = stack.get(FactorCraftDataComponents.SCAN_HISTORY);
+        if (history == null) {
+            history = ScanHistory.empty();
         }
+        return history.getTrend(currentConcentration);
     }
     
     /**
-     * 更新 NBT 缓存
-     * 
-     * TODO: 使用 Data Component 系统实现
+     * 更新扫描历史 Data Component
      * 
      * @param stack 扫描仪物品
      * @param concentration 当前浓度
      */
     private void updateNbtCache(ItemStack stack, double concentration) {
-        // TODO: 实现 Data Component 缓存
-        // 需要创建自定义 DataComponentType 用于存储扫描历史
+        ScanHistory history = stack.get(FactorCraftDataComponents.SCAN_HISTORY);
+        if (history == null) {
+            history = ScanHistory.empty();
+        }
+        ScanHistory updatedHistory = history.addEntry(concentration);
+        stack.set(FactorCraftDataComponents.SCAN_HISTORY, updatedHistory);
     }
     
     /**
@@ -175,7 +170,13 @@ public class FactorScannerItem extends Item {
         player.sendMessage(Text.literal("  建议：" + recommendation).formatted(Formatting.GRAY), false);
         
         if (tier == ScannerTier.MASTER) {
-            player.sendMessage(Text.literal("  历史记录：[功能开发中]").formatted(Formatting.GRAY), false);
+            ItemStack scannerStack = player.getMainHandStack();
+            ScanHistory history = scannerStack.get(FactorCraftDataComponents.SCAN_HISTORY);
+            if (history != null && history.getScanCount() > 0) {
+                player.sendMessage(Text.literal("  历史记录：" + history.getScanCount() + " 次扫描").formatted(Formatting.GRAY), false);
+            } else {
+                player.sendMessage(Text.literal("  历史记录：暂无数据").formatted(Formatting.GRAY), false);
+            }
         }
     }
     

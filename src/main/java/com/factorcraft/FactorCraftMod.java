@@ -34,6 +34,10 @@ public class FactorCraftMod implements ModInitializer {
         // 注册配置同步网络包
         ConfigSyncHandler.register();
         
+        // 注册 Data Components
+        com.factorcraft.component.FactorCraftDataComponents.register();
+        LOGGER.info("[FactorCraft] Data Components 注册完成");
+        
         // 使用 ModuleBootstrap 初始化所有模块
         ModuleBootstrap.initializeDefaults();
         
