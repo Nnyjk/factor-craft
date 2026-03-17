@@ -1,5 +1,8 @@
 package com.factorcraft.module.cycle.block.entity;
 
+import com.factorcraft.api.IFactorContainer;
+import com.factorcraft.api.IFactorNetworkNode;
+import com.factorcraft.module.cycle.network.FactorNetworkManager;
 import com.factorcraft.module.factor.FactorService;
 import com.factorcraft.module.factor.FactorTier;
 import net.minecraft.block.BlockState;
@@ -13,25 +16,30 @@ import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
+
+import java.util.UUID;
 
 /**
  * Factor 吸收结构 BlockEntity
  * 
  * 功能：
+ * - 从网络接收 Factor
  * - 消耗 Factor 生产材料
  * - 根据维度基准值计算消耗倍率
  * - 支持环境加成（Factor 窗口、ΔF）
  * 
  * 设计文档：docs/17_factor_cycle_structures.md
  */
-public class FactorSinkBlockEntity extends BlockEntity {
+public class FactorSinkBlockEntity extends BlockEntity implements IFactorNetworkNode, IFactorContainer {
     
     // NBT 键
     private static final String NBT_FACTOR_STORED = "FactorStored";
     private static final String NBT_PROGRESS = "Progress";
     private static final String NBT_TIER = "Tier";
     private static final String NBT_RECIPE_INDEX = "RecipeIndex";
+    private static final String NBT_NODE_ID = "NodeId";
     
     // 配置参数
     private int factorStored = 0;
@@ -42,11 +50,18 @@ public class FactorSinkBlockEntity extends BlockEntity {
     // 物品栈 (输入槽 + 输出槽)
     private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(2, ItemStack.EMPTY);
     
+    // 网络相关
+    private final String nodeId;
+    
     // 处理时间（ticks）
     private static final int PROCESSING_TIME = 200; // 10 秒
     
+    // 传输速率（每 tick）
+    private static final double[] TRANSFER_RATE_BY_TIER = {10.0, 25.0, 50.0, 100.0};
+    
     public FactorSinkBlockEntity(BlockPos pos, BlockState state) {
         super(CycleBlockEntities.FACTOR_SINK, pos, state);
+        this.nodeId = UUID.randomUUID().toString();
     }
     
     @Override
@@ -56,6 +71,7 @@ public class FactorSinkBlockEntity extends BlockEntity {
         nbt.putInt(NBT_PROGRESS, progress);
         nbt.putInt(NBT_TIER, tier.ordinal());
         nbt.putInt(NBT_RECIPE_INDEX, recipeIndex);
+        nbt.putString(NBT_NODE_ID, nodeId);
         Inventories.writeNbt(nbt, inventory, registryLookup);
     }
     
@@ -69,6 +85,14 @@ public class FactorSinkBlockEntity extends BlockEntity {
         Inventories.readNbt(nbt, inventory, registryLookup);
     }
     
+    @Override
+    public void markDirty() {
+        super.markDirty();
+        if (world != null) {
+            FactorNetworkManager.getInstance().registerNode(world, this);
+        }
+    }
+    
     /**
      * 每 tick 调用
      */
@@ -76,6 +100,9 @@ public class FactorSinkBlockEntity extends BlockEntity {
         if (world.isClient) {
             return;
         }
+        
+        // 注册到网络
+        FactorNetworkManager.getInstance().registerNode(world, entity);
         
         // 检查是否有足够的 Factor 和材料
         if (entity.canProcess()) {
@@ -241,15 +268,31 @@ public class FactorSinkBlockEntity extends BlockEntity {
     }
     
     /**
-     * 添加 Factor
+     * 添加 Factor（IFactorContainer 接口）
      */
-    public void addFactor(int amount) {
-        factorStored += amount;
+    @Override
+    public double addFactor(double amount) {
+        int oldStored = factorStored;
+        int maxStorage = (int) getMaxFactorStorage();
+        factorStored = Math.min(maxStorage, factorStored + (int) amount);
+        int actual = factorStored - oldStored;
         markDirty();
+        return actual;
     }
     
     /**
-     * 获取当前存储的 Factor
+     * 抽取 Factor（IFactorContainer 接口）
+     */
+    @Override
+    public double extractFactor(double amount) {
+        int actual = Math.min(factorStored, (int) amount);
+        factorStored -= actual;
+        markDirty();
+        return actual;
+    }
+    
+    /**
+     * 获取 Factor 存储量
      */
     public int getFactorStored() {
         return factorStored;
@@ -277,5 +320,63 @@ public class FactorSinkBlockEntity extends BlockEntity {
     @Override
     public NbtCompound toInitialChunkDataNbt(RegistryWrapper.WrapperLookup registryLookup) {
         return createNbt(registryLookup);
+    }
+    
+    // ==================== IFactorNetworkNode 实现 ====================
+    
+    @Override
+    public String getNodeId() {
+        return nodeId;
+    }
+    
+    @Override
+    public BlockPos getNodePos() {
+        return pos;
+    }
+    
+    @Override
+    public NodeType getNodeType() {
+        return NodeType.SINK;
+    }
+    
+    @Override
+    public double getFactorStorage() {
+        return factorStored;
+    }
+    
+    @Override
+    public double getMaxFactorStorage() {
+        return 50000.0; // 最大存储
+    }
+    
+    @Override
+    public double addFactor(double amount, String from) {
+        // 从网络接收 Factor
+        return addFactor(amount);
+    }
+    
+    @Override
+    public double extractFactor(double amount, String to) {
+        // 汇节点通常不向网络输出（只输出到机器）
+        return 0.0;
+    }
+    
+    @Override
+    public double getTransferRate() {
+        int tierLevel = tier.level();
+        if (tierLevel >= 0 && tierLevel < TRANSFER_RATE_BY_TIER.length) {
+            return TRANSFER_RATE_BY_TIER[tierLevel];
+        }
+        return TRANSFER_RATE_BY_TIER[0];
+    }
+    
+    @Override
+    public boolean canExtractFactor() {
+        return factorStored > 0;
+    }
+    
+    @Override
+    public boolean canReceiveFactor() {
+        return factorStored < getMaxFactorStorage();
     }
 }
