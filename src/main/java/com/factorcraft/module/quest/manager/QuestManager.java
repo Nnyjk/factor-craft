@@ -1,9 +1,11 @@
 package com.factorcraft.module.quest.manager;
 
 import com.factorcraft.FactorCraftMod;
+import com.factorcraft.module.network.QuestRewardPayload;
 import com.factorcraft.module.quest.template.QuestTemplate;
 import com.factorcraft.module.quest.instance.QuestInstance;
 
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Identifier;
 
@@ -86,7 +88,16 @@ public class QuestManager {
         
         QuestTemplate template = this.templates.get(questId);
         if (template != null) {
-            template.getRewards().forEach(reward -> reward.give(player));
+            // 发放奖励并发送通知
+            template.getRewards().forEach(reward -> {
+                reward.give(player);
+                // 发送客户端通知
+                QuestRewardPayload.sendToPlayer(
+                    (net.minecraft.server.network.ServerPlayerEntity) player,
+                    reward.getType().name(),
+                    reward.getDescription()
+                );
+            });
         }
         
         FactorCraftMod.LOGGER.info("[FactorCraft:Quest] 玩家 {} 完成任务：{}", 
