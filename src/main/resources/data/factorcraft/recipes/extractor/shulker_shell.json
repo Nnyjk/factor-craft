@@ -1,0 +1,11 @@
+{
+  "type": "factorcraft:extractor",
+  "group": "advanced_extraction",
+  "input": {
+    "item": "minecraft:shulker_shell"
+  },
+  "input_count": 1,
+  "output_factor": 250.0,
+  "extraction_time": 700,
+  "category": "extraction"
+}

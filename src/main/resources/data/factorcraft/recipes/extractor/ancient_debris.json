@@ -1,0 +1,11 @@
+{
+  "type": "factorcraft:extractor",
+  "group": "advanced_extraction",
+  "input": {
+    "item": "minecraft:ancient_debris"
+  },
+  "input_count": 1,
+  "output_factor": 350.0,
+  "extraction_time": 900,
+  "category": "extraction"
+}

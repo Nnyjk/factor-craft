@@ -1,0 +1,11 @@
+{
+  "type": "factorcraft:consumer",
+  "group": "emergency_power",
+  "input": {
+    "item": "minecraft:ender_pearl"
+  },
+  "input_count": 1,
+  "output_factor": 400.0,
+  "conversion_time": 250,
+  "category": "emergency"
+}

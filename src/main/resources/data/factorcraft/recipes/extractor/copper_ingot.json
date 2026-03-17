@@ -1,0 +1,11 @@
+{
+  "type": "factorcraft:extractor",
+  "group": "basic_extraction",
+  "input": {
+    "item": "minecraft:copper_ingot"
+  },
+  "input_count": 1,
+  "output_factor": 60.0,
+  "extraction_time": 280,
+  "category": "extraction"
+}

@@ -1,0 +1,11 @@
+{
+  "type": "factorcraft:extractor",
+  "group": "basic_extraction",
+  "input": {
+    "item": "minecraft:emerald"
+  },
+  "input_count": 1,
+  "output_factor": 150.0,
+  "extraction_time": 500,
+  "category": "extraction"
+}

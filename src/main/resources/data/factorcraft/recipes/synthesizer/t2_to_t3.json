@@ -1,0 +1,15 @@
+{
+  "type": "factorcraft:factor_fusion",
+  "group": "material_upgrade",
+  "input": {
+    "item": "factorcraft:shadow_steel_ingot"
+  },
+  "input_count": 128,
+  "output": {
+    "item": "factorcraft:stardust_ingot",
+    "count": 32
+  },
+  "factor_cost": 5000.0,
+  "craft_time": 2400,
+  "category": "material"
+}
