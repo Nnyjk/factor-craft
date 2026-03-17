@@ -27,7 +27,7 @@
 ### 审查时间线
 ```
 BASE_SHA: 6d326b5 (feat/ui-screen-handlers 合并前)
-HEAD_SHA: 030b6a7 (当前 HEAD - 完善特性效果应用器和配置)
+HEAD_SHA: 217f35f (当前 HEAD - 实现 Factor 扫描仪核心功能)
 ```
 
 ### 审查结论
@@ -561,9 +561,9 @@ PR 合并后需清理以下已实现功能的 TODO 注释：
 **当前剩余 TODO (6 个):**
 - `FactorAltarGenerator.java:11` - 待清理（PR #80 已实现）
 - `FactorOreGenerator.java:15` - 待清理（PR #80 已实现）
-- `FactorScannerItem.java:75` - 集成 Factor 浓度系统 (新功能 TODO)
-- `FactorScannerItem.java:122` - 实现趋势检测 (新功能 TODO)
-- `FactorScannerItem.java:130` - 实现 NBT 缓存 (新功能 TODO)
+- `FactorScannerItem.java:139` - 使用 Data Component 系统实现历史数据缓存 (新功能 TODO)
+- `FactorScannerItem.java:157` - 使用 Data Component 系统实现 (新功能 TODO)
+- `FactorScannerItem.java:163` - 实现 Data Component 缓存 (新功能 TODO)
 - `TraitEffectApplier.java:169` - 集成 Factor 浓度系统 (新功能 TODO)
 
 ---
