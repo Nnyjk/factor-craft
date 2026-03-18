@@ -5,22 +5,30 @@ import org.slf4j.LoggerFactory;
 
 /**
  * 生物模块 API
+ * 
+ * @deprecated 使用 {@link com.factorcraft.module.creature.mutation.MutationManager} 和 
+ * {@link com.factorcraft.module.creature.mutation.MutationDropRegistry} 替代
  */
+@Deprecated
 public class CreatureApi {
     
     public static final Logger LOGGER = LoggerFactory.getLogger("factorcraft/creature");
     
     /**
-     * 获取生物生成规则
+     * @deprecated 功能已迁移到 {@link com.factorcraft.module.creature.mutation.MutationManager}
      */
+    @Deprecated
     public static void registerSpawnRules() {
-        // TODO: 实现生物生成规则
+        // 功能已迁移到 MutationManager
+        LOGGER.debug("registerSpawnRules() called - functionality moved to MutationManager");
     }
     
     /**
-     * 获取生物掉落池
+     * @deprecated 功能已迁移到 {@link com.factorcraft.module.creature.mutation.MutationDropRegistry}
      */
+    @Deprecated
     public static void registerDropPools() {
-        // TODO: 实现掉落池
+        // 功能已迁移到 MutationDropRegistry
+        LOGGER.debug("registerDropPools() called - functionality moved to MutationDropRegistry");
     }
 }
