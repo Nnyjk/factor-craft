@@ -13,6 +13,7 @@ import com.factorcraft.module.technology.TechnologyModule;
 import com.factorcraft.module.social.SocialModule;
 import com.factorcraft.module.advancement.AdvancementModule;
 import com.factorcraft.module.event.worldevent.FactorWorldEventModule;
+import com.factorcraft.module.vfx.VfxModule;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -36,7 +37,8 @@ public final class ModuleBootstrap {
                 (FactorCraftModule) new SocialModule(),
                 (FactorCraftModule) new AdvancementModule(),
                 (FactorCraftModule) new NonCoreIntegrationModule(),
-                (FactorCraftModule) FactorWorldEventModule.getInstance()
+                (FactorCraftModule) FactorWorldEventModule.getInstance(),
+                (FactorCraftModule) VfxModule.getInstance()
         );
     }
 
