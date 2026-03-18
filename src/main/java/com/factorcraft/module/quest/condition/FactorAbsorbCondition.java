@@ -9,12 +9,18 @@ import net.minecraft.registry.RegistryWrapper;
  */
 public class FactorAbsorbCondition implements QuestCondition {
     
+    private final String factorType;
     private final double requiredAmount;
     private double absorbedAmount;
     
     public FactorAbsorbCondition(double requiredAmount) {
+        this("any", requiredAmount);
+    }
+    
+    public FactorAbsorbCondition(String factorType, double requiredAmount) {
+        this.factorType = factorType;
         this.requiredAmount = requiredAmount;
-        this.absorbedAmount = 0.0;
+        this.absorbedAmount = 0;
     }
     
     @Override
@@ -29,12 +35,13 @@ public class FactorAbsorbCondition implements QuestCondition {
     
     @Override
     public float getProgress(PlayerEntity player, Object context) {
-        return Math.min(1.0f, (float) (absorbedAmount / requiredAmount));
+        return (float) Math.min(1.0, absorbedAmount / requiredAmount);
     }
     
     @Override
     public NbtCompound toNbt(RegistryWrapper.WrapperLookup registries) {
         NbtCompound nbt = new NbtCompound();
+        nbt.putString("factor_type", factorType);
         nbt.putDouble("required", requiredAmount);
         nbt.putDouble("current", absorbedAmount);
         return nbt;
@@ -44,6 +51,13 @@ public class FactorAbsorbCondition implements QuestCondition {
         this.absorbedAmount += amount;
     }
     
+    public void onAbsorb(String type, double amount) {
+        if ("any".equals(factorType) || factorType.equals(type)) {
+            this.absorbedAmount += amount;
+        }
+    }
+    
+    public String getFactorType() { return factorType; }
     public double getRequiredAmount() { return requiredAmount; }
     public double getAbsorbedAmount() { return absorbedAmount; }
 }
