@@ -11,7 +11,9 @@ import com.factorcraft.module.event.bus.SimpleFactorEventBus;
 import com.factorcraft.module.factor.api.FactorApiProvider;
 import com.factorcraft.module.factor.management.ChunkFactorEventHandler;
 import com.factorcraft.module.factor.management.DiffusionSystem;
+import com.factorcraft.performance.ChunkFactorCache;
 import com.factorcraft.performance.OptimizedDiffusion;
+import com.factorcraft.performance.PerformanceMonitor;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -24,6 +26,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * - 日切结算（Tier 变更）
  * - 区块级 Factor 扩散
  * - 潮汐事件触发
+ * - 性能监控集成
  */
 public final class FactorSystemModule implements FactorCraftModule {
     private static final AtomicBoolean REGISTERED = new AtomicBoolean(false);
@@ -33,6 +36,8 @@ public final class FactorSystemModule implements FactorCraftModule {
     // 扩散检查间隔 (100 ticks = 5秒)
     private static final long DIFFUSION_INTERVAL = 100;
     
+    // 性能监控开关
+    public static boolean ENABLE_PERFORMANCE_MONITORING = true;
     
     // 使用优化扩散算法 (默认启用)
     public static final boolean USE_OPTIMIZED_DIFFUSION = true;
@@ -56,26 +61,49 @@ public final class FactorSystemModule implements FactorCraftModule {
             
             // 注册世界 tick 处理
             ServerTickEvents.END_WORLD_TICK.register(world -> {
+                long tickStart = ENABLE_PERFORMANCE_MONITORING ? System.nanoTime() : 0;
+                
                 // Factor 系统核心 tick
+                PerformanceMonitor.startTracking("factor_tick");
                 SERVICE.tick(world);
+                PerformanceMonitor.endTracking("factor_tick");
                 
                 // 潮汐效果管理器 tick（玩家效果、机器效率修正等）
+                PerformanceMonitor.startTracking("tide_effects");
                 TideEffectManager.getInstance().tick(world);
+                PerformanceMonitor.endTracking("tide_effects");
                 
                 // Factor 网络传输 tick
+                PerformanceMonitor.startTracking("network_tick");
                 FactorNetworkManager.getInstance().tick(world);
+                PerformanceMonitor.endTracking("network_tick");
                 
                 // 生物变异系统 tick
+                PerformanceMonitor.startTracking("creature_mutation");
                 CreatureMutationModule.tick(world);
+                PerformanceMonitor.endTracking("creature_mutation");
                 
                 // 区块扩散处理
                 long time = world.getTime();
                 if (time % DIFFUSION_INTERVAL == 0) {
+                    PerformanceMonitor.startTracking("diffusion");
                     if (USE_OPTIMIZED_DIFFUSION) {
                         OptimizedDiffusion.process(world);
                     } else {
                         DiffusionSystem.processAllDiffusion(world);
                     }
+                    PerformanceMonitor.endTracking("diffusion");
+                }
+                
+                // 缓存清理
+                if (time % 6000 == 0) {
+                    ChunkFactorCache.tickCleanup(time);
+                }
+                
+                // 性能监控记录
+                if (ENABLE_PERFORMANCE_MONITORING) {
+                    long tickTime = System.nanoTime() - tickStart;
+                    PerformanceMonitor.recordTick(tickTime);
                 }
                 
                 // 调试日志

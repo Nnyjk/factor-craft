@@ -59,6 +59,17 @@ public class FactorCraftCommands {
             .then(literal("stats")
                 .requires(source -> source.hasPermissionLevel(2))
                 .executes(FactorCraftCommands::showStats))
+            .then(literal("profile")
+                .requires(source -> source.hasPermissionLevel(2))
+                .then(literal("start")
+                    .executes(FactorCraftCommands::profileStart))
+                .then(literal("stop")
+                    .executes(FactorCraftCommands::profileStop))
+                .then(literal("report")
+                    .executes(FactorCraftCommands::profileReport)))
+            .then(literal("perf")
+                .requires(source -> source.hasPermissionLevel(2))
+                .executes(FactorCraftCommands::perfReport))
         );
     }
     
@@ -195,6 +206,65 @@ public class FactorCraftCommands {
         source.sendFeedback(() -> Text.literal("§e总 Tick 数: §f" + stats.totalTicks()), false);
         source.sendFeedback(() -> Text.literal("§e平均 Tick 时间: §f" + String.format("%.2f", stats.avgTickTimeNanos() / 1_000_000.0) + " ms"), false);
         source.sendFeedback(() -> Text.literal("§e缓存区块数: §f" + stats.cachedChunks()), false);
+        
+        return 1;
+    }
+    
+    private static int profileStart(CommandContext<ServerCommandSource> context) {
+        ServerCommandSource source = context.getSource();
+        
+        com.factorcraft.performance.PerformanceProfiler.startProfiling();
+        source.sendFeedback(() -> Text.literal("§a性能分析已启动"), true);
+        
+        return 1;
+    }
+    
+    private static int profileStop(CommandContext<ServerCommandSource> context) {
+        ServerCommandSource source = context.getSource();
+        
+        com.factorcraft.performance.PerformanceProfiler.stopProfiling();
+        source.sendFeedback(() -> Text.literal("§a性能分析已停止"), true);
+        
+        return 1;
+    }
+    
+    private static int profileReport(CommandContext<ServerCommandSource> context) {
+        ServerCommandSource source = context.getSource();
+        
+        var report = com.factorcraft.performance.PerformanceProfiler.generateReport(source.getServer());
+        var lines = com.factorcraft.performance.PerformanceProfiler.formatReport(report);
+        
+        for (Text line : lines) {
+            source.sendFeedback(() -> line, false);
+        }
+        
+        return 1;
+    }
+    
+    private static int perfReport(CommandContext<ServerCommandSource> context) {
+        ServerCommandSource source = context.getSource();
+        
+        // 生成快速性能报告
+        var systemStats = com.factorcraft.performance.PerformanceMonitor.getSystemStats();
+        var cacheStats = com.factorcraft.performance.ChunkFactorCache.getStats();
+        var networkStats = systemStats.networkStats();
+        
+        source.sendFeedback(() -> Text.literal("§6=== 快速性能报告 ==="), false);
+        source.sendFeedback(() -> Text.literal(String.format("§eTick: §f%d §7| §eAvg: §f%.2f ms", 
+            systemStats.totalTicks(), 
+            systemStats.avgTickTimeNanos() / 1_000_000.0)), false);
+        source.sendFeedback(() -> Text.literal(String.format("§e缓存: §f%d §7(%.1f%%)", 
+            cacheStats.currentSize(), cacheStats.usagePercent())), false);
+        
+        if (networkStats != null) {
+            source.sendFeedback(() -> Text.literal(String.format("§e网络: §f已发送 %d §7| §e待处理: §f%d",
+                networkStats.packetsSent(), networkStats.pendingSyncs())), false);
+        }
+        
+        // 性能评估
+        double avgMs = systemStats.avgTickTimeNanos() / 1_000_000.0;
+        String status = avgMs < 20 ? "§a良好" : (avgMs < 40 ? "§e一般" : "§c需优化");
+        source.sendFeedback(() -> Text.literal("§e状态: " + status), false);
         
         return 1;
     }
