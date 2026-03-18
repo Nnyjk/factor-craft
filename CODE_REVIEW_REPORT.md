@@ -1,8 +1,9 @@
 # Factor Craft 代码审查报告
 
-> 审查时间：2026-03-18 (定期审查)  
+> 审查时间：2026-03-18 13:45 (定期审查)  
 > 审查 Agent: fc-review  
 > 审查范围：开放 PR (0 个) - 所有 PR 已合并！
+> 最新提交：9bb87e7 (Phase G 核心功能实现 - Factor 系统深化)
 
 ---
 
@@ -567,14 +568,11 @@ PR 合并后需清理以下已实现功能的 TODO 注释：
 
 **TODO 清理进度:** 9/9 (100%) ✅
 
-**当前剩余 TODO (7 个):**
-- `FactorAltarGenerator.java:11` - 待清理（PR #80 已实现）
-- `FactorOreGenerator.java:15` - 待清理（PR #80 已实现）
-- `CultivatorCoreScreenHandler.java:91` - 实现实际的特性检查 (GUI 功能)
-- `MutationManager.java:182` - 恢复原始属性 (生物系统新功能)
+**当前剩余 TODO (4 个):**
+- `CultivatorCoreScreenHandler.java` - 实现实际的特性检查 (GUI 功能)
+- `MutationManager.java` - 恢复原始属性 (生物系统新功能)
 - `CreatureApi.java:17` - 实现生物生成规则 (生物系统新功能)
 - `CreatureApi.java:24` - 实现掉落池 (生物系统新功能)
-- `TraitEffectApplier.java:169` - 集成 Factor 浓度系统 (特性效果增强)
 
 **TODO 变更说明:**
 - ✅ `MutationManager.java:190` - 已完成（浓度集成已实现）
@@ -815,3 +813,35 @@ sed -i '/TODO: 需要接入世界生成系统/d' src/main/java/com/factorcraft/w
 1. 基础功能：#79 → #80 → #82 → #85
 2. TODO 修复：#95 → #96 → #97
 3. 任务系统：#110 → #116
+
+---
+
+## 📅 定期审查记录
+
+### 2026-03-18 13:45 (本次)
+
+**检查结果:**
+
+| 检查项 | 状态 | 说明 |
+|--------|------|------|
+| 编译 | ✅ 通过 | 无编译错误 |
+| 测试 | ✅ 通过 | 全部单元测试通过 |
+| TODO | ⚠️ 4 个 | 需关注清理 |
+| FIXME/HACK | ✅ 无 | 无技术债务 |
+| 代码量 | 38,051 行 | Java 代码 |
+
+**当前分支状态:**
+- 分支: `refactor/issue-158-mutation-restore`
+- 与 main 差异: 无
+- 工作区: 干净
+
+**待处理 TODO (4 个):**
+
+| 文件 | 内容 | 优先级 |
+|------|------|--------|
+| `CultivatorCoreScreenHandler.java` | 实现实际的特性检查 | 中 |
+| `MutationManager.java:182` | 恢复原始属性 | 中 |
+| `CreatureApi.java:17` | 实现生物生成规则 | 低 |
+| `CreatureApi.java:24` | 实现掉落池 | 低 |
+
+**审查结论:** ✅ 代码库健康，无阻塞问题
