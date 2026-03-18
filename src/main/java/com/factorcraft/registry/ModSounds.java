@@ -20,6 +20,10 @@ import java.util.Map;
  */
 public class ModSounds {
     
+    // ==================== 注册表 ====================
+    
+    private static final Map<Identifier, SoundEvent> SOUND_EVENTS = new LinkedHashMap<>();
+    
     // ==================== 机器音效 ====================
     
     /** 提取器工作音效 */
@@ -73,9 +77,7 @@ public class ModSounds {
     /** Factor 流动声 */
     public static final SoundEvent FACTOR_FLOW = register("factor_flow");
     
-    // ==================== 注册表 ====================
-    
-    private static final Map<Identifier, SoundEvent> SOUND_EVENTS = new LinkedHashMap<>();
+    // ==================== 注册表（移至文件顶部）====================
     
     /**
      * 注册音效事件
