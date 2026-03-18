@@ -15,6 +15,7 @@ import java.util.List;
  * 合成核心 GUI 界面
  * 
  * 显示配方列表、合成进度、Factor 缓冲区
+ * 使用 GuiRenderHelper 实现视觉效果
  */
 public class SynthesizerCoreScreen extends HandledScreen<SynthesizerCoreScreenHandler> {
     
@@ -22,6 +23,10 @@ public class SynthesizerCoreScreen extends HandledScreen<SynthesizerCoreScreenHa
     
     private static final int WIDTH = 280;
     private static final int HEIGHT = 200;
+    
+    // 动画管理器
+    private final GuiAnimationManager animManager = GuiAnimationManager.getInstance();
+    private final String machineId;
     
     // 配方列表滚动
     private int recipeScrollOffset = 0;
@@ -31,10 +36,16 @@ public class SynthesizerCoreScreen extends HandledScreen<SynthesizerCoreScreenHa
     private ButtonWidget startButton;
     private ButtonWidget cancelButton;
     
+    // 缓存的动画值
+    private double animatedProgress = 0;
+    private double animatedBuffer = 0;
+    private double animatedEfficiency = 0;
+    
     public SynthesizerCoreScreen(SynthesizerCoreScreenHandler handler, PlayerInventory inventory, Text title) {
         super(handler, inventory, title);
         this.backgroundWidth = WIDTH;
         this.backgroundHeight = HEIGHT;
+        this.machineId = "synthesizer_" + handler.hashCode();
     }
     
     @Override
@@ -76,6 +87,9 @@ public class SynthesizerCoreScreen extends HandledScreen<SynthesizerCoreScreenHa
     
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+        // 更新动画
+        updateAnimations();
+        
         renderBackground(context, mouseX, mouseY, delta);
         
         drawPanel(context);
@@ -83,11 +97,18 @@ public class SynthesizerCoreScreen extends HandledScreen<SynthesizerCoreScreenHa
         drawFactorBuffer(context);
         drawCraftingProgress(context);
         drawRecipeList(context, mouseX, mouseY);
+        drawStatusIndicator(context);
         
         // 更新按钮状态
         updateButtonStates();
         
         super.render(context, mouseX, mouseY, delta);
+    }
+    
+    private void updateAnimations() {
+        animatedProgress = animManager.animateProgress(machineId, handler.getCraftProgressPercentage() / 100.0);
+        animatedBuffer = animManager.animateFactorStorage(machineId, handler.getBufferPercentage() / 100.0);
+        animatedEfficiency = animManager.animateEfficiency(machineId, handler.getEfficiency());
     }
     
     private void drawPanel(DrawContext context) {
@@ -103,14 +124,18 @@ public class SynthesizerCoreScreen extends HandledScreen<SynthesizerCoreScreenHa
     private void drawStructureInfo(DrawContext context) {
         int statusY = y + 20;
         
-        // 结构状态
+        // 使用 GuiRenderHelper 绘制状态
         boolean valid = handler.isStructureValid();
+        GuiRenderHelper.MachineStatus status = valid 
+            ? GuiRenderHelper.MachineStatus.COMPLETE 
+            : GuiRenderHelper.MachineStatus.ERROR;
+        GuiRenderHelper.drawStatusIndicator(context, x + 10, statusY, status);
+        
         Text statusText = valid 
             ? Text.translatable("factorcraft.gui.structure.valid")
             : Text.translatable("factorcraft.gui.structure.invalid");
         int statusColor = valid ? 0x55FF55 : 0xFF5555;
-        
-        context.drawTextWithShadow(this.textRenderer, statusText, x + 10, statusY, statusColor);
+        context.drawTextWithShadow(this.textRenderer, statusText, x + 24, statusY, statusColor);
         
         // Tier 徽章
         int badgeX = x + 100;
@@ -121,36 +146,29 @@ public class SynthesizerCoreScreen extends HandledScreen<SynthesizerCoreScreenHa
         Text tierText = Text.translatable("factorcraft.gui.tier", tier);
         context.drawCenteredTextWithShadow(this.textRenderer, tierText, badgeX + 20, statusY, 0xFFFFFF);
         
-        // 效率
-        double eff = handler.getEfficiency();
-        Text effText = Text.translatable("factorcraft.gui.efficiency", String.format("%.0f%%", eff * 100));
-        context.drawTextWithShadow(this.textRenderer, effText, x + 10, statusY + 15, 0xAAAAAA);
+        // 效率条
+        GuiRenderHelper.drawLabeledProgressBar(
+            context, 
+            x + 10, statusY + 15, 
+            130, 6, 
+            animatedEfficiency,
+            Text.translatable("factorcraft.gui.efficiency", String.format("%.0f%%", animatedEfficiency * 100)),
+            false
+        );
     }
     
     private void drawFactorBuffer(DrawContext context) {
         int bufferY = y + 50;
         
-        // 标签
-        Text label = Text.translatable("factorcraft.gui.synthesizer.buffer");
-        context.drawTextWithShadow(this.textRenderer, label, x + 10, bufferY, 0xAAAAAA);
-        
-        // 缓冲条
-        int barX = x + 10;
-        int barY = bufferY + 12;
-        int barWidth = 120;
-        int barHeight = 16;
-        
-        double percentage = handler.getBufferPercentage();
-        int fillColor = getBufferColor(percentage);
-        
-        context.fill(barX, barY, barX + barWidth, barY + barHeight, 0xFF333333);
-        int fillWidth = (int) (barWidth * percentage / 100.0);
-        context.fill(barX, barY, barX + fillWidth, barY + barHeight, fillColor);
-        context.drawBorder(barX, barY, barWidth, barHeight, 0xFF666666);
-        
-        Text valueText = Text.literal(String.format("%.0f / %.0f", 
-            handler.getFactorBuffer(), handler.getMaxBuffer()));
-        context.drawCenteredTextWithShadow(this.textRenderer, valueText, barX + barWidth / 2, barY + 4, 0xFFFFFF);
+        // 使用 GuiRenderHelper 渲染 Factor 存储
+        GuiRenderHelper.drawFactorStorage(
+            context, 
+            x + 10, bufferY + 12, 
+            120, 16,
+            handler.getFactorBuffer(), 
+            handler.getMaxBuffer(),
+            "Factor 缓冲"
+        );
     }
     
     private void drawCraftingProgress(DrawContext context) {
@@ -161,25 +179,30 @@ public class SynthesizerCoreScreen extends HandledScreen<SynthesizerCoreScreenHa
             Text recipeLabel = Text.translatable("factorcraft.gui.synthesizer.crafting");
             context.drawTextWithShadow(this.textRenderer, recipeLabel, x + 10, craftY, 0x55FFFF);
             
-            // 进度条
-            int barX = x + 10;
-            int barY = craftY + 12;
-            int barWidth = 120;
-            int barHeight = 12;
-            
-            double progress = handler.getCraftProgressPercentage();
-            context.fill(barX, barY, barX + barWidth, barY + barHeight, 0xFF333333);
-            int fillWidth = (int) (barWidth * progress / 100.0);
-            context.fill(barX, barY, barX + fillWidth, barY + barHeight, 0xFF00AA00);
-            context.drawBorder(barX, barY, barWidth, barHeight, 0xFF666666);
-            
-            Text progressText = Text.literal(String.format("%.0f%%", progress));
-            context.drawCenteredTextWithShadow(this.textRenderer, progressText, barX + barWidth / 2, barY + 2, 0xFFFFFF);
+            // 使用 GuiRenderHelper 渲染进度条
+            GuiRenderHelper.drawLabeledProgressBar(
+                context, 
+                x + 10, craftY + 12, 
+                120, 12, 
+                animatedProgress,
+                null,
+                true
+            );
             
             // Factor 消耗
+            double consumed = handler.getFactorConsumed();
+            double needed = handler.getFactorNeeded();
             Text factorText = Text.translatable("factorcraft.gui.synthesizer.factor_cost",
-                String.format("%.1f / %.1f", handler.getFactorConsumed(), handler.getFactorNeeded()));
+                String.format("%.1f / %.1f", consumed, needed));
             context.drawTextWithShadow(this.textRenderer, factorText, x + 10, craftY + 28, 0xAAAAAA);
+            
+            // 流量指示器
+            double consumptionRate = handler.getFactorConsumptionRate();
+            GuiRenderHelper.drawFlowIndicator(
+                context, 
+                x + 10, craftY + 42,
+                0, consumptionRate
+            );
         } else {
             Text idleText = Text.translatable("factorcraft.gui.synthesizer.idle");
             context.drawTextWithShadow(this.textRenderer, idleText, x + 10, craftY, 0x888888);
@@ -230,6 +253,13 @@ public class SynthesizerCoreScreen extends HandledScreen<SynthesizerCoreScreenHa
                               mouseY >= itemStartY && mouseY < itemStartY + itemHeight;
             boolean selected = i == selectedRecipeIndex;
             
+            // 使用 GuiRenderHelper 渲染按钮状态
+            GuiRenderHelper.ButtonState btnState = selected 
+                ? GuiRenderHelper.ButtonState.PRESSED 
+                : hovered 
+                    ? GuiRenderHelper.ButtonState.HOVERED 
+                    : GuiRenderHelper.ButtonState.NORMAL;
+            
             if (selected || hovered) {
                 int bgColor = selected ? 0x8055FF55 : 0x40555555;
                 context.fill(listX + 1, itemStartY, listX + listWidth - 1, itemStartY + itemHeight, bgColor);
@@ -239,9 +269,11 @@ public class SynthesizerCoreScreen extends HandledScreen<SynthesizerCoreScreenHa
             Text recipeName = Text.translatable("factorcraft.recipe." + recipe.id(), recipe.id());
             context.drawTextWithShadow(this.textRenderer, recipeName, listX + 4, itemStartY + 2, 0xFFFFFF);
             
-            // Factor 成本
-            Text costText = Text.literal(String.format("F: %.0f", recipe.factorCost()));
-            context.drawTextWithShadow(this.textRenderer, costText, listX + 4, itemStartY + 12, 0xAAAAAA);
+            // Factor 成本（带颜色编码）
+            double factorCost = recipe.factorCost();
+            int costColor = factorCost < 100 ? 0x55FF55 : factorCost < 500 ? 0xFFFF55 : 0xFF5555;
+            Text costText = Text.literal(String.format("F: %.0f", factorCost));
+            context.drawTextWithShadow(this.textRenderer, costText, listX + 4, itemStartY + 12, costColor);
         }
         
         // 空列表提示
@@ -255,6 +287,35 @@ public class SynthesizerCoreScreen extends HandledScreen<SynthesizerCoreScreenHa
             Text scrollHint = Text.literal("↓ ↑");
             context.drawCenteredTextWithShadow(this.textRenderer, scrollHint, listX + listWidth / 2, listY + listHeight - 12, 0x888888);
         }
+    }
+    
+    private void drawStatusIndicator(DrawContext context) {
+        // 确定机器状态
+        GuiRenderHelper.MachineStatus status;
+        String detail = "";
+        
+        if (!handler.isStructureValid()) {
+            status = GuiRenderHelper.MachineStatus.ERROR;
+            detail = "结构不完整";
+        } else if (handler.isCrafting()) {
+            double progress = handler.getCraftProgressPercentage();
+            if (progress >= 100) {
+                status = GuiRenderHelper.MachineStatus.COMPLETE;
+                detail = "合成完成";
+            } else {
+                status = GuiRenderHelper.MachineStatus.WORKING;
+                detail = String.format("合成中: %.0f%%", progress);
+            }
+        } else if (handler.getBufferPercentage() < 10) {
+            status = GuiRenderHelper.MachineStatus.WARNING;
+            detail = "Factor 不足";
+        } else {
+            status = GuiRenderHelper.MachineStatus.IDLE;
+            detail = "等待配方";
+        }
+        
+        // 渲染状态指示器
+        GuiRenderHelper.drawStatusText(context, x + 10, y + HEIGHT - 25, status, detail);
     }
     
     private void updateButtonStates() {
@@ -322,14 +383,6 @@ public class SynthesizerCoreScreen extends HandledScreen<SynthesizerCoreScreenHa
             case 5 -> 0xFFFFD700;
             default -> 0xFF666666;
         };
-    }
-    
-    private int getBufferColor(double percentage) {
-        if (percentage >= 90) return 0xFF00FF00;
-        if (percentage >= 70) return 0xFF88FF00;
-        if (percentage >= 50) return 0xFFFFFF00;
-        if (percentage >= 30) return 0xFFFFAA00;
-        return 0xFFFF5500;
     }
     
     @Override

@@ -205,6 +205,14 @@ public class SynthesizerCoreScreenHandler extends MachineCoreScreenHandler {
         return craftTimeTotal > 0 ? (craftProgress * 100.0) / craftTimeTotal : 0;
     }
     
+    /**
+     * 获取 Factor 消耗速率（每 tick）
+     */
+    public double getFactorConsumptionRate() {
+        if (!isCrafting() || craftTimeTotal <= 0) return 0;
+        return factorNeeded / craftTimeTotal;
+    }
+    
     public double getDimensionEfficiency() {
         return SynthesisConfig.getDimensionEfficiency(dimension, tier);
     }

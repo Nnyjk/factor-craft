@@ -14,6 +14,7 @@ import java.util.List;
  * 提取核心 GUI 界面
  * 
  * 显示多方块结构信息、Factor 存储状态、效率数据
+ * 使用 GuiRenderHelper 实现视觉效果
  */
 public class ExtractorCoreScreen extends HandledScreen<ExtractorCoreScreenHandler> {
     
@@ -22,10 +23,20 @@ public class ExtractorCoreScreen extends HandledScreen<ExtractorCoreScreenHandle
     private static final int WIDTH = 220;
     private static final int HEIGHT = 180;
     
+    // 动画管理器
+    private final GuiAnimationManager animManager = GuiAnimationManager.getInstance();
+    private final String machineId;
+    
+    // 缓存的动画值
+    private double animatedProgress = 0;
+    private double animatedStorage = 0;
+    private double animatedEfficiency = 0;
+    
     public ExtractorCoreScreen(ExtractorCoreScreenHandler handler, PlayerInventory inventory, Text title) {
         super(handler, inventory, title);
         this.backgroundWidth = WIDTH;
         this.backgroundHeight = HEIGHT;
+        this.machineId = "extractor_" + handler.hashCode();
     }
     
     @Override
@@ -45,6 +56,9 @@ public class ExtractorCoreScreen extends HandledScreen<ExtractorCoreScreenHandle
     
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+        // 更新动画
+        updateAnimations();
+        
         // 渲染背景
         renderBackground(context, mouseX, mouseY, delta);
         
@@ -63,11 +77,21 @@ public class ExtractorCoreScreen extends HandledScreen<ExtractorCoreScreenHandle
         // 渲染进度条
         drawProgressBar(context);
         
+        // 渲染状态指示器
+        drawStatusIndicator(context);
+        
         // 渲染提示
         drawTooltips(context, mouseX, mouseY);
         
         // 渲染子组件
         super.render(context, mouseX, mouseY, delta);
+    }
+    
+    private void updateAnimations() {
+        // 平滑动画进度
+        animatedProgress = animManager.animateProgress(machineId, handler.getProgressPercentage() / 100.0);
+        animatedStorage = animManager.animateFactorStorage(machineId, handler.getStoragePercentage() / 100.0);
+        animatedEfficiency = animManager.animateEfficiency(machineId, handler.getEfficiency());
     }
     
     private void drawPanel(DrawContext context) {
@@ -87,13 +111,17 @@ public class ExtractorCoreScreen extends HandledScreen<ExtractorCoreScreenHandle
         boolean valid = handler.isStructureValid();
         int statusY = y + 20;
         
-        // 状态图标
+        // 状态图标和文本
+        GuiRenderHelper.MachineStatus status = valid 
+            ? GuiRenderHelper.MachineStatus.COMPLETE 
+            : GuiRenderHelper.MachineStatus.ERROR;
+        GuiRenderHelper.drawStatusIndicator(context, x + 10, statusY, status);
+        
         Text statusText = valid 
             ? Text.translatable("factorcraft.gui.structure.valid")
             : Text.translatable("factorcraft.gui.structure.invalid");
         int statusColor = valid ? 0x55FF55 : 0xFF5555;
-        
-        context.drawTextWithShadow(this.textRenderer, statusText, x + 10, statusY, statusColor);
+        context.drawTextWithShadow(this.textRenderer, statusText, x + 24, statusY, statusColor);
         
         // Tier 徽章
         int badgeX = x + WIDTH - 50;
@@ -107,50 +135,50 @@ public class ExtractorCoreScreen extends HandledScreen<ExtractorCoreScreenHandle
         // 结构名称
         if (valid) {
             Text structName = Text.translatable("factorcraft.structure.extractor.t" + tier);
-            context.drawTextWithShadow(this.textRenderer, structName, x + 10, statusY + 15, 0xAAAAAA);
+            context.drawTextWithShadow(this.textRenderer, structName, x + 24, statusY + 15, 0xAAAAAA);
         }
     }
     
     private void drawFactorStorage(DrawContext context) {
         int storageY = y + 50;
         
-        // 标签
-        Text label = Text.translatable("factorcraft.gui.factor.storage");
-        context.drawTextWithShadow(this.textRenderer, label, x + 10, storageY, 0xAAAAAA);
+        // 使用 GuiRenderHelper 渲染 Factor 存储
+        GuiRenderHelper.drawFactorStorage(
+            context, 
+            x + 10, storageY + 12, 
+            WIDTH - 20, 20,
+            handler.getFactorStorage(), 
+            handler.getMaxStorage(),
+            "Factor 存储"
+        );
         
-        // 存储条
-        int barX = x + 10;
-        int barY = storageY + 12;
-        int barWidth = WIDTH - 20;
-        int barHeight = 20;
-        
-        double percentage = handler.getStoragePercentage();
-        int fillColor = getFactorBarColor(percentage);
-        
-        // 背景
-        context.fill(barX, barY, barX + barWidth, barY + barHeight, 0xFF333333);
-        
-        // 填充
-        int fillWidth = (int) (barWidth * percentage / 100.0);
-        context.fill(barX, barY, barX + fillWidth, barY + barHeight, fillColor);
-        
-        // 边框
-        context.drawBorder(barX, barY, barWidth, barHeight, 0xFF666666);
-        
-        // 数值
-        Text valueText = Text.literal(String.format("%.0f / %.0f", 
-            handler.getFactorStorage(), handler.getMaxStorage()));
-        context.drawCenteredTextWithShadow(this.textRenderer, valueText, barX + barWidth / 2, barY + 6, 0xFFFFFF);
+        // 流量指示器
+        double inputRate = handler.getExtractRate();
+        GuiRenderHelper.drawFlowIndicator(
+            context, 
+            x + WIDTH - 70, storageY + 40,
+            inputRate, 0
+        );
     }
     
     private void drawEfficiencyInfo(DrawContext context) {
-        int infoY = y + 95;
+        int infoY = y + 85;
         
-        // 结构效率
-        double efficiency = handler.getEfficiency();
+        // 结构效率 - 带动画
+        double eff = animatedEfficiency * 100;
         Text effText = Text.translatable("factorcraft.gui.efficiency.structure", 
-            String.format("%.0f%%", efficiency * 100));
-        context.drawTextWithShadow(this.textRenderer, effText, x + 10, infoY, 0xAAAAAA);
+            String.format("%.0f%%", eff));
+        int effColor = eff >= 80 ? 0x55FF55 : eff >= 50 ? 0xFFFF55 : 0xFF5555;
+        context.drawTextWithShadow(this.textRenderer, effText, x + 10, infoY, effColor);
+        
+        // 效率条
+        GuiRenderHelper.drawProgressBar(
+            context, 
+            x + 100, infoY, 
+            WIDTH - 110, 8, 
+            animatedEfficiency, 
+            true
+        );
         
         // 维度效率
         double dimEff = handler.getDimensionEfficiency();
@@ -182,14 +210,39 @@ public class ExtractorCoreScreen extends HandledScreen<ExtractorCoreScreenHandle
             String.format("%.2f", rate));
         context.drawTextWithShadow(this.textRenderer, rateText, x + 10, barY, 0x55FFFF);
         
-        // 进度条
-        int progressX = x + 100;
-        int progressWidth = WIDTH - 110;
-        double progress = handler.getProgressPercentage();
+        // 进度条 - 带标签
+        Text progressLabel = Text.translatable("factorcraft.gui.progress");
+        GuiRenderHelper.drawLabeledProgressBar(
+            context, 
+            x + 100, barY, 
+            WIDTH - 110, 8, 
+            animatedProgress,
+            progressLabel,
+            true
+        );
+    }
+    
+    private void drawStatusIndicator(DrawContext context) {
+        // 确定机器状态
+        GuiRenderHelper.MachineStatus status;
+        String detail = "";
         
-        context.fill(progressX, barY, progressX + progressWidth, barY + 8, 0xFF333333);
-        int fillWidth = (int) (progressWidth * progress / 100.0);
-        context.fill(progressX, barY, progressX + fillWidth, barY + 8, 0xFF00AA00);
+        if (!handler.isStructureValid()) {
+            status = GuiRenderHelper.MachineStatus.ERROR;
+            detail = "结构不完整";
+        } else if (handler.getStoragePercentage() >= 95) {
+            status = GuiRenderHelper.MachineStatus.WARNING;
+            detail = "存储即将满";
+        } else if (handler.getExtractRate() > 0) {
+            status = GuiRenderHelper.MachineStatus.WORKING;
+            detail = String.format("提取中: %.2f/t", handler.getExtractRate());
+        } else {
+            status = GuiRenderHelper.MachineStatus.IDLE;
+            detail = "等待资源";
+        }
+        
+        // 渲染状态指示器
+        GuiRenderHelper.drawStatusText(context, x + 10, y + HEIGHT - 25, status, detail);
     }
     
     private void drawTooltips(DrawContext context, int mouseX, int mouseY) {
@@ -211,6 +264,17 @@ public class ExtractorCoreScreen extends HandledScreen<ExtractorCoreScreenHandle
                 String.format("%.1f%%", handler.getStoragePercentage())));
             context.drawTooltip(this.textRenderer, tooltip, mouseX, mouseY);
         }
+        
+        // 进度条提示
+        int progressX = x + 100;
+        int progressY = y + 145;
+        if (mouseX >= progressX && mouseX < progressX + WIDTH - 110 && 
+            mouseY >= progressY && mouseY < progressY + 8) {
+            List<Text> tooltip = new ArrayList<>();
+            tooltip.add(Text.translatable("factorcraft.tooltip.progress"));
+            tooltip.add(Text.literal(String.format("%.1f%%", animatedProgress * 100)));
+            context.drawTooltip(this.textRenderer, tooltip, mouseX, mouseY);
+        }
     }
     
     // ==================== 辅助方法 ====================
@@ -224,14 +288,6 @@ public class ExtractorCoreScreen extends HandledScreen<ExtractorCoreScreenHandle
             case 5 -> 0xFFFFD700; // 金色
             default -> 0xFF666666;
         };
-    }
-    
-    private int getFactorBarColor(double percentage) {
-        if (percentage >= 90) return 0xFF00FF00;
-        if (percentage >= 70) return 0xFF88FF00;
-        if (percentage >= 50) return 0xFFFFFF00;
-        if (percentage >= 30) return 0xFFFFAA00;
-        return 0xFFFF5500;
     }
     
     private String getDimensionDisplayName(String dimension) {
