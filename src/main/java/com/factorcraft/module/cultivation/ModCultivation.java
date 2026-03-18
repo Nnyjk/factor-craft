@@ -31,34 +31,29 @@ public class ModCultivation {
     
     // ==================== 方块 ====================
     
-    public static final Block CULTIVATION_CORE = registerBlock(
-        "cultivation_core",
-        new CultivationCoreBlock(
-            AbstractBlock.Settings.create()
-                .strength(3.0f)
-        )
-    );
+    public static Block CULTIVATION_CORE;
     
     /**
      * 注册方块
      */
-    private static Block registerBlock(String name, Block block) {
+    private static Block registerCultivationCore(String name) {
         Identifier id = Identifier.of(MOD_ID, name);
-        RegistryKey<Block> key = RegistryKey.of(RegistryKeys.BLOCK, id);
+        RegistryKey<Block> blockKey = RegistryKey.of(RegistryKeys.BLOCK, id);
+        RegistryKey<Item> itemKey = RegistryKey.of(RegistryKeys.ITEM, id);
         
-        // 重新创建带有 registryKey 的 Block 设置
-        Block registeredBlock = new CultivationCoreBlock(
+        // 创建带有 registryKey 的 Block
+        Block block = new CultivationCoreBlock(
             AbstractBlock.Settings.create()
-                .registryKey(key)
+                .registryKey(blockKey)
                 .strength(3.0f)
         );
         
-        Registry.register(Registries.BLOCK, id, registeredBlock);
-        Registry.register(Registries.ITEM, id, new BlockItem(registeredBlock, new Item.Settings()
-            .registryKey(RegistryKey.of(RegistryKeys.ITEM, id))));
+        Registry.register(Registries.BLOCK, id, block);
+        Registry.register(Registries.ITEM, id, new BlockItem(block, new Item.Settings()
+            .registryKey(itemKey)));
         
         FactorCraftMod.LOGGER.debug("[ModCultivation] 注册方块：{}", name);
-        return registeredBlock;
+        return block;
     }
     
     // ==================== BlockEntity ====================
@@ -85,17 +80,17 @@ public class ModCultivation {
     
     // ==================== ScreenHandler ====================
     
-    public static final ScreenHandlerType<CultivationScreenHandler> CULTIVATION_CORE_SCREEN =
-        Registry.register(
+    public static ScreenHandlerType<CultivationScreenHandler> CULTIVATION_CORE_SCREEN;
+    
+    /**
+     * 注册 ScreenHandler
+     */
+    public static void registerScreenHandlers() {
+        CULTIVATION_CORE_SCREEN = Registry.register(
             Registries.SCREEN_HANDLER,
             Identifier.of(MOD_ID, "cultivation_core_screen"),
             new ScreenHandlerType<>(CultivationScreenHandler::new, FeatureFlags.VANILLA_FEATURES)
         );
-    
-    /**
-     * 注册 Screen（服务端调用）
-     */
-    public static void registerScreens() {
         FactorCraftMod.LOGGER.debug("[ModCultivation] ScreenHandler 已注册");
     }
     
@@ -111,8 +106,15 @@ public class ModCultivation {
      * 完整注册流程（服务端）
      */
     public static void register() {
+        // 注册方块
+        CULTIVATION_CORE = registerCultivationCore("cultivation_core");
+        
+        // 注册 BlockEntity
         registerBlockEntities();
-        registerScreens();
+        
+        // 注册 ScreenHandler
+        registerScreenHandlers();
+        
         FactorCraftMod.LOGGER.info("[ModCultivation] 培育系统注册完成");
     }
 }
