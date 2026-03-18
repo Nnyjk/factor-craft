@@ -43,6 +43,20 @@ public class FactorCraftDataComponents {
             .build()
     );
     
+    // ========== Factor 工具相关 ==========
+    
+    /**
+     * Factor 加速状态标记
+     * 用于工具挖掘时标记是否使用 Factor 加速
+     */
+    public static final ComponentType<Boolean> FACTOR_BOOSTED = register(
+        "factor_boosted",
+        ComponentType.<Boolean>builder()
+            .codec(com.mojang.serialization.Codec.BOOL)
+            .packetCodec(net.minecraft.network.codec.PacketCodecs.BOOLEAN)
+            .build()
+    );
+    
     /**
      * 注册 Data Component 类型
      */
