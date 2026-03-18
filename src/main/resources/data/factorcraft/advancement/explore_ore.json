@@ -1,0 +1,21 @@
+{
+  "display": {
+    "icon": {
+      "id": "factorcraft:factor_ore"
+    },
+    "title": "探索者",
+    "description": "发现 Factor 矿石",
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "parent": "factorcraft:root",
+  "criteria": {
+    "requirement": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [{"items": ["factorcraft:factor_ore"]}]
+      }
+    }
+  }
+}

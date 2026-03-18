@@ -1,0 +1,36 @@
+{
+  "display": {
+    "icon": {
+      "id": "factorcraft:factor_item_crystal_sharp"
+    },
+    "title": "Factor 世界",
+    "description": "完成所有成就",
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "parent": "factorcraft:factor_master",
+  "criteria": {
+    "machine_master": {
+      "trigger": "minecraft:advancement_done",
+      "conditions": {"advancement": "factorcraft:machine_master"}
+    },
+    "factor_master": {
+      "trigger": "minecraft:advancement_done",
+      "conditions": {"advancement": "factorcraft:factor_master"}
+    },
+    "material_master": {
+      "trigger": "minecraft:advancement_done",
+      "conditions": {"advancement": "factorcraft:material_master"}
+    },
+    "quest_master": {
+      "trigger": "minecraft:advancement_done",
+      "conditions": {"advancement": "factorcraft:quest_master"}
+    },
+    "explore_all_dims": {
+      "trigger": "minecraft:advancement_done",
+      "conditions": {"advancement": "factorcraft:explore_all_dims"}
+    }
+  },
+  "requirements": [["machine_master"], ["factor_master"], ["material_master"], ["quest_master"], ["explore_all_dims"]]
+}

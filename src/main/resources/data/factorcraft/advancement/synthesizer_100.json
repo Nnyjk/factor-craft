@@ -1,0 +1,22 @@
+{
+  "display": {
+    "icon": {
+      "id": "factorcraft:synthesizer_t1"
+    },
+    "title": "合成新手",
+    "description": "运行合成器 100 次",
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "parent": "factorcraft:root",
+  "criteria": {
+    "requirement": {
+      "trigger": "factorcraft:machine_used",
+      "conditions": {
+        "machine": "synthesizer",
+        "count": 100
+      }
+    }
+  }
+}

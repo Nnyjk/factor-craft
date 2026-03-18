@@ -1,0 +1,21 @@
+{
+  "display": {
+    "icon": {
+      "id": "factorcraft:resonance_core"
+    },
+    "title": "共振大师",
+    "description": "获得共振核心",
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "parent": "factorcraft:mutation_first",
+  "criteria": {
+    "requirement": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [{"items": ["factorcraft:resonance_core"]}]
+      }
+    }
+  }
+}

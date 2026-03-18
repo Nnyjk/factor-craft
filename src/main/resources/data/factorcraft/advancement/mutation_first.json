@@ -1,0 +1,21 @@
+{
+  "display": {
+    "icon": {
+      "id": "factorcraft:mutation_core"
+    },
+    "title": "突变研究者",
+    "description": "创建第一个突变核心",
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "parent": "factorcraft:root",
+  "criteria": {
+    "requirement": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [{"items": ["factorcraft:mutation_core"]}]
+      }
+    }
+  }
+}

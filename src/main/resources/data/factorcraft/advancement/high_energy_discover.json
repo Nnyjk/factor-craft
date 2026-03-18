@@ -1,0 +1,18 @@
+{
+  "display": {
+    "icon": {
+      "id": "factorcraft:high_energy_zone"
+    },
+    "title": "高能区域探索",
+    "description": "发现高能区域",
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "parent": "factorcraft:explore_ore",
+  "criteria": {
+    "requirement": {
+      "trigger": "factorcraft:high_energy_zone_discovered"
+    }
+  }
+}

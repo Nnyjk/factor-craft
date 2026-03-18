@@ -1,0 +1,21 @@
+{
+  "display": {
+    "icon": {
+      "id": "factorcraft:transmitter"
+    },
+    "title": "网络建设者",
+    "description": "放置第一个传递器",
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "parent": "factorcraft:root",
+  "criteria": {
+    "requirement": {
+      "trigger": "minecraft:placed_block",
+      "conditions": {
+        "block": "factorcraft:transmitter"
+      }
+    }
+  }
+}

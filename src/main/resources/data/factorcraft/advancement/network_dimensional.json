@@ -1,0 +1,21 @@
+{
+  "display": {
+    "icon": {
+      "id": "factorcraft:dimensional_transmitter"
+    },
+    "title": "跨维度网络",
+    "description": "使用跨维度传递器",
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "parent": "factorcraft:network_first",
+  "criteria": {
+    "requirement": {
+      "trigger": "minecraft:placed_block",
+      "conditions": {
+        "block": "factorcraft:dimensional_transmitter"
+      }
+    }
+  }
+}

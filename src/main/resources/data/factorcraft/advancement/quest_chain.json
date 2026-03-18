@@ -1,0 +1,18 @@
+{
+  "display": {
+    "icon": {
+      "id": "factorcraft:quest_chain_scroll"
+    },
+    "title": "任务链探索者",
+    "description": "完成一个任务链",
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "parent": "factorcraft:quest_explorer",
+  "criteria": {
+    "requirement": {
+      "trigger": "factorcraft:quest_chain_completed"
+    }
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "display": {
+    "icon": {
+      "id": "factorcraft:extractor_t5"
+    },
+    "title": "机器大师",
+    "description": "解锁所有 T5 级机器",
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "parent": "factorcraft:machine_t4",
+  "criteria": {
+    "extractor_t5": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [{"items": ["factorcraft:extractor_t5"]}]
+      }
+    },
+    "synthesizer_t5": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [{"items": ["factorcraft:synthesizer_t5"]}]
+      }
+    },
+    "cultivator_t5": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [{"items": ["factorcraft:cultivator_t5"]}]
+      }
+    }
+  },
+  "requirements": [["extractor_t5"], ["synthesizer_t5"], ["cultivator_t5"]]
+}

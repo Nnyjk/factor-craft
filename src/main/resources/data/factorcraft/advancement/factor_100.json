@@ -1,0 +1,21 @@
+{
+  "display": {
+    "icon": {
+      "id": "factorcraft:factor_item_crystal_sharp"
+    },
+    "title": "Factor 新手",
+    "description": "收集 100 Factor",
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "parent": "factorcraft:root",
+  "criteria": {
+    "requirement": {
+      "trigger": "factorcraft:factor_collected",
+      "conditions": {
+        "amount": 100
+      }
+    }
+  }
+}

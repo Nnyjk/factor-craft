@@ -1,0 +1,28 @@
+{
+  "display": {
+    "icon": {
+      "id": "minecraft:netherrack"
+    },
+    "title": "维度探索者",
+    "description": "在所有维度采集 Factor",
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "parent": "factorcraft:explore_altar",
+  "criteria": {
+    "overworld": {
+      "trigger": "minecraft:location",
+      "conditions": {"dimension": "minecraft:overworld"}
+    },
+    "nether": {
+      "trigger": "minecraft:location",
+      "conditions": {"dimension": "minecraft:the_nether"}
+    },
+    "end": {
+      "trigger": "minecraft:location",
+      "conditions": {"dimension": "minecraft:the_end"}
+    }
+  },
+  "requirements": [["overworld"], ["nether"], ["end"]]
+}
