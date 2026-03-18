@@ -1,7 +1,10 @@
 package com.factorcraft.module.creature.mutation;
 
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.attribute.EntityAttribute;
+import net.minecraft.entity.attribute.EntityAttributeInstance;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 
@@ -22,6 +25,9 @@ public class MutatedCreatureState {
     
     /** 变异应用时间（tick） */
     private final long applyTime;
+    
+    /** 原始属性值（用于恢复） */
+    private final Map<String, Double> originalAttributes = new HashMap<>();
     
     /** 过期时间（临时变异，0 = 永久） */
     private long expireTime;
@@ -113,6 +119,33 @@ public class MutatedCreatureState {
      */
     public UUID getCreatureId() {
         return creatureId;
+    }
+    
+    /**
+     * 保存原始属性值
+     * @param attributeId 属性标识符
+     * @param value 原始值
+     */
+    public void saveOriginalAttribute(String attributeId, double value) {
+        originalAttributes.putIfAbsent(attributeId, value);
+    }
+    
+    /**
+     * 获取原始属性值
+     * @param attributeId 属性标识符
+     * @return 原始值，不存在返回 null
+     */
+    @Nullable
+    public Double getOriginalAttribute(String attributeId) {
+        return originalAttributes.get(attributeId);
+    }
+    
+    /**
+     * 获取所有原始属性
+     * @return 不可修改的属性映射
+     */
+    public Map<String, Double> getOriginalAttributes() {
+        return Collections.unmodifiableMap(originalAttributes);
     }
     
     /**

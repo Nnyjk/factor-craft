@@ -7,6 +7,7 @@ import com.factorcraft.module.vfx.particle.FactorParticleTypes;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeInstance;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.effect.StatusEffectInstance;
@@ -140,8 +141,8 @@ public class MutationManager {
         
         state.addMutation(Identifier.of(FactorCraftMod.MOD_ID, mutation.id()), duration, permanent);
         
-        // 应用效果
-        applyMutationEffects(creature, mutation);
+        // 应用效果（传入 state 以保存原始属性值）
+        applyMutationEffects(creature, mutation, state);
         
         FactorCraftMod.LOGGER.debug("Applied mutation {} to creature {}", mutation.id(), creature.getType());
     }
@@ -149,27 +150,31 @@ public class MutationManager {
     /**
      * 应用变异效果到生物
      */
-    private void applyMutationEffects(LivingEntity creature, MutationEffect mutation) {
+    private void applyMutationEffects(LivingEntity creature, MutationEffect mutation, MutatedCreatureState state) {
         // 应用状态效果
         for (StatusEffectInstance effect : mutation.effects()) {
             creature.addStatusEffect(effect);
         }
         
-        // 修改属性（Minecraft 1.21.4 API）
-        applyAttributeModifier(creature, EntityAttributes.ATTACK_DAMAGE, mutation.damageModifier());
-        applyAttributeModifier(creature, EntityAttributes.MAX_HEALTH, mutation.healthModifier());
-        applyAttributeModifier(creature, EntityAttributes.MOVEMENT_SPEED, mutation.speedModifier());
+        // 修改属性（Minecraft 1.21.4 API），保存原始值以便恢复
+        applyAttributeModifier(creature, EntityAttributes.ATTACK_DAMAGE, mutation.damageModifier(), state);
+        applyAttributeModifier(creature, EntityAttributes.MAX_HEALTH, mutation.healthModifier(), state);
+        applyAttributeModifier(creature, EntityAttributes.MOVEMENT_SPEED, mutation.speedModifier(), state);
     }
     
     /**
      * 应用属性修正
      */
-    private void applyAttributeModifier(LivingEntity creature, net.minecraft.registry.entry.RegistryEntry<net.minecraft.entity.attribute.EntityAttribute> attribute, double modifier) {
+    private void applyAttributeModifier(LivingEntity creature, net.minecraft.registry.entry.RegistryEntry<net.minecraft.entity.attribute.EntityAttribute> attribute, double modifier, MutatedCreatureState state) {
         EntityAttributeInstance instance = creature.getAttributeInstance(attribute);
-        if (instance != null) {
-            // 移除旧的修正（如果有）
-            // 注意：实际实现需要跟踪 UUID 以避免重复应用
-            instance.setBaseValue(instance.getBaseValue() * modifier);
+        if (instance != null && modifier != 0) {
+            // 保存原始值
+            String attrId = attribute.getIdAsString();
+            state.saveOriginalAttribute(attrId, instance.getBaseValue());
+            
+            // 应用新值（基于百分比修正）
+            double newValue = instance.getBaseValue() * (1 + modifier);
+            instance.setBaseValue(newValue);
         }
     }
     
@@ -179,8 +184,40 @@ public class MutationManager {
     public void removeMutations(LivingEntity creature) {
         MutatedCreatureState state = creatureStates.remove(creature.getUuid());
         if (state != null) {
-            // TODO: 恢复原始属性
+            // 恢复原始属性
+            restoreOriginalAttributes(creature, state);
             FactorCraftMod.LOGGER.debug("Removed mutations from creature {}", creature.getType());
+        }
+    }
+    
+    /**
+     * 恢复生物的原始属性值
+     */
+    private void restoreOriginalAttributes(LivingEntity creature, MutatedCreatureState state) {
+        for (Map.Entry<String, Double> entry : state.getOriginalAttributes().entrySet()) {
+            String attrId = entry.getKey();
+            Double originalValue = entry.getValue();
+            
+            // 解析属性标识符并恢复
+            try {
+                Identifier id = Identifier.of(attrId);
+                // 获取注册表中的属性
+                net.minecraft.registry.Registry<EntityAttribute> registry = 
+                    net.minecraft.registry.Registries.ATTRIBUTE;
+                EntityAttribute attribute = registry.get(id);
+                
+                if (attribute != null) {
+                    EntityAttributeInstance instance = creature.getAttributeInstance(
+                        net.minecraft.registry.entry.RegistryEntry.of(attribute)
+                    );
+                    if (instance != null) {
+                        instance.setBaseValue(originalValue);
+                        FactorCraftMod.LOGGER.debug("Restored attribute {} to {}", attrId, originalValue);
+                    }
+                }
+            } catch (Exception e) {
+                FactorCraftMod.LOGGER.warn("Failed to restore attribute {}: {}", attrId, e.getMessage());
+            }
         }
     }
     
