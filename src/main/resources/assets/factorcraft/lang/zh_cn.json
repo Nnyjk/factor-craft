@@ -173,5 +173,21 @@
   "factorcraft.structure.extractor.t4": "提取器结构 T4",
   "factorcraft.structure.extractor.t5": "提取器结构 T5",
   
+  "subtitles.factorcraft.extractor_work": "提取器工作",
+  "subtitles.factorcraft.synthesizer_work": "合成器工作",
+  "subtitles.factorcraft.consumer_work": "消耗器工作",
+  "subtitles.factorcraft.transmitter_work": "传递器工作",
+  "subtitles.factorcraft.cultivator_work": "培育器工作",
+  "subtitles.factorcraft.breeder_work": "繁殖器工作",
+  "subtitles.factorcraft.ui_button_click": "按钮点击",
+  "subtitles.factorcraft.item_pickup": "物品拾取",
+  "subtitles.factorcraft.recipe_unlock": "配方解锁",
+  "subtitles.factorcraft.factor_collect": "Factor 收集",
+  "subtitles.factorcraft.achievement_unlock": "成就解锁",
+  "subtitles.factorcraft.quest_complete": "任务完成",
+  "subtitles.factorcraft.level_up": "等级提升",
+  "subtitles.factorcraft.factor_ambient": "Factor 环境",
+  "subtitles.factorcraft.factor_flow": "Factor 流动",
+  
   "gui.close": "关闭"
 }

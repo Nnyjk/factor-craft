@@ -1,0 +1,62 @@
+{
+  "extractor_work": {
+    "subtitle": "subtitles.factorcraft.extractor_work",
+    "sounds": [{"name": "factorcraft:extractor_work", "volume": 0.5, "pitch": 1.0}]
+  },
+  "synthesizer_work": {
+    "subtitle": "subtitles.factorcraft.synthesizer_work",
+    "sounds": [{"name": "factorcraft:synthesizer_work", "volume": 0.5, "pitch": 1.0}]
+  },
+  "consumer_work": {
+    "subtitle": "subtitles.factorcraft.consumer_work",
+    "sounds": [{"name": "factorcraft:consumer_work", "volume": 0.5, "pitch": 1.0}]
+  },
+  "transmitter_work": {
+    "subtitle": "subtitles.factorcraft.transmitter_work",
+    "sounds": [{"name": "factorcraft:transmitter_work", "volume": 0.3, "pitch": 1.0}]
+  },
+  "cultivator_work": {
+    "subtitle": "subtitles.factorcraft.cultivator_work",
+    "sounds": [{"name": "factorcraft:cultivator_work", "volume": 0.5, "pitch": 1.0}]
+  },
+  "breeder_work": {
+    "subtitle": "subtitles.factorcraft.breeder_work",
+    "sounds": [{"name": "factorcraft:breeder_work", "volume": 0.5, "pitch": 1.0}]
+  },
+  "ui_button_click": {
+    "subtitle": "subtitles.factorcraft.ui_button_click",
+    "sounds": [{"name": "block.stone_button.click_on", "volume": 0.8, "pitch": 1.2}]
+  },
+  "item_pickup": {
+    "subtitle": "subtitles.factorcraft.item_pickup",
+    "sounds": [{"name": "entity.item.pickup", "volume": 0.6, "pitch": 1.0}]
+  },
+  "recipe_unlock": {
+    "subtitle": "subtitles.factorcraft.recipe_unlock",
+    "sounds": [{"name": "factorcraft:recipe_unlock", "volume": 0.7, "pitch": 1.0}]
+  },
+  "factor_collect": {
+    "subtitle": "subtitles.factorcraft.factor_collect",
+    "sounds": [{"name": "factorcraft:factor_collect", "volume": 0.6, "pitch": 1.0}]
+  },
+  "achievement_unlock": {
+    "subtitle": "subtitles.factorcraft.achievement_unlock",
+    "sounds": [{"name": "ui.toast.challenge_complete", "volume": 0.8, "pitch": 1.0}]
+  },
+  "quest_complete": {
+    "subtitle": "subtitles.factorcraft.quest_complete",
+    "sounds": [{"name": "factorcraft:quest_complete", "volume": 0.8, "pitch": 1.0}]
+  },
+  "level_up": {
+    "subtitle": "subtitles.factorcraft.level_up",
+    "sounds": [{"name": "entity.player.levelup", "volume": 0.75, "pitch": 1.0}]
+  },
+  "factor_ambient": {
+    "subtitle": "subtitles.factorcraft.factor_ambient",
+    "sounds": [{"name": "factorcraft:factor_ambient", "volume": 0.3, "pitch": 1.0}]
+  },
+  "factor_flow": {
+    "subtitle": "subtitles.factorcraft.factor_flow",
+    "sounds": [{"name": "factorcraft:factor_flow", "volume": 0.4, "pitch": 1.0}]
+  }
+}

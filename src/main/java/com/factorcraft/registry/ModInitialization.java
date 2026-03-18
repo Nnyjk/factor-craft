@@ -17,6 +17,9 @@ public class ModInitialization {
         // 注册配方类型（仅用于 JEI/REI 显示）
         ModRecipes.register();
         
+        // 注册音效
+        ModSounds.initialize();
+        
         // 注册 Factor 网络扫描仪
         com.factorcraft.module.network.ModScanners.register();
         

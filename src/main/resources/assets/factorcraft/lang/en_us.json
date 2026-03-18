@@ -173,5 +173,21 @@
   "factorcraft.structure.extractor.t4": "Extractor Structure T4",
   "factorcraft.structure.extractor.t5": "Extractor Structure T5",
   
+  "subtitles.factorcraft.extractor_work": "Extractor working",
+  "subtitles.factorcraft.synthesizer_work": "Synthesizer working",
+  "subtitles.factorcraft.consumer_work": "Consumer working",
+  "subtitles.factorcraft.transmitter_work": "Transmitter working",
+  "subtitles.factorcraft.cultivator_work": "Cultivator working",
+  "subtitles.factorcraft.breeder_work": "Breeder working",
+  "subtitles.factorcraft.ui_button_click": "Button click",
+  "subtitles.factorcraft.item_pickup": "Item pickup",
+  "subtitles.factorcraft.recipe_unlock": "Recipe unlocked",
+  "subtitles.factorcraft.factor_collect": "Factor collected",
+  "subtitles.factorcraft.achievement_unlock": "Achievement unlocked",
+  "subtitles.factorcraft.quest_complete": "Quest completed",
+  "subtitles.factorcraft.level_up": "Level up",
+  "subtitles.factorcraft.factor_ambient": "Factor ambient",
+  "subtitles.factorcraft.factor_flow": "Factor flowing",
+  
   "gui.close": "Close"
 }
