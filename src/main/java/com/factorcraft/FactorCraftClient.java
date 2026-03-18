@@ -39,7 +39,7 @@ public class FactorCraftClient implements ClientModInitializer {
         com.factorcraft.module.cultivation.ModCultivation.initClient();
         
         // 注册 VFX 客户端
-        com.factorcraft.module.vfx.VfxModule.getInstance().initializeClient();
+        com.factorcraft.module.vfx.client.VfxModuleClient.initialize();
         LOGGER.info("[FactorCraft:Client] VFX 客户端注册完成");
         
         LOGGER.info("[FactorCraft:Client] Screen 客户端注册完成");

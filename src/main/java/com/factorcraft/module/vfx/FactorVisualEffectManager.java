@@ -3,9 +3,6 @@ package com.factorcraft.module.vfx;
 import com.factorcraft.module.factor.FactorService;
 import com.factorcraft.module.factor.TideStatus;
 import com.factorcraft.module.vfx.particle.FactorParticleConfig;
-import com.factorcraft.module.vfx.particle.FactorParticleTypes;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.particle.ParticleEffect;
@@ -13,20 +10,21 @@ import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
 /**
- * Factor 视觉效果管理器
+ * Factor 视觉效果管理器（服务端）
  * 
  * 负责：
  * - 手持 Factor 效果
  * - 使用 Factor 效果
  * - 高浓度区域效果
  * - 强度分级效果
+ * 
+ * 注意：客户端相关代码在 FactorVisualEffectManagerClient 中
  */
 public class FactorVisualEffectManager {
     private static final FactorVisualEffectManager INSTANCE = new FactorVisualEffectManager();
@@ -70,19 +68,6 @@ public class FactorVisualEffectManager {
     }
     
     /**
-     * 客户端 tick 处理
-     */
-    public void tickClient(World world, ClientPlayerEntity player) {
-        if (!FactorParticleConfig.ENABLED) return;
-        
-        // 客户端手持效果增强
-        processHeldEffectsClient(world, player);
-        
-        // 高浓度区域屏幕效果
-        processAreaScreenEffects(world, player);
-    }
-    
-    /**
      * 服务端处理手持效果
      */
     private void processHeldEffectsServer(ServerWorld world, PlayerEntity player, long time) {
@@ -105,17 +90,6 @@ public class FactorVisualEffectManager {
                 spawnHeldEffectParticles(world, player, type, concentration);
                 heldEffectCooldowns.put(playerId, time);
             }
-        }
-    }
-    
-    /**
-     * 客户端处理手持效果（更精细）
-     */
-    private void processHeldEffectsClient(World world, ClientPlayerEntity player) {
-        ItemStack mainHand = player.getMainHandStack();
-        if (!mainHand.isEmpty() && isFactorItem(mainHand)) {
-            // 客户端额外渲染：手持时微微发光
-            // 这里可以添加更复杂的渲染效果
         }
     }
     
@@ -226,19 +200,6 @@ public class FactorVisualEffectManager {
             world.spawnParticles(ParticleTypes.END_ROD,
                 x, y, z, 3, 0.5, 0.5, 0.5, 0.05);
         }
-    }
-    
-    /**
-     * 处理屏幕效果（客户端）
-     */
-    private void processAreaScreenEffects(World world, ClientPlayerEntity player) {
-        if (world instanceof ServerWorld serverWorld) {
-            double concentration = FactorService.getInstance().getFactor(serverWorld);
-            TideStatus status = TideStatus.fromConcentration(concentration);
-        }
-        // 高浓度区域的屏幕效果由客户端处理
-        // 这里可以添加着色器效果或屏幕扭曲
-        // 目前使用粒子效果替代
     }
     
     /**

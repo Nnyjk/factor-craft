@@ -3,7 +3,6 @@ package com.factorcraft.module.vfx;
 import com.factorcraft.FactorCraftMod;
 import com.factorcraft.module.FactorCraftModule;
 import com.factorcraft.module.vfx.particle.FactorParticleTypes;
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -17,6 +16,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * - 使用效果渲染
  * - 高浓度区域效果
  * - 过载特效
+ * 
+ * 注意：客户端相关代码在 VfxModuleClient 中
  */
 public final class VfxModule implements FactorCraftModule {
     private static final AtomicBoolean REGISTERED = new AtomicBoolean(false);
@@ -49,18 +50,6 @@ public final class VfxModule implements FactorCraftModule {
                 "[FactorCraft:VFX] 视觉效果系统已启用 " +
                 "(5 种元素类型/手持效果/区域效果/过载特效)");
         }
-    }
-    
-    /**
-     * 客户端初始化
-     */
-    public void initializeClient() {
-        // 客户端 tick 处理
-        ClientTickEvents.END_CLIENT_TICK.register(client -> {
-            if (client.world != null && client.player != null) {
-                FactorVisualEffectManager.getInstance().tickClient(client.world, client.player);
-            }
-        });
     }
     
     @Override
