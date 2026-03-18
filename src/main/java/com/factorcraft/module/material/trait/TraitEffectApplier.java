@@ -1,5 +1,6 @@
 package com.factorcraft.module.material.trait;
 
+import com.factorcraft.module.factor.FactorService;
 import com.factorcraft.module.factor.TideStatus;
 import com.factorcraft.module.material.model.TraitCategory;
 import com.factorcraft.module.material.model.TraitEffect;
@@ -166,9 +167,17 @@ public class TraitEffectApplier {
             }
         }
         
-        // 浓度条件（TODO: 集成 Factor 浓度系统）
-        if (condition.getConcentrationBelow().isPresent()) {
-            // 暂时返回 true，等待浓度系统集成
+        // 浓度条件
+        if (condition.getConcentrationBelow().isPresent() && entity.getWorld() instanceof ServerWorld serverWorld) {
+            double threshold = condition.getConcentrationBelow().get();
+            try {
+                double currentConcentration = FactorService.getInstance().getFactor(serverWorld);
+                if (currentConcentration >= threshold) {
+                    return false; // 浓度不低于阈值
+                }
+            } catch (Exception e) {
+                LOGGER.debug("Failed to get factor concentration: {}", e.getMessage());
+            }
         }
         
         return true;
