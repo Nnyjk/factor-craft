@@ -37,7 +37,7 @@ public class FactorBatteryItem extends Item {
     public final BatteryTier tier;
     
     public FactorBatteryItem(BatteryTier tier, Settings settings) {
-        super(settings.maxCount(1));
+        super(settings);
         this.tier = tier;
     }
     
