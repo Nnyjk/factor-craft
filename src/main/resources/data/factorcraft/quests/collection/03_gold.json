@@ -1,0 +1,29 @@
+{
+  "id": "collection_03",
+  "title": "黄金矿工",
+  "description": "收集大量的黄金。",
+  "category": "collection",
+  "difficulty": "medium",
+  "objectives": [
+    {
+      "type": "collect_item",
+      "item": "minecraft:gold_ingot",
+      "count": 128,
+      "description": "收集 128 个金锭"
+    }
+  ],
+  "rewards": [
+    {
+      "type": "item",
+      "item": "factorcraft:factor_crystal",
+      "count": 15
+    },
+    {
+      "type": "quest_xp",
+      "amount": 400
+    }
+  ],
+  "prerequisites": [],
+  "repeatable": true,
+  "hidden": false
+}

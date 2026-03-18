@@ -1,0 +1,29 @@
+{
+  "id": "tutorial_07",
+  "title": "培育器核心",
+  "description": "制作培育器核心，开始特性注入。",
+  "category": "tutorial",
+  "difficulty": "medium",
+  "objectives": [
+    {
+      "type": "craft_item",
+      "item": "factorcraft:cultivator_core",
+      "count": 1,
+      "description": "制作培育器核心"
+    }
+  ],
+  "rewards": [
+    {
+      "type": "item",
+      "item": "minecraft:wheat",
+      "count": 64
+    },
+    {
+      "type": "quest_xp",
+      "amount": 250
+    }
+  ],
+  "prerequisites": ["tutorial_06"],
+  "repeatable": false,
+  "hidden": false
+}

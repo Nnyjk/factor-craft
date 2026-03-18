@@ -1,0 +1,33 @@
+{
+  "id": "challenge_05",
+  "title": "完美注入",
+  "description": "连续成功注入 5 次特性。",
+  "category": "challenge",
+  "difficulty": "very_hard",
+  "objectives": [
+    {
+      "type": "consecutive_success",
+      "action": "trait_infusion",
+      "count": 5,
+      "description": "连续 5 次成功注入特性"
+    }
+  ],
+  "rewards": [
+    {
+      "type": "item",
+      "item": "factorcraft:harmonic_crystal",
+      "count": 4
+    },
+    {
+      "type": "factor",
+      "amount": 3000.0
+    },
+    {
+      "type": "quest_xp",
+      "amount": 2000
+    }
+  ],
+  "prerequisites": ["challenge_04"],
+  "repeatable": true,
+  "hidden": true
+}

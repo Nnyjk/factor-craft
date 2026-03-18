@@ -1,0 +1,29 @@
+{
+  "id": "tutorial_09",
+  "title": "多方块结构",
+  "description": "建造第一个多方块机器结构。",
+  "category": "tutorial",
+  "difficulty": "hard",
+  "objectives": [
+    {
+      "type": "build_multiblock",
+      "structure": "factorcraft:extractor",
+      "count": 1,
+      "description": "建造提取器多方块结构"
+    }
+  ],
+  "rewards": [
+    {
+      "type": "item",
+      "item": "factorcraft:shadow_steel_ingot",
+      "count": 16
+    },
+    {
+      "type": "quest_xp",
+      "amount": 500
+    }
+  ],
+  "prerequisites": ["tutorial_08"],
+  "repeatable": false,
+  "hidden": false
+}

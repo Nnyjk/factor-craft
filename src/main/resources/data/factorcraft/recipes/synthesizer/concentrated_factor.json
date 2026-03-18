@@ -1,0 +1,15 @@
+{
+  "type": "factorcraft:factor_fusion",
+  "group": "special_synthesis",
+  "input": {
+    "item": "factorcraft:factor_crystal"
+  },
+  "input_count": 16,
+  "output": {
+    "item": "factorcraft:concentrated_factor",
+    "count": 1
+  },
+  "factor_cost": 2000.0,
+  "craft_time": 1000,
+  "category": "special"
+}

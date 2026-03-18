@@ -1,0 +1,11 @@
+{
+  "type": "factorcraft:consumer",
+  "group": "recycling",
+  "input": {
+    "item": "factorcraft:flame_essence"
+  },
+  "input_count": 1,
+  "output_factor": 800.0,
+  "conversion_time": 200,
+  "category": "recycling"
+}

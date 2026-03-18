@@ -1,0 +1,11 @@
+{
+  "type": "factorcraft:extractor",
+  "group": "advanced_extraction",
+  "input": {
+    "item": "minecraft:sea_lantern"
+  },
+  "input_count": 1,
+  "output_factor": 180.0,
+  "extraction_time": 500,
+  "category": "extraction"
+}

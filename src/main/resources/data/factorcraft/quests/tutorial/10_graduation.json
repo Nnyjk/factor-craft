@@ -1,0 +1,32 @@
+{
+  "id": "tutorial_10",
+  "title": "新手毕业",
+  "description": "完成所有新手教程，准备好迎接真正的挑战！",
+  "category": "tutorial",
+  "difficulty": "hard",
+  "objectives": [
+    {
+      "type": "complete_quest_chain",
+      "chain": "tutorial",
+      "description": "完成所有新手任务"
+    }
+  ],
+  "rewards": [
+    {
+      "type": "item",
+      "item": "factorcraft:stardust_ingot",
+      "count": 8
+    },
+    {
+      "type": "factor",
+      "amount": 1000.0
+    },
+    {
+      "type": "quest_xp",
+      "amount": 1000
+    }
+  ],
+  "prerequisites": ["tutorial_09"],
+  "repeatable": false,
+  "hidden": false
+}

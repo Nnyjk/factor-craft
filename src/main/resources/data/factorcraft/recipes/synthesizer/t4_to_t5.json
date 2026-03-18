@@ -1,0 +1,15 @@
+{
+  "type": "factorcraft:factor_fusion",
+  "group": "material_upgrade",
+  "input": {
+    "item": "factorcraft:ancient_alloy"
+  },
+  "input_count": 512,
+  "output": {
+    "item": "factorcraft:void_crystal",
+    "count": 51
+  },
+  "factor_cost": 125000.0,
+  "craft_time": 6000,
+  "category": "material"
+}

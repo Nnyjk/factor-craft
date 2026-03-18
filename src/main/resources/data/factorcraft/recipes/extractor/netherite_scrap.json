@@ -1,0 +1,11 @@
+{
+  "type": "factorcraft:extractor",
+  "group": "advanced_extraction",
+  "input": {
+    "item": "minecraft:netherite_scrap"
+  },
+  "input_count": 1,
+  "output_factor": 300.0,
+  "extraction_time": 800,
+  "category": "extraction"
+}

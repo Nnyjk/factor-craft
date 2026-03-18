@@ -1,0 +1,19 @@
+{
+  "type": "factorcraft:trait_infusion",
+  "group": "basic_trait",
+  "input": {
+    "item": "minecraft:potato"
+  },
+  "input_count": 1,
+  "trait_item": {
+    "item": "factorcraft:factor_crystal"
+  },
+  "output": {
+    "item": "factorcraft:energized_potato",
+    "count": 1
+  },
+  "factor_cost": 500.0,
+  "craft_time": 600,
+  "success_rate": 0.3,
+  "category": "trait"
+}

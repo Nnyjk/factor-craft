@@ -1,0 +1,11 @@
+{
+  "type": "factorcraft:extractor",
+  "group": "basic_extraction",
+  "input": {
+    "item": "minecraft:coal"
+  },
+  "input_count": 1,
+  "output_factor": 50.0,
+  "extraction_time": 200,
+  "category": "extraction"
+}

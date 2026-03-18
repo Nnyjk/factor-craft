@@ -1,0 +1,29 @@
+{
+  "id": "construction_08",
+  "title": "多方块合成器",
+  "description": "建造大型多方块合成器结构。",
+  "category": "construction",
+  "difficulty": "hard",
+  "objectives": [
+    {
+      "type": "build_multiblock",
+      "structure": "factorcraft:large_synthesizer",
+      "count": 1,
+      "description": "建造大型合成器"
+    }
+  ],
+  "rewards": [
+    {
+      "type": "item",
+      "item": "factorcraft:ancient_alloy",
+      "count": 4
+    },
+    {
+      "type": "quest_xp",
+      "amount": 800
+    }
+  ],
+  "prerequisites": ["construction_02"],
+  "repeatable": false,
+  "hidden": false
+}

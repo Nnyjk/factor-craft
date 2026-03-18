@@ -1,0 +1,29 @@
+{
+  "id": "tutorial_05",
+  "title": "材料升级",
+  "description": "使用合成器将材料升级到 T2 等级。",
+  "category": "tutorial",
+  "difficulty": "medium",
+  "objectives": [
+    {
+      "type": "craft_item",
+      "item": "factorcraft:shadow_steel_ingot",
+      "count": 1,
+      "description": "制作 T2 材料"
+    }
+  ],
+  "rewards": [
+    {
+      "type": "item",
+      "item": "factorcraft:shadow_steel_ingot",
+      "count": 8
+    },
+    {
+      "type": "quest_xp",
+      "amount": 200
+    }
+  ],
+  "prerequisites": ["tutorial_04"],
+  "repeatable": false,
+  "hidden": false
+}

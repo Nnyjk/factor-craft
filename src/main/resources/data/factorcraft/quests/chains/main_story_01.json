@@ -1,0 +1,30 @@
+{
+  "id": "chain_main_01",
+  "title": "Factor 觉醒 [1/10]",
+  "description": "发现神秘的 Factor 晶体，开始你的 Factor 之旅。",
+  "category": "chain",
+  "chain": "main_story",
+  "difficulty": "easy",
+  "objectives": [
+    {
+      "type": "craft_item",
+      "item": "factorcraft:factor_crystal",
+      "count": 1,
+      "description": "制作 Factor 晶体"
+    }
+  ],
+  "rewards": [
+    {
+      "type": "item",
+      "item": "factorcraft:factor_crystal",
+      "count": 3
+    },
+    {
+      "type": "quest_xp",
+      "amount": 50
+    }
+  ],
+  "prerequisites": [],
+  "repeatable": false,
+  "hidden": false
+}

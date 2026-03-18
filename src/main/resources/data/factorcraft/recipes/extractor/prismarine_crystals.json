@@ -1,0 +1,11 @@
+{
+  "type": "factorcraft:extractor",
+  "group": "advanced_extraction",
+  "input": {
+    "item": "minecraft:prismarine_crystals"
+  },
+  "input_count": 4,
+  "output_factor": 120.0,
+  "extraction_time": 400,
+  "category": "extraction"
+}

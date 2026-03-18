@@ -1,0 +1,35 @@
+{
+  "id": "tutorial_04",
+  "title": "能量传输",
+  "description": "制作并放置传递器，学习 Factor 传输。",
+  "category": "tutorial",
+  "difficulty": "easy",
+  "objectives": [
+    {
+      "type": "craft_item",
+      "item": "factorcraft:transmitter_core",
+      "count": 1,
+      "description": "制作传递器核心"
+    },
+    {
+      "type": "place_block",
+      "block": "factorcraft:transmitter_core",
+      "count": 1,
+      "description": "放置传递器核心"
+    }
+  ],
+  "rewards": [
+    {
+      "type": "item",
+      "item": "factorcraft:factor_crystal",
+      "count": 10
+    },
+    {
+      "type": "quest_xp",
+      "amount": 150
+    }
+  ],
+  "prerequisites": ["tutorial_03"],
+  "repeatable": false,
+  "hidden": false
+}

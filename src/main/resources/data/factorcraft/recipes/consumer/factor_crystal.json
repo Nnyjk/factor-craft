@@ -1,0 +1,11 @@
+{
+  "type": "factorcraft:consumer",
+  "group": "factor_conversion",
+  "input": {
+    "item": "factorcraft:factor_crystal"
+  },
+  "input_count": 1,
+  "output_factor": 500.0,
+  "conversion_time": 100,
+  "category": "conversion"
+}

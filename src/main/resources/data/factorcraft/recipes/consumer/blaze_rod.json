@@ -1,0 +1,11 @@
+{
+  "type": "factorcraft:consumer",
+  "group": "emergency_power",
+  "input": {
+    "item": "minecraft:blaze_rod"
+  },
+  "input_count": 1,
+  "output_factor": 300.0,
+  "conversion_time": 200,
+  "category": "emergency"
+}

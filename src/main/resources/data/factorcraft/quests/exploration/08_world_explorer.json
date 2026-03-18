@@ -1,0 +1,42 @@
+{
+  "id": "exploration_08",
+  "title": "世界探索者",
+  "description": "探索所有主要维度和生物群系。",
+  "category": "exploration",
+  "difficulty": "very_hard",
+  "objectives": [
+    {
+      "type": "visit_dimension",
+      "dimension": "minecraft:overworld",
+      "description": "在主世界探索"
+    },
+    {
+      "type": "visit_dimension",
+      "dimension": "minecraft:the_nether",
+      "description": "在下界探索"
+    },
+    {
+      "type": "visit_dimension",
+      "dimension": "minecraft:the_end",
+      "description": "在末地探索"
+    }
+  ],
+  "rewards": [
+    {
+      "type": "item",
+      "item": "factorcraft:void_crystal",
+      "count": 2
+    },
+    {
+      "type": "factor",
+      "amount": 3000.0
+    },
+    {
+      "type": "quest_xp",
+      "amount": 1500
+    }
+  ],
+  "prerequisites": ["exploration_01", "exploration_02"],
+  "repeatable": false,
+  "hidden": false
+}

@@ -1,0 +1,32 @@
+{
+  "id": "challenge_07",
+  "title": "Factor 大亨",
+  "description": "累计存储 10000 点 Factor。",
+  "category": "challenge",
+  "difficulty": "very_hard",
+  "objectives": [
+    {
+      "type": "store_factor",
+      "amount": 10000.0,
+      "description": "存储 10000 点 Factor"
+    }
+  ],
+  "rewards": [
+    {
+      "type": "item",
+      "item": "factorcraft:void_crystal",
+      "count": 4
+    },
+    {
+      "type": "factor",
+      "amount": 5000.0
+    },
+    {
+      "type": "quest_xp",
+      "amount": 2500
+    }
+  ],
+  "prerequisites": [],
+  "repeatable": false,
+  "hidden": false
+}

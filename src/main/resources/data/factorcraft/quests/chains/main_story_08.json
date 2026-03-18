@@ -1,0 +1,30 @@
+{
+  "id": "chain_main_08",
+  "title": "T4 材料 [8/10]",
+  "description": "解锁 T4 远古合金，接近科技巅峰。",
+  "category": "chain",
+  "chain": "main_story",
+  "difficulty": "very_hard",
+  "objectives": [
+    {
+      "type": "craft_item",
+      "item": "factorcraft:ancient_alloy",
+      "count": 1,
+      "description": "制作 T4 远古合金"
+    }
+  ],
+  "rewards": [
+    {
+      "type": "item",
+      "item": "factorcraft:ancient_alloy",
+      "count": 4
+    },
+    {
+      "type": "quest_xp",
+      "amount": 800
+    }
+  ],
+  "prerequisites": ["chain_main_07"],
+  "repeatable": false,
+  "hidden": false
+}

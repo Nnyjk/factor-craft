@@ -1,0 +1,15 @@
+{
+  "type": "factorcraft:factor_fusion",
+  "group": "material_upgrade",
+  "input": {
+    "item": "factorcraft:stardust_ingot"
+  },
+  "input_count": 256,
+  "output": {
+    "item": "factorcraft:ancient_alloy",
+    "count": 42
+  },
+  "factor_cost": 25000.0,
+  "craft_time": 3600,
+  "category": "material"
+}

@@ -1,0 +1,15 @@
+{
+  "type": "factorcraft:factor_fusion",
+  "group": "special_synthesis",
+  "input": {
+    "item": "minecraft:ghast_tear"
+  },
+  "input_count": 2,
+  "output": {
+    "item": "factorcraft:soul_essence",
+    "count": 1
+  },
+  "factor_cost": 8000.0,
+  "craft_time": 2500,
+  "category": "special"
+}

@@ -1,0 +1,35 @@
+{
+  "id": "chain_auto_04",
+  "title": "特性农场 [4/5]",
+  "description": "建造自动化特性注入农场。",
+  "category": "chain",
+  "chain": "automation",
+  "difficulty": "hard",
+  "objectives": [
+    {
+      "type": "build_multiblock",
+      "structure": "factorcraft:cultivator",
+      "count": 2,
+      "description": "建造 2 个自动化培育器"
+    },
+    {
+      "type": "infuse_trait",
+      "count": 20,
+      "description": "注入 20 次特性"
+    }
+  ],
+  "rewards": [
+    {
+      "type": "item",
+      "item": "factorcraft:resonance_crystal",
+      "count": 8
+    },
+    {
+      "type": "quest_xp",
+      "amount": 700
+    }
+  ],
+  "prerequisites": ["chain_auto_03"],
+  "repeatable": false,
+  "hidden": false
+}

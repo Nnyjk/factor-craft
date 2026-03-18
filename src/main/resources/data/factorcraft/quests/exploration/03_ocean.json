@@ -1,0 +1,33 @@
+{
+  "id": "exploration_03",
+  "title": "深海探索",
+  "description": "探索深海并收集海洋资源。",
+  "category": "exploration",
+  "difficulty": "medium",
+  "objectives": [
+    {
+      "type": "visit_biome",
+      "biome": "minecraft:deep_ocean",
+      "description": "到达深海生物群系"
+    },
+    {
+      "type": "collect_item",
+      "item": "minecraft:prismarine_crystals",
+      "count": 32,
+      "description": "收集 32 个海晶砂"
+    }
+  ],
+  "rewards": [
+    {
+      "type": "factor",
+      "amount": 800.0
+    },
+    {
+      "type": "quest_xp",
+      "amount": 450
+    }
+  ],
+  "prerequisites": [],
+  "repeatable": false,
+  "hidden": false
+}

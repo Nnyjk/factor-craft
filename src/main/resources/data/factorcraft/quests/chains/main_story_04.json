@@ -1,0 +1,36 @@
+{
+  "id": "chain_main_04",
+  "title": "特性注入 [4/10]",
+  "description": "学习特性注入技术，创造强化物品。",
+  "category": "chain",
+  "chain": "main_story",
+  "difficulty": "medium",
+  "objectives": [
+    {
+      "type": "craft_item",
+      "item": "factorcraft:cultivator_core",
+      "count": 1,
+      "description": "制作培育器核心"
+    },
+    {
+      "type": "infuse_trait",
+      "item": "factorcraft:energized_wheat",
+      "count": 1,
+      "description": "制作 energized_wheat"
+    }
+  ],
+  "rewards": [
+    {
+      "type": "item",
+      "item": "factorcraft:factor_crystal",
+      "count": 10
+    },
+    {
+      "type": "quest_xp",
+      "amount": 250
+    }
+  ],
+  "prerequisites": ["chain_main_03"],
+  "repeatable": false,
+  "hidden": false
+}

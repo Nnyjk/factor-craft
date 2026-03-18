@@ -1,0 +1,38 @@
+{
+  "id": "chain_auto_05",
+  "title": "完全自动化 [5/5]",
+  "description": "实现从提取到成品的全自动化生产线。",
+  "category": "chain",
+  "chain": "automation",
+  "difficulty": "very_hard",
+  "objectives": [
+    {
+      "type": "build_structure",
+      "structure": "full_automation",
+      "count": 1,
+      "description": "建造完整自动化系统"
+    }
+  ],
+  "rewards": [
+    {
+      "type": "item",
+      "item": "factorcraft:ancient_alloy",
+      "count": 8
+    },
+    {
+      "type": "factor",
+      "amount": 5000.0
+    },
+    {
+      "type": "quest_xp",
+      "amount": 1500
+    },
+    {
+      "type": "achievement",
+      "achievement": "factorcraft:automation_master"
+    }
+  ],
+  "prerequisites": ["chain_auto_04"],
+  "repeatable": false,
+  "hidden": false
+}
