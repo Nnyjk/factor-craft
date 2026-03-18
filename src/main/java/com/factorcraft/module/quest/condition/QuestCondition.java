@@ -76,6 +76,30 @@ public interface QuestCondition {
                 nbt.getDouble("required")
             );
             case COMPOSITE -> new CompositeCondition(CompositeCondition.LogicType.AND);
+            
+            // 探索型条件 (Issue #126)
+            case FACTOR_EXPLORE -> new FactorExploreCondition(
+                nbt.getDouble("min_concentration"),
+                nbt.getInt("required")
+            );
+            case STRUCTURE_DISCOVER -> new StructureDiscoverCondition(
+                nbt.contains("structure_id") ? Identifier.tryParse(nbt.getString("structure_id")) : null,
+                nbt.getInt("required")
+            );
+            
+            // 挑战型条件 (Issue #126) - 需要递归解析内部条件
+            case TIMED -> {
+                NbtCompound innerNbt = nbt.getCompound("inner");
+                QuestCondition inner = fromNbt(innerNbt, registries);
+                if (inner == null) yield null;
+                yield new TimedCondition(inner, (int) (nbt.getLong("time_limit") / 20));
+            }
+            case NO_DEATH -> {
+                NbtCompound innerNbt = nbt.getCompound("inner");
+                QuestCondition inner = fromNbt(innerNbt, registries);
+                if (inner == null) yield null;
+                yield new NoDeathCondition(inner);
+            }
         };
     }
 }
