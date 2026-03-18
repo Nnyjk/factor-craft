@@ -23,20 +23,24 @@ public final class TideSystem {
     }
 
     /**
-     * 根据偏离度获取潮汐状态
+     * 根据偏离度获取潮汐状态（旧 API，兼容用）
+     * @deprecated 使用 TideStatus.fromConcentration() 替代
      */
+    @Deprecated
     public static TideStatus getStatusFromDeviation(double deviation) {
-        double absDeviation = Math.abs(deviation);
-        
-        if (absDeviation <= 0.1) {
-            return TideStatus.STABLE;
-        } else if (absDeviation <= 0.3) {
-            return TideStatus.DEVIATED;
-        } else if (absDeviation <= 0.5) {
-            return TideStatus.FLUCTUATING;
-        } else {
-            return TideStatus.VOLATILE;
-        }
+        // 兼容旧 API，转换为浓度
+        double concentration = 0.5 + (deviation * 0.5);
+        concentration = Math.max(0.0, Math.min(1.0, concentration));
+        return TideStatus.fromConcentration(concentration);
+    }
+    
+    /**
+     * 根据 Factor 浓度获取潮汐状态（新 API）
+     * @param concentration Factor 浓度 (0.0-1.0)
+     * @return 对应的潮汐状态
+     */
+    public static TideStatus getStatusFromConcentration(double concentration) {
+        return TideStatus.fromConcentration(concentration);
     }
 
     /**

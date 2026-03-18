@@ -203,49 +203,34 @@ public class TideSystemMechanicsTest {
     class StatusTransition {
         
         @Test
+        @DisplayName("LOW_ENERGY/HIGH_ENERGY 状态边界")
+        void testLowHighEnergyStatus() {
+            // 负偏离（低浓度）
+            assertEquals(TideStatus.DEPLETED, TideStatus.fromConcentration(0.1));
+            assertEquals(TideStatus.LOW_ENERGY, TideStatus.fromConcentration(0.3));
+            // 正偏离（高浓度）
+            assertEquals(TideStatus.HIGH_ENERGY, TideStatus.fromConcentration(0.7));
+            assertEquals(TideStatus.OVERLOAD, TideStatus.fromConcentration(0.9));
+        }
+        
+        @Test
         @DisplayName("STABLE 状态边界")
         void testStableStatus() {
-            assertEquals(TideStatus.STABLE, TideSystem.getStatusFromDeviation(0));
-            assertEquals(TideStatus.STABLE, TideSystem.getStatusFromDeviation(0.1));
-            assertEquals(TideStatus.STABLE, TideSystem.getStatusFromDeviation(-0.1));
-            assertEquals(TideStatus.STABLE, TideSystem.getStatusFromDeviation(0.05));
+            // 浓度 40-60% 为 STABLE（不包含 60%）
+            assertEquals(TideStatus.STABLE, TideStatus.fromConcentration(0.4));
+            assertEquals(TideStatus.STABLE, TideStatus.fromConcentration(0.5));
+            assertEquals(TideStatus.HIGH_ENERGY, TideStatus.fromConcentration(0.6));
         }
         
         @Test
-        @DisplayName("DEVIATED 状态边界")
-        void testDeviatedStatus() {
-            assertEquals(TideStatus.DEVIATED, TideSystem.getStatusFromDeviation(0.11));
-            assertEquals(TideStatus.DEVIATED, TideSystem.getStatusFromDeviation(0.2));
-            assertEquals(TideStatus.DEVIATED, TideSystem.getStatusFromDeviation(0.3));
-            assertEquals(TideStatus.DEVIATED, TideSystem.getStatusFromDeviation(-0.15));
-        }
-        
-        @Test
-        @DisplayName("FLUCTUATING 状态边界")
-        void testFluctuatingStatus() {
-            assertEquals(TideStatus.FLUCTUATING, TideSystem.getStatusFromDeviation(0.31));
-            assertEquals(TideStatus.FLUCTUATING, TideSystem.getStatusFromDeviation(0.4));
-            assertEquals(TideStatus.FLUCTUATING, TideSystem.getStatusFromDeviation(0.5));
-            assertEquals(TideStatus.FLUCTUATING, TideSystem.getStatusFromDeviation(-0.4));
-        }
-        
-        @Test
-        @DisplayName("VOLATILE 状态边界")
-        void testVolatileStatus() {
-            assertEquals(TideStatus.VOLATILE, TideSystem.getStatusFromDeviation(0.51));
-            assertEquals(TideStatus.VOLATILE, TideSystem.getStatusFromDeviation(0.8));
-            assertEquals(TideStatus.VOLATILE, TideSystem.getStatusFromDeviation(1.0));
-            assertEquals(TideStatus.VOLATILE, TideSystem.getStatusFromDeviation(-0.6));
-        }
-        
-        @Test
-        @DisplayName("状态使用绝对偏离度")
-        void testAbsoluteDeviation() {
-            // 正负偏离应该产生相同状态
-            assertEquals(TideSystem.getStatusFromDeviation(0.2),
-                        TideSystem.getStatusFromDeviation(-0.2));
-            assertEquals(TideSystem.getStatusFromDeviation(0.4),
-                        TideSystem.getStatusFromDeviation(-0.4));
+        @DisplayName("效果概率")
+        void testEffectProbability() {
+            // DEPLETED (0.1) < LOW_ENERGY (0.2) < STABLE (0.0) < HIGH_ENERGY (0.3) < OVERLOAD (0.5)
+            assertEquals(0.1, TideStatus.DEPLETED.baseEffectChance(), 0.001);
+            assertEquals(0.2, TideStatus.LOW_ENERGY.baseEffectChance(), 0.001);
+            assertEquals(0.0, TideStatus.STABLE.baseEffectChance(), 0.001);
+            assertEquals(0.3, TideStatus.HIGH_ENERGY.baseEffectChance(), 0.001);
+            assertEquals(0.5, TideStatus.OVERLOAD.baseEffectChance(), 0.001);
         }
     }
     
@@ -350,20 +335,19 @@ public class TideSystemMechanicsTest {
         @Test
         @DisplayName("非 STABLE 触发效果")
         void testNonStableTrigger() {
-            assertTrue(TideStatus.DEVIATED.shouldTriggerEffects());
-            assertTrue(TideStatus.FLUCTUATING.shouldTriggerEffects());
-            assertTrue(TideStatus.VOLATILE.shouldTriggerEffects());
+            assertTrue(TideStatus.DEPLETED.shouldTriggerEffects());
+            assertTrue(TideStatus.LOW_ENERGY.shouldTriggerEffects());
+            assertTrue(TideStatus.HIGH_ENERGY.shouldTriggerEffects());
+            assertTrue(TideStatus.OVERLOAD.shouldTriggerEffects());
         }
         
         @Test
-        @DisplayName("效果概率递增")
-        void testIncreasingProbability() {
-            assertTrue(TideStatus.DEVIATED.baseEffectChance() > 
-                      TideStatus.STABLE.baseEffectChance());
-            assertTrue(TideStatus.FLUCTUATING.baseEffectChance() > 
-                      TideStatus.DEVIATED.baseEffectChance());
-            assertTrue(TideStatus.VOLATILE.baseEffectChance() > 
-                      TideStatus.FLUCTUATING.baseEffectChance());
+        @DisplayName("效果概率 - OVERLOAD 最高")
+        void testHighestProbability() {
+            // OVERLOAD 有最高的效果概率 (0.5)
+            assertEquals(0.5, TideStatus.OVERLOAD.baseEffectChance(), 0.001);
+            // STABLE 没有效果概率
+            assertEquals(0.0, TideStatus.STABLE.baseEffectChance(), 0.001);
         }
     }
 }

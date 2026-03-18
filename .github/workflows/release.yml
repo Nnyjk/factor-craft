@@ -1,0 +1,129 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'  # 匹配所有 v 开头的 tag，如 v0.2.0, v0.2.0-beta
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write  # 创建 Release 需要
+      packages: write  # 发布到 GitHub Packages 需要
+    
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    
+    - name: Set up JDK 21
+      uses: actions/setup-java@v4
+      with:
+        java-version: '21'
+        distribution: 'temurin'
+    
+    - name: Setup Gradle
+      uses: gradle/actions/setup-gradle@v3
+    
+    - name: Cache Fabric Loom
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/.gradle/caches/fabric-loom
+          ~/.gradle/caches/modules-2/files-2.1/net.fabricmc
+        key: fabric-loom-${{ hashFiles('gradle.properties') }}
+        restore-keys: |
+          fabric-loom-
+    
+    - name: Build Release
+      run: ./gradlew build --no-daemon
+    
+    - name: Run Tests
+      run: ./gradlew test runGametest --no-daemon
+    
+    - name: Extract Version from Tag
+      id: get_version
+      run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+    
+    - name: Generate Changelog
+      id: changelog
+      run: |
+        # 获取上一个 tag
+        PREVIOUS_TAG=$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || echo "")
+        
+        if [ -z "$PREVIOUS_TAG" ]; then
+          # 没有上一个 tag，获取所有 commits
+          CHANGELOG=$(git log --pretty=format:"- %s" HEAD)
+        else
+          # 获取两个 tag 之间的 commits
+          CHANGELOG=$(git log --pretty=format:"- %s" ${PREVIOUS_TAG}..HEAD)
+        fi
+        
+        # 保存到文件
+        echo "$CHANGELOG" > changelog.md
+        
+        # 输出到 GitHub Actions
+        {
+          echo 'CHANGELOG<<EOF'
+          echo "$CHANGELOG"
+          echo EOF
+        } >> $GITHUB_OUTPUT
+    
+    - name: Create GitHub Release
+      uses: softprops/action-gh-release@v1
+      with:
+        name: Release v${{ steps.get_version.outputs.VERSION }}
+        body: |
+          ## 📦 版本信息
+          
+          **版本号**: v${{ steps.get_version.outputs.VERSION }}
+          **Minecraft**: 1.21.4
+          **Fabric**: 0.16.10+
+          **发布日期**: ${{ github.event.head_commit.timestamp }}
+          
+          ## 📝 更新内容
+          
+          ${{ steps.changelog.outputs.CHANGELOG }}
+          
+          ## 📥 下载
+          
+          - [factor-craft-${{ steps.get_version.outputs.VERSION }}.jar](https://github.com/${{ github.repository }}/releases/download/v${{ steps.get_version.outputs.VERSION }}/factor-craft-${{ steps.get_version.outputs.VERSION }}.jar)
+          
+          ## ⚠️ 注意事项
+          
+          - 需要安装 Fabric Loader 0.16.10+
+          - 需要安装 Fabric API 0.119.2+
+          - 首次使用请备份存档
+          
+          ---
+          
+          *此 Release 由 GitHub Actions 自动生成*
+        files: |
+          build/libs/factor-craft-${{ steps.get_version.outputs.VERSION }}.jar
+          build/libs/factor-craft-${{ steps.get_version.outputs.VERSION }}-sources.jar
+        draft: false  # 直接发布，不保存为草稿
+        prerelease: ${{ contains(github.ref, '-beta') || contains(github.ref, '-alpha') || contains(github.ref, '-rc') }}
+        generate_release_notes: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    
+    - name: Upload to GitHub Packages (Optional)
+      # 如果需要发布到 GitHub Packages，取消下面注释
+      # run: |
+      #   ./gradlew publish
+      # env:
+      #   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: echo "GitHub Packages upload skipped (commented out)"
+    
+    - name: Notify Release Success
+      if: success()
+      run: |
+        echo "✅ Release v${{ steps.get_version.outputs.VERSION }} published successfully!"
+        echo "🔗 View at: https://github.com/${{ github.repository }}/releases/tag/v${{ steps.get_version.outputs.VERSION }}"
+    
+    - name: Notify Release Failure
+      if: failure()
+      run: |
+        echo "❌ Release failed! Check the logs for details."
+        exit 1

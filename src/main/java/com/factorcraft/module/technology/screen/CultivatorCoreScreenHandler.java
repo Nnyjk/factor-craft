@@ -75,6 +75,27 @@ public class CultivatorCoreScreenHandler extends ScreenHandler {
     public int getInfusionProgress() { return infusionProgress; }
     public double getFactorBuffer() { return factorBuffer; }
     
+    public double getMaxBuffer() {
+        return 1000 * tier; // 基础 1000 * tier
+    }
+    
+    public double getBufferPercentage() {
+        return getMaxBuffer() > 0 ? (factorBuffer / getMaxBuffer()) * 100 : 0;
+    }
+    
+    public boolean isStructureValid() {
+        return blockEntity instanceof CultivatorCoreBlockEntity;
+    }
+    
+    public boolean hasTraitInSlot(int slot) {
+        // TODO: 实现实际的特性检查
+        return false;
+    }
+    
+    public boolean isInfusing() {
+        return infusionProgress > 0 && infusionProgress < 100;
+    }
+    
     public String getStructureName() {
         return switch (tier) {
             case 1 -> "命运织机";

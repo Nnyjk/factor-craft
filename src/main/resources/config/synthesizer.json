@@ -1,0 +1,18 @@
+{
+  "version": "1.0.0",
+  "schema": "factorcraft:machines/synthesizer/1.0",
+  "machines": {
+    "synthesizer_t1": {
+      "speed": 1.0,
+      "capacity": 2000,
+      "energy_consumption": 20,
+      "crafting_time": 100
+    },
+    "synthesizer_t2": {
+      "speed": 2.0,
+      "capacity": 10000,
+      "energy_consumption": 50,
+      "crafting_time": 60
+    }
+  }
+}

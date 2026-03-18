@@ -1,5 +1,7 @@
 package com.factorcraft.module.cycle.block.entity;
 
+import com.factorcraft.api.IFactorNetworkNode;
+import com.factorcraft.module.cycle.network.FactorNetworkManager;
 import com.factorcraft.module.factor.FactorService;
 import com.factorcraft.module.factor.FactorTier;
 import net.minecraft.block.BlockState;
@@ -15,23 +17,26 @@ import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import java.util.UUID;
+
 /**
  * Factor 释放结构 BlockEntity
  * 
  * 功能：
- * - 消耗材料产生 Factor
- * - 根据维度倍率计算释放量
+ * - 从世界浓度提取 Factor 到网络
+ * - 根据维度倍率计算提取量
  * - 支持材料品质系数
  * 
  * 设计文档：docs/17_factor_cycle_structures.md
  */
-public class FactorSourceBlockEntity extends BlockEntity {
+public class FactorSourceBlockEntity extends BlockEntity implements IFactorNetworkNode {
     
     // NBT 键
     private static final String NBT_FACTOR_BUFFER = "FactorBuffer";
     private static final String NBT_PROGRESS = "Progress";
     private static final String NBT_TIER = "Tier";
     private static final String NBT_INPUT_STACK = "InputStack";
+    private static final String NBT_NODE_ID = "NodeId";
     
     // 配置参数
     private int factorBuffer = 0; // 待释放的 Factor 缓存
@@ -41,11 +46,18 @@ public class FactorSourceBlockEntity extends BlockEntity {
     // 物品栈
     private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(1, ItemStack.EMPTY);
     
+    // 网络相关
+    private final String nodeId;
+    
     // 处理时间（ticks）
     private static final int PROCESSING_TIME = 100; // 5 秒
     
+    // 传输速率（每 tick）
+    private static final double[] TRANSFER_RATE_BY_TIER = {10.0, 25.0, 50.0, 100.0};
+    
     public FactorSourceBlockEntity(BlockPos pos, BlockState state) {
         super(CycleBlockEntities.FACTOR_SOURCE, pos, state);
+        this.nodeId = UUID.randomUUID().toString();
     }
     
     @Override
@@ -54,6 +66,7 @@ public class FactorSourceBlockEntity extends BlockEntity {
         nbt.putInt(NBT_FACTOR_BUFFER, factorBuffer);
         nbt.putInt(NBT_PROGRESS, progress);
         nbt.putInt(NBT_TIER, tier.ordinal());
+        nbt.putString(NBT_NODE_ID, nodeId);
         Inventories.writeNbt(nbt, inventory, registryLookup);
     }
     
@@ -66,6 +79,15 @@ public class FactorSourceBlockEntity extends BlockEntity {
         Inventories.readNbt(nbt, inventory, registryLookup);
     }
     
+    @Override
+    public void markDirty() {
+        super.markDirty();
+        // 标记网络需要更新
+        if (world != null) {
+            FactorNetworkManager.getInstance().registerNode(world, this);
+        }
+    }
+    
     /**
      * 每 tick 调用
      */
@@ -74,7 +96,13 @@ public class FactorSourceBlockEntity extends BlockEntity {
             return;
         }
         
-        // 检查是否有输入材料
+        // 注册到网络
+        FactorNetworkManager.getInstance().registerNode(world, entity);
+        
+        // 从世界提取 Factor
+        entity.extractFactorFromWorld(world);
+        
+        // 检查是否有输入材料（用于加成）
         if (entity.canProcess()) {
             entity.progress++;
             entity.markDirty();
@@ -88,10 +116,41 @@ public class FactorSourceBlockEntity extends BlockEntity {
                 entity.progress = 0;
             }
         }
+    }
+    
+    /**
+     * 从世界浓度提取 Factor 到缓存
+     */
+    private void extractFactorFromWorld(World world) {
+        if (world.isClient) {
+            return;
+        }
         
-        // 释放缓存的 Factor 到世界
-        if (entity.factorBuffer > 0) {
-            entity.releaseFactor(world, pos);
+        FactorService service = FactorService.getInstance();
+        if (service == null) {
+            return;
+        }
+        
+        // 获取世界 Factor 浓度
+        double concentration = service.getFactor((net.minecraft.server.world.ServerWorld) world);
+        
+        // 计算提取量（基于浓度和等级）
+        double baseRate = getTransferRate();
+        double dimensionMultiplier = getDimensionMultiplier();
+        double qualityCoefficient = getQualityCoefficient();
+        
+        int extractAmount = (int) (baseRate * dimensionMultiplier * qualityCoefficient * (concentration / 100.0));
+        
+        if (extractAmount > 0) {
+            // 添加到缓存（有上限）
+            int maxBuffer = 10000;
+            int spaceAvailable = maxBuffer - factorBuffer;
+            int actualExtract = Math.min(extractAmount, spaceAvailable);
+            
+            if (actualExtract > 0) {
+                factorBuffer += actualExtract;
+                markDirty();
+            }
         }
     }
     
@@ -114,7 +173,7 @@ public class FactorSourceBlockEntity extends BlockEntity {
     }
     
     /**
-     * 执行处理（消耗材料，缓存 Factor）
+     * 执行处理（消耗材料，增加提取效率）
      */
     private void process() {
         // 消耗输入物品
@@ -125,57 +184,7 @@ public class FactorSourceBlockEntity extends BlockEntity {
             markDirty();
         }
         
-        // 计算 Factor 产出
-        int factorProduced = calculateFactorProduction();
-        
-        // 缓存 Factor
-        factorBuffer += factorProduced;
-        markDirty();
-    }
-    
-    /**
-     * 释放 Factor 到世界
-     */
-    private void releaseFactor(World world, BlockPos pos) {
-        if (world.isClient) {
-            return;
-        }
-        
-        FactorService service = FactorService.getInstance();
-        if (service != null && factorBuffer > 0) {
-            // 释放 Factor（根据维度倍率计算）
-            int released = calculateFactorProduction();
-            service.addFactor(pos, released);
-            factorBuffer = 0;
-            markDirty();
-        }
-    }
-    
-    /**
-     * 计算 Factor 产出（考虑维度倍率和材料品质）
-     * 
-     * 公式：实际释放 = 基础释放 × 维度倍率 × 材料品质系数
-     */
-    private int calculateFactorProduction() {
-        int baseProduction = getBaseProduction();
-        double dimensionMultiplier = getDimensionMultiplier();
-        double qualityCoefficient = getQualityCoefficient();
-        
-        return (int) (baseProduction * dimensionMultiplier * qualityCoefficient);
-    }
-    
-    /**
-     * 获取基础产出（根据科技等级）
-     */
-    private int getBaseProduction() {
-        int level = tier.level();
-        switch (level) {
-            case 1: return 50;    // T1: 基础共振器
-            case 2: return 150;   // T2: 能量分解机
-            case 3: return 500;   // T3: 物质转化炉
-            case 4: return 2000;  // T4: 维度裂变器
-            default: return 50;   // T1 默认
-        }
+        // 材料处理会临时增加提取效率（已在 getQualityCoefficient 中体现）
     }
     
     /**
@@ -271,5 +280,57 @@ public class FactorSourceBlockEntity extends BlockEntity {
     @Override
     public NbtCompound toInitialChunkDataNbt(RegistryWrapper.WrapperLookup registryLookup) {
         return createNbt(registryLookup);
+    }
+    
+    // ==================== IFactorNetworkNode 实现 ====================
+    
+    @Override
+    public String getNodeId() {
+        return nodeId;
+    }
+    
+    @Override
+    public BlockPos getNodePos() {
+        return pos;
+    }
+    
+    @Override
+    public NodeType getNodeType() {
+        return NodeType.SOURCE;
+    }
+    
+    @Override
+    public double getFactorStorage() {
+        return factorBuffer;
+    }
+    
+    @Override
+    public double getMaxFactorStorage() {
+        return 10000.0; // 最大缓存
+    }
+    
+    @Override
+    public double addFactor(double amount, String from) {
+        // 源节点通常不接收外部 Factor（只从世界提取）
+        return 0.0;
+    }
+    
+    @Override
+    public double extractFactor(double amount, String to) {
+        int actualExtract = (int) Math.min(factorBuffer, amount);
+        if (actualExtract > 0) {
+            factorBuffer -= actualExtract;
+            markDirty();
+        }
+        return actualExtract;
+    }
+    
+    @Override
+    public double getTransferRate() {
+        int tierLevel = tier.level();
+        if (tierLevel >= 0 && tierLevel < TRANSFER_RATE_BY_TIER.length) {
+            return TRANSFER_RATE_BY_TIER[tierLevel];
+        }
+        return TRANSFER_RATE_BY_TIER[0];
     }
 }

@@ -59,6 +59,17 @@ public class FactorCraftCommands {
             .then(literal("stats")
                 .requires(source -> source.hasPermissionLevel(2))
                 .executes(FactorCraftCommands::showStats))
+            .then(literal("profile")
+                .requires(source -> source.hasPermissionLevel(2))
+                .then(literal("start")
+                    .executes(FactorCraftCommands::profileStart))
+                .then(literal("stop")
+                    .executes(FactorCraftCommands::profileStop))
+                .then(literal("report")
+                    .executes(FactorCraftCommands::profileReport)))
+            .then(literal("perf")
+                .requires(source -> source.hasPermissionLevel(2))
+                .executes(FactorCraftCommands::perfReport))
         );
     }
     
@@ -195,6 +206,56 @@ public class FactorCraftCommands {
         source.sendFeedback(() -> Text.literal("§e总 Tick 数: §f" + stats.totalTicks()), false);
         source.sendFeedback(() -> Text.literal("§e平均 Tick 时间: §f" + String.format("%.2f", stats.avgTickTimeNanos() / 1_000_000.0) + " ms"), false);
         source.sendFeedback(() -> Text.literal("§e缓存区块数: §f" + stats.cachedChunks()), false);
+        
+        return 1;
+    }
+    
+    private static int profileStart(CommandContext<ServerCommandSource> context) {
+        ServerCommandSource source = context.getSource();
+        
+        com.factorcraft.performance.PerformanceProfiler.startProfiling();
+        source.sendFeedback(() -> Text.literal("§a性能分析已启动"), true);
+        
+        return 1;
+    }
+    
+    private static int profileStop(CommandContext<ServerCommandSource> context) {
+        ServerCommandSource source = context.getSource();
+        
+        com.factorcraft.performance.PerformanceProfiler.stopProfiling();
+        source.sendFeedback(() -> Text.literal("§a性能分析已停止"), true);
+        
+        return 1;
+    }
+    
+    private static int profileReport(CommandContext<ServerCommandSource> context) {
+        ServerCommandSource source = context.getSource();
+        
+        var report = com.factorcraft.performance.PerformanceProfiler.generateReport(source.getServer());
+        var lines = com.factorcraft.performance.PerformanceProfiler.formatReport(report);
+        
+        for (Text line : lines) {
+            source.sendFeedback(() -> line, false);
+        }
+        
+        return 1;
+    }
+    
+    private static int perfReport(CommandContext<ServerCommandSource> context) {
+        ServerCommandSource source = context.getSource();
+        
+        // 生成完整性能报告
+        var report = com.factorcraft.performance.PerformanceAnalysisReport.generateFullReport();
+        
+        for (Text line : report) {
+            source.sendFeedback(() -> line, false);
+        }
+        
+        // 性能评分
+        int score = com.factorcraft.performance.PerformanceAnalysisReport.getPerformanceScore();
+        String grade = com.factorcraft.performance.PerformanceAnalysisReport.getPerformanceGrade();
+        
+        source.sendFeedback(() -> Text.literal(String.format("§e性能评分: §f%d §7(%s 级)", score, grade)), false);
         
         return 1;
     }

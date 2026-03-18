@@ -1,0 +1,27 @@
+{
+  "version": "1.0.0",
+  "schema": "factorcraft:machines/extractor/1.0",
+  "machines": {
+    "extractor_t1": {
+      "speed": 1.0,
+      "capacity": 1000,
+      "energy_consumption": 10,
+      "range": 3,
+      "work_interval": 20
+    },
+    "extractor_t2": {
+      "speed": 2.0,
+      "capacity": 5000,
+      "energy_consumption": 25,
+      "range": 5,
+      "work_interval": 15
+    },
+    "extractor_t3": {
+      "speed": 4.0,
+      "capacity": 20000,
+      "energy_consumption": 60,
+      "range": 7,
+      "work_interval": 10
+    }
+  }
+}

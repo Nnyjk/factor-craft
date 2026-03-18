@@ -1,29 +1,45 @@
 package com.factorcraft.module.creature;
 
+import com.factorcraft.module.creature.mutation.MutationManager;
+import com.factorcraft.module.creature.mutation.MutationRegistry;
+import net.minecraft.server.world.ServerWorld;
+
 /**
- * 怪物系统模块 (占位实现)
+ * 生物模块
  * 
- * 待实现: Minecraft 实体注册 API 调研完成后实现完整的怪物系统
+ * 管理生物相关功能（变异、掉落、生成规则）
  */
 public class CreatureModule {
     
-    private static CreatureModule instance;
+    /** 变异管理器 */
+    private static MutationManager mutationManager;
     
-    private CreatureModule() {}
-    
-    public static CreatureModule getInstance() {
-        if (instance == null) {
-            instance = new CreatureModule();
-        }
-        return instance;
+    /**
+     * 初始化模块
+     */
+    public static void init() {
+        // 注册变异效果
+        MutationRegistry.init();
+        
+        // 创建管理器
+        mutationManager = new MutationManager();
+        
+        CreatureApi.LOGGER.info("Creature module initialized");
     }
     
     /**
-     * 初始化怪物系统
-     * 
-     * 待实现: 注册怪物实体
+     * Tick 更新
      */
-    public void initialize() {
-        System.out.println("[CreatureModule] 怪物系统已初始化 (占位)");
+    public static void tick(ServerWorld world) {
+        if (mutationManager != null) {
+            mutationManager.tick(world);
+        }
+    }
+    
+    /**
+     * 获取变异管理器
+     */
+    public static MutationManager getMutationManager() {
+        return mutationManager;
     }
 }

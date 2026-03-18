@@ -1,9 +1,352 @@
 {
   "materialsM2": {
-    "materials": [],
-    "traits": [],
-    "enchants": [],
-    "statuses": [],
-    "notes": "填充上述四个数组后将覆盖默认池；为空或结构不完整时自动回退默认池"
+    "materials": [
+      {
+        "material_id": "factorcraft:copper_core",
+        "level": "LV1_CRUDE",
+        "trait_slots": 1,
+        "extraction_efficiency": 0.8,
+        "stability": 0.45,
+        "tier": 1,
+        "dimensions": ["minecraft:overworld"]
+      },
+      {
+        "material_id": "factorcraft:nether_steel",
+        "level": "LV2_INDUSTRIAL",
+        "trait_slots": 2,
+        "extraction_efficiency": 1.2,
+        "stability": 0.62,
+        "tier": 2,
+        "dimensions": ["minecraft:overworld", "minecraft:the_nether"]
+      },
+      {
+        "material_id": "factorcraft:cobalt_matrix",
+        "level": "LV3_DIMENSIONAL",
+        "trait_slots": 3,
+        "extraction_efficiency": 1.8,
+        "stability": 0.78,
+        "tier": 3,
+        "dimensions": ["minecraft:the_nether", "minecraft:the_end"]
+      },
+      {
+        "material_id": "factorcraft:ancient_alloy",
+        "level": "LV4_ANCIENT",
+        "trait_slots": 4,
+        "extraction_efficiency": 2.4,
+        "stability": 0.9,
+        "tier": 4,
+        "dimensions": ["minecraft:overworld", "minecraft:the_end"]
+      },
+      {
+        "material_id": "factorcraft:arbiter_shard",
+        "level": "LV5_ARBITER",
+        "trait_slots": 5,
+        "extraction_efficiency": 3.1,
+        "stability": 1.0,
+        "tier": 5,
+        "dimensions": ["minecraft:the_end"]
+      }
+    ],
+    "traits": [
+      {
+        "trait_id": "factorcraft:resonant",
+        "category": "GENERAL",
+        "min_tier": 2,
+        "max_tier": 4,
+        "weight": 1.0,
+        "dimensions": [],
+        "linked_status_id": "factorcraft:tidal_focus",
+        "duration_multiplier": 1.15
+      },
+      {
+        "trait_id": "factorcraft:conductive",
+        "category": "EXTRACTION",
+        "min_tier": 1,
+        "max_tier": 5,
+        "weight": 1.2,
+        "dimensions": [],
+        "linked_status_id": null,
+        "duration_multiplier": 1.0
+      },
+      {
+        "trait_id": "factorcraft:stable",
+        "category": "EXTRACTION",
+        "min_tier": 1,
+        "max_tier": 5,
+        "weight": 1.0,
+        "dimensions": [],
+        "linked_status_id": "factorcraft:steady_blessing",
+        "duration_multiplier": 1.2
+      },
+      {
+        "trait_id": "factorcraft:conductive_transfer",
+        "category": "TRANSFER",
+        "min_tier": 1,
+        "max_tier": 5,
+        "weight": 0.9,
+        "dimensions": [],
+        "linked_status_id": null,
+        "duration_multiplier": 1.0
+      },
+      {
+        "trait_id": "factorcraft:storage",
+        "category": "TRANSFER",
+        "min_tier": 1,
+        "max_tier": 5,
+        "weight": 1.1,
+        "dimensions": [],
+        "linked_status_id": null,
+        "duration_multiplier": 1.0
+      },
+      {
+        "trait_id": "factorcraft:catalyst",
+        "category": "PRODUCTION",
+        "min_tier": 1,
+        "max_tier": 5,
+        "weight": 1.0,
+        "dimensions": [],
+        "linked_status_id": null,
+        "duration_multiplier": 1.0
+      },
+      {
+        "trait_id": "factorcraft:heat_resistant",
+        "category": "DIMENSION",
+        "min_tier": 1,
+        "max_tier": 5,
+        "weight": 0.8,
+        "dimensions": ["minecraft:the_nether"],
+        "linked_status_id": null,
+        "duration_multiplier": 1.0
+      },
+      {
+        "trait_id": "factorcraft:void_adapted",
+        "category": "DIMENSION",
+        "min_tier": 1,
+        "max_tier": 5,
+        "weight": 0.8,
+        "dimensions": ["minecraft:the_end"],
+        "linked_status_id": "factorcraft:void_vertigo",
+        "duration_multiplier": 0.85
+      },
+      {
+        "trait_id": "factorcraft:nether_surge",
+        "category": "DIMENSION",
+        "min_tier": 2,
+        "max_tier": 4,
+        "weight": 1.0,
+        "dimensions": ["minecraft:the_nether"],
+        "linked_status_id": "factorcraft:tidal_focus",
+        "duration_multiplier": 1.1
+      },
+      {
+        "trait_id": "factorcraft:end_silence",
+        "category": "DIMENSION",
+        "min_tier": 2,
+        "max_tier": 4,
+        "weight": 1.0,
+        "dimensions": ["minecraft:the_end"],
+        "linked_status_id": "factorcraft:void_vertigo",
+        "duration_multiplier": 0.85
+      },
+      {
+        "trait_id": "factorcraft:overworld_bloom",
+        "category": "DIMENSION",
+        "min_tier": 0,
+        "max_tier": 3,
+        "weight": 1.0,
+        "dimensions": ["minecraft:overworld"],
+        "linked_status_id": "factorcraft:steady_blessing",
+        "duration_multiplier": 1.1
+      },
+      {
+        "trait_id": "factorcraft:arbiter_mark",
+        "category": "ENDGAME",
+        "min_tier": 3,
+        "max_tier": 4,
+        "weight": 1.0,
+        "dimensions": [],
+        "linked_status_id": "factorcraft:arbiter_wing",
+        "duration_multiplier": 1.0
+      },
+      {
+        "trait_id": "factorcraft:chaos_gift",
+        "category": "ENDGAME",
+        "min_tier": 3,
+        "max_tier": 4,
+        "weight": 0.7,
+        "dimensions": [],
+        "linked_status_id": "factorcraft:rift_burn",
+        "duration_multiplier": 1.25
+      },
+      {
+        "trait_id": "factorcraft:fragile",
+        "category": "NEGATIVE",
+        "min_tier": 1,
+        "max_tier": 5,
+        "weight": 0.6,
+        "dimensions": [],
+        "linked_status_id": null,
+        "duration_multiplier": 1.0
+      },
+      {
+        "trait_id": "factorcraft:unstable",
+        "category": "NEGATIVE",
+        "min_tier": 1,
+        "max_tier": 5,
+        "weight": 0.5,
+        "dimensions": [],
+        "linked_status_id": null,
+        "duration_multiplier": 1.0
+      },
+      {
+        "trait_id": "factorcraft:energy_hungry",
+        "category": "NEGATIVE",
+        "min_tier": 1,
+        "max_tier": 5,
+        "weight": 0.7,
+        "dimensions": [],
+        "linked_status_id": null,
+        "duration_multiplier": 1.0
+      }
+    ],
+    "enchants": [
+      {
+        "enchant_id": "factorcraft:tide_rend",
+        "category": "WEAPON",
+        "min_tier": 2,
+        "max_tier": 4,
+        "weight": 1.0
+      },
+      {
+        "enchant_id": "factorcraft:rift_pierce",
+        "category": "WEAPON",
+        "min_tier": 3,
+        "max_tier": 4,
+        "weight": 1.2
+      },
+      {
+        "enchant_id": "factorcraft:stabilized_riposte",
+        "category": "WEAPON",
+        "min_tier": 1,
+        "max_tier": 3,
+        "weight": 0.8
+      },
+      {
+        "enchant_id": "factorcraft:harmonic_quarry",
+        "category": "TOOL",
+        "min_tier": 1,
+        "max_tier": 3,
+        "weight": 0.9
+      },
+      {
+        "enchant_id": "factorcraft:overload_sampling",
+        "category": "TOOL",
+        "min_tier": 3,
+        "max_tier": 4,
+        "weight": 1.1
+      },
+      {
+        "enchant_id": "factorcraft:static_calibrate",
+        "category": "TOOL",
+        "min_tier": 0,
+        "max_tier": 4,
+        "weight": 0.7
+      },
+      {
+        "enchant_id": "factorcraft:phase_guard",
+        "category": "ARMOR",
+        "min_tier": 1,
+        "max_tier": 4,
+        "weight": 1.0
+      },
+      {
+        "enchant_id": "factorcraft:entropy_weave",
+        "category": "ARMOR",
+        "min_tier": 2,
+        "max_tier": 4,
+        "weight": 1.1
+      },
+      {
+        "enchant_id": "factorcraft:dawn_shelter",
+        "category": "ARMOR",
+        "min_tier": 0,
+        "max_tier": 2,
+        "weight": 0.8
+      }
+    ],
+    "statuses": [
+      {
+        "status_id": "factorcraft:tidal_focus",
+        "type": "BUFF",
+        "base_duration_seconds": 120,
+        "max_stacks": 3,
+        "stack_rule": "STACK_INTENSITY",
+        "min_tier": 2,
+        "max_tier": 4
+      },
+      {
+        "status_id": "factorcraft:steady_blessing",
+        "type": "BUFF",
+        "base_duration_seconds": 180,
+        "max_stacks": 2,
+        "stack_rule": "REFRESH_DURATION",
+        "min_tier": 0,
+        "max_tier": 3
+      },
+      {
+        "status_id": "factorcraft:dimension_sync",
+        "type": "BUFF",
+        "base_duration_seconds": 90,
+        "max_stacks": 2,
+        "stack_rule": "REFRESH_DURATION",
+        "min_tier": 1,
+        "max_tier": 4
+      },
+      {
+        "status_id": "factorcraft:arbiter_wing",
+        "type": "BUFF",
+        "base_duration_seconds": 60,
+        "max_stacks": 1,
+        "stack_rule": "OVERRIDE_BY_STRONGER",
+        "min_tier": 3,
+        "max_tier": 4
+      },
+      {
+        "status_id": "factorcraft:mana_suppression",
+        "type": "DEBUFF",
+        "base_duration_seconds": 80,
+        "max_stacks": 3,
+        "stack_rule": "STACK_INTENSITY",
+        "min_tier": 0,
+        "max_tier": 4
+      },
+      {
+        "status_id": "factorcraft:rift_burn",
+        "type": "DEBUFF",
+        "base_duration_seconds": 75,
+        "max_stacks": 4,
+        "stack_rule": "STACK_INTENSITY",
+        "min_tier": 2,
+        "max_tier": 4
+      },
+      {
+        "status_id": "factorcraft:structure_fatigue",
+        "type": "DEBUFF",
+        "base_duration_seconds": 120,
+        "max_stacks": 2,
+        "stack_rule": "REFRESH_DURATION",
+        "min_tier": 3,
+        "max_tier": 4
+      },
+      {
+        "status_id": "factorcraft:void_vertigo",
+        "type": "DEBUFF",
+        "base_duration_seconds": 45,
+        "max_stacks": 1,
+        "stack_rule": "OVERRIDE_BY_STRONGER",
+        "min_tier": 2,
+        "max_tier": 4
+      }
+    ]
   }
 }
