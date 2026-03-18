@@ -47,9 +47,7 @@ public class FactorCraftMod implements ModInitializer {
         // 注册培育系统
         com.factorcraft.module.cultivation.ModCultivation.register();
         
-        // 注册粒子类型
-        FactorParticleTypes.register();
-        LOGGER.info("[FactorCraft] 粒子类型注册完成");
+        // 粒子类型注册已移至 VfxModule 中，避免重复注册
         
         // 注册网络包
         NetworkPackets.register();
