@@ -244,27 +244,18 @@ public class FactorCraftCommands {
     private static int perfReport(CommandContext<ServerCommandSource> context) {
         ServerCommandSource source = context.getSource();
         
-        // 生成快速性能报告
-        var systemStats = com.factorcraft.performance.PerformanceMonitor.getSystemStats();
-        var cacheStats = com.factorcraft.performance.ChunkFactorCache.getStats();
-        var networkStats = systemStats.networkStats();
+        // 生成完整性能报告
+        var report = com.factorcraft.performance.PerformanceAnalysisReport.generateFullReport();
         
-        source.sendFeedback(() -> Text.literal("§6=== 快速性能报告 ==="), false);
-        source.sendFeedback(() -> Text.literal(String.format("§eTick: §f%d §7| §eAvg: §f%.2f ms", 
-            systemStats.totalTicks(), 
-            systemStats.avgTickTimeNanos() / 1_000_000.0)), false);
-        source.sendFeedback(() -> Text.literal(String.format("§e缓存: §f%d §7(%.1f%%)", 
-            cacheStats.currentSize(), cacheStats.usagePercent())), false);
-        
-        if (networkStats != null) {
-            source.sendFeedback(() -> Text.literal(String.format("§e网络: §f已发送 %d §7| §e待处理: §f%d",
-                networkStats.packetsSent(), networkStats.pendingSyncs())), false);
+        for (Text line : report) {
+            source.sendFeedback(() -> line, false);
         }
         
-        // 性能评估
-        double avgMs = systemStats.avgTickTimeNanos() / 1_000_000.0;
-        String status = avgMs < 20 ? "§a良好" : (avgMs < 40 ? "§e一般" : "§c需优化");
-        source.sendFeedback(() -> Text.literal("§e状态: " + status), false);
+        // 性能评分
+        int score = com.factorcraft.performance.PerformanceAnalysisReport.getPerformanceScore();
+        String grade = com.factorcraft.performance.PerformanceAnalysisReport.getPerformanceGrade();
+        
+        source.sendFeedback(() -> Text.literal(String.format("§e性能评分: §f%d §7(%s 级)", score, grade)), false);
         
         return 1;
     }
