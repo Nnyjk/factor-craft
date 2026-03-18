@@ -18,7 +18,15 @@ public enum QuestConditionType {
     FACTOR_ABSORB("Factor 吸收", "absorb"),
     
     // 复合条件 (PR #37)
-    COMPOSITE("复合条件", "composite");
+    COMPOSITE("复合条件", "composite"),
+    
+    // 探索型条件 (Issue #126)
+    FACTOR_EXPLORE("探索区域", "explore"),
+    STRUCTURE_DISCOVER("发现结构", "discover"),
+    
+    // 挑战型条件 (Issue #126)
+    TIMED("限时挑战", "timed"),
+    NO_DEATH("无死亡挑战", "no_death");
     
     private final String displayName;
     private final String serializedName;
