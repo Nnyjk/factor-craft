@@ -1,0 +1,21 @@
+{
+  "display": {
+    "icon": {
+      "id": "factorcraft:factor_item_crystal_sharp"
+    },
+    "title": "Factor 大师",
+    "description": "收集 100,000 Factor",
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "parent": "factorcraft:factor_10000",
+  "criteria": {
+    "requirement": {
+      "trigger": "factorcraft:factor_collected",
+      "conditions": {
+        "amount": 100000
+      }
+    }
+  }
+}

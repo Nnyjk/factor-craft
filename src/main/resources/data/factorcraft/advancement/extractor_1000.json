@@ -1,0 +1,22 @@
+{
+  "display": {
+    "icon": {
+      "id": "factorcraft:extractor_t5"
+    },
+    "title": "提取专家",
+    "description": "运行提取器 1000 次",
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "parent": "factorcraft:extractor_100",
+  "criteria": {
+    "requirement": {
+      "trigger": "factorcraft:machine_used",
+      "conditions": {
+        "machine": "extractor",
+        "count": 1000
+      }
+    }
+  }
+}

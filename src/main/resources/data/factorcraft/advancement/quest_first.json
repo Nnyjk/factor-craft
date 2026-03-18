@@ -1,0 +1,21 @@
+{
+  "display": {
+    "icon": {
+      "id": "factorcraft:quest_scroll"
+    },
+    "title": "冒险开始",
+    "description": "完成第一个任务",
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "parent": "factorcraft:root",
+  "criteria": {
+    "requirement": {
+      "trigger": "factorcraft:quest_completed",
+      "conditions": {
+        "count": 1
+      }
+    }
+  }
+}

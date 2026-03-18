@@ -1,0 +1,21 @@
+{
+  "display": {
+    "icon": {
+      "id": "factorcraft:quest_scroll"
+    },
+    "title": "任务达人",
+    "description": "完成 10 个任务",
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "parent": "factorcraft:quest_first",
+  "criteria": {
+    "requirement": {
+      "trigger": "factorcraft:quest_completed",
+      "conditions": {
+        "count": 10
+      }
+    }
+  }
+}

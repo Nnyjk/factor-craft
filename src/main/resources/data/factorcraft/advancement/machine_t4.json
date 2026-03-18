@@ -1,0 +1,25 @@
+{
+  "display": {
+    "icon": {
+      "id": "factorcraft:extractor_t4"
+    },
+    "title": "精英机器",
+    "description": "解锁 T4 级机器",
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "parent": "factorcraft:machine_t3",
+  "criteria": {
+    "requirement": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": ["factorcraft:extractor_t4", "factorcraft:synthesizer_t4", "factorcraft:cultivator_t4"]
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "display": {
+    "icon": {
+      "id": "factorcraft:consumer_t1"
+    },
+    "title": "能量消费者",
+    "description": "运行消耗器 100 次",
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "parent": "factorcraft:root",
+  "criteria": {
+    "requirement": {
+      "trigger": "factorcraft:machine_used",
+      "conditions": {
+        "machine": "consumer",
+        "count": 100
+      }
+    }
+  }
+}

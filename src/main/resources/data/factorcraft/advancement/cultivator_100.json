@@ -1,0 +1,22 @@
+{
+  "display": {
+    "icon": {
+      "id": "factorcraft:cultivator_t1"
+    },
+    "title": "培育新手",
+    "description": "运行培育器 100 次",
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "parent": "factorcraft:root",
+  "criteria": {
+    "requirement": {
+      "trigger": "factorcraft:machine_used",
+      "conditions": {
+        "machine": "cultivator",
+        "count": 100
+      }
+    }
+  }
+}

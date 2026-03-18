@@ -1,0 +1,21 @@
+{
+  "display": {
+    "icon": {
+      "id": "factorcraft:factor_item_crystal_sharp"
+    },
+    "title": "Factor 富翁",
+    "description": "收集 10,000 Factor",
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "parent": "factorcraft:factor_1000",
+  "criteria": {
+    "requirement": {
+      "trigger": "factorcraft:factor_collected",
+      "conditions": {
+        "amount": 10000
+      }
+    }
+  }
+}

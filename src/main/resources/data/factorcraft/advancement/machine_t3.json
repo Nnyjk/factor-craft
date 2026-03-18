@@ -1,0 +1,25 @@
+{
+  "display": {
+    "icon": {
+      "id": "factorcraft:extractor_t3"
+    },
+    "title": "高级机器",
+    "description": "解锁 T3 级机器",
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "parent": "factorcraft:machine_t2",
+  "criteria": {
+    "requirement": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": ["factorcraft:extractor_t3", "factorcraft:synthesizer_t3", "factorcraft:cultivator_t3"]
+          }
+        ]
+      }
+    }
+  }
+}
