@@ -30,7 +30,7 @@ public class FactorScannerItem extends Item {
     public final ScannerTier tier;
     
     public FactorScannerItem(ScannerTier tier, Settings settings) {
-        super(settings.maxDamage(tier.maxDurability));
+        super(settings);
         this.tier = tier;
     }
     

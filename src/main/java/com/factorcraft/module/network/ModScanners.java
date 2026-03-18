@@ -4,6 +4,8 @@ import com.factorcraft.module.network.item.FactorScannerItem;
 import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.Identifier;
 
 /**
@@ -11,29 +13,38 @@ import net.minecraft.util.Identifier;
  */
 public class ModScanners {
     
-    public static final Item BASIC_SCANNER = register(
+    private static final String MOD_ID = "factorcraft";
+    
+    public static final Item BASIC_SCANNER = registerScanner(
         "basic_scanner",
-        new FactorScannerItem(FactorScannerItem.ScannerTier.BASIC, new Item.Settings())
+        FactorScannerItem.ScannerTier.BASIC
     );
     
-    public static final Item ADVANCED_SCANNER = register(
+    public static final Item ADVANCED_SCANNER = registerScanner(
         "advanced_scanner",
-        new FactorScannerItem(FactorScannerItem.ScannerTier.ADVANCED, new Item.Settings())
+        FactorScannerItem.ScannerTier.ADVANCED
     );
     
-    public static final Item PROFESSIONAL_SCANNER = register(
+    public static final Item PROFESSIONAL_SCANNER = registerScanner(
         "professional_scanner",
-        new FactorScannerItem(FactorScannerItem.ScannerTier.PROFESSIONAL, new Item.Settings())
+        FactorScannerItem.ScannerTier.PROFESSIONAL
     );
     
-    public static final Item MASTER_SCANNER = register(
+    public static final Item MASTER_SCANNER = registerScanner(
         "master_scanner",
-        new FactorScannerItem(FactorScannerItem.ScannerTier.MASTER, new Item.Settings())
+        FactorScannerItem.ScannerTier.MASTER
     );
     
-    private static Item register(String name, Item item) {
-        return Registry.register(Registries.ITEM, 
-            Identifier.of("factorcraft", name), item);
+    /**
+     * 注册扫描仪物品
+     */
+    private static Item registerScanner(String name, FactorScannerItem.ScannerTier tier) {
+        Identifier id = Identifier.of(MOD_ID, name);
+        RegistryKey<Item> key = RegistryKey.of(RegistryKeys.ITEM, id);
+        
+        Item item = new FactorScannerItem(tier, 
+            new Item.Settings().registryKey(key).maxDamage(tier.maxDurability));
+        return Registry.register(Registries.ITEM, id, item);
     }
     
     public static void register() {
