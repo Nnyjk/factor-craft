@@ -19,6 +19,9 @@
     ],
     "fabric-gametest": [
       "com.factorcraft.gametest.FactorCraftGameTests"
+    ],
+    "rei": [
+      "com.factorcraft.compat.rei.FactorCraftREIClientPlugin"
     ]
   },
   "mixins": [

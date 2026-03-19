@@ -22,6 +22,10 @@ base {
 repositories {
     mavenCentral()
     maven { url = 'https://maven.fabricmc.net/' }
+    // REI (Roughly Enough Items)
+    maven { url = 'https://maven.shedaniel.me/' }
+    // Architectury (REI dependency)
+    maven { url = 'https://maven.architectury.dev/' }
 }
 
 dependencies {
@@ -32,6 +36,11 @@ dependencies {
     
     // Game Test API
     modImplementation "net.fabricmc.fabric-api:fabric-game-rule-api-v1:${project.fabric_version}"
+    
+    // REI (Roughly Enough Items) - Optional recipe viewer integration
+    modCompileOnly "dev.architectury:architectury-fabric:13.0.6"
+    modCompileOnly "me.shedaniel:RoughlyEnoughItems-api-fabric:16.0.754"
+    modRuntimeOnly "me.shedaniel:RoughlyEnoughItems-fabric:16.0.754"
     
     // Test dependencies
     testImplementation 'org.junit.jupiter:junit-jupiter:5.10.0'
