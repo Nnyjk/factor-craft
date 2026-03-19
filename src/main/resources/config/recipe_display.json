@@ -1,0 +1,123 @@
+{
+  "version": "1.0.0",
+  "description": "Recipe definitions for REI/JEI integration",
+  
+  "extractor_recipes": {
+    "t1": {
+      "tier": 1,
+      "inputs": ["factorcraft:factor_shard_t1"],
+      "outputs": ["factorcraft:factor_energy_t1"],
+      "processing_time": 200,
+      "factor_cost": 0,
+      "factor_output": 10
+    },
+    "t2": {
+      "tier": 2,
+      "inputs": ["factorcraft:factor_shard_t2"],
+      "outputs": ["factorcraft:factor_energy_t2"],
+      "processing_time": 150,
+      "factor_cost": 0,
+      "factor_output": 50
+    },
+    "t3": {
+      "tier": 3,
+      "inputs": ["factorcraft:factor_shard_t3"],
+      "outputs": ["factorcraft:factor_energy_t3"],
+      "processing_time": 100,
+      "factor_cost": 0,
+      "factor_output": 200
+    },
+    "t4": {
+      "tier": 4,
+      "inputs": ["factorcraft:factor_shard_t4"],
+      "outputs": ["factorcraft:factor_energy_t4"],
+      "processing_time": 75,
+      "factor_cost": 0,
+      "factor_output": 800
+    },
+    "t5": {
+      "tier": 5,
+      "inputs": ["factorcraft:factor_shard_t5"],
+      "outputs": ["factorcraft:factor_energy_t5"],
+      "processing_time": 50,
+      "factor_cost": 0,
+      "factor_output": 3200
+    }
+  },
+  
+  "consumer_recipes": {
+    "t1_material_conversion": {
+      "tier": 1,
+      "inputs": ["factorcraft:factor_shard_t1", "minecraft:copper_ingot"],
+      "outputs": ["factorcraft:dust_copper_ingot"],
+      "processing_time": 100,
+      "factor_cost": 10
+    },
+    "t2_material_conversion": {
+      "tier": 2,
+      "inputs": ["factorcraft:factor_shard_t2", "minecraft:iron_ingot"],
+      "outputs": ["factorcraft:shadow_steel_ingot"],
+      "processing_time": 80,
+      "factor_cost": 50
+    },
+    "t3_material_conversion": {
+      "tier": 3,
+      "inputs": ["factorcraft:factor_shard_t3", "minecraft:diamond"],
+      "outputs": ["factorcraft:stardust_gem"],
+      "processing_time": 60,
+      "factor_cost": 200
+    },
+    "t4_material_conversion": {
+      "tier": 4,
+      "inputs": ["factorcraft:factor_shard_t4", "minecraft:netherite_scrap"],
+      "outputs": ["factorcraft:ancient_alloy_ingot"],
+      "processing_time": 45,
+      "factor_cost": 800
+    },
+    "t5_material_conversion": {
+      "tier": 5,
+      "inputs": ["factorcraft:factor_shard_t5", "minecraft:nether_star"],
+      "outputs": ["factorcraft:void_crystal"],
+      "processing_time": 30,
+      "factor_cost": 3200
+    }
+  },
+  
+  "synthesizer_recipes": {
+    "crystal_sharp_t1": {
+      "tier": 1,
+      "inputs": ["factorcraft:factor_shard_t1", "minecraft:iron_sword"],
+      "outputs": ["factorcraft:factor_item_crystal_sharp"],
+      "processing_time": 300,
+      "factor_cost": 50
+    },
+    "crystal_sturdy_t2": {
+      "tier": 2,
+      "inputs": ["factorcraft:factor_shard_t2", "minecraft:iron_chestplate"],
+      "outputs": ["factorcraft:factor_item_crystal_sturdy"],
+      "processing_time": 240,
+      "factor_cost": 100
+    },
+    "crystal_protective_t3": {
+      "tier": 3,
+      "inputs": ["factorcraft:factor_shard_t3", "minecraft:diamond"],
+      "outputs": ["factorcraft:factor_item_crystal_protective"],
+      "processing_time": 180,
+      "factor_cost": 200
+    },
+    "crystal_energetic_t4": {
+      "tier": 4,
+      "inputs": ["factorcraft:factor_shard_t4", "minecraft:enchanted_golden_apple"],
+      "outputs": ["factorcraft:factor_item_crystal_energetic"],
+      "processing_time": 120,
+      "factor_cost": 400
+    },
+    "crystal_catalytic_t5": {
+      "tier": 5,
+      "inputs": ["factorcraft:factor_shard_t5", "minecraft:beacon"],
+      "outputs": ["factorcraft:factor_item_crystal_catalytic"],
+      "processing_time": 80,
+      "factor_cost": 800
+    }
+  }
+}

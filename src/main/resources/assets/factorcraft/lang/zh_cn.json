@@ -264,5 +264,13 @@
   "factorcraft.machine.status.idle": "空闲",
   "factorcraft.machine.status.running": "运行中",
   "factorcraft.machine.status.paused": "暂停",
-  "factorcraft.machine.status.error": "错误"
+  "factorcraft.machine.status.error": "错误",
+  
+  "_comment": "REI Integration",
+  "factorcraft.rei.category.extractor": "Factor 提取器",
+  "factorcraft.rei.category.consumer": "Factor 消费者",
+  "factorcraft.rei.category.synthesizer": "Factor 合成器",
+  "factorcraft.rei.tier": "等级 %s",
+  "factorcraft.rei.processing_time": "处理时间: %s ticks",
+  "factorcraft.rei.factor_cost": "Factor 消耗: %s"
 }
