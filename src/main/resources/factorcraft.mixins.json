@@ -4,8 +4,6 @@
   "package": "com.factorcraft.update.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-  ],
-  "client": [
     "TitleScreenMixin"
   ],
   "injectors": {

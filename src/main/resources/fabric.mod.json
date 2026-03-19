@@ -22,8 +22,12 @@
     ]
   },
   "mixins": [
-    "factorcraft.mixins"
   ],
+  "client": {
+    "mixins": [
+      "factorcraft.mixins"
+    ]
+  },
   "depends": {
     "fabricloader": ">=${loader_version}",
     "minecraft": "~${minecraft_version}",
