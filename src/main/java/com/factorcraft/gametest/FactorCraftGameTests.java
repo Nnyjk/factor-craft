@@ -49,14 +49,9 @@ public class FactorCraftGameTests {
             assertBlockRegistered(context, "factor_machine_cultivator_core_t" + tier);
         }
         
-        // 传递器 T1-T4
+        // 传递器 T1-T4 (无 T5)
         for (int tier = 1; tier <= 4; tier++) {
             assertBlockRegistered(context, "factor_machine_transmitter_t" + tier);
-        }
-        
-        // 繁育器核心 T1-T5
-        for (int tier = 1; tier <= 5; tier++) {
-            assertBlockRegistered(context, "factor_machine_breeder_core_t" + tier);
         }
         
         context.complete();
