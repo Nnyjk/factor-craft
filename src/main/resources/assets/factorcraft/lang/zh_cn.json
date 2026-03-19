@@ -189,5 +189,13 @@
   "subtitles.factorcraft.factor_ambient": "Factor 环境",
   "subtitles.factorcraft.factor_flow": "Factor 流动",
   
-  "gui.close": "关闭"
+  "gui.close": "关闭",
+  
+  "factorcraft.update.title": "FactorCraft 更新",
+  "factorcraft.update.available": "发现新版本: %s (当前: %s)",
+  "factorcraft.update.up_to_date": "FactorCraft 已是最新版本 (%s)",
+  "factorcraft.update.notification": "新版本 %s 可用!",
+  "factorcraft.update.download": "下载",
+  "factorcraft.update.release_page": "发布页面",
+  "factorcraft.update.link_copied": "下载链接已复制到剪贴板!"
 }
