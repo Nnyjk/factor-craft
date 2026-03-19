@@ -5,6 +5,7 @@ import com.factorcraft.module.building.BuildingModule;
 import com.factorcraft.module.command.CommandModule;
 import com.factorcraft.module.creature.CreatureDropModule;
 import com.factorcraft.module.cycle.CycleModuleAdapter;
+import com.factorcraft.module.error.ErrorModule;
 import com.factorcraft.module.factor.FactorSystemModule;
 import com.factorcraft.module.gear.GearModule;
 import com.factorcraft.module.integration.NonCoreIntegrationModule;
@@ -27,6 +28,7 @@ public final class ModuleBootstrap {
     private static final List<FactorCraftModule> DEFAULT_MODULES;
     static {
         DEFAULT_MODULES = List.of(
+                (FactorCraftModule) new ErrorModule(),
                 (FactorCraftModule) new CommandModule(),
                 (FactorCraftModule) new FactorSystemModule(),
                 (FactorCraftModule) new CycleModuleAdapter(),
