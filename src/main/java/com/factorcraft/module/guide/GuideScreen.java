@@ -23,7 +23,7 @@ public class GuideScreen extends Screen {
     private static final int WIDTH = 320;
     private static final int HEIGHT = 220;
     private static final int TAB_HEIGHT = 24;
-    private static final int TAB_WIDTH = 60;
+    private static final int TAB_WIDTH = 42;
     
     private int x;
     private int y;
@@ -42,6 +42,8 @@ public class GuideScreen extends Screen {
         tabs.add(new GuideTab("科技树", GuideContent::getTechTree));
         tabs.add(new GuideTab("材料", GuideContent::getMaterials));
         tabs.add(new GuideTab("维度", GuideContent::getDimensions));
+        tabs.add(new GuideTab("机器", GuideContent::getMachines));
+        tabs.add(new GuideTab("任务", GuideContent::getQuests));
     }
     
     @Override
