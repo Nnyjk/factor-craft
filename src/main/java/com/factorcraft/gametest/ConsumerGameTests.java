@@ -24,7 +24,7 @@ public class ConsumerGameTests {
         
         // 验证 T1-T5 消耗器核心已注册
         for (int tier = 1; tier <= 5; tier++) {
-            String blockId = "factor_machine_consumer_t" + tier;
+            String blockId = "factor_machine_consumer_core_t" + tier;
             var block = net.minecraft.registry.Registries.BLOCK.get(
                 net.minecraft.util.Identifier.of("factorcraft", blockId));
             if (block == null || block == net.minecraft.block.Blocks.AIR) {
