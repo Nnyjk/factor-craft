@@ -197,5 +197,72 @@
   "factorcraft.update.notification": "Update %s available!",
   "factorcraft.update.download": "Download",
   "factorcraft.update.release_page": "Release Page",
-  "factorcraft.update.link_copied": "Download link copied to clipboard!"
+  "factorcraft.update.link_copied": "Download link copied to clipboard!",
+  
+  "_comment": "Command Messages",
+  "factorcraft.command.factor.header": "=== Factor Info ===",
+  "factorcraft.command.factor.chunk": "Chunk: %s, %s",
+  "factorcraft.command.factor.concentration": "Concentration: %.1f%%",
+  "factorcraft.command.factor.tide_state": "Tide State: %s",
+  "factorcraft.command.factor.base_value": "Base Value: %.2f",
+  "factorcraft.command.factor.current": "Current: %.2f",
+  "factorcraft.command.factor.set_success": "Factor concentration set to %d%%",
+  "factorcraft.command.factor.reset_success": "Factor concentration reset to natural value",
+  "factorcraft.command.factor.no_block_entity": "No block entity at current position",
+  
+  "factorcraft.command.trait.header": "=== Trait Info ===",
+  "factorcraft.command.trait.no_item": "No item in hand",
+  "factorcraft.command.trait.no_traits": "This item has no traits",
+  "factorcraft.command.trait.entry": "- %s (Lv.%d): %s",
+  "factorcraft.command.trait.add_success": "Added trait %s Lv.%d",
+  "factorcraft.command.trait.remove_success": "Removed trait %s",
+  "factorcraft.command.trait.clear_success": "Cleared all traits",
+  "factorcraft.command.trait.not_found": "Trait %s not found on item",
+  
+  "factorcraft.command.reload.success": "Configuration reloaded successfully",
+  "factorcraft.command.reload.failed": "Failed to reload configuration: %s",
+  
+  "factorcraft.command.stats.header": "=== FactorCraft Stats ===",
+  "factorcraft.command.stats.players": "Online Players: %d",
+  "factorcraft.command.stats.chunks_loaded": "Chunks with Factor Data: %d",
+  "factorcraft.command.stats.quests_active": "Active Quests: %d",
+  "factorcraft.command.stats.quests_completed": "Completed Quests: %d",
+  
+  "factorcraft.command.machine.header": "=== Machine Info ===",
+  "factorcraft.command.machine.not_machine": "This block is not a Factor machine",
+  "factorcraft.command.machine.type": "Type: %s",
+  "factorcraft.command.machine.tier": "Tier: T%d",
+  "factorcraft.command.machine.status": "Status: %s",
+  "factorcraft.command.machine.factor_stored": "Factor Stored: %d",
+  "factorcraft.command.machine.factor_capacity": "Factor Capacity: %d",
+  "factorcraft.command.machine.can_receive": "Can Receive: %s",
+  "factorcraft.command.machine.can_extract": "Can Extract: %s",
+  "factorcraft.command.machine.reset_success": "Machine reset successfully",
+  
+  "factorcraft.command.profile.started": "Profiling started",
+  "factorcraft.command.profile.stopped": "Profiling stopped",
+  "factorcraft.command.profile.header": "=== Profile Report ===",
+  "factorcraft.command.profile.no_data": "No profiling data available",
+  
+  "factorcraft.command.perf.header": "=== Performance Report ===",
+  "factorcraft.command.perf.tps": "TPS: %.1f",
+  "factorcraft.command.perf.mspt": "MSPT: %.1f",
+  "factorcraft.command.perf.memory": "Memory: %dMB / %dMB",
+  
+  "factorcraft.command.error.no_permission": "You don't have permission to use this command",
+  "factorcraft.command.error.invalid_args": "Invalid arguments",
+  "factorcraft.command.error.player_only": "This command can only be used by players",
+  
+  "_comment": "Tide States",
+  "factorcraft.tide.depleted": "Depleted",
+  "factorcraft.tide.low": "Low",
+  "factorcraft.tide.stable": "Stable",
+  "factorcraft.tide.high": "High",
+  "factorcraft.tide.overload": "Overload",
+  
+  "_comment": "Machine Status",
+  "factorcraft.machine.status.idle": "Idle",
+  "factorcraft.machine.status.running": "Running",
+  "factorcraft.machine.status.paused": "Paused",
+  "factorcraft.machine.status.error": "Error"
 }

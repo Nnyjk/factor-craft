@@ -197,5 +197,72 @@
   "factorcraft.update.notification": "新版本 %s 可用!",
   "factorcraft.update.download": "下载",
   "factorcraft.update.release_page": "发布页面",
-  "factorcraft.update.link_copied": "下载链接已复制到剪贴板!"
+  "factorcraft.update.link_copied": "下载链接已复制到剪贴板!",
+  
+  "_comment": "Command Messages",
+  "factorcraft.command.factor.header": "=== Factor 信息 ===",
+  "factorcraft.command.factor.chunk": "区块: %s, %s",
+  "factorcraft.command.factor.concentration": "浓度: %.1f%%",
+  "factorcraft.command.factor.tide_state": "潮汐状态: %s",
+  "factorcraft.command.factor.base_value": "基准值: %.2f",
+  "factorcraft.command.factor.current": "当前值: %.2f",
+  "factorcraft.command.factor.set_success": "Factor 浓度已设置为 %d%%",
+  "factorcraft.command.factor.reset_success": "Factor 浓度已重置为自然值",
+  "factorcraft.command.factor.no_block_entity": "当前位置没有方块实体",
+  
+  "factorcraft.command.trait.header": "=== 特性信息 ===",
+  "factorcraft.command.trait.no_item": "手中没有物品",
+  "factorcraft.command.trait.no_traits": "此物品没有特性",
+  "factorcraft.command.trait.entry": "- %s (Lv.%d): %s",
+  "factorcraft.command.trait.add_success": "已添加特性 %s Lv.%d",
+  "factorcraft.command.trait.remove_success": "已移除特性 %s",
+  "factorcraft.command.trait.clear_success": "已清除所有特性",
+  "factorcraft.command.trait.not_found": "物品上未找到特性 %s",
+  
+  "factorcraft.command.reload.success": "配置重载成功",
+  "factorcraft.command.reload.failed": "配置重载失败: %s",
+  
+  "factorcraft.command.stats.header": "=== FactorCraft 统计 ===",
+  "factorcraft.command.stats.players": "在线玩家: %d",
+  "factorcraft.command.stats.chunks_loaded": "有 Factor 数据的区块: %d",
+  "factorcraft.command.stats.quests_active": "进行中任务: %d",
+  "factorcraft.command.stats.quests_completed": "已完成任务: %d",
+  
+  "factorcraft.command.machine.header": "=== 机器信息 ===",
+  "factorcraft.command.machine.not_machine": "此方块不是 Factor 机器",
+  "factorcraft.command.machine.type": "类型: %s",
+  "factorcraft.command.machine.tier": "等级: T%d",
+  "factorcraft.command.machine.status": "状态: %s",
+  "factorcraft.command.machine.factor_stored": "存储 Factor: %d",
+  "factorcraft.command.machine.factor_capacity": "Factor 容量: %d",
+  "factorcraft.command.machine.can_receive": "可接收: %s",
+  "factorcraft.command.machine.can_extract": "可提取: %s",
+  "factorcraft.command.machine.reset_success": "机器重置成功",
+  
+  "factorcraft.command.profile.started": "性能分析已开始",
+  "factorcraft.command.profile.stopped": "性能分析已停止",
+  "factorcraft.command.profile.header": "=== 性能分析报告 ===",
+  "factorcraft.command.profile.no_data": "无性能分析数据",
+  
+  "factorcraft.command.perf.header": "=== 性能报告 ===",
+  "factorcraft.command.perf.tps": "TPS: %.1f",
+  "factorcraft.command.perf.mspt": "MSPT: %.1f",
+  "factorcraft.command.perf.memory": "内存: %dMB / %dMB",
+  
+  "factorcraft.command.error.no_permission": "你没有权限使用此命令",
+  "factorcraft.command.error.invalid_args": "参数无效",
+  "factorcraft.command.error.player_only": "此命令只能由玩家使用",
+  
+  "_comment": "Tide States",
+  "factorcraft.tide.depleted": "枯竭",
+  "factorcraft.tide.low": "低能",
+  "factorcraft.tide.stable": "稳定",
+  "factorcraft.tide.high": "高能",
+  "factorcraft.tide.overload": "过载",
+  
+  "_comment": "Machine Status",
+  "factorcraft.machine.status.idle": "空闲",
+  "factorcraft.machine.status.running": "运行中",
+  "factorcraft.machine.status.paused": "暂停",
+  "factorcraft.machine.status.error": "错误"
 }
