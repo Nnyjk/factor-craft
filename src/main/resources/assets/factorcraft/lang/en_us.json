@@ -264,5 +264,13 @@
   "factorcraft.machine.status.idle": "Idle",
   "factorcraft.machine.status.running": "Running",
   "factorcraft.machine.status.paused": "Paused",
-  "factorcraft.machine.status.error": "Error"
+  "factorcraft.machine.status.error": "Error",
+  
+  "_comment": "REI Integration",
+  "factorcraft.rei.category.extractor": "Factor Extractor",
+  "factorcraft.rei.category.consumer": "Factor Consumer",
+  "factorcraft.rei.category.synthesizer": "Factor Synthesizer",
+  "factorcraft.rei.tier": "Tier %s",
+  "factorcraft.rei.processing_time": "Processing Time: %s ticks",
+  "factorcraft.rei.factor_cost": "Factor Cost: %s"
 }
