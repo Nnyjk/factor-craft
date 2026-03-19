@@ -5,6 +5,7 @@ import com.factorcraft.module.quest.QuestCommands;
 import com.factorcraft.module.research.ResearchCommands;
 import com.factorcraft.update.UpdateCommands;
 import com.factorcraft.module.social.manager.PermissionCommands;
+import com.factorcraft.module.error.ErrorCommands;
 import com.factorcraft.config.ConfigManager;
 import com.factorcraft.datapack.DataPackManager;
 import com.factorcraft.module.ModuleBootstrap;
@@ -63,6 +64,7 @@ public class FactorCraftMod implements ModInitializer {
             ResearchCommands.register(dispatcher);
             UpdateCommands.register(dispatcher);
             PermissionCommands.register(dispatcher);
+            ErrorCommands.register(dispatcher);
         });
         LOGGER.info("[FactorCraft] 命令系统注册完成");
         
