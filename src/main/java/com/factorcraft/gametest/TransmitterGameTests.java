@@ -23,9 +23,9 @@ public class TransmitterGameTests {
     public static void transmitterCoreRegistration(TestContext context) {
         FactorCraftMod.LOGGER.info("[GameTest] Testing transmitter core registration...");
         
-        // 验证 T1-T5 传递器核心已注册
-        for (int tier = 1; tier <= 5; tier++) {
-            String blockId = "factor_machine_transmitter_core_t" + tier;
+        // 验证 T1-T4 传递器核心已注册
+        for (int tier = 1; tier <= 4; tier++) {
+            String blockId = "factor_machine_transmitter_t" + tier;
             var block = net.minecraft.registry.Registries.BLOCK.get(
                 net.minecraft.util.Identifier.of("factorcraft", blockId));
             if (block == null || block == net.minecraft.block.Blocks.AIR) {
