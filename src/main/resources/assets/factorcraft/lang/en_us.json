@@ -272,5 +272,6 @@
   "factorcraft.rei.category.synthesizer": "Factor Synthesizer",
   "factorcraft.rei.tier": "Tier %s",
   "factorcraft.rei.processing_time": "Processing Time: %s ticks",
-  "factorcraft.rei.factor_cost": "Factor Cost: %s"
+  "factorcraft.rei.factor_cost": "Factor Cost: %s",
+  "factorcraft.rei.factor_output": "Factor Output: %s"
 }

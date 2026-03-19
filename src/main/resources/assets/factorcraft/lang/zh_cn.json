@@ -272,5 +272,6 @@
   "factorcraft.rei.category.synthesizer": "Factor 合成器",
   "factorcraft.rei.tier": "等级 %s",
   "factorcraft.rei.processing_time": "处理时间: %s ticks",
-  "factorcraft.rei.factor_cost": "Factor 消耗: %s"
+  "factorcraft.rei.factor_cost": "Factor 消耗: %s",
+  "factorcraft.rei.factor_output": "Factor 产出: %s"
 }
