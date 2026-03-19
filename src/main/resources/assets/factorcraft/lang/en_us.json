@@ -189,5 +189,13 @@
   "subtitles.factorcraft.factor_ambient": "Factor ambient",
   "subtitles.factorcraft.factor_flow": "Factor flowing",
   
-  "gui.close": "Close"
+  "gui.close": "Close",
+  
+  "factorcraft.update.title": "FactorCraft Update",
+  "factorcraft.update.available": "New version available: %s (current: %s)",
+  "factorcraft.update.up_to_date": "FactorCraft is up to date (%s)",
+  "factorcraft.update.notification": "Update %s available!",
+  "factorcraft.update.download": "Download",
+  "factorcraft.update.release_page": "Release Page",
+  "factorcraft.update.link_copied": "Download link copied to clipboard!"
 }

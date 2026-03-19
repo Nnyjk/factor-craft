@@ -6,6 +6,7 @@ import com.factorcraft.dynamic.DynamicContentManager;
 import com.factorcraft.module.network.ClientNetworkHandler;
 import com.factorcraft.network.ConfigSyncHandler;
 import com.factorcraft.module.technology.screen.ModScreens;
+import com.factorcraft.update.UpdateNotifier;
 import net.fabricmc.api.ClientModInitializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,6 +42,10 @@ public class FactorCraftClient implements ClientModInitializer {
         // 注册 VFX 客户端
         com.factorcraft.module.vfx.client.VfxModuleClient.initialize();
         LOGGER.info("[FactorCraft:Client] VFX 客户端注册完成");
+        
+        // 初始化更新检查器
+        new UpdateNotifier();
+        LOGGER.info("[FactorCraft:Client] 更新检查器注册完成");
         
         LOGGER.info("[FactorCraft:Client] Screen 客户端注册完成");
         
