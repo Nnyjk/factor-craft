@@ -1,0 +1,113 @@
+{
+  "enabled": true,
+  "global_multiplier": 1.0,
+  "default_drops": {
+    "factor_shard": {
+      "base_chance": 0.1,
+      "min_count": 1,
+      "max_count": 2,
+      "tier_range": [1, 2]
+    }
+  },
+  "mob_drops": {
+    "minecraft:zombie": {
+      "factor_shard": { "chance": 0.08, "min": 1, "max": 2, "tier": 1 },
+      "factor_essence": { "chance": 0.03, "min": 1, "max": 1 }
+    },
+    "minecraft:skeleton": {
+      "factor_shard": { "chance": 0.08, "min": 1, "max": 2, "tier": 1 },
+      "factor_essence": { "chance": 0.03, "min": 1, "max": 1 }
+    },
+    "minecraft:spider": {
+      "factor_shard": { "chance": 0.06, "min": 1, "max": 1, "tier": 1 }
+    },
+    "minecraft:creeper": {
+      "factor_shard": { "chance": 0.10, "min": 1, "max": 3, "tier": 1 },
+      "resonance_dust": { "chance": 0.05, "min": 1, "max": 1 }
+    },
+    "minecraft:enderman": {
+      "factor_shard": { "chance": 0.25, "min": 2, "max": 4, "tier": 2 },
+      "void_essence": { "chance": 0.15, "min": 1, "max": 1 }
+    },
+    "minecraft:blaze": {
+      "factor_shard": { "chance": 0.20, "min": 1, "max": 3, "tier": 2 },
+      "fire_essence": { "chance": 0.10, "min": 1, "max": 1 }
+    },
+    "minecraft:ghast": {
+      "factor_shard": { "chance": 0.30, "min": 2, "max": 5, "tier": 2 },
+      "tear_essence": { "chance": 0.20, "min": 1, "max": 2 }
+    },
+    "minecraft:wither_skeleton": {
+      "factor_shard": { "chance": 0.25, "min": 2, "max": 4, "tier": 3 },
+      "wither_essence": { "chance": 0.15, "min": 1, "max": 1 }
+    },
+    "minecraft:shulker": {
+      "factor_shard": { "chance": 0.30, "min": 2, "max": 5, "tier": 2 },
+      "shell_fragment": { "chance": 0.10, "min": 1, "max": 1 }
+    },
+    "minecraft:guardian": {
+      "factor_shard": { "chance": 0.15, "min": 1, "max": 3, "tier": 2 },
+      "prismarine_essence": { "chance": 0.08, "min": 1, "max": 1 }
+    },
+    "minecraft:elder_guardian": {
+      "factor_shard": { "chance": 0.50, "min": 5, "max": 10, "tier": 4 },
+      "sea_essence": { "chance": 0.30, "min": 1, "max": 2 },
+      "guardian_core": { "chance": 0.15, "min": 1, "max": 1 }
+    },
+    "minecraft:phantom": {
+      "factor_shard": { "chance": 0.12, "min": 1, "max": 2, "tier": 1 },
+      "membrane_essence": { "chance": 0.05, "min": 1, "max": 1 }
+    },
+    "minecraft:drowned": {
+      "factor_shard": { "chance": 0.10, "min": 1, "max": 2, "tier": 1 },
+      "trident_fragment": { "chance": 0.02, "min": 1, "max": 1 }
+    },
+    "minecraft:piglin_brute": {
+      "factor_shard": { "chance": 0.25, "min": 2, "max": 4, "tier": 2 },
+      "gold_essence": { "chance": 0.12, "min": 1, "max": 2 }
+    },
+    "minecraft:hoglin": {
+      "factor_shard": { "chance": 0.20, "min": 1, "max": 3, "tier": 2 },
+      "meat_essence": { "chance": 0.10, "min": 1, "max": 1 }
+    },
+    "minecraft:piglin": {
+      "factor_shard": { "chance": 0.12, "min": 1, "max": 2, "tier": 1 }
+    }
+  },
+  "boss_drops": {
+    "minecraft:ender_dragon": {
+      "factor_shard": { "chance": 1.0, "min": 20, "max": 40, "tier": 5 },
+      "dragon_essence": { "chance": 1.0, "min": 5, "max": 10 },
+      "ender_core": { "chance": 0.50, "min": 1, "max": 1 },
+      "dragon_breath_vial": { "chance": 0.30, "min": 1, "max": 2 }
+    },
+    "minecraft:wither": {
+      "factor_shard": { "chance": 1.0, "min": 15, "max": 30, "tier": 4 },
+      "wither_essence": { "chance": 1.0, "min": 3, "max": 6 },
+      "nether_star_shard": { "chance": 0.50, "min": 1, "max": 2 },
+      "wither_core": { "chance": 0.25, "min": 1, "max": 1 }
+    },
+    "minecraft:warden": {
+      "factor_shard": { "chance": 1.0, "min": 25, "max": 50, "tier": 5 },
+      "deep_dark_essence": { "chance": 1.0, "min": 5, "max": 10 },
+      "echo_shard_cluster": { "chance": 0.60, "min": 2, "max": 4 },
+      "warden_heart": { "chance": 0.10, "min": 1, "max": 1 }
+    },
+    "minecraft:elder_guardian": {
+      "factor_shard": { "chance": 1.0, "min": 10, "max": 20, "tier": 4 },
+      "sea_essence": { "chance": 0.80, "min": 2, "max": 4 },
+      "sponge_essence": { "chance": 0.40, "min": 1, "max": 2 }
+    }
+  },
+  "factor_concentration_bonus": {
+    "enabled": true,
+    "low_threshold": 20,
+    "medium_threshold": 40,
+    "high_threshold": 60,
+    "very_high_threshold": 80,
+    "low_bonus": 0.1,
+    "medium_bonus": 0.2,
+    "high_bonus": 0.35,
+    "very_high_bonus": 0.5
+  }
+}

@@ -3,6 +3,8 @@ package com.factorcraft.performance;
 import com.factorcraft.config.ConfigManager;
 import com.factorcraft.module.factor.TideEffectsConfig;
 import com.factorcraft.module.factor.TideEffectManager;
+import com.factorcraft.module.loot.MobDropsConfig;
+import com.factorcraft.module.loot.handler.EntityDropHandler;
 import com.factorcraft.module.material.trait.TraitRegistry;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.minecraft.server.MinecraftServer;
@@ -76,6 +78,8 @@ public class ConfigHotReloader {
             // 根据文件名重载对应配置
             if (fileName.contains("tide_effects")) {
                 reloadTideEffects();
+            } else if (fileName.contains("mob_drops")) {
+                reloadMobDrops();
             } else if (fileName.contains("traits")) {
                 reloadTraits();
             } else if (fileName.contains("biome")) {
@@ -126,6 +130,7 @@ public class ConfigHotReloader {
             reloadBiomeConcentrations();
             reloadResonanceRules();
             reloadTideEffects();
+            reloadMobDrops();
             
             System.out.println("[FactorCraft] All configs reloaded successfully");
         } catch (Exception e) {
@@ -139,5 +144,13 @@ public class ConfigHotReloader {
     private static void reloadTideEffects() {
         TideEffectsConfig.reload();
         TideEffectManager.getInstance().reloadConfig();
+    }
+    
+    /**
+     * 重载怪物掉落配置
+     */
+    private static void reloadMobDrops() {
+        MobDropsConfig.reload();
+        EntityDropHandler.reloadConfig();
     }
 }
