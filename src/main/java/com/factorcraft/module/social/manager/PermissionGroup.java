@@ -51,6 +51,14 @@ public class PermissionGroup {
         return permissions.contains(permission);
     }
     
+    /**
+     * 检查是否包含指定 ID 的权限
+     */
+    public boolean hasPermission(String permissionId) {
+        return permissions.stream()
+            .anyMatch(p -> p.id().equals(permissionId));
+    }
+    
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
