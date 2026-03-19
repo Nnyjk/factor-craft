@@ -2,7 +2,6 @@ package com.factorcraft.module.building.block;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.IntProperty;
 
@@ -14,7 +13,7 @@ public class FactorMetalBlock extends Block {
     public static final IntProperty TIER = IntProperty.of("tier", 1, 5);
     
     public FactorMetalBlock() {
-        super(Settings.copy(Blocks.IRON_BLOCK)
+        super(Settings.create()
             .strength(6.0f, 6.0f));
         setDefaultState(getDefaultState().with(TIER, 1));
     }

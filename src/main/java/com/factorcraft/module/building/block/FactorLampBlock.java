@@ -2,7 +2,6 @@ package com.factorcraft.module.building.block;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.block.ShapeContext;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.state.StateManager;
@@ -21,7 +20,9 @@ public class FactorLampBlock extends Block {
     public static final VoxelShape SHAPE = Block.createCuboidShape(4, 0, 4, 12, 16, 12);
     
     public FactorLampBlock() {
-        super(Settings.copy(Blocks.LANTERN)
+        super(Settings.create()
+            .strength(3.5f)
+            .requiresTool()
             .luminance(state -> 15)
             .nonOpaque());
         setDefaultState(getDefaultState().with(Properties.HORIZONTAL_FACING, Direction.NORTH));

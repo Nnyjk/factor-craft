@@ -2,7 +2,6 @@ package com.factorcraft.module.building.block;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.block.ShapeContext;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.util.math.BlockPos;
@@ -19,7 +18,8 @@ public class FactorTorchBlock extends Block {
     protected static final VoxelShape SHAPE = Block.createCuboidShape(6, 0, 6, 10, 10, 10);
     
     public FactorTorchBlock() {
-        super(Settings.copy(Blocks.TORCH)
+        super(Settings.create()
+            .strength(0.0f)
             .luminance(state -> 10)
             .nonOpaque());
     }

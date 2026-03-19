@@ -2,7 +2,6 @@ package com.factorcraft.module.building.block;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.block.TranslucentBlock;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.state.StateManager;
@@ -19,7 +18,8 @@ public class FactorGlassBlock extends TranslucentBlock {
     public static final IntProperty TIER = IntProperty.of("tier", 1, 5);
     
     public FactorGlassBlock() {
-        super(Settings.copy(Blocks.GLASS)
+        super(Settings.create()
+            .strength(0.3f)
             .luminance(state -> state.get(TIER) * 2)
             .nonOpaque());
         setDefaultState(getDefaultState().with(TIER, 1));

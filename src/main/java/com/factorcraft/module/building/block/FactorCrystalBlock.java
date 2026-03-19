@@ -2,7 +2,6 @@ package com.factorcraft.module.building.block;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
@@ -14,7 +13,8 @@ import net.minecraft.world.World;
 public class FactorCrystalBlock extends Block {
     
     public FactorCrystalBlock() {
-        super(Settings.copy(Blocks.AMETHYST_BLOCK)
+        super(Settings.create()
+            .strength(1.5f, 1.5f)
             .luminance(state -> 8)
             .nonOpaque());
     }
