@@ -1,16 +1,30 @@
 package com.factorcraft.command;
 
+import com.factorcraft.api.IFactorContainer;
 import com.factorcraft.module.factor.management.ChunkFactorManager;
 import com.factorcraft.module.factor.state.ChunkFactorState;
 import com.factorcraft.module.material.trait.TraitService;
+import com.factorcraft.module.quest.QuestModule;
+import com.factorcraft.module.quest.instance.QuestInstance;
+import com.factorcraft.module.quest.manager.QuestManager;
+import com.factorcraft.module.quest.template.QuestTemplate;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.command.ServerCommandSource;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import static net.minecraft.server.command.CommandManager.*;
 
@@ -70,6 +84,35 @@ public class FactorCraftCommands {
             .then(literal("perf")
                 .requires(source -> source.hasPermissionLevel(2))
                 .executes(FactorCraftCommands::perfReport))
+            // Factor 管理命令
+            .then(literal("factor")
+                .requires(source -> source.hasPermissionLevel(2))
+                .then(literal("chunk")
+                    .then(argument("x", IntegerArgumentType.integer())
+                        .then(argument("z", IntegerArgumentType.integer())
+                            .executes(FactorCraftCommands::factorChunkInfo)))))
+            // 机器管理命令
+            .then(literal("machine")
+                .requires(source -> source.hasPermissionLevel(2))
+                .then(literal("info")
+                    .executes(FactorCraftCommands::machineInfo))
+                .then(literal("reset")
+                    .executes(FactorCraftCommands::machineReset)))
+            // 任务管理命令
+            .then(literal("quest")
+                .requires(source -> source.hasPermissionLevel(2))
+                .then(literal("list")
+                    .executes(FactorCraftCommands::questListSelf)
+                    .then(argument("player", StringArgumentType.string())
+                        .executes(FactorCraftCommands::questList)))
+                .then(literal("complete")
+                    .then(argument("player", StringArgumentType.string())
+                        .then(argument("quest", StringArgumentType.string())
+                            .executes(FactorCraftCommands::questComplete))))
+                .then(literal("reset")
+                    .executes(FactorCraftCommands::questResetSelf)
+                    .then(argument("player", StringArgumentType.string())
+                        .executes(FactorCraftCommands::questReset))))
         );
     }
     
@@ -266,5 +309,203 @@ public class FactorCraftCommands {
         if (concentration < 80) return "STABLE";
         if (concentration < 100) return "HIGH_ENERGY";
         return "OVERLOAD";
+    }
+    
+    // ==================== Factor 管理命令 ====================
+    
+    private static int factorChunkInfo(CommandContext<ServerCommandSource> context) {
+        ServerCommandSource source = context.getSource();
+        int chunkX = IntegerArgumentType.getInteger(context, "x");
+        int chunkZ = IntegerArgumentType.getInteger(context, "z");
+        
+        ChunkPos chunkPos = new ChunkPos(chunkX, chunkZ);
+        ChunkFactorState state = ChunkFactorManager.getOrCreateState(source.getWorld(), chunkPos);
+        
+        source.sendFeedback(() -> Text.literal("§6=== 区块 Factor 信息 ==="), false);
+        source.sendFeedback(() -> Text.literal(String.format("§e坐标: §f%d, %d", chunkX, chunkZ)), false);
+        source.sendFeedback(() -> Text.literal(String.format("§e当前浓度: §f%.1f", state.getCurrentConcentration())), false);
+        source.sendFeedback(() -> Text.literal(String.format("§e初始浓度: §f%.1f", state.getInitialConcentration())), false);
+        source.sendFeedback(() -> Text.literal("§e等级: §f" + getConcentrationTier(state.getCurrentConcentration())), false);
+        source.sendFeedback(() -> Text.literal(String.format("§e锚定: §f%s", 
+            state.isAnchored() ? "是 (半径: " + state.getAnchorRadius() + ")" : "否")), false);
+        
+        return 1;
+    }
+    
+    // ==================== 机器管理命令 ====================
+    
+    private static int machineInfo(CommandContext<ServerCommandSource> context) {
+        ServerCommandSource source = context.getSource();
+        BlockPos pos = BlockPos.ofFloored(source.getPosition());
+        
+        BlockEntity blockEntity = source.getWorld().getBlockEntity(pos);
+        if (blockEntity == null) {
+            source.sendError(Text.literal("§c当前位置没有方块实体"));
+            return 0;
+        }
+        
+        source.sendFeedback(() -> Text.literal("§6=== 机器信息 ==="), false);
+        source.sendFeedback(() -> Text.literal(String.format("§e类型: §f%s", 
+            blockEntity.getType().toString())), false);
+        source.sendFeedback(() -> Text.literal(String.format("§e位置: §f%d, %d, %d", 
+            pos.getX(), pos.getY(), pos.getZ())), false);
+        
+        if (blockEntity instanceof IFactorContainer container) {
+            source.sendFeedback(() -> Text.literal(String.format("§eFactor 存储: §f%.1f / %.1f", 
+                container.getFactorStorage(), container.getMaxFactorStorage())), false);
+            source.sendFeedback(() -> Text.literal(String.format("§e可接收: §f%s", 
+                container.canReceiveFactor() ? "是" : "否")), false);
+            source.sendFeedback(() -> Text.literal(String.format("§e可提取: §f%s", 
+                container.canExtractFactor() ? "是" : "否")), false);
+        } else {
+            source.sendFeedback(() -> Text.literal("§7该方块不是 Factor 容器"), false);
+        }
+        
+        return 1;
+    }
+    
+    private static int machineReset(CommandContext<ServerCommandSource> context) {
+        ServerCommandSource source = context.getSource();
+        BlockPos pos = BlockPos.ofFloored(source.getPosition());
+        
+        BlockEntity blockEntity = source.getWorld().getBlockEntity(pos);
+        if (blockEntity == null) {
+            source.sendError(Text.literal("§c当前位置没有方块实体"));
+            return 0;
+        }
+        
+        if (blockEntity instanceof IFactorContainer container) {
+            // 重置 Factor 存储
+            double extracted = container.extractFactor(container.getFactorStorage());
+            source.sendFeedback(() -> Text.literal(String.format("§a已重置机器 Factor: 抽取 %.1f", extracted)), true);
+        } else {
+            source.sendError(Text.literal("§c该方块不是 Factor 容器"));
+            return 0;
+        }
+        
+        // 标记需要保存
+        source.getWorld().markDirty(pos);
+        source.sendFeedback(() -> Text.literal("§a机器状态已重置"), true);
+        
+        return 1;
+    }
+    
+    // ==================== 任务管理命令 ====================
+    
+    private static int questListSelf(CommandContext<ServerCommandSource> context) {
+        ServerCommandSource source = context.getSource();
+        ServerPlayerEntity player = source.getPlayer();
+        return listPlayerQuests(source, player);
+    }
+    
+    private static int questList(CommandContext<ServerCommandSource> context) {
+        ServerCommandSource source = context.getSource();
+        String playerName = StringArgumentType.getString(context, "player");
+        
+        ServerPlayerEntity player = source.getServer().getPlayerManager().getPlayer(playerName);
+        if (player == null) {
+            source.sendError(Text.literal("§c玩家未找到: " + playerName));
+            return 0;
+        }
+        
+        return listPlayerQuests(source, player);
+    }
+    
+    private static int listPlayerQuests(ServerCommandSource source, ServerPlayerEntity player) {
+        QuestManager manager = QuestModule.getInstance().getQuestManager();
+        List<QuestInstance> activeQuests = manager.getActiveQuests(player.getUuid());
+        Set<Identifier> completedQuests = manager.getCompletedQuests(player.getUuid());
+        
+        source.sendFeedback(() -> Text.literal(String.format("§6=== %s 的任务 ===", 
+            player.getName().getString())), false);
+        source.sendFeedback(() -> Text.literal(String.format("§e活跃任务: §f%d", activeQuests.size())), false);
+        
+        for (QuestInstance quest : activeQuests) {
+            QuestTemplate template = quest.getTemplate();
+            String name = template != null ? template.getTitle() : "Unknown";
+            String questIdStr = template != null ? template.getId().toString() : "unknown:unknown";
+            source.sendFeedback(() -> Text.literal(String.format("  §7- §f%s §7(%s)", 
+                name, questIdStr)), false);
+        }
+        
+        source.sendFeedback(() -> Text.literal(String.format("§e已完成任务: §f%d", completedQuests.size())), false);
+        
+        return 1;
+    }
+    
+    private static int questComplete(CommandContext<ServerCommandSource> context) {
+        ServerCommandSource source = context.getSource();
+        String playerName = StringArgumentType.getString(context, "player");
+        String questIdStr = StringArgumentType.getString(context, "quest");
+        
+        ServerPlayerEntity player = source.getServer().getPlayerManager().getPlayer(playerName);
+        if (player == null) {
+            source.sendError(Text.literal("§c玩家未找到: " + playerName));
+            return 0;
+        }
+        
+        Identifier questId = Identifier.tryParse(questIdStr);
+        if (questId == null) {
+            source.sendError(Text.literal("§c无效的任务 ID: " + questIdStr));
+            return 0;
+        }
+        
+        QuestManager manager = QuestModule.getInstance().getQuestManager();
+        
+        // 检查任务是否存在
+        QuestTemplate template = manager.getTemplate(questId);
+        if (template == null) {
+            source.sendError(Text.literal("§c任务不存在: " + questIdStr));
+            return 0;
+        }
+        
+        // 检查玩家是否有此任务
+        List<QuestInstance> activeQuests = manager.getActiveQuests(player.getUuid());
+        boolean hasQuest = activeQuests.stream()
+            .anyMatch(q -> q.getTemplate() != null && q.getTemplate().getId().equals(questId));
+        
+        if (!hasQuest) {
+            // 先开始任务
+            manager.startQuest(player, questId);
+        }
+        
+        // 完成任务
+        manager.completeQuest(player, questId);
+        
+        source.sendFeedback(() -> Text.literal(String.format("§a已为玩家 %s 完成任务 %s", 
+            playerName, questIdStr)), true);
+        
+        return 1;
+    }
+    
+    private static int questResetSelf(CommandContext<ServerCommandSource> context) {
+        ServerCommandSource source = context.getSource();
+        ServerPlayerEntity player = source.getPlayer();
+        
+        QuestManager manager = QuestModule.getInstance().getQuestManager();
+        int resetCount = manager.resetPlayerQuests(player.getUuid());
+        
+        source.sendFeedback(() -> Text.literal(String.format("§a已重置你的 %d 个任务数据", resetCount)), true);
+        
+        return 1;
+    }
+    
+    private static int questReset(CommandContext<ServerCommandSource> context) {
+        ServerCommandSource source = context.getSource();
+        String playerName = StringArgumentType.getString(context, "player");
+        
+        ServerPlayerEntity player = source.getServer().getPlayerManager().getPlayer(playerName);
+        if (player == null) {
+            source.sendError(Text.literal("§c玩家未找到: " + playerName));
+            return 0;
+        }
+        
+        QuestManager manager = QuestModule.getInstance().getQuestManager();
+        int resetCount = manager.resetPlayerQuests(player.getUuid());
+        
+        source.sendFeedback(() -> Text.literal(String.format("§a已重置玩家 %s 的 %d 个任务数据", 
+            playerName, resetCount)), true);
+        
+        return 1;
     }
 }

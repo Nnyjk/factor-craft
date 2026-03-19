@@ -167,4 +167,62 @@ public class QuestManager {
         FactorCraftMod.LOGGER.debug("[FactorCraft:Quest] 已同步任务数据到玩家 {}: {} 个活跃，{} 个已完成",
             player.getName().getString(), activeQuests.size(), completedQuests.size());
     }
+    
+    /**
+     * 重置玩家的所有任务数据
+     * 清除活跃任务和已完成任务记录
+     * 
+     * @param playerId 玩家 UUID
+     * @return 重置的任务数量
+     */
+    public int resetPlayerQuests(UUID playerId) {
+        int resetCount = 0;
+        
+        // 清除活跃任务
+        Map<Identifier, QuestInstance> playerActiveQuests = this.activeQuests.remove(playerId);
+        if (playerActiveQuests != null) {
+            resetCount += playerActiveQuests.size();
+        }
+        
+        // 清除已完成任务记录
+        Set<Identifier> playerCompletedQuests = this.completedQuests.remove(playerId);
+        if (playerCompletedQuests != null) {
+            resetCount += playerCompletedQuests.size();
+        }
+        
+        FactorCraftMod.LOGGER.info("[FactorCraft:Quest] 已重置玩家 {} 的 {} 个任务数据", 
+            playerId, resetCount);
+        
+        return resetCount;
+    }
+    
+    /**
+     * 重置玩家的特定任务
+     * 可以重新开始已完成的任务
+     * 
+     * @param playerId 玩家 UUID
+     * @param questId 任务 ID
+     * @return 是否成功重置
+     */
+    public boolean resetQuest(UUID playerId, Identifier questId) {
+        boolean removed = false;
+        
+        // 从活跃任务中移除
+        Map<Identifier, QuestInstance> playerActiveQuests = this.activeQuests.get(playerId);
+        if (playerActiveQuests != null && playerActiveQuests.remove(questId) != null) {
+            removed = true;
+        }
+        
+        // 从已完成任务中移除
+        Set<Identifier> playerCompletedQuests = this.completedQuests.get(playerId);
+        if (playerCompletedQuests != null && playerCompletedQuests.remove(questId)) {
+            removed = true;
+        }
+        
+        if (removed) {
+            FactorCraftMod.LOGGER.info("[FactorCraft:Quest] 已重置玩家 {} 的任务 {}", playerId, questId);
+        }
+        
+        return removed;
+    }
 }
