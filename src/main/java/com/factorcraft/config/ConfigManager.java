@@ -56,6 +56,9 @@ public class ConfigManager {
         loadExternalConfigs();
         
         FactorCraftMod.LOGGER.info("[FactorCraft:Config] 配置系统初始化完成，已加载 {} 个配置", CONFIGS.size());
+        
+        // 初始化平衡配置
+        BalanceConfig.initialize();
     }
     
     /**
@@ -257,6 +260,7 @@ public class ConfigManager {
         CONFIGS.clear();
         loadDefaultConfigs();
         loadExternalConfigs();
+        BalanceConfig.reload();
         FactorCraftMod.LOGGER.info("[FactorCraft:Config] 配置重载完成，已加载 {} 个配置", CONFIGS.size());
     }
     
