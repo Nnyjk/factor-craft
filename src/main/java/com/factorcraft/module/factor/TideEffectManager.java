@@ -1,14 +1,20 @@
 package com.factorcraft.module.factor;
 
 import com.factorcraft.FactorCraftMod;
+import com.factorcraft.module.factor.TideEffectsConfig.EffectEntry;
+import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.Vec3d;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -22,6 +28,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * 1. 玩家效果：进入/离开区域时应用/移除状态效果
  * 2. 机器效果：自动应用效率修正
  * 3. 世界效果：影响生物生成、作物生长等
+ * 
+ * 配置化：效果值可通过 tide_effects.json 配置
  */
 public class TideEffectManager {
     
@@ -40,7 +48,8 @@ public class TideEffectManager {
     private static final int UPDATE_INTERVAL = 20;
     
     private TideEffectManager() {
-        // 单例
+        // 单例，初始化时加载配置
+        TideEffectsConfig.getInstance();
     }
     
     public static TideEffectManager getInstance() {
@@ -52,6 +61,11 @@ public class TideEffectManager {
      * 应在服务器 tick 事件中调用
      */
     public void tick(ServerWorld world) {
+        // 检查是否启用
+        if (!TideEffectsConfig.isEnabled()) {
+            return;
+        }
+        
         long gameTime = world.getTime();
         
         // 每 UPDATE_INTERVAL tick 更新一次
@@ -109,60 +123,23 @@ public class TideEffectManager {
             removeTideEffects(player, oldStatus);
         }
         
-        // 应用新效果
-        switch (newStatus) {
-            case DEPLETED:
-                // 疲劳 I（缓慢）
+        // 从配置获取效果列表
+        List<EffectEntry> effects = TideEffectsConfig.getPlayerEffects(newStatus);
+        
+        var registry = player.getRegistryManager().getOrThrow(RegistryKeys.STATUS_EFFECT);
+        
+        for (EffectEntry entry : effects) {
+            RegistryEntry<StatusEffect> effectEntry = getEffectEntryById(entry.effectId(), registry);
+            if (effectEntry != null) {
                 player.addStatusEffect(new StatusEffectInstance(
-                    StatusEffects.SLOWNESS, 
-                    UPDATE_INTERVAL * 3, 
-                    0, 
-                    false, 
-                    false, 
-                    true
+                    effectEntry,
+                    entry.duration(),
+                    entry.amplifier(),
+                    false,  // ambient
+                    false,  // visible
+                    true    // show icon
                 ));
-                break;
-                
-            case LOW_ENERGY:
-                // 无明显效果
-                break;
-                
-            case STABLE:
-                // 无效果
-                break;
-                
-            case HIGH_ENERGY:
-                // 生命恢复 I
-                player.addStatusEffect(new StatusEffectInstance(
-                    StatusEffects.REGENERATION, 
-                    UPDATE_INTERVAL * 3, 
-                    0, 
-                    false, 
-                    false, 
-                    true
-                ));
-                break;
-                
-            case OVERLOAD:
-                // 力量 I
-                player.addStatusEffect(new StatusEffectInstance(
-                    StatusEffects.STRENGTH, 
-                    UPDATE_INTERVAL * 3, 
-                    0, 
-                    false, 
-                    false, 
-                    true
-                ));
-                // 缓慢掉血（伤害效果）
-                player.addStatusEffect(new StatusEffectInstance(
-                    StatusEffects.WITHER, 
-                    UPDATE_INTERVAL * 3, 
-                    0, 
-                    false, 
-                    false, 
-                    true
-                ));
-                break;
+            }
         }
         
         // 发送状态更新通知（可选）
@@ -173,22 +150,36 @@ public class TideEffectManager {
     }
     
     /**
+     * 根据效果 ID 获取状态效果条目
+     */
+    @Nullable
+    private RegistryEntry<StatusEffect> getEffectEntryById(String effectId, net.minecraft.registry.Registry<StatusEffect> registry) {
+        // 尝试解析为命名空间:路径格式
+        Identifier id = Identifier.tryParse(effectId);
+        if (id == null) {
+            // 尝试添加 minecraft: 前缀
+            id = Identifier.tryParse("minecraft:" + effectId);
+        }
+        if (id == null) {
+            return null;
+        }
+        
+        return registry.getEntry(id).orElse(null);
+    }
+    
+    /**
      * 移除潮汐状态效果
      */
     private void removeTideEffects(PlayerEntity player, TideStatus status) {
-        switch (status) {
-            case DEPLETED:
-                player.removeStatusEffect(StatusEffects.SLOWNESS);
-                break;
-            case HIGH_ENERGY:
-                player.removeStatusEffect(StatusEffects.REGENERATION);
-                break;
-            case OVERLOAD:
-                player.removeStatusEffect(StatusEffects.STRENGTH);
-                player.removeStatusEffect(StatusEffects.WITHER);
-                break;
-            default:
-                break;
+        List<EffectEntry> effects = TideEffectsConfig.getPlayerEffects(status);
+        
+        var registry = player.getRegistryManager().getOrThrow(RegistryKeys.STATUS_EFFECT);
+        
+        for (EffectEntry entry : effects) {
+            RegistryEntry<StatusEffect> effectEntry = getEffectEntryById(entry.effectId(), registry);
+            if (effectEntry != null) {
+                player.removeStatusEffect(effectEntry);
+            }
         }
     }
     
@@ -217,13 +208,14 @@ public class TideEffectManager {
      */
     public double calculateMachineEfficiency(double baseEfficiency, ServerWorld world, ChunkPos chunkPos) {
         FactorService factorService = FactorService.getInstance();
-        if (factorService == null) {
+        if (factorService == null || !TideEffectsConfig.isEnabled()) {
             return baseEfficiency;
         }
         
         double concentration = factorService.getFactor(world);
         TideStatus status = TideStatus.fromConcentration(concentration);
-        return status.applyMachineEfficiency(baseEfficiency);
+        double modifier = TideEffectsConfig.getMachineEfficiency(status);
+        return baseEfficiency * (1.0 + modifier);
     }
     
     /**
@@ -235,13 +227,14 @@ public class TideEffectManager {
      */
     public double calculateExtractionAmount(double baseAmount, ServerWorld world, ChunkPos chunkPos) {
         FactorService factorService = FactorService.getInstance();
-        if (factorService == null) {
+        if (factorService == null || !TideEffectsConfig.isEnabled()) {
             return baseAmount;
         }
         
         double concentration = factorService.getFactor(world);
         TideStatus status = TideStatus.fromConcentration(concentration);
-        return status.applyExtractionAmount(baseAmount);
+        double modifier = TideEffectsConfig.getExtractionEfficiency(status);
+        return baseAmount * (1.0 + modifier);
     }
     
     /**
@@ -252,13 +245,14 @@ public class TideEffectManager {
      */
     public float getSpawnRateModifier(ServerWorld world, ChunkPos chunkPos) {
         FactorService factorService = FactorService.getInstance();
-        if (factorService == null) {
+        if (factorService == null || !TideEffectsConfig.isEnabled()) {
             return 1.0f;
         }
         
         double concentration = factorService.getFactor(world);
         TideStatus status = TideStatus.fromConcentration(concentration);
-        return (float) (1.0 + status.getSpawnRateModifier());
+        double modifier = TideEffectsConfig.getCreatureSpawnModifier(status);
+        return (float) (1.0 + modifier);
     }
     
     /**
@@ -269,12 +263,20 @@ public class TideEffectManager {
      */
     public boolean hasOverloadRisk(ServerWorld world, ChunkPos chunkPos) {
         FactorService factorService = FactorService.getInstance();
-        if (factorService == null) {
+        if (factorService == null || !TideEffectsConfig.isEnabled()) {
             return false;
         }
         
         double concentration = factorService.getFactor(world);
         TideStatus status = TideStatus.fromConcentration(concentration);
-        return status.hasOverloadRisk();
+        return TideEffectsConfig.hasOverloadRisk(status);
+    }
+    
+    /**
+     * 重载配置
+     */
+    public void reloadConfig() {
+        TideEffectsConfig.reload();
+        FactorCraftMod.LOGGER.info("[TideEffectManager] 配置已重载，启用状态: {}", TideEffectsConfig.isEnabled());
     }
 }

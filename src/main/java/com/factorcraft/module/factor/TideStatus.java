@@ -8,6 +8,12 @@ import net.minecraft.util.Formatting;
  * 
  * 表示当前 Factor 浓度相对于基准值的偏离程度
  * 每种状态对应不同的游戏效果
+ * 
+ * <p><b>配置优先：</b>实际效果值应通过 {@link TideEffectsConfig} 获取，
+ * 此枚举中的默认值仅供显示和回退使用。</p>
+ * 
+ * @see TideEffectsConfig
+ * @see TideEffectManager
  */
 public enum TideStatus {
     /**
@@ -211,5 +217,50 @@ public enum TideStatus {
             case HIGH_ENERGY -> 0.3;
             case OVERLOAD -> 0.5;
         };
+    }
+    
+    /**
+     * 获取配置化的机器效率修正系数
+     * <p>优先从配置读取，配置禁用时返回 0</p>
+     * @return 修正系数
+     */
+    public double getConfiguredMachineEfficiency() {
+        return TideEffectsConfig.getMachineEfficiency(this);
+    }
+    
+    /**
+     * 获取配置化的提取效率修正系数
+     * <p>优先从配置读取，配置禁用时返回 0</p>
+     * @return 修正系数
+     */
+    public double getConfiguredExtractionEfficiency() {
+        return TideEffectsConfig.getExtractionEfficiency(this);
+    }
+    
+    /**
+     * 获取配置化的生物生成修正系数
+     * <p>优先从配置读取，配置禁用时返回 0</p>
+     * @return 修正系数
+     */
+    public double getConfiguredSpawnModifier() {
+        return TideEffectsConfig.getCreatureSpawnModifier(this);
+    }
+    
+    /**
+     * 应用配置化的机器效率修正
+     * @param baseEfficiency 基础效率
+     * @return 修正后的效率
+     */
+    public double applyConfiguredMachineEfficiency(double baseEfficiency) {
+        return baseEfficiency * (1.0 + getConfiguredMachineEfficiency());
+    }
+    
+    /**
+     * 应用配置化的提取量修正
+     * @param baseAmount 基础提取量
+     * @return 修正后的提取量
+     */
+    public double applyConfiguredExtractionAmount(double baseAmount) {
+        return baseAmount * (1.0 + getConfiguredExtractionEfficiency());
     }
 }
