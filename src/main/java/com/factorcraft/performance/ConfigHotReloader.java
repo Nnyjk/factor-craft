@@ -1,6 +1,8 @@
 package com.factorcraft.performance;
 
 import com.factorcraft.config.ConfigManager;
+import com.factorcraft.module.factor.TideEffectsConfig;
+import com.factorcraft.module.factor.TideEffectManager;
 import com.factorcraft.module.material.trait.TraitRegistry;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.minecraft.server.MinecraftServer;
@@ -72,7 +74,9 @@ public class ConfigHotReloader {
         
         try {
             // 根据文件名重载对应配置
-            if (fileName.contains("traits")) {
+            if (fileName.contains("tide_effects")) {
+                reloadTideEffects();
+            } else if (fileName.contains("traits")) {
                 reloadTraits();
             } else if (fileName.contains("biome")) {
                 reloadBiomeConcentrations();
@@ -121,10 +125,19 @@ public class ConfigHotReloader {
             reloadTraits();
             reloadBiomeConcentrations();
             reloadResonanceRules();
+            reloadTideEffects();
             
             System.out.println("[FactorCraft] All configs reloaded successfully");
         } catch (Exception e) {
             System.err.println("[FactorCraft] Failed to reload configs: " + e.getMessage());
         }
+    }
+    
+    /**
+     * 重载潮汐效果配置
+     */
+    private static void reloadTideEffects() {
+        TideEffectsConfig.reload();
+        TideEffectManager.getInstance().reloadConfig();
     }
 }

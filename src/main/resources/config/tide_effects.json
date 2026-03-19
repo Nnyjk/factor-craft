@@ -1,0 +1,46 @@
+{
+  "enabled": true,
+  "effects": {
+    "depleted": {
+      "machine_efficiency": -0.50,
+      "extraction_efficiency": -0.75,
+      "creature_spawn_modifier": -0.25,
+      "player_effects": ["slowness:1:200", "weakness:1:200"],
+      "effect_chance": 0.1
+    },
+    "low_energy": {
+      "machine_efficiency": -0.25,
+      "extraction_efficiency": -0.50,
+      "creature_spawn_modifier": -0.20,
+      "player_effects": [],
+      "effect_chance": 0.2
+    },
+    "stable": {
+      "machine_efficiency": 0.0,
+      "extraction_efficiency": 0.0,
+      "creature_spawn_modifier": 0.0,
+      "player_effects": [],
+      "effect_chance": 0.0
+    },
+    "high_energy": {
+      "machine_efficiency": 0.25,
+      "extraction_efficiency": 0.50,
+      "creature_spawn_modifier": 0.20,
+      "player_effects": ["speed:0:200", "haste:0:200"],
+      "effect_chance": 0.3
+    },
+    "overload": {
+      "machine_efficiency": 0.50,
+      "extraction_efficiency": 1.00,
+      "creature_spawn_modifier": 0.30,
+      "player_effects": ["speed:1:200", "haste:1:200", "nausea:0:100"],
+      "effect_chance": 0.5,
+      "overload_risk": true
+    }
+  },
+  "visual": {
+    "show_hud_status": true,
+    "hud_position": "top_left",
+    "particle_effects": true
+  }
+}
