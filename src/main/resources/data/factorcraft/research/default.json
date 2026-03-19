@@ -1,0 +1,98 @@
+{
+  "version": 1,
+  "research": [
+    {
+      "id": "basic_extraction",
+      "name": "基础提取技术",
+      "description": "学习如何从自然界提取 Factor",
+      "type": "TECHNOLOGY",
+      "research_time": 1200,
+      "effects": {
+        "unlock_extractor": true
+      },
+      "ui": {
+        "x": 0,
+        "y": 0,
+        "category": "technology"
+      }
+    },
+    {
+      "id": "factor_storage",
+      "name": "Factor 存储技术",
+      "description": "解锁 Factor 存储容器",
+      "type": "TECHNOLOGY",
+      "research_time": 2400,
+      "prerequisites": ["basic_extraction"],
+      "item_requirements": {
+        "minecraft:iron_ingot": 8
+      },
+      "effects": {
+        "unlock_tank": true
+      },
+      "ui": {
+        "x": 1,
+        "y": 0,
+        "category": "technology"
+      }
+    },
+    {
+      "id": "basic_synthesis",
+      "name": "基础合成技术",
+      "description": "学习如何合成新 Factor",
+      "type": "TECHNOLOGY",
+      "research_time": 2400,
+      "prerequisites": ["basic_extraction"],
+      "factor_costs": {
+        "basic": 100
+      },
+      "effects": {
+        "unlock_synthesizer": true
+      },
+      "ui": {
+        "x": 2,
+        "y": 0,
+        "category": "technology"
+      }
+    },
+    {
+      "id": "extraction_efficiency_1",
+      "name": "提取效率 I",
+      "description": "提取器效率提升 25%",
+      "type": "EFFICIENCY",
+      "research_time": 1800,
+      "prerequisites": ["basic_extraction"],
+      "factor_costs": {
+        "basic": 200
+      },
+      "effects": {
+        "extractor_efficiency": 1.25
+      },
+      "ui": {
+        "x": 0,
+        "y": 2,
+        "category": "efficiency"
+      }
+    },
+    {
+      "id": "factor_mastery",
+      "name": "Factor 大师",
+      "description": "掌握 Factor 的终极奥秘，所有效率+25%",
+      "type": "ULTIMATE",
+      "research_time": 12000,
+      "prerequisites": ["extraction_efficiency_2", "storage_capacity_2", "factor_armor"],
+      "factor_costs": {
+        "basic": 2000,
+        "rare": 500,
+        "legendary": 100
+      },
+      "effects": {
+        "global_efficiency": 1.25
+      },
+      "ui": {
+        "x": 2,
+        "y": 6,
+        "category": "ultimate"
+      }
+    }
+  ]
+}
