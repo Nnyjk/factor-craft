@@ -4,14 +4,18 @@ import com.factorcraft.FactorCraftMod;
 import com.factorcraft.module.FactorCraftModule;
 import com.factorcraft.module.building.block.*;
 
+import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.Identifier;
 
 import java.util.List;
+import java.util.function.Function;
 
 /**
  * BuildingModule - 建筑/家具/装饰模块
@@ -82,49 +86,70 @@ public final class BuildingModule implements FactorCraftModule {
     
     private void registerCoreBlocks() {
         // Factor 光源
-        FACTOR_LAMP = registerBlock("factor_lamp", new FactorLampBlock());
-        FACTOR_TORCH = registerBlock("factor_torch", new FactorTorchBlock());
+        FACTOR_LAMP = registerFactorBlock("factor_lamp", FactorLampBlock::new);
+        FACTOR_TORCH = registerFactorBlock("factor_torch", FactorTorchBlock::new);
         
         // Factor 建材
-        FACTOR_GLASS = registerBlock("factor_glass", new FactorGlassBlock());
-        FACTOR_CRYSTAL = registerBlock("factor_crystal_block", new FactorCrystalBlock());
-        FACTOR_METAL = registerBlock("factor_metal", new FactorMetalBlock());
+        FACTOR_GLASS = registerFactorBlock("factor_glass", FactorGlassBlock::new);
+        FACTOR_CRYSTAL = registerFactorBlock("factor_crystal_block", FactorCrystalBlock::new);
+        FACTOR_METAL = registerFactorBlock("factor_metal", FactorMetalBlock::new);
         FactorMetalBlock.FACTOR_METAL = FACTOR_METAL;
     }
     
     private void registerDecorativeBlocks() {
         // 科技装饰方块
-        FACTOR_CONDUIT = registerBlock("factor_conduit", createDecorBlock(3.0f, 15));
-        FACTOR_PANEL = registerBlock("factor_panel", createDecorBlock(4.0f, 0));
-        FACTOR_PLATING = registerBlock("factor_plating", createDecorBlock(5.0f, 0));
-        FACTOR_STRUT = registerBlock("factor_strut", createDecorBlock(3.0f, 0));
-        FACTOR_GRATING = registerBlock("factor_grating", createDecorBlock(3.0f, 0));
-        FACTOR_SCREEN = registerBlock("factor_screen", createDecorBlock(2.0f, 8));
-        FACTOR_CONSOLE = registerBlock("factor_console", createDecorBlock(4.0f, 10));
-        FACTOR_VENT = registerBlock("factor_vent", createDecorBlock(3.0f, 0));
-        FACTOR_CABLE_TRAY = registerBlock("factor_cable_tray", createDecorBlock(2.0f, 0));
-        FACTOR_PILLAR = registerBlock("factor_pillar", createDecorBlock(4.0f, 0));
-        FACTOR_COLUMN = registerBlock("factor_column", createDecorBlock(5.0f, 0));
-        FACTOR_PEDESTAL = registerBlock("factor_pedestal", createDecorBlock(4.0f, 0));
-        FACTOR_PLATFORM = registerBlock("factor_platform", createDecorBlock(3.0f, 0));
-        FACTOR_RAILING = registerBlock("factor_railing", createDecorBlock(2.0f, 0));
-        RESONANCE_CLUSTER = registerBlock("resonance_cluster", createDecorBlock(2.0f, 12));
+        FACTOR_CONDUIT = registerDecorBlock("factor_conduit", 3.0f, 15);
+        FACTOR_PANEL = registerDecorBlock("factor_panel", 4.0f, 0);
+        FACTOR_PLATING = registerDecorBlock("factor_plating", 5.0f, 0);
+        FACTOR_STRUT = registerDecorBlock("factor_strut", 3.0f, 0);
+        FACTOR_GRATING = registerDecorBlock("factor_grating", 3.0f, 0);
+        FACTOR_SCREEN = registerDecorBlock("factor_screen", 2.0f, 8);
+        FACTOR_CONSOLE = registerDecorBlock("factor_console", 4.0f, 10);
+        FACTOR_VENT = registerDecorBlock("factor_vent", 3.0f, 0);
+        FACTOR_CABLE_TRAY = registerDecorBlock("factor_cable_tray", 2.0f, 0);
+        FACTOR_PILLAR = registerDecorBlock("factor_pillar", 4.0f, 0);
+        FACTOR_COLUMN = registerDecorBlock("factor_column", 5.0f, 0);
+        FACTOR_PEDESTAL = registerDecorBlock("factor_pedestal", 4.0f, 0);
+        FACTOR_PLATFORM = registerDecorBlock("factor_platform", 3.0f, 0);
+        FACTOR_RAILING = registerDecorBlock("factor_railing", 2.0f, 0);
+        RESONANCE_CLUSTER = registerDecorBlock("resonance_cluster", 2.0f, 12);
     }
     
-    private Block createDecorBlock(float hardness, int luminance) {
-        return new Block(Block.Settings.create()
+    /**
+     * 注册 Factor 方块（构造函数接受 Identifier）
+     */
+    private <T extends Block> T registerFactorBlock(String name, Function<Identifier, T> factory) {
+        Identifier id = Identifier.of("factorcraft", name);
+        T block = factory.apply(id);
+        Registry.register(Registries.BLOCK, id, block);
+        
+        // 同时注册 BlockItem（需要 registryKey）
+        RegistryKey<Item> itemKey = RegistryKey.of(RegistryKeys.ITEM, id);
+        Registry.register(Registries.ITEM, id, new BlockItem(block, new Item.Settings().registryKey(itemKey)));
+        
+        FactorCraftMod.LOGGER.debug("[FactorCraft:Building] 注册方块: {}", name);
+        return block;
+    }
+    
+    /**
+     * 注册装饰方块（简单方块）
+     */
+    private Block registerDecorBlock(String name, float hardness, int luminance) {
+        Identifier id = Identifier.of("factorcraft", name);
+        RegistryKey<Block> blockKey = RegistryKey.of(RegistryKeys.BLOCK, id);
+        
+        Block block = new Block(AbstractBlock.Settings.create()
+            .registryKey(blockKey)
             .strength(hardness, 6.0f)
             .luminance(luminance > 0 ? state -> luminance : state -> 0));
-    }
-    
-    private <T extends Block> T registerBlock(String name, T block) {
-        Identifier id = Identifier.of("factorcraft", name);
+        
         Registry.register(Registries.BLOCK, id, block);
         
         // 同时注册 BlockItem
-        Registry.register(Registries.ITEM, id, new BlockItem(block, new Item.Settings()));
+        RegistryKey<Item> itemKey = RegistryKey.of(RegistryKeys.ITEM, id);
+        Registry.register(Registries.ITEM, id, new BlockItem(block, new Item.Settings().registryKey(itemKey)));
         
-        FactorCraftMod.LOGGER.debug("[FactorCraft:Building] 注册方块: {}", name);
+        FactorCraftMod.LOGGER.debug("[FactorCraft:Building] 注册装饰方块: {}", name);
         return block;
     }
     

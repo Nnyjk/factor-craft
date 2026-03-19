@@ -1,8 +1,12 @@
 package com.factorcraft.module.building.block;
 
+import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
@@ -12,8 +16,9 @@ import net.minecraft.world.World;
  */
 public class FactorCrystalBlock extends Block {
     
-    public FactorCrystalBlock() {
-        super(Settings.create()
+    public FactorCrystalBlock(Identifier id) {
+        super(AbstractBlock.Settings.create()
+            .registryKey(RegistryKey.of(RegistryKeys.BLOCK, id))
             .strength(1.5f, 1.5f)
             .luminance(state -> 8)
             .nonOpaque());

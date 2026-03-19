@@ -1,9 +1,13 @@
 package com.factorcraft.module.building.block;
 
+import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ShapeContext;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.util.shape.VoxelShape;
@@ -17,8 +21,9 @@ public class FactorTorchBlock extends Block {
     
     protected static final VoxelShape SHAPE = Block.createCuboidShape(6, 0, 6, 10, 10, 10);
     
-    public FactorTorchBlock() {
-        super(Settings.create()
+    public FactorTorchBlock(Identifier id) {
+        super(AbstractBlock.Settings.create()
+            .registryKey(RegistryKey.of(RegistryKeys.BLOCK, id))
             .strength(0.0f)
             .luminance(state -> 10)
             .nonOpaque());

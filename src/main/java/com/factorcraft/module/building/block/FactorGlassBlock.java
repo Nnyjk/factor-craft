@@ -1,11 +1,15 @@
 package com.factorcraft.module.building.block;
 
+import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.TranslucentBlock;
 import net.minecraft.item.ItemPlacementContext;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.IntProperty;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.BlockView;
 
@@ -17,8 +21,9 @@ public class FactorGlassBlock extends TranslucentBlock {
     // T1-T5 等级，影响颜色和透明度
     public static final IntProperty TIER = IntProperty.of("tier", 1, 5);
     
-    public FactorGlassBlock() {
-        super(Settings.create()
+    public FactorGlassBlock(Identifier id) {
+        super(AbstractBlock.Settings.create()
+            .registryKey(RegistryKey.of(RegistryKeys.BLOCK, id))
             .strength(0.3f)
             .luminance(state -> state.get(TIER) * 2)
             .nonOpaque());
