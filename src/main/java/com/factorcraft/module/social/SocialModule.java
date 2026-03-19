@@ -2,6 +2,7 @@ package com.factorcraft.module.social;
 
 import com.factorcraft.FactorCraftMod;
 import com.factorcraft.module.FactorCraftModule;
+import com.factorcraft.module.social.manager.PermissionConfig;
 
 import java.util.List;
 
@@ -10,6 +11,7 @@ import java.util.List;
  * 
  * 功能:
  * - 权限管理
+ * - 权限组配置
  */
 public final class SocialModule implements FactorCraftModule {
     
@@ -35,7 +37,10 @@ public final class SocialModule implements FactorCraftModule {
     
     @Override
     public void initialize() {
+        // 加载权限配置
+        PermissionConfig.load();
+        
         FactorCraftMod.LOGGER.info("[FactorCraft:Social] 社交模块已加载");
-        FactorCraftMod.LOGGER.info("[FactorCraft:Social] 功能: 权限管理");
+        FactorCraftMod.LOGGER.info("[FactorCraft:Social] 功能: 权限管理, 权限组配置");
     }
 }
