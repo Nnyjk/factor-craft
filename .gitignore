@@ -26,3 +26,12 @@ replay_pid*
 logs/
 run/
 build/gametest/
+
+# Agent Workspace Files (should not be in repo)
+MEMORY.md
+memory/
+*.memory.md
+sessions/
+dialog/
+embedding_cache/
+tool_result/
