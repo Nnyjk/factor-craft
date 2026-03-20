@@ -16,6 +16,7 @@ import com.factorcraft.module.advancement.AdvancementModule;
 import com.factorcraft.module.event.worldevent.FactorWorldEventModule;
 import com.factorcraft.module.vfx.VfxModule;
 import com.factorcraft.module.research.ResearchModule;
+import com.factorcraft.module.profession.ProfessionModule;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -42,7 +43,8 @@ public final class ModuleBootstrap {
                 (FactorCraftModule) new NonCoreIntegrationModule(),
                 (FactorCraftModule) FactorWorldEventModule.getInstance(),
                 (FactorCraftModule) VfxModule.getInstance(),
-                (FactorCraftModule) new ResearchModule()
+                (FactorCraftModule) new ResearchModule(),
+                (FactorCraftModule) ProfessionModule.getInstance()
         );
     }
 
