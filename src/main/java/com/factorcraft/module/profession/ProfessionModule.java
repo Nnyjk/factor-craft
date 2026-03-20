@@ -42,7 +42,7 @@ public final class ProfessionModule implements FactorCraftModule {
     
     @Override
     public List<String> dependencies() {
-        return List.of("factor"); // 依赖 Factor 系统
+        return List.of("factor_system"); // 依赖 Factor 系统
     }
     
     @Override
