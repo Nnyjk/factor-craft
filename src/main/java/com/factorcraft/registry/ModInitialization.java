@@ -1,6 +1,7 @@
 package com.factorcraft.registry;
 
 import com.factorcraft.FactorCraftMod;
+import com.factorcraft.factor.FactorInitializer;
 import com.factorcraft.recipe.RecipeLoader;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 
@@ -19,6 +20,9 @@ public class ModInitialization {
         
         // 注册音效
         ModSounds.initialize();
+        
+        // 初始化 Factor 系统
+        FactorInitializer.initialize();
         
         // 注册 Factor 网络扫描仪
         com.factorcraft.module.network.ModScanners.register();
