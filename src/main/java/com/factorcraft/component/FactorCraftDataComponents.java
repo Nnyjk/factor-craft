@@ -1,6 +1,7 @@
 package com.factorcraft.component;
 
 import com.factorcraft.FactorCraftMod;
+import com.factorcraft.component.type.FactorData;
 import com.factorcraft.component.type.FactorStorage;
 import com.factorcraft.component.type.ScanHistory;
 import net.minecraft.component.ComponentType;
@@ -40,6 +41,18 @@ public class FactorCraftDataComponents {
         ComponentType.<FactorStorage>builder()
             .codec(FactorStorage.CODEC)
             .packetCodec(FactorStorage.STREAM_CODEC)
+            .build()
+    );
+    
+    /**
+     * Factor 数据组件
+     * 存储完整的 Factor 对象，用于 Factor 物品
+     */
+    public static final ComponentType<FactorData> FACTOR_DATA = register(
+        "factor_data",
+        ComponentType.<FactorData>builder()
+            .codec(FactorData.CODEC)
+            .packetCodec(FactorData.PACKET_CODEC)
             .build()
     );
     

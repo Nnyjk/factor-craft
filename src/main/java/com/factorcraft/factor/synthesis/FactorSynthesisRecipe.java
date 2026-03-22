@@ -143,6 +143,35 @@ public class FactorSynthesisRecipe {
     }
     
     /**
+     * 检查输入 Factor 列表是否匹配此配方
+     * 
+     * @param inputFactors 输入的 Factor 列表
+     * @return 是否匹配
+     */
+    public boolean matchesInput(List<com.factorcraft.factor.Factor> inputFactors) {
+        if (inputFactors.size() != inputs.size()) {
+            return false;
+        }
+        
+        // 按类型分组统计输入数量
+        java.util.Map<Identifier, Integer> inputCounts = new java.util.HashMap<>();
+        for (com.factorcraft.factor.Factor factor : inputFactors) {
+            Identifier factorId = factor.getId();
+            inputCounts.merge(factorId, 1, Integer::sum);
+        }
+        
+        // 检查每个配方输入是否满足
+        for (FactorIngredient ingredient : inputs) {
+            int available = inputCounts.getOrDefault(ingredient.getFactorId(), 0);
+            if (available < ingredient.getCount()) {
+                return false;
+            }
+        }
+        
+        return true;
+    }
+    
+    /**
      * 创建 Builder
      */
     public static Builder builder(Identifier id) {

@@ -66,6 +66,7 @@ public final class LootModule implements FactorCraftModule {
         // 注册物品
         FactorShardItem.registerAll();
         ResonanceCoreItem.register();
+        FactorItem.register();
         
         // 注册掉落处理器
         EntityDropHandler.register();
