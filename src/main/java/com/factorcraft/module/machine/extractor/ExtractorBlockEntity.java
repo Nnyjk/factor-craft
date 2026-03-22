@@ -5,6 +5,7 @@ import com.factorcraft.api.IEnergyReceiver;
 import com.factorcraft.factor.Factor;
 import com.factorcraft.factor.FactorRarity;
 import com.factorcraft.factor.FactorType;
+import com.factorcraft.module.loot.FactorItem;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
@@ -316,11 +317,9 @@ public class ExtractorBlockEntity extends BlockEntity
         }
     }
     
-    /** 创建 Factor 物品（暂时返回空物品，需要 FactorItem 实现） */
+    /** 创建 Factor 物品 */
     private ItemStack createFactorItem(Factor factor) {
-        // TODO: 实现 FactorItem 并创建物品
-        // 暂时返回空物品
-        return ItemStack.EMPTY;
+        return FactorItem.createFactorStack(factor);
     }
     
     /** 检查是否可以输出 */
