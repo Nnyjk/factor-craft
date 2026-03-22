@@ -1,7 +1,7 @@
 # Factor Craft 安装指南
 
-> **版本：** Alpha 1.0.0  
-> **Minecraft:** 1.21.4  
+> **版本：** v0.2.0-beta
+> **Minecraft:** 1.21.4
 > **Fabric:** 0.16.10+
 
 ---
@@ -27,7 +27,7 @@
 2. 放入 `.minecraft/mods/`
 
 ### 3. 安装 Factor Craft
-1. 下载 `factor-craft-0.1.0.jar`
+1. 下载 `factor-craft-0.2.0-beta.jar`
 2. 放入 `.minecraft/mods/`
 
 ### 4. 启动游戏
@@ -45,18 +45,18 @@
 
 ### 第 2-3 天
 - 建造基础共振炉
-- 生产青铜锭
+- 生产尘铜锭 (T1 材料)
 - 制作 Factor 剑 T1
 
 ### 第 4-7 天
-- 前往下界
-- 建造维度结晶器
-- 生产维度级材料
+- 建造 Factor 提取器
+- 收集 Factor 能量
+- 升级到暗影钢 (T2 材料)
 
 ### 第 8-14 天
-- 进入末地
-- 建造远古合成阵
-- 挑战 Boss
+- 探索高浓度区块
+- 建造 Factor 合成器
+- 挑战 Factor 守护者
 
 ---
 
@@ -85,5 +85,12 @@
 
 ---
 
-> **版本：** 1.0  
-> **更新：** 2026-03-10
+## 推荐配套 Mod
+
+| Mod | 用途 |
+|-----|------|
+| REI (Roughly Enough Items) | 查看配方 |
+| Mod Menu | 模组管理 |
+| Cloth Config | 配置界面 |
+| Sodium | 性能优化 |
+| Litematica | 多方块建筑投影 |

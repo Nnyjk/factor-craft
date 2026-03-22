@@ -4,8 +4,8 @@
 
 Factor Craft 是一个基于 Fabric 1.21.4 的 Minecraft Mod，引入 Factor 能量系统和特性培育机制。
 
-**项目状态：** ✅ 核心完成  
-**最后更新：** 2026-03-14
+**项目状态：** ✅ Alpha 核心完成  
+**最后更新：** 2026-03-22
 
 ---
 
@@ -84,141 +84,103 @@ Factor Craft 是一个基于 Fabric 1.21.4 的 Minecraft Mod，引入 Factor 能
 - 特性信息显示
 - 网络同步
 
+---
+
+### Phase 6: 机器系统 ✅
+
+**目标：** 实现多方块机器
+
+**实现内容：**
+- 提取器 T1-T5
+- 合成器 T1-T5
+- 消耗器 T1-T5
+- 培育器 T1-T5
+- 传递器 T1-T4
+
 **核心文件：**
-- `FactorDisplayHandler.java`
-- `TraitDisplayHandler.java`
-- `NetworkHandler.java`
+- `ExtractorCoreBlockEntity.java`
+- `SynthesizerCoreBlockEntity.java`
+- `ConsumerCoreBlockEntity.java`
+- `BreederCoreBlockEntity.java`
+- `TransmitterCoreBlockEntity.java`
 
 ---
 
-### Phase 6: 测试系统 ✅
+### Phase 7: 任务系统 ✅
 
-**目标：** 建立完整的测试套件
+**目标：** 实现任务引导
 
 **实现内容：**
-- 18 个单元测试
-- 100% 核心逻辑覆盖
-- 集成测试
+- 任务管理器
+- 进度追踪
+- 奖励系统
 
 **核心文件：**
-- `TraitManagerTest.java`
-- `ChunkFactorStateTest.java`
-- `ResonanceCalculatorTest.java`
+- `QuestManager.java`
+- `Quest.java`
+- `QuestReward.java`
 
 ---
 
-### Phase 7: 性能优化 ✅
+### Phase 8: 世界生成 ✅
 
-**目标：** 优化性能
-
-**实现内容：**
-- FastUtil 集合优化
-- 批量处理机制
-- 缓存优化
-
-**核心文件：**
-- `PerformanceOptimizations.java`
-- `BatchProcessor.java`
-
----
-
-### Phase 8: 游戏内容 ✅
-
-**目标：** 注册游戏内容
+**目标：** 实现 Factor 相关世界生成
 
 **实现内容：**
-- 3 个方块（Extractor, Core, Analyzer）
-- 5 个物品（Crystal, Essence, Meter, Catalyst, Scroll）
-- 2 个配方类型
-
-**核心文件：**
-- `ModBlocks.java`
-- `ModItems.java`
-- `ModRecipes.java`
-
----
-
-### Phase 9: 高级特性 ✅
-
-**目标：** 实现高级功能
-
-**实现内容：**
-- 命令系统（10+ 命令）
-- 权限管理（3 组，9 个权限）
-- 成就系统（6 个成就）
-- 数据包支持
-
-**核心文件：**
-- `CommandRegistry.java`
-- `PermissionManager.java`
-- `AchievementManager.java`
-
----
-
-### Phase 10: 世界生成 & 任务 ✅
-
-**目标：** 实现世界生成和任务系统
-
-**实现内容：**
-- Factor 晶体矿脉生成
-- 祭坛结构生成
-- Boss 实体（Factor Guardian）
-- 4 个预定义任务
+- Factor 晶体矿脉
+- Factor 祭坛结构
+- Boss 守护者
 
 **核心文件：**
 - `FactorCrystalOreFeature.java`
-- `FactorOreGenerator.java`
 - `FactorAltarGenerator.java`
 - `FactorGuardianEntity.java`
-- `QuestManager.java`
 
 ---
 
-### Phase 11: 多人优化 ✅
+### Phase 9-10: 多人与优化 ✅
 
-**目标：** 实现多人游戏优化
+**目标：** 多人游戏支持和性能优化
 
 **实现内容：**
-- 区域保护系统（每玩家 3 个区域）
-
-**核心文件：**
-- `RegionProtectionManager.java`
-
----
-
-## 技术栈
-
-- **Minecraft:** 1.21.4
-- **Fabric Loader:** 0.16.9
-- **Fabric API:** 0.110.5+1.21.4
-- **Java:** 21
-- **Gradle:** 8.10
+- 权限管理系统
+- 网络同步优化
+- 性能分析工具
 
 ---
 
-## 关键决策记录
+### Phase 11: 职业系统 🔄
 
-### 2026-03-11
-1. **配置分离：** 将所有配置文件放在 `config/factor-craft/` 目录
-2. **热重载：** 使用 WatchService 监听文件变更
-3. **性能优化：** 采用 FastUtil 集合和批量处理
+**目标：** 实现三大职业体系
 
-### 2026-03-12
-1. **世界生成策略：** 采用球形晶体簇生成，符合视觉美感
-2. **Boss 设计：** 简化版实现，保留扩展空间
-3. **任务系统：** 4 个核心任务，后续可扩展
-4. **区域保护：** 每玩家限制 3 个区域，避免滥用
+**设计完成：**
+- 创生者 (Genesis)
+- 湮灭者 (Oblivion)
+- 锻铸师 (Forge)
 
-### 2026-03-14
-1. **移除经济系统：** 交易系统、排行榜已删除
-2. **移除社交功能：** 不再计划公会、好友系统
-3. **移除跨服同步：** 不再计划 Redis 集成
+**待实现：**
+- 技能树
+- 职业特性
+- 专属机制
+
+详见: `docs/designs/class_system.md`
 
 ---
 
-## 待办事项
+## 代码统计
 
-- [ ] 游戏内测试
-- [ ] 性能基准测试
-- [ ] 贴图资源制作
-- [ ] 文档完善
+| 指标 | 数量 |
+|------|------|
+| Java 类 | 80+ |
+| 配置文件 | 9 |
+| 测试用例 | 18+ |
+| 总代码行 | ~8000+ |
+
+---
+
+## 相关文档
+
+- [路线图](../ROADMAP.md)
+- [开发规划](DEVELOPMENT_PLAN.md)
+- [科技树设计](designs/technology_tree.md)
+- [职业系统设计](designs/class_system.md)

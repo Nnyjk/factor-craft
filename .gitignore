@@ -20,12 +20,14 @@ replay_pid*
 *.zip
 *.tar.gz
 *.rar
-.worktrees/
 
 # Test outputs
 logs/
 run/
 build/gametest/
+
+# Worktrees
+.worktrees/
 
 # Agent Workspace Files (should not be in repo)
 MEMORY.md
@@ -35,3 +37,4 @@ sessions/
 dialog/
 embedding_cache/
 tool_result/
+reports/
