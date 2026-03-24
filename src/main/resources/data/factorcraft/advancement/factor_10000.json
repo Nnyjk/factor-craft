@@ -9,7 +9,7 @@
     "show_toast": true,
     "announce_to_chat": true
   },
-  "parent": "factorcraft:factor_1000",
+  "parent": "factorcraft:factor_5000",
   "criteria": {
     "requirement": {
       "trigger": "factorcraft:factor_collected",
