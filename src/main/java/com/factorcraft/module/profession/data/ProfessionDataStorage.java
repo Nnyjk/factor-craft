@@ -3,17 +3,17 @@ package com.factorcraft.module.profession.data;
 import com.factorcraft.module.profession.model.PlayerProfessionData;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.RegistryWrapper;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.PersistentState;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 import java.util.UUID;
 
 /**
  * 职业数据持久化存储
+ * 
+ * 使用 PersistentState 机制将玩家职业数据存储到世界数据中
  */
 public class ProfessionDataStorage extends PersistentState {
     
@@ -24,67 +24,74 @@ public class ProfessionDataStorage extends PersistentState {
     public ProfessionDataStorage() {
     }
     
+    // ==================== PersistentState 实现 ====================
+    
     /**
-     * 从 NBT 加载
+     * 从 NBT 加载数据
      */
     public ProfessionDataStorage(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
-        for (String key : nbt.getKeys()) {
+        NbtCompound dataNbt = nbt.getCompound("player_data");
+        for (String key : dataNbt.getKeys()) {
             try {
                 UUID playerId = UUID.fromString(key);
-                NbtCompound playerNbt = nbt.getCompound(key);
+                NbtCompound playerNbt = dataNbt.getCompound(key);
                 PlayerProfessionData data = new PlayerProfessionData();
                 data.readNbt(playerNbt);
                 playerDataMap.put(playerId, data);
             } catch (IllegalArgumentException e) {
-                // 忽略无效的 UUID
+                // 忽略无效的UUID
             }
         }
     }
     
     @Override
     public NbtCompound writeNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
+        NbtCompound dataNbt = new NbtCompound();
         for (Map.Entry<UUID, PlayerProfessionData> entry : playerDataMap.entrySet()) {
             NbtCompound playerNbt = new NbtCompound();
             entry.getValue().writeNbt(playerNbt);
-            nbt.put(entry.getKey().toString(), playerNbt);
+            dataNbt.put(entry.getKey().toString(), playerNbt);
         }
+        nbt.put("player_data", dataNbt);
         return nbt;
     }
     
+    // ==================== 数据访问 ====================
+    
+    /**
+     * 获取玩家职业数据
+     */
     public PlayerProfessionData getPlayerData(UUID playerId) {
         return playerDataMap.computeIfAbsent(playerId, id -> new PlayerProfessionData());
     }
     
-    public PlayerProfessionData getPlayerData(ServerPlayerEntity player) {
-        return getPlayerData(player.getUuid());
+    /**
+     * 获取所有玩家数据
+     */
+    public Map<UUID, PlayerProfessionData> getAllPlayerData() {
+        return playerDataMap;
     }
     
-    public void setPlayerData(UUID playerId, PlayerProfessionData data) {
-        playerDataMap.put(playerId, data);
+    /**
+     * 清除玩家数据
+     */
+    public void clearPlayerData(UUID playerId) {
+        playerDataMap.remove(playerId);
         markDirty();
     }
     
-    public void setPlayerData(ServerPlayerEntity player, PlayerProfessionData data) {
-        setPlayerData(player.getUuid(), data);
-    }
-    
-    public Optional<PlayerProfessionData> getData(UUID playerId) {
-        return Optional.ofNullable(playerDataMap.get(playerId));
-    }
-    
-    public boolean hasData(UUID playerId) {
-        return playerDataMap.containsKey(playerId);
-    }
-    
-    public void removeData(UUID playerId) {
-        playerDataMap.remove(playerId);
+    /**
+     * 清除所有数据
+     */
+    public void clearAll() {
+        playerDataMap.clear();
         markDirty();
     }
     
     // ==================== 静态访问方法 ====================
     
     /**
-     * 从世界获取存储实例
+     * 获取职业数据存储实例
      */
     public static ProfessionDataStorage get(ServerWorld world) {
         return world.getPersistentStateManager().getOrCreate(
@@ -95,19 +102,5 @@ public class ProfessionDataStorage extends PersistentState {
             ),
             KEY
         );
-    }
-    
-    /**
-     * 便捷方法：获取玩家职业数据
-     */
-    public static PlayerProfessionData getPlayerProfessionData(ServerWorld world, UUID playerId) {
-        return get(world).getPlayerData(playerId);
-    }
-    
-    /**
-     * 便捷方法：获取玩家职业数据
-     */
-    public static PlayerProfessionData getPlayerProfessionData(ServerWorld world, ServerPlayerEntity player) {
-        return get(world).getPlayerData(player);
     }
 }

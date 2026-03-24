@@ -1,0 +1,15 @@
+{
+  "id": "genesis",
+  "display_name": "创生师",
+  "description": "生产建造核心，擅长资源采集与团队辅助",
+  "factor_type": "genesis_factor",
+  "base_attributes": {
+    "build_speed": 1.05,
+    "crop_growth": 1.025,
+    "resource_yield": 1.015
+  },
+  "unlock_conditions": {
+    "min_level": 0,
+    "required_factor_count": 0
+  }
+}

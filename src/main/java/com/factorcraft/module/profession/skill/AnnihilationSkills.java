@@ -3,10 +3,25 @@ package com.factorcraft.module.profession.skill;
 import com.factorcraft.module.profession.model.ProfessionType;
 import net.minecraft.server.network.ServerPlayerEntity;
 
+import java.util.List;
+
 /**
  * 湮灭使技能
  */
 public class AnnihilationSkills {
+    
+    private static final List<ProfessionSkill> ALL_SKILLS = List.of(
+        new AnnihilationSlash(),
+        new FactorDevour(),
+        new VoidStep()
+    );
+    
+    /**
+     * 获取所有湮灭使技能
+     */
+    public static List<ProfessionSkill> getAllSkills() {
+        return ALL_SKILLS;
+    }
     
     /**
      * 湮灭斩 - 向前释放范围伤害波
@@ -23,8 +38,9 @@ public class AnnihilationSkills {
         }
         
         @Override
-        public void execute(ServerPlayerEntity player) {
+        public boolean execute(ServerPlayerEntity player) {
             // TODO: 实现范围伤害逻辑
+            return true;
         }
     }
     
@@ -43,8 +59,9 @@ public class AnnihilationSkills {
         }
         
         @Override
-        public void execute(ServerPlayerEntity player) {
+        public boolean execute(ServerPlayerEntity player) {
             // TODO: 实现Factor吸收逻辑
+            return true;
         }
     }
     
@@ -63,8 +80,9 @@ public class AnnihilationSkills {
         }
         
         @Override
-        public void execute(ServerPlayerEntity player) {
+        public boolean execute(ServerPlayerEntity player) {
             // TODO: 实现瞬移逻辑
+            return true;
         }
     }
 }

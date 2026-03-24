@@ -57,6 +57,13 @@ public abstract class ProfessionSkill {
     }
     
     /**
+     * 获取冷却时间（毫秒）
+     */
+    public long getCooldownMs() {
+        return cooldownTicks * 50L; // 1 tick = 50ms
+    }
+    
+    /**
      * 检查是否可以使用技能
      */
     public boolean canUse(ServerPlayerEntity player) {
@@ -68,8 +75,10 @@ public abstract class ProfessionSkill {
     
     /**
      * 执行技能
+     * @param player 执行技能的玩家
+     * @return 是否执行成功
      */
-    public abstract void execute(ServerPlayerEntity player);
+    public abstract boolean execute(ServerPlayerEntity player);
     
     /**
      * 扣除Factor消耗
