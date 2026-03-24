@@ -1,0 +1,40 @@
+{
+  "id": "chain_profession_04",
+  "title": "锻铸匠之路 [4/5]",
+  "description": "锻铸匠专精加工制造，能打造最高品质的装备。展示你的锻造技艺。",
+  "category": "chain",
+  "chain": "profession",
+  "difficulty": "medium",
+  "objectives": [
+    {
+      "type": "craft_item",
+      "item": "factorcraft:factor_crystal",
+      "count": 20,
+      "description": "制作 20 个 Factor 晶体"
+    },
+    {
+      "type": "craft_item",
+      "item": "factorcraft:shadow_steel_ingot",
+      "count": 5,
+      "description": "锻造 5 个暗影钢锭"
+    }
+  ],
+  "rewards": [
+    {
+      "type": "factor",
+      "amount": 1000.0
+    },
+    {
+      "type": "item",
+      "item": "factorcraft:shadow_steel_ingot",
+      "count": 3
+    },
+    {
+      "type": "quest_xp",
+      "amount": 300
+    }
+  ],
+  "prerequisites": ["chain_profession_01"],
+  "repeatable": false,
+  "hidden": false
+}

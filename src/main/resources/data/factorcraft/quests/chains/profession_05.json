@@ -1,0 +1,39 @@
+{
+  "id": "chain_profession_05",
+  "title": "职业精通 [5/5]",
+  "description": "完成职业任务链，展现你选择的道路。成为一名真正的 Factor 大师！",
+  "category": "chain",
+  "chain": "profession",
+  "difficulty": "hard",
+  "objectives": [
+    {
+      "type": "extract_factor",
+      "amount": 10000.0,
+      "description": "累计提取 10000 点 Factor"
+    },
+    {
+      "type": "craft_item",
+      "item": "factorcraft:void_crystal",
+      "count": 1,
+      "description": "制作虚空水晶"
+    }
+  ],
+  "rewards": [
+    {
+      "type": "factor",
+      "amount": 5000.0
+    },
+    {
+      "type": "item",
+      "item": "factorcraft:factor_crystal",
+      "count": 10
+    },
+    {
+      "type": "quest_xp",
+      "amount": 1000
+    }
+  ],
+  "prerequisites": ["chain_profession_02", "chain_profession_03", "chain_profession_04"],
+  "repeatable": false,
+  "hidden": false
+}

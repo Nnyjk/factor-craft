@@ -1,0 +1,40 @@
+{
+  "id": "chain_profession_02",
+  "title": "创生师之路 [2/5]",
+  "description": "创生师擅长生产建造，是团队的核心辅助。展示你的建造才能。",
+  "category": "chain",
+  "chain": "profession",
+  "difficulty": "medium",
+  "objectives": [
+    {
+      "type": "place_block",
+      "block": "factorcraft:extractor_core",
+      "count": 3,
+      "description": "建造 3 台提取器"
+    },
+    {
+      "type": "craft_item",
+      "item": "factorcraft:synthesizer_core",
+      "count": 1,
+      "description": "制作合成器核心"
+    }
+  ],
+  "rewards": [
+    {
+      "type": "factor",
+      "amount": 1000.0
+    },
+    {
+      "type": "item",
+      "item": "factorcraft:factor_crystal",
+      "count": 5
+    },
+    {
+      "type": "quest_xp",
+      "amount": 300
+    }
+  ],
+  "prerequisites": ["chain_profession_01"],
+  "repeatable": false,
+  "hidden": false
+}

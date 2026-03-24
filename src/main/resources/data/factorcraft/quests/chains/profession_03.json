@@ -1,0 +1,39 @@
+{
+  "id": "chain_profession_03",
+  "title": "湮灭使之路 [3/5]",
+  "description": "湮灭使精通战斗探索，是团队的先锋力量。证明你的战斗实力。",
+  "category": "chain",
+  "chain": "profession",
+  "difficulty": "medium",
+  "objectives": [
+    {
+      "type": "kill_entity",
+      "entity": "minecraft:zombie",
+      "count": 20,
+      "description": "击败 20 个僵尸"
+    },
+    {
+      "type": "dimension_travel",
+      "dimension": "minecraft:the_nether",
+      "description": "探索下界"
+    }
+  ],
+  "rewards": [
+    {
+      "type": "factor",
+      "amount": 1000.0
+    },
+    {
+      "type": "item",
+      "item": "factorcraft:factor_crystal",
+      "count": 5
+    },
+    {
+      "type": "quest_xp",
+      "amount": 300
+    }
+  ],
+  "prerequisites": ["chain_profession_01"],
+  "repeatable": false,
+  "hidden": false
+}
