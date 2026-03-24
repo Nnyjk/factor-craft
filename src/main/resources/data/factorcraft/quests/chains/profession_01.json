@@ -1,0 +1,35 @@
+{
+  "id": "chain_profession_01",
+  "title": "职业觉醒 [1/5]",
+  "description": "你的 Factor 能力已达到临界点，是时候选择你的职业道路了。",
+  "category": "chain",
+  "chain": "profession",
+  "difficulty": "medium",
+  "objectives": [
+    {
+      "type": "extract_factor",
+      "amount": 5000.0,
+      "description": "累计提取 5000 点 Factor"
+    },
+    {
+      "type": "craft_item",
+      "item": "factorcraft:factor_crystal",
+      "count": 10,
+      "description": "制作 10 个 Factor 晶体"
+    }
+  ],
+  "rewards": [
+    {
+      "type": "item",
+      "item": "factorcraft:factor_crystal",
+      "count": 5
+    },
+    {
+      "type": "quest_xp",
+      "amount": 500
+    }
+  ],
+  "prerequisites": ["chain_main_05"],
+  "repeatable": false,
+  "hidden": false
+}
