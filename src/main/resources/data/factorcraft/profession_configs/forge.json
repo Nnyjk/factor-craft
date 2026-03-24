@@ -1,0 +1,15 @@
+{
+  "id": "forge",
+  "display_name": "锻铸匠",
+  "description": "加工制造核心，擅长装备强化与合成",
+  "factor_type": "forge_factor",
+  "base_attributes": {
+    "craft_efficiency": 1.05,
+    "equipment_quality": 1.025,
+    "synthesis_rate": 1.015
+  },
+  "unlock_conditions": {
+    "min_level": 0,
+    "required_factor_count": 0
+  }
+}

@@ -1,7 +1,10 @@
 package com.factorcraft.module.profession.model;
 
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.nbt.NbtList;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 玩家职业数据
@@ -14,14 +17,15 @@ public class PlayerProfessionData {
     private int level;
     private int experience;
     private int talentPoints;
-    private long lastSkillUseTime;
+    
+    // 技能冷却时间存储（技能ID -> 上次使用时间戳）
+    private final Map<String, Long> skillCooldowns = new HashMap<>();
     
     public PlayerProfessionData() {
         this.professionType = null;
         this.level = 1;
         this.experience = 0;
         this.talentPoints = 0;
-        this.lastSkillUseTime = 0;
     }
     
     public boolean hasProfession() {
@@ -53,12 +57,20 @@ public class PlayerProfessionData {
         checkLevelUp();
     }
     
+    public void setExperience(int experience) {
+        this.experience = Math.max(0, experience);
+    }
+    
     public int getTalentPoints() {
         return talentPoints;
     }
     
     public void addTalentPoints(int points) {
         this.talentPoints += points;
+    }
+    
+    public void setTalentPoints(int talentPoints) {
+        this.talentPoints = Math.max(0, talentPoints);
     }
     
     public boolean useTalentPoints(int points) {
@@ -83,13 +95,37 @@ public class PlayerProfessionData {
         return level * level * 100; // 简单的经验公式
     }
     
-    public long getLastSkillUseTime() {
-        return lastSkillUseTime;
+    // ==================== 技能冷却 ====================
+    
+    /**
+     * 获取技能上次使用时间
+     */
+    public long getSkillLastUseTime(String skillId) {
+        return skillCooldowns.getOrDefault(skillId, 0L);
     }
     
-    public void setLastSkillUseTime(long time) {
-        this.lastSkillUseTime = time;
+    /**
+     * 设置技能上次使用时间
+     */
+    public void setSkillLastUseTime(String skillId, long time) {
+        skillCooldowns.put(skillId, time);
     }
+    
+    /**
+     * 清除技能冷却
+     */
+    public void clearSkillCooldown(String skillId) {
+        skillCooldowns.remove(skillId);
+    }
+    
+    /**
+     * 清除所有技能冷却
+     */
+    public void clearAllSkillCooldowns() {
+        skillCooldowns.clear();
+    }
+    
+    // ==================== NBT 序列化 ====================
     
     public NbtCompound writeNbt(NbtCompound nbt) {
         if (professionType != null) {
@@ -98,7 +134,17 @@ public class PlayerProfessionData {
         nbt.putInt("level", level);
         nbt.putInt("experience", experience);
         nbt.putInt("talentPoints", talentPoints);
-        nbt.putLong("lastSkillUseTime", lastSkillUseTime);
+        
+        // 保存技能冷却
+        NbtList cooldownList = new NbtList();
+        for (Map.Entry<String, Long> entry : skillCooldowns.entrySet()) {
+            NbtCompound cooldownNbt = new NbtCompound();
+            cooldownNbt.putString("skillId", entry.getKey());
+            cooldownNbt.putLong("lastUseTime", entry.getValue());
+            cooldownList.add(cooldownNbt);
+        }
+        nbt.put("skillCooldowns", cooldownList);
+        
         return nbt;
     }
     
@@ -107,8 +153,20 @@ public class PlayerProfessionData {
             professionType = ProfessionType.fromId(nbt.getString("profession"));
         }
         level = nbt.getInt("level");
+        if (level < 1) level = 1;
         experience = nbt.getInt("experience");
         talentPoints = nbt.getInt("talentPoints");
-        lastSkillUseTime = nbt.getLong("lastSkillUseTime");
+        
+        // 读取技能冷却
+        skillCooldowns.clear();
+        if (nbt.contains("skillCooldowns")) {
+            NbtList cooldownList = nbt.getList("skillCooldowns", NbtList.COMPOUND_TYPE);
+            for (int i = 0; i < cooldownList.size(); i++) {
+                NbtCompound cooldownNbt = cooldownList.getCompound(i);
+                String skillId = cooldownNbt.getString("skillId");
+                long lastUseTime = cooldownNbt.getLong("lastUseTime");
+                skillCooldowns.put(skillId, lastUseTime);
+            }
+        }
     }
 }

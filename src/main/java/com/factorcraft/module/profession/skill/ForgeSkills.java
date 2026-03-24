@@ -3,10 +3,25 @@ package com.factorcraft.module.profession.skill;
 import com.factorcraft.module.profession.model.ProfessionType;
 import net.minecraft.server.network.ServerPlayerEntity;
 
+import java.util.List;
+
 /**
  * 锻铸匠技能
  */
 public class ForgeSkills {
+    
+    private static final List<ProfessionSkill> ALL_SKILLS = List.of(
+        new InstantProcess(),
+        new PerfectForge(),
+        new EquipmentMaster()
+    );
+    
+    /**
+     * 获取所有锻铸匠技能
+     */
+    public static List<ProfessionSkill> getAllSkills() {
+        return ALL_SKILLS;
+    }
     
     /**
      * 瞬间加工 - 立即完成当前机器加工任务
@@ -23,8 +38,9 @@ public class ForgeSkills {
         }
         
         @Override
-        public void execute(ServerPlayerEntity player) {
+        public boolean execute(ServerPlayerEntity player) {
             // TODO: 实现瞬间加工逻辑
+            return true;
         }
     }
     
@@ -43,8 +59,9 @@ public class ForgeSkills {
         }
         
         @Override
-        public void execute(ServerPlayerEntity player) {
+        public boolean execute(ServerPlayerEntity player) {
             // TODO: 实现完美锻铸逻辑
+            return true;
         }
     }
     
@@ -63,8 +80,9 @@ public class ForgeSkills {
         }
         
         @Override
-        public void execute(ServerPlayerEntity player) {
+        public boolean execute(ServerPlayerEntity player) {
             // 被动技能，无需主动执行
+            return false;
         }
     }
 }

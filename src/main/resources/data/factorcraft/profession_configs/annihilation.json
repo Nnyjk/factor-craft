@@ -1,0 +1,15 @@
+{
+  "id": "annihilation",
+  "display_name": "湮灭使",
+  "description": "战斗探索核心，擅长战斗与资源收集",
+  "factor_type": "annihilation_factor",
+  "base_attributes": {
+    "attack_damage": 1.05,
+    "crit_chance": 0.025,
+    "exploration_luck": 1.015
+  },
+  "unlock_conditions": {
+    "min_level": 0,
+    "required_factor_count": 0
+  }
+}
