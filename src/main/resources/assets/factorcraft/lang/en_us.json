@@ -273,5 +273,21 @@
   "factorcraft.rei.tier": "Tier %s",
   "factorcraft.rei.processing_time": "Processing Time: %s ticks",
   "factorcraft.rei.factor_cost": "Factor Cost: %s",
-  "factorcraft.rei.factor_output": "Factor Output: %s"
+  "factorcraft.rei.factor_output": "Factor Output: %s",
+
+  "_comment": "Item Lore",
+  "item.factorcraft.factor_shard_t1.lore": "A shard containing weak Factor energy, the most basic form of Factor",
+  "item.factorcraft.factor_shard_t2.lore": "Purified Factor shard with more stable energy",
+  "item.factorcraft.factor_shard_t3.lore": "High purity Factor shard emitting obvious energy fluctuations",
+  "item.factorcraft.factor_shard_t4.lore": "Nearly pure Factor shard with almost no impurities",
+  "item.factorcraft.factor_shard_t5.lore": "Origin-level Factor shard containing the power of attribute essence",
+
+  "item.factorcraft.resonance_core.lore": "Core component that resonates with Factor, the foundation of all Factor devices",
+  "item.factorcraft.factor_item_coil_t1.lore": "Basic Factor extraction coil, extracts Factor energy from chunks",
+  "item.factorcraft.factor_item_circuit_basic.lore": "Basic circuit controlling Factor flow, the control core of Factor devices",
+
+  "block.factorcraft.factor_machine_extractor_core_t1.lore": "Core component of Factor extractor, extracts basic Factor from environment",
+  "block.factorcraft.factor_machine_synthesizer_core_t1.lore": "Core component of Factor synthesizer, combines different Factors into composite Factor",
+  "block.factorcraft.factor_machine_tank.lore": "Tank made of special materials, can stably store Factor energy",
+  "block.factorcraft.factor_block_anchor.lore": "Anchors chunk Factor concentration to prevent natural dissipation"
 }

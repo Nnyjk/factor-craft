@@ -273,5 +273,21 @@
   "factorcraft.rei.tier": "等级 %s",
   "factorcraft.rei.processing_time": "处理时间: %s ticks",
   "factorcraft.rei.factor_cost": "Factor 消耗: %s",
-  "factorcraft.rei.factor_output": "Factor 产出: %s"
+  "factorcraft.rei.factor_output": "Factor 产出: %s",
+
+  "_comment": "Item Lore",
+  "item.factorcraft.factor_shard_t1.lore": "蕴含着微弱Factor能量的碎片，是Factor最基础的形态",
+  "item.factorcraft.factor_shard_t2.lore": "经过初步提纯的Factor碎片，能量更加稳定",
+  "item.factorcraft.factor_shard_t3.lore": "高纯度Factor碎片，散发出明显的能量波动",
+  "item.factorcraft.factor_shard_t4.lore": "接近纯净的Factor碎片，几乎不含任何杂质",
+  "item.factorcraft.factor_shard_t5.lore": "本源级Factor碎片，蕴含着属性本源的力量",
+
+  "item.factorcraft.resonance_core.lore": "可以与Factor产生共振的核心部件，是所有Factor设备的基础",
+  "item.factorcraft.factor_item_coil_t1.lore": "基础级Factor提取线圈，从区块中提取Factor能量",
+  "item.factorcraft.factor_item_circuit_basic.lore": "控制Factor流动的基础电路，是Factor设备的控制核心",
+
+  "block.factorcraft.factor_machine_extractor_core_t1.lore": "Factor提取机的核心部件，从环境中提取基础Factor",
+  "block.factorcraft.factor_machine_synthesizer_core_t1.lore": "Factor合成机的核心部件，将不同Factor合成为复合Factor",
+  "block.factorcraft.factor_machine_tank.lore": "使用特殊材料制作的储罐，可以稳定存储Factor能量",
+  "block.factorcraft.factor_block_anchor.lore": "可以锚定区块Factor浓度，防止Factor自然消散"
 }
