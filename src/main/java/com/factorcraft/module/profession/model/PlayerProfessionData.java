@@ -112,6 +112,20 @@ public class PlayerProfessionData {
     }
     
     /**
+     * 获取所有技能冷却数据
+     */
+    public Map<String, Long> getSkillCooldowns() {
+        return skillCooldowns;
+    }
+    
+    /**
+     * 设置技能冷却（简化方法）
+     */
+    public void setSkillCooldown(String skillId, long time) {
+        setSkillLastUseTime(skillId, time);
+    }
+    
+    /**
      * 清除技能冷却
      */
     public void clearSkillCooldown(String skillId) {

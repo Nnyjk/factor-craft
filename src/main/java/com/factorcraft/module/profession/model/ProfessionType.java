@@ -3,39 +3,75 @@ package com.factorcraft.module.profession.model;
 /**
  * 职业类型枚举
  * 
- * 三大核心职业体系，与Factor系统深度绑定
+ * 四大职业体系，与Factor系统深度绑定
+ * 
+ * 基础职业（开局可选）：
+ * - ENGINEER: Factor工程师
+ * - CULTIVATOR: 能量培育师
+ * - EXPLORER: 潮汐探索者
+ * 
+ * 隐藏职业（特殊条件解锁）：
+ * - MASTER: 因子掌控者
  */
 public enum ProfessionType {
     
     /**
-     * 创生师 - 生产建造核心、团队辅助
-     * 核心关键词：创生
-     * 核心属性：Factor亲和度、建造速度、作物生长倍率、资源产出倍率
+     * Factor工程师 - 生产建造核心、自动化工厂
+     * 核心关键词：效率、自动化、Factor产量
+     * 核心属性：机器工作速度、Factor消耗降低、产量提升、自动化范围
+     * 天赋分支：效率、自动化、能量
      */
-    GENESIS("genesis", "创生师", "genesis_factor"),
+    ENGINEER("engineer", "Factor工程师", "engineer_factor", false),
     
     /**
-     * 湮灭使 - 战斗探索核心、资源采集
-     * 核心关键词：湮灭
-     * 核心属性：攻击力、暴击率、Factor伤害加成、探索幸运值
+     * 能量培育师 - 生物养成核心、变异培育
+     * 核心关键词：培育、变异、生物产出
+     * 核心属性：生物生长速度、变异概率、稀有掉落率、Factor产出效率
+     * 天赋分支：培育、养殖、能量
      */
-    ANNIHILATION("annihilation", "湮灭使", "annihilation_factor"),
+    CULTIVATOR("cultivator", "能量培育师", "cultivator_factor", false),
     
     /**
-     * 锻铸匠 - 加工制造核心、装备强化
-     * 核心关键词：锻铸
-     * 核心属性：加工效率、装备品质、Factor转化效率、合成成功率
+     * 潮汐探索者 - 冒险战斗核心、遗迹探索
+     * 核心关键词：战斗、探索、潮汐
+     * 核心属性：攻击力、暴击率、探索幸运值、潮汐抗性
+     * 天赋分支：战斗、探索、生存
      */
-    FORGE("forge", "锻铸匠", "forge_factor");
+    EXPLORER("explorer", "潮汐探索者", "explorer_factor", false),
+    
+    /**
+     * 因子掌控者 - 全能型隐藏职业
+     * 解锁条件：完成主线任务"因子融合"，3个基础职业均达到10级
+     * 核心能力：可融合三个基础职业的能力，自定义天赋组合
+     * 天赋分支：全能融合
+     */
+    MASTER("master", "因子掌控者", "master_factor", true),
+    /**
+     * 熔炉锻造师 - 锻造系职业
+     * 核心关键词：锻造、强化、装备制作
+     */
+    FORGE("forge", "熔炉锻造师", "forge_factor", false),
+    /**
+     * 湮灭术士 - 毁灭系职业
+     * 核心关键词：毁灭、湮灭、黑暗魔法
+     */
+    ANNIHILATION("annihilation", "湮灭术士", "annihilation_factor", false),
+    /**
+     * 起源先驱 - 起源系职业
+     * 核心关键词：起源、创造、先驱
+     */
+    GENESIS("genesis", "起源先驱", "genesis_factor", false);
     
     private final String id;
     private final String displayName;
     private final String factorType;
+    private final boolean hidden;
     
-    ProfessionType(String id, String displayName, String factorType) {
+    ProfessionType(String id, String displayName, String factorType, boolean hidden) {
         this.id = id;
         this.displayName = displayName;
         this.factorType = factorType;
+        this.hidden = hidden;
     }
     
     public String getId() {
@@ -50,6 +86,16 @@ public enum ProfessionType {
         return factorType;
     }
     
+    /**
+     * 是否为隐藏职业
+     */
+    public boolean isHidden() {
+        return hidden;
+    }
+    
+    /**
+     * 根据ID获取职业类型
+     */
     public static ProfessionType fromId(String id) {
         for (ProfessionType type : values()) {
             if (type.id.equals(id)) {
@@ -57,5 +103,42 @@ public enum ProfessionType {
             }
         }
         return null;
+    }
+    
+    /**
+     * 获取所有基础职业（非隐藏）
+     */
+    public static ProfessionType[] getBasicProfessions() {
+        return new ProfessionType[] { ENGINEER, CULTIVATOR, EXPLORER };
+    }
+    
+    /**
+     * 获取职业描述
+     */
+    public String getDescription() {
+        return switch (this) {
+            case ENGINEER -> "专注机器效率提升、Factor产量优化、自动化工厂搭建";
+            case CULTIVATOR -> "专注Factor生物培育、变异生物养殖、特殊道具产出";
+            case EXPLORER -> "专注Factor能量利用、战斗能力提升、遗迹探索";
+            case MASTER -> "可融合三个基础职业的能力，自定义天赋组合";
+            case FORGE -> "专注锻造强化、装备制作、属性提升";
+            case ANNIHILATION -> "专注湮灭魔法、黑暗力量、毁灭攻击";
+            case GENESIS -> "专注起源力量、创造能力、先驱科技";
+        };
+    }
+    
+    /**
+     * 获取职业核心属性标签
+     */
+    public String[] getCoreTags() {
+        return switch (this) {
+            case ENGINEER -> new String[] {"效率", "自动化", "Factor产量"};
+            case CULTIVATOR -> new String[] {"培育", "变异", "生物产出"};
+            case EXPLORER -> new String[] {"战斗", "探索", "潮汐"};
+            case MASTER -> new String[] {"全能", "融合", "自定义"};
+            case FORGE -> new String[] {"锻造", "强化", "制作"};
+            case ANNIHILATION -> new String[] {"湮灭", "诅咒", "召唤"};
+            case GENESIS -> new String[] {"起源", "创造", "先驱"};
+        };
     }
 }

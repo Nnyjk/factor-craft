@@ -17,10 +17,15 @@ import java.util.*;
 /**
  * ProfessionModule - 职业系统模块
  * 
- * 三大核心职业体系：
- * - 创生师（GENESIS）：生产建造核心、团队辅助
- * - 湮灭使（ANNIHILATION）：战斗探索核心、资源采集
- * - 锻铸匠（FORGE）：加工制造核心、装备强化
+ * 四大职业体系：
+ * 
+ * 基础职业（开局可选）：
+ * - Factor工程师（ENGINEER）：生产建造核心、自动化工厂
+ * - 能量培育师（CULTIVATOR）：生物养成核心、变异培育
+ * - 潮汐探索者（EXPLORER）：冒险战斗核心、遗迹探索
+ * 
+ * 隐藏职业（特殊条件解锁）：
+ * - 因子掌控者（MASTER）：全能型、融合三职业技能
  */
 public final class ProfessionModule implements FactorCraftModule {
     
@@ -75,22 +80,28 @@ public final class ProfessionModule implements FactorCraftModule {
      * 注册所有技能
      */
     private void registerSkills() {
-        // 创生师技能
-        for (ProfessionSkill skill : GenesisSkills.getAllSkills()) {
+        // Factor工程师技能
+        for (ProfessionSkill skill : EngineerSkills.getAllSkills()) {
             skillRegistry.put(skill.getId(), skill);
             FactorCraftMod.LOGGER.debug("[FactorCraft:Profession] 注册技能: {}", skill.getId());
         }
         
-        // 湮灭使技能
-        for (ProfessionSkill skill : AnnihilationSkills.getAllSkills()) {
+        // 能量培育师技能
+        for (ProfessionSkill skill : CultivatorSkills.getAllSkills()) {
             skillRegistry.put(skill.getId(), skill);
             FactorCraftMod.LOGGER.debug("[FactorCraft:Profession] 注册技能: {}", skill.getId());
         }
         
-        // 锻铸匠技能
-        for (ProfessionSkill skill : ForgeSkills.getAllSkills()) {
+        // 潮汐探索者技能
+        for (ProfessionSkill skill : ExplorerSkills.getAllSkills()) {
             skillRegistry.put(skill.getId(), skill);
             FactorCraftMod.LOGGER.debug("[FactorCraft:Profession] 注册技能: {}", skill.getId());
+        }
+        
+        // 因子掌控者技能（隐藏职业）
+        for (ProfessionSkill skill : MasterSkills.getAllSkills()) {
+            skillRegistry.put(skill.getId(), skill);
+            FactorCraftMod.LOGGER.debug("[FactorCraft:Profession] 注册隐藏职业技能: {}", skill.getId());
         }
     }
     
@@ -126,10 +137,28 @@ public final class ProfessionModule implements FactorCraftModule {
             return false;
         }
         
+        // 检查职业是否匹配
+        ProfessionType playerProfession = api.getPlayerProfession(player).orElse(null);
+        if (playerProfession != skill.getProfessionType()) {
+            // 因子掌控者可以使用所有基础职业技能
+            if (playerProfession != ProfessionType.MASTER || skill.getProfessionType().isHidden()) {
+                return false;
+            }
+        }
+        
+        // 检查等级是否足够
+        int playerLevel = api.getLevel(player);
+        if (playerLevel < skill.getUnlockLevel()) {
+            return false;
+        }
+        
         // 检查冷却
         if (!api.isSkillReady(player, skillId)) {
             return false;
         }
+        
+        // 检查Factor能量是否足够
+        // TODO: 实现Factor能量检查
         
         // 执行技能
         boolean success = skill.execute(player);
@@ -158,5 +187,16 @@ public final class ProfessionModule implements FactorCraftModule {
             }
         }
         return skills;
+    }
+    
+    /**
+     * 检查玩家是否可以解锁隐藏职业
+     * 条件：完成主线任务"因子融合"，3个基础职业均达到10级
+     */
+    public boolean canUnlockMaster(ServerPlayerEntity player) {
+        // TODO: 实现隐藏职业解锁条件检查
+        // 1. 检查是否完成主线任务"因子融合"
+        // 2. 检查3个基础职业是否都达到10级
+        return false;
     }
 }
