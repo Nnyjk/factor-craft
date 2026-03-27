@@ -1,0 +1,33 @@
+{
+  "id": "daily_synthesizer_use",
+  "title": "合成器使用",
+  "description": "使用合成器完成 10 次合成操作。",
+  "type": "daily",
+  "category": "machine_operation",
+  "repeatable": true,
+  "reset_time": "daily",
+  "objectives": [
+    {
+      "type": "machine_operation",
+      "machine": "factorcraft:synthesizer",
+      "operation_count": 10,
+      "description": "合成器使用 10 次"
+    }
+  ],
+  "rewards": {
+    "experience": 80,
+    "profession_exp": 40,
+    "items": [
+      {
+        "item": "factorcraft:advanced_circuit",
+        "amount": 2
+      }
+    ],
+    "currency": {
+      "type": "factor_points",
+      "amount": 16
+    }
+  },
+  "difficulty": "medium",
+  "estimated_time_minutes": 40
+}

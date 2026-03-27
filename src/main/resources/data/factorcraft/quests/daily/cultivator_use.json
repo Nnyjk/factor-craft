@@ -1,0 +1,33 @@
+{
+  "id": "daily_cultivator_use",
+  "title": "培育器使用",
+  "description": "使用培育器完成 5 次生物培育。",
+  "type": "daily",
+  "category": "machine_operation",
+  "repeatable": true,
+  "reset_time": "daily",
+  "objectives": [
+    {
+      "type": "machine_operation",
+      "machine": "factorcraft:cultivator",
+      "operation_count": 5,
+      "description": "培育器使用 5 次"
+    }
+  ],
+  "rewards": {
+    "experience": 90,
+    "profession_exp": 45,
+    "items": [
+      {
+        "item": "factorcraft:creature_egg_common",
+        "amount": 1
+      }
+    ],
+    "currency": {
+      "type": "factor_points",
+      "amount": 18
+    }
+  },
+  "difficulty": "medium",
+  "estimated_time_minutes": 50
+}

@@ -1,0 +1,32 @@
+{
+  "id": "daily_profession_exp",
+  "title": "职业经验积累",
+  "description": "获得 500 点职业经验，提升职业等级。",
+  "type": "daily",
+  "category": "profession",
+  "repeatable": true,
+  "reset_time": "daily",
+  "objectives": [
+    {
+      "type": "gain_profession_exp",
+      "amount": 500,
+      "description": "获得 500 职业经验"
+    }
+  ],
+  "rewards": {
+    "experience": 100,
+    "profession_exp": 100,
+    "items": [
+      {
+        "item": "factorcraft:profession_crystal",
+        "amount": 1
+      }
+    ],
+    "currency": {
+      "type": "factor_points",
+      "amount": 20
+    }
+  },
+  "difficulty": "medium",
+  "estimated_time_minutes": 45
+}

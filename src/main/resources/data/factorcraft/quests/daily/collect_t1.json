@@ -1,0 +1,33 @@
+{
+  "id": "daily_collect_t1",
+  "title": "基础材料收集",
+  "description": "收集 100 个 T1 等级的基础材料，用于日常生产需求。",
+  "type": "daily",
+  "category": "collection",
+  "repeatable": true,
+  "reset_time": "daily",
+  "objectives": [
+    {
+      "type": "collect_item",
+      "target": "factorcraft:t1_material",
+      "amount": 100,
+      "description": "收集 T1 材料"
+    }
+  ],
+  "rewards": {
+    "experience": 50,
+    "profession_exp": 25,
+    "items": [
+      {
+        "item": "factorcraft:factor_crystal_t1",
+        "amount": 2
+      }
+    ],
+    "currency": {
+      "type": "factor_points",
+      "amount": 10
+    }
+  },
+  "difficulty": "easy",
+  "estimated_time_minutes": 30
+}

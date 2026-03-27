@@ -1,0 +1,33 @@
+{
+  "id": "daily_collect_t2",
+  "title": "进阶材料收集",
+  "description": "收集 50 个 T2 等级的进阶材料，用于中级机器制造。",
+  "type": "daily",
+  "category": "collection",
+  "repeatable": true,
+  "reset_time": "daily",
+  "objectives": [
+    {
+      "type": "collect_item",
+      "target": "factorcraft:t2_material",
+      "amount": 50,
+      "description": "收集 T2 材料"
+    }
+  ],
+  "rewards": {
+    "experience": 75,
+    "profession_exp": 40,
+    "items": [
+      {
+        "item": "factorcraft:factor_crystal_t2",
+        "amount": 1
+      }
+    ],
+    "currency": {
+      "type": "factor_points",
+      "amount": 15
+    }
+  },
+  "difficulty": "medium",
+  "estimated_time_minutes": 45
+}
