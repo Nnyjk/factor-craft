@@ -1,0 +1,33 @@
+{
+  "id": "achievement_master_unlock",
+  "title": "因子掌控者",
+  "description": "解锁隐藏职业——因子掌控者。",
+  "type": "achievement",
+  "category": "profession",
+  "repeatable": false,
+  "hidden": true,
+  "objectives": [
+    {
+      "type": "unlock_profession",
+      "profession": "factor_master",
+      "description": "解锁隐藏职业"
+    }
+  ],
+  "rewards": {
+    "experience": 1000,
+    "profession_exp": 1000,
+    "items": [
+      {
+        "item": "factorcraft:master_crystal",
+        "amount": 1
+      }
+    ],
+    "currency": {
+      "type": "factor_points",
+      "amount": 500
+    },
+    "badge": "factor_master"
+  },
+  "difficulty": "expert",
+  "prerequisites": ["achievement_tier_5", "achievement_engineer_100", "achievement_cultivator_50", "achievement_explorer_100"]
+}

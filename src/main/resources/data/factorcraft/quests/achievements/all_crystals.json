@@ -1,0 +1,32 @@
+{
+  "id": "achievement_all_crystals",
+  "title": "晶体大师",
+  "description": "收集全部等级的 Factor 晶体。",
+  "type": "achievement",
+  "category": "collection",
+  "repeatable": false,
+  "hidden": false,
+  "objectives": [
+    {
+      "type": "collect_all_crystals",
+      "description": "收集全部 Factor 晶体"
+    }
+  ],
+  "rewards": {
+    "experience": 400,
+    "profession_exp": 150,
+    "items": [
+      {
+        "item": "factorcraft:crystal_master_token",
+        "amount": 1
+      }
+    ],
+    "currency": {
+      "type": "factor_points",
+      "amount": 250
+    },
+    "badge": "crystal_master"
+  },
+  "difficulty": "medium",
+  "prerequisites": []
+}

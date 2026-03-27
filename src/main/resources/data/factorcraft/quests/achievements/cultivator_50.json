@@ -1,0 +1,35 @@
+{
+  "id": "achievement_cultivator_50",
+  "title": "生命守护者",
+  "description": "作为能量培育师，成功培育 50 只生物。",
+  "type": "achievement",
+  "category": "profession",
+  "profession": "cultivator",
+  "repeatable": false,
+  "hidden": false,
+  "objectives": [
+    {
+      "type": "cultivate_creatures",
+      "profession": "cultivator",
+      "count": 50,
+      "description": "培育 50 只生物"
+    }
+  ],
+  "rewards": {
+    "experience": 400,
+    "profession_exp": 500,
+    "items": [
+      {
+        "item": "factorcraft:cultivator_master_tool",
+        "amount": 1
+      }
+    ],
+    "currency": {
+      "type": "factor_points",
+      "amount": 250
+    },
+    "badge": "life_guardian"
+  },
+  "difficulty": "hard",
+  "prerequisites": []
+}

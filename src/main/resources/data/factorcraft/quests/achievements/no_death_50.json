@@ -1,0 +1,34 @@
+{
+  "id": "achievement_no_death_50",
+  "title": "生存专家",
+  "description": "职业等级达到 50 级且期间无死亡。",
+  "type": "achievement",
+  "category": "challenge",
+  "repeatable": false,
+  "hidden": true,
+  "objectives": [
+    {
+      "type": "reach_profession_level",
+      "level": 50,
+      "condition": "no_death",
+      "description": "无死亡达到职业等级 50"
+    }
+  ],
+  "rewards": {
+    "experience": 800,
+    "profession_exp": 500,
+    "items": [
+      {
+        "item": "factorcraft:survivor_medal",
+        "amount": 1
+      }
+    ],
+    "currency": {
+      "type": "factor_points",
+      "amount": 500
+    },
+    "badge": "survival_expert"
+  },
+  "difficulty": "expert",
+  "prerequisites": []
+}

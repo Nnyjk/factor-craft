@@ -1,0 +1,35 @@
+{
+  "id": "achievement_explorer_100",
+  "title": "世界探索者",
+  "description": "作为潮汐探索者，发现 100 个 Factor 富集点。",
+  "type": "achievement",
+  "category": "profession",
+  "profession": "explorer",
+  "repeatable": false,
+  "hidden": false,
+  "objectives": [
+    {
+      "type": "discover_factor_rich",
+      "profession": "explorer",
+      "count": 100,
+      "description": "发现 100 个 Factor 富集点"
+    }
+  ],
+  "rewards": {
+    "experience": 400,
+    "profession_exp": 500,
+    "items": [
+      {
+        "item": "factorcraft:explorer_master_tool",
+        "amount": 1
+      }
+    ],
+    "currency": {
+      "type": "factor_points",
+      "amount": 250
+    },
+    "badge": "world_explorer"
+  },
+  "difficulty": "hard",
+  "prerequisites": []
+}

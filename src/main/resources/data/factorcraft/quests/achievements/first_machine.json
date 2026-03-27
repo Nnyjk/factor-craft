@@ -1,0 +1,34 @@
+{
+  "id": "achievement_first_machine",
+  "title": "第一台机器",
+  "description": "建造并激活第一台 Factor 机器。",
+  "type": "achievement",
+  "category": "progress",
+  "repeatable": false,
+  "hidden": false,
+  "objectives": [
+    {
+      "type": "build_machine",
+      "machine": "factorcraft:extractor",
+      "count": 1,
+      "description": "建造第一台机器"
+    }
+  ],
+  "rewards": {
+    "experience": 150,
+    "profession_exp": 75,
+    "items": [
+      {
+        "item": "factorcraft:energy_cell_t1",
+        "amount": 2
+      }
+    ],
+    "currency": {
+      "type": "factor_points",
+      "amount": 75
+    },
+    "badge": "pioneer"
+  },
+  "difficulty": "easy",
+  "prerequisites": ["achievement_first_contact"]
+}

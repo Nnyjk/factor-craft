@@ -1,0 +1,34 @@
+{
+  "id": "achievement_daily_master",
+  "title": "日常达人",
+  "description": "单日内完成 10 个日常任务。",
+  "type": "achievement",
+  "category": "challenge",
+  "repeatable": false,
+  "hidden": false,
+  "objectives": [
+    {
+      "type": "complete_daily_quests",
+      "count": 10,
+      "timeframe": "single_day",
+      "description": "单日完成 10 个日常任务"
+    }
+  ],
+  "rewards": {
+    "experience": 350,
+    "profession_exp": 150,
+    "items": [
+      {
+        "item": "factorcraft:daily_master_token",
+        "amount": 1
+      }
+    ],
+    "currency": {
+      "type": "factor_points",
+      "amount": 200
+    },
+    "badge": "daily_master"
+  },
+  "difficulty": "medium",
+  "prerequisites": []
+}
