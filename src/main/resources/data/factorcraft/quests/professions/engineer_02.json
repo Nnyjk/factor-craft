@@ -1,0 +1,28 @@
+{
+  "title": "工程师之路：机械升级",
+  "description": "升级你的机械，提高生产效率。",
+  "type": "profession",
+  "profession": "factor_engineer",
+  "difficulty": "easy",
+  "tier": 1,
+  "objectives": [
+    {
+      "id": "upgrade_machine",
+      "type": "craft",
+      "target": "factorcraft:advanced_machine",
+      "amount": 1,
+      "description": "合成高级机械"
+    }
+  ],
+  "rewards": {
+    "experience": 75,
+    "items": [
+      {
+        "item": "factorcraft:efficiency_upgrade",
+        "amount": 2
+      }
+    ]
+  },
+  "prerequisites": ["engineer_01"],
+  "isRepeatable": false
+}

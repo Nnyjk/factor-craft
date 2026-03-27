@@ -1,0 +1,35 @@
+{
+  "title": "工程师之路：自动化",
+  "description": "建立自动化生产线，解放双手。",
+  "type": "profession",
+  "profession": "factor_engineer",
+  "difficulty": "medium",
+  "tier": 2,
+  "objectives": [
+    {
+      "id": "build_production_line",
+      "type": "construct",
+      "target": "factorcraft:conveyor_belt",
+      "amount": 10,
+      "description": "建造 10 个传送带"
+    },
+    {
+      "id": "automate_crafting",
+      "type": "craft",
+      "target": "factorcraft:auto_crafter",
+      "amount": 1,
+      "description": "合成自动合成台"
+    }
+  ],
+  "rewards": {
+    "experience": 150,
+    "items": [
+      {
+        "item": "factorcraft:speed_upgrade",
+        "amount": 3
+      }
+    ]
+  },
+  "prerequisites": ["engineer_02"],
+  "isRepeatable": false
+}

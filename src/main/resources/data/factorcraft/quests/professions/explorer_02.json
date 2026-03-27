@@ -1,0 +1,35 @@
+{
+  "title": "探索者之路：深海探索",
+  "description": "潜入深海，寻找稀有的因子资源。",
+  "type": "profession",
+  "profession": "tide_explorer",
+  "difficulty": "easy",
+  "tier": 1,
+  "objectives": [
+    {
+      "id": "explore_ocean",
+      "type": "explore",
+      "target": "factorcraft:ocean_monument",
+      "amount": 1,
+      "description": "探索海底神殿"
+    },
+    {
+      "id": "collect_prismarine",
+      "type": "collect",
+      "target": "minecraft:prismarine_crystals",
+      "amount": 20,
+      "description": "收集 20 个海晶砂粒"
+    }
+  ],
+  "rewards": {
+    "experience": 100,
+    "items": [
+      {
+        "item": "factorcraft:depth_charge",
+        "amount": 5
+      }
+    ]
+  },
+  "prerequisites": ["explorer_01"],
+  "isRepeatable": false
+}

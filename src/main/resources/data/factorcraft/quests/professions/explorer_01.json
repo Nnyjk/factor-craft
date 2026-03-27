@@ -1,0 +1,28 @@
+{
+  "title": "探索者之路：初次探索",
+  "description": "开始你的探索之旅，发现新的因子节点。",
+  "type": "profession",
+  "profession": "tide_explorer",
+  "difficulty": "easy",
+  "tier": 1,
+  "objectives": [
+    {
+      "id": "discover_node",
+      "type": "explore",
+      "target": "factorcraft:factor_node",
+      "amount": 5,
+      "description": "发现 5 个因子节点"
+    }
+  ],
+  "rewards": {
+    "experience": 50,
+    "items": [
+      {
+        "item": "factorcraft:explorer_compass",
+        "amount": 1
+      }
+    ]
+  },
+  "prerequisites": [],
+  "isRepeatable": false
+}
