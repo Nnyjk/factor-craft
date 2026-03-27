@@ -1,11 +1,11 @@
 {
   "type": "factorcraft:consumer",
-  "group": "recycling",
+  "group": "factor_conversion",
   "input": {
     "item": "factorcraft:resonance_crystal"
   },
   "input_count": 1,
-  "output_factor": 250.0,
-  "conversion_time": 180,
-  "category": "recycling"
+  "output_factor": 1500.0,
+  "conversion_time": 200,
+  "category": "conversion"
 }

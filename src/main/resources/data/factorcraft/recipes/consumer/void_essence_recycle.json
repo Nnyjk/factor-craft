@@ -1,11 +1,11 @@
 {
   "type": "factorcraft:consumer",
-  "group": "recycling",
+  "group": "factor_conversion",
   "input": {
     "item": "factorcraft:void_essence"
   },
   "input_count": 1,
-  "output_factor": 1500.0,
-  "conversion_time": 250,
-  "category": "recycling"
+  "output_factor": 2000.0,
+  "conversion_time": 240,
+  "category": "conversion"
 }

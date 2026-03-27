@@ -4,12 +4,12 @@
   "input": {
     "item": "factorcraft:stardust_ingot"
   },
-  "input_count": 256,
+  "input_count": 64,
   "output": {
     "item": "factorcraft:ancient_alloy",
-    "count": 42
+    "count": 32
   },
-  "factor_cost": 25000.0,
-  "craft_time": 3600,
+  "factor_cost": 20000.0,
+  "craft_time": 3000,
   "category": "material"
 }
