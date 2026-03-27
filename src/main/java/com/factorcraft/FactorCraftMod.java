@@ -1,6 +1,7 @@
 package com.factorcraft;
 
 import com.factorcraft.command.FactorCraftCommands;
+import com.factorcraft.module.profession.command.ProfessionCommand;
 import com.factorcraft.module.quest.QuestCommands;
 import com.factorcraft.module.research.ResearchCommands;
 import com.factorcraft.update.UpdateCommands;
@@ -65,6 +66,7 @@ public class FactorCraftMod implements ModInitializer {
             UpdateCommands.register(dispatcher);
             PermissionCommands.register(dispatcher);
             ErrorCommands.register(dispatcher);
+            ProfessionCommand.register(dispatcher);
         });
         LOGGER.info("[FactorCraft] 命令系统注册完成");
         
