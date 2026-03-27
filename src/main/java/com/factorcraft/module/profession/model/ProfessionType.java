@@ -45,22 +45,7 @@ public enum ProfessionType {
      * 核心能力：可融合三个基础职业的能力，自定义天赋组合
      * 天赋分支：全能融合
      */
-    MASTER("master", "因子掌控者", "master_factor", true),
-    /**
-     * 熔炉锻造师 - 锻造系职业
-     * 核心关键词：锻造、强化、装备制作
-     */
-    FORGE("forge", "熔炉锻造师", "forge_factor", false),
-    /**
-     * 湮灭术士 - 毁灭系职业
-     * 核心关键词：毁灭、湮灭、黑暗魔法
-     */
-    ANNIHILATION("annihilation", "湮灭术士", "annihilation_factor", false),
-    /**
-     * 起源先驱 - 起源系职业
-     * 核心关键词：起源、创造、先驱
-     */
-    GENESIS("genesis", "起源先驱", "genesis_factor", false);
+    MASTER("master", "因子掌控者", "master_factor", true);
     
     private final String id;
     private final String displayName;
@@ -121,9 +106,6 @@ public enum ProfessionType {
             case CULTIVATOR -> "专注Factor生物培育、变异生物养殖、特殊道具产出";
             case EXPLORER -> "专注Factor能量利用、战斗能力提升、遗迹探索";
             case MASTER -> "可融合三个基础职业的能力，自定义天赋组合";
-            case FORGE -> "专注锻造强化、装备制作、属性提升";
-            case ANNIHILATION -> "专注湮灭魔法、黑暗力量、毁灭攻击";
-            case GENESIS -> "专注起源力量、创造能力、先驱科技";
         };
     }
     
@@ -136,9 +118,6 @@ public enum ProfessionType {
             case CULTIVATOR -> new String[] {"培育", "变异", "生物产出"};
             case EXPLORER -> new String[] {"战斗", "探索", "潮汐"};
             case MASTER -> new String[] {"全能", "融合", "自定义"};
-            case FORGE -> new String[] {"锻造", "强化", "制作"};
-            case ANNIHILATION -> new String[] {"湮灭", "诅咒", "召唤"};
-            case GENESIS -> new String[] {"起源", "创造", "先驱"};
         };
     }
 }
