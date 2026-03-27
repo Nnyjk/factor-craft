@@ -7,6 +7,7 @@
       "description": "学习如何从自然界提取 Factor",
       "type": "TECHNOLOGY",
       "research_time": 1200,
+      "research_point_cost": 5,
       "effects": {
         "unlock_extractor": true
       },
@@ -22,6 +23,7 @@
       "description": "解锁 Factor 存储容器",
       "type": "TECHNOLOGY",
       "research_time": 2400,
+      "research_point_cost": 10,
       "prerequisites": ["basic_extraction"],
       "item_requirements": {
         "minecraft:iron_ingot": 8
@@ -41,6 +43,7 @@
       "description": "学习如何合成新 Factor",
       "type": "TECHNOLOGY",
       "research_time": 2400,
+      "research_point_cost": 15,
       "prerequisites": ["basic_extraction"],
       "factor_costs": {
         "basic": 100
@@ -55,11 +58,52 @@
       }
     },
     {
+      "id": "factor_network",
+      "name": "Factor 网络技术",
+      "description": "解锁 Factor 远程传输",
+      "type": "TECHNOLOGY",
+      "research_time": 3600,
+      "research_point_cost": 25,
+      "prerequisites": ["basic_synthesis"],
+      "factor_costs": {
+        "advanced": 100
+      },
+      "effects": {
+        "unlock_pipe": true
+      },
+      "ui": {
+        "x": 3,
+        "y": 0,
+        "category": "technology"
+      }
+    },
+    {
+      "id": "advanced_extraction",
+      "name": "高级提取技术",
+      "description": "解锁高级提取器",
+      "type": "TECHNOLOGY",
+      "research_time": 4800,
+      "research_point_cost": 20,
+      "prerequisites": ["basic_extraction"],
+      "factor_costs": {
+        "advanced": 50
+      },
+      "effects": {
+        "unlock_advanced_extractor": true
+      },
+      "ui": {
+        "x": 0,
+        "y": 1,
+        "category": "technology"
+      }
+    },
+    {
       "id": "extraction_efficiency_1",
       "name": "提取效率 I",
       "description": "提取器效率提升 25%",
       "type": "EFFICIENCY",
       "research_time": 1800,
+      "research_point_cost": 15,
       "prerequisites": ["basic_extraction"],
       "factor_costs": {
         "basic": 200
@@ -74,11 +118,212 @@
       }
     },
     {
+      "id": "extraction_efficiency_2",
+      "name": "提取效率 II",
+      "description": "提取器效率提升 50%",
+      "type": "EFFICIENCY",
+      "research_time": 3600,
+      "research_point_cost": 30,
+      "prerequisites": ["extraction_efficiency_1", "advanced_extraction"],
+      "factor_costs": {
+        "advanced": 300
+      },
+      "effects": {
+        "extractor_efficiency": 1.5
+      },
+      "ui": {
+        "x": 0,
+        "y": 4,
+        "category": "efficiency"
+      }
+    },
+    {
+      "id": "storage_capacity_1",
+      "name": "存储容量 I",
+      "description": "储罐容量提升 50%",
+      "type": "EFFICIENCY",
+      "research_time": 1800,
+      "research_point_cost": 15,
+      "prerequisites": ["factor_storage"],
+      "factor_costs": {
+        "basic": 200
+      },
+      "effects": {
+        "tank_capacity": 1.5
+      },
+      "ui": {
+        "x": 1,
+        "y": 2,
+        "category": "efficiency"
+      }
+    },
+    {
+      "id": "storage_capacity_2",
+      "name": "存储容量 II",
+      "description": "储罐容量提升 100%",
+      "type": "EFFICIENCY",
+      "research_time": 3600,
+      "research_point_cost": 30,
+      "prerequisites": ["storage_capacity_1"],
+      "factor_costs": {
+        "advanced": 300
+      },
+      "effects": {
+        "tank_capacity": 2.0
+      },
+      "ui": {
+        "x": 1,
+        "y": 4,
+        "category": "efficiency"
+      }
+    },
+    {
+      "id": "synthesis_speed_1",
+      "name": "合成速度 I",
+      "description": "合成器速度提升 25%",
+      "type": "EFFICIENCY",
+      "research_time": 1800,
+      "research_point_cost": 15,
+      "prerequisites": ["basic_synthesis"],
+      "factor_costs": {
+        "basic": 200
+      },
+      "effects": {
+        "synthesizer_speed": 1.25
+      },
+      "ui": {
+        "x": 2,
+        "y": 2,
+        "category": "efficiency"
+      }
+    },
+    {
+      "id": "synthesis_speed_2",
+      "name": "合成速度 II",
+      "description": "合成器速度提升 50%",
+      "type": "EFFICIENCY",
+      "research_time": 3600,
+      "research_point_cost": 30,
+      "prerequisites": ["synthesis_speed_1"],
+      "factor_costs": {
+        "advanced": 300
+      },
+      "effects": {
+        "synthesizer_speed": 1.5
+      },
+      "ui": {
+        "x": 2,
+        "y": 4,
+        "category": "efficiency"
+      }
+    },
+    {
+      "id": "factor_helmet",
+      "name": "Factor 头盔",
+      "description": "解锁 Factor 能量头盔",
+      "type": "EQUIPMENT",
+      "research_time": 3600,
+      "research_point_cost": 25,
+      "prerequisites": ["basic_synthesis"],
+      "factor_costs": {
+        "advanced": 100
+      },
+      "effects": {
+        "unlock_factor_helmet": true
+      },
+      "ui": {
+        "x": 3,
+        "y": 1,
+        "category": "equipment"
+      }
+    },
+    {
+      "id": "factor_chestplate",
+      "name": "Factor 胸甲",
+      "description": "解锁 Factor 能量胸甲",
+      "type": "EQUIPMENT",
+      "research_time": 4800,
+      "research_point_cost": 35,
+      "prerequisites": ["factor_helmet"],
+      "factor_costs": {
+        "advanced": 200
+      },
+      "effects": {
+        "unlock_factor_chestplate": true
+      },
+      "ui": {
+        "x": 3,
+        "y": 2,
+        "category": "equipment"
+      }
+    },
+    {
+      "id": "factor_leggings",
+      "name": "Factor 护腿",
+      "description": "解锁 Factor 能量护腿",
+      "type": "EQUIPMENT",
+      "research_time": 4800,
+      "research_point_cost": 35,
+      "prerequisites": ["factor_helmet"],
+      "factor_costs": {
+        "advanced": 200
+      },
+      "effects": {
+        "unlock_factor_leggings": true
+      },
+      "ui": {
+        "x": 4,
+        "y": 2,
+        "category": "equipment"
+      }
+    },
+    {
+      "id": "factor_boots",
+      "name": "Factor 靴子",
+      "description": "解锁 Factor 能量靴子",
+      "type": "EQUIPMENT",
+      "research_time": 4800,
+      "research_point_cost": 35,
+      "prerequisites": ["factor_leggings"],
+      "factor_costs": {
+        "advanced": 200
+      },
+      "effects": {
+        "unlock_factor_boots": true
+      },
+      "ui": {
+        "x": 4,
+        "y": 3,
+        "category": "equipment"
+      }
+    },
+    {
+      "id": "factor_armor",
+      "name": "Factor 全套护甲",
+      "description": "全套 Factor 护甲额外加成",
+      "type": "EQUIPMENT",
+      "research_time": 7200,
+      "research_point_cost": 50,
+      "prerequisites": ["factor_boots", "factor_chestplate"],
+      "factor_costs": {
+        "rare": 100
+      },
+      "effects": {
+        "full_armor_bonus": true
+      },
+      "ui": {
+        "x": 3,
+        "y": 4,
+        "category": "equipment"
+      }
+    },
+    {
       "id": "factor_mastery",
       "name": "Factor 大师",
-      "description": "掌握 Factor 的终极奥秘，所有效率+25%",
+      "description": "掌握 Factor 的终极奥秘，所有效率 +25%",
       "type": "ULTIMATE",
       "research_time": 12000,
+      "research_point_cost": 100,
       "prerequisites": ["extraction_efficiency_2", "storage_capacity_2", "factor_armor"],
       "factor_costs": {
         "basic": 2000,

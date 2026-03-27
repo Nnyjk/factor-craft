@@ -32,6 +32,9 @@ public class ResearchCommands {
             // 查看进度
             .then(CommandManager.literal("progress")
                 .executes(ResearchCommands::showProgress))
+            // 查看研究点
+            .then(CommandManager.literal("points")
+                .executes(ResearchCommands::showPoints))
             // 重置研究（管理员）
             .then(CommandManager.literal("reset")
                 .requires(source -> source.hasPermissionLevel(2))
@@ -172,6 +175,34 @@ public class ResearchCommands {
                 ), false);
             }
         }
+        
+        return 1;
+    }
+    
+    /**
+     * 显示玩家研究点数量
+     */
+    private static int showPoints(CommandContext<ServerCommandSource> context) {
+        ServerCommandSource source = context.getSource();
+        
+        if (!(source.getEntity() instanceof ServerPlayerEntity player)) {
+            source.sendError(Text.literal("§c只有玩家可以执行此命令"));
+            return 0;
+        }
+        
+        ResearchPointManager pointManager = ResearchModule.getInstance().getResearchPointManager();
+        ResearchPointStorage storage = pointManager.getStorage(player);
+        
+        int totalPoints = storage.getTotalEarned();
+        int spentPoints = storage.getTotalSpent();
+        int availablePoints = storage.getCurrentPoints();
+        
+        source.sendFeedback(() -> Text.literal(
+            "§a§l[研究] §r§f研究点统计:\n" +
+            "  §e总获取: §f" + totalPoints + "\n" +
+            "  §e已消耗: §f" + spentPoints + "\n" +
+            "  §a可用: §f" + availablePoints
+        ), false);
         
         return 1;
     }

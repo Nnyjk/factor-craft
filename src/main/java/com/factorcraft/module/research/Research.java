@@ -46,6 +46,7 @@ public class Research {
     private final Map<String, Integer> factorCosts;  // factor_type -> amount
     private final Map<Item, Integer> itemRequirements;  // item -> count
     private final List<String> requiredQuests;
+    private final int researchPointCost;  // 研究点成本
     
     // 效果
     private final Map<String, Object> effects;
@@ -65,6 +66,7 @@ public class Research {
         this.factorCosts = new HashMap<>(builder.factorCosts);
         this.itemRequirements = new HashMap<>(builder.itemRequirements);
         this.requiredQuests = new ArrayList<>(builder.requiredQuests);
+        this.researchPointCost = builder.researchPointCost;
         this.effects = new HashMap<>(builder.effects);
         this.treeX = builder.treeX;
         this.treeY = builder.treeY;
@@ -81,6 +83,7 @@ public class Research {
     public Map<String, Integer> getFactorCosts() { return factorCosts; }
     public Map<Item, Integer> getItemRequirements() { return itemRequirements; }
     public List<String> getRequiredQuests() { return requiredQuests; }
+    public int getResearchPointCost() { return researchPointCost; }
     public Map<String, Object> getEffects() { return effects; }
     public int getTreeX() { return treeX; }
     public int getTreeY() { return treeY; }
@@ -95,7 +98,8 @@ public class Research {
             .name(json.get("name").getAsString())
             .description(json.get("description").getAsString())
             .type(Type.valueOf(json.get("type").getAsString().toUpperCase()))
-            .researchTime(json.has("research_time") ? json.get("research_time").getAsInt() : 6000);
+            .researchTime(json.has("research_time") ? json.get("research_time").getAsInt() : 6000)
+            .researchPointCost(json.has("research_point_cost") ? json.get("research_point_cost").getAsInt() : 0);
         
         // 前置研究
         if (json.has("prerequisites")) {
@@ -158,6 +162,7 @@ public class Research {
         private Map<String, Integer> factorCosts = new HashMap<>();
         private Map<Item, Integer> itemRequirements = new HashMap<>();
         private List<String> requiredQuests = new ArrayList<>();
+        private int researchPointCost = 0;  // 研究点成本
         private Map<String, Object> effects = new HashMap<>();
         private int treeX = 0;
         private int treeY = 0;
@@ -172,6 +177,7 @@ public class Research {
         public Builder addFactorCost(String factorType, int amount) { factorCosts.put(factorType, amount); return this; }
         public Builder addItemRequirement(Item item, int count) { itemRequirements.put(item, count); return this; }
         public Builder addRequiredQuest(String questId) { requiredQuests.add(questId); return this; }
+        public Builder researchPointCost(int cost) { this.researchPointCost = cost; return this; }
         public Builder addEffect(String key, Object value) { effects.put(key, value); return this; }
         public Builder treeX(int x) { this.treeX = x; return this; }
         public Builder treeY(int y) { this.treeY = y; return this; }
