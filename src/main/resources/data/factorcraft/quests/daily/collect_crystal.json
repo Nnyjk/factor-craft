@@ -1,0 +1,33 @@
+{
+  "id": "daily_collect_crystal",
+  "title": "因子晶体收集",
+  "description": "收集 10 个 Factor 晶体，用于高级配方合成。",
+  "type": "daily",
+  "category": "collection",
+  "repeatable": true,
+  "reset_time": "daily",
+  "objectives": [
+    {
+      "type": "collect_item",
+      "target": "factorcraft:factor_crystal",
+      "amount": 10,
+      "description": "收集 Factor 晶体"
+    }
+  ],
+  "rewards": {
+    "experience": 100,
+    "profession_exp": 50,
+    "items": [
+      {
+        "item": "factorcraft:factor_crystal_t3",
+        "amount": 1
+      }
+    ],
+    "currency": {
+      "type": "factor_points",
+      "amount": 20
+    }
+  },
+  "difficulty": "medium",
+  "estimated_time_minutes": 60
+}

@@ -1,0 +1,33 @@
+{
+  "id": "daily_extractor_run",
+  "title": "提取器运行",
+  "description": "让提取器持续运行 1 小时，积累基础资源。",
+  "type": "daily",
+  "category": "machine_operation",
+  "repeatable": true,
+  "reset_time": "daily",
+  "objectives": [
+    {
+      "type": "machine_operation",
+      "machine": "factorcraft:extractor",
+      "duration_ticks": 72000,
+      "description": "提取器运行 1 小时"
+    }
+  ],
+  "rewards": {
+    "experience": 60,
+    "profession_exp": 30,
+    "items": [
+      {
+        "item": "factorcraft:energy_cell_t1",
+        "amount": 1
+      }
+    ],
+    "currency": {
+      "type": "factor_points",
+      "amount": 12
+    }
+  },
+  "difficulty": "easy",
+  "estimated_time_minutes": 60
+}

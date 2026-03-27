@@ -1,0 +1,32 @@
+{
+  "id": "daily_factor_rich",
+  "title": "Factor 富集点发现",
+  "description": "发现 1 个 Factor 富集点，标记高浓度 Factor 区域。",
+  "type": "daily",
+  "category": "exploration",
+  "repeatable": true,
+  "reset_time": "daily",
+  "objectives": [
+    {
+      "type": "discover_factor_rich",
+      "count": 1,
+      "description": "发现 Factor 富集点"
+    }
+  ],
+  "rewards": {
+    "experience": 120,
+    "profession_exp": 50,
+    "items": [
+      {
+        "item": "factorcraft:factor_detector",
+        "amount": 1
+      }
+    ],
+    "currency": {
+      "type": "factor_points",
+      "amount": 25
+    }
+  },
+  "difficulty": "hard",
+  "estimated_time_minutes": 60
+}

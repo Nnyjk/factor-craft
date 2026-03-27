@@ -1,0 +1,32 @@
+{
+  "id": "daily_skill_use",
+  "title": "职业技能使用",
+  "description": "使用职业技能 10 次，提升职业熟练度。",
+  "type": "daily",
+  "category": "profession",
+  "repeatable": true,
+  "reset_time": "daily",
+  "objectives": [
+    {
+      "type": "use_skill",
+      "count": 10,
+      "description": "使用职业技能 10 次"
+    }
+  ],
+  "rewards": {
+    "experience": 70,
+    "profession_exp": 60,
+    "items": [
+      {
+        "item": "factorcraft:profession_token",
+        "amount": 1
+      }
+    ],
+    "currency": {
+      "type": "factor_points",
+      "amount": 14
+    }
+  },
+  "difficulty": "easy",
+  "estimated_time_minutes": 20
+}

@@ -1,0 +1,32 @@
+{
+  "id": "daily_biome_explore",
+  "title": "生物群系探索",
+  "description": "探索 3 个不同的生物群系，发现新的 Factor 资源点。",
+  "type": "daily",
+  "category": "exploration",
+  "repeatable": true,
+  "reset_time": "daily",
+  "objectives": [
+    {
+      "type": "explore_biomes",
+      "count": 3,
+      "description": "探索 3 个不同生物群系"
+    }
+  ],
+  "rewards": {
+    "experience": 80,
+    "profession_exp": 35,
+    "items": [
+      {
+        "item": "factorcraft:explorer_compass",
+        "amount": 1
+      }
+    ],
+    "currency": {
+      "type": "factor_points",
+      "amount": 15
+    }
+  },
+  "difficulty": "easy",
+  "estimated_time_minutes": 30
+}
