@@ -78,6 +78,28 @@ public class GearRegistry {
     public static final Item FACTOR_SWORD_T5 = registerSword("factor_sword_t5", 
         ToolMaterial.NETHERITE, 5);
     
+    // ========== 武器 ==========
+    
+    // T1 武器
+    public static final Item FACTOR_BOW_T1 = registerBow("factor_bow_t1", 1);
+    public static final Item FACTOR_STAFF_T1 = registerStaff("factor_staff_t1", 1);
+    
+    // T2 武器
+    public static final Item FACTOR_BOW_T2 = registerBow("factor_bow_t2", 2);
+    public static final Item FACTOR_STAFF_T2 = registerStaff("factor_staff_t2", 2);
+    
+    // T3 武器
+    public static final Item FACTOR_BOW_T3 = registerBow("factor_bow_t3", 3);
+    public static final Item FACTOR_STAFF_T3 = registerStaff("factor_staff_t3", 3);
+    
+    // T4 武器
+    public static final Item FACTOR_BOW_T4 = registerBow("factor_bow_t4", 4);
+    public static final Item FACTOR_STAFF_T4 = registerStaff("factor_staff_t4", 4);
+    
+    // T5 武器
+    public static final Item FACTOR_BOW_T5 = registerBow("factor_bow_t5", 5);
+    public static final Item FACTOR_STAFF_T5 = registerStaff("factor_staff_t5", 5);
+    
     // ========== 护甲 ==========
     
     // T1 护甲
@@ -146,6 +168,14 @@ public class GearRegistry {
     
     private static Item registerSword(String name, ToolMaterial material, int tier) {
         return register(name, settings -> new FactorSwordItem(material, tier, settings));
+    }
+    
+    private static Item registerBow(String name, int tier) {
+        return register(name, settings -> new FactorBowItem(tier, settings));
+    }
+    
+    private static Item registerStaff(String name, int tier) {
+        return register(name, settings -> new FactorStaffItem(tier, settings));
     }
     
     private static Item registerArmor(String name, ArmorMaterial material, EquipmentType type, int tier) {
