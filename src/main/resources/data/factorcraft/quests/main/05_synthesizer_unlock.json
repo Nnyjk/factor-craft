@@ -1,0 +1,29 @@
+{
+  "id": "main_05",
+  "title": "合成器解锁",
+  "description": "制作合成器核心，解锁高级合成功能。",
+  "category": "main",
+  "difficulty": "easy",
+  "objectives": [
+    {
+      "type": "craft_item",
+      "item": "factorcraft:synthesizer_core",
+      "count": 1,
+      "description": "制作合成器核心"
+    }
+  ],
+  "rewards": [
+    {
+      "type": "item",
+      "item": "factorcraft:synthesizer_core",
+      "count": 1
+    },
+    {
+      "type": "quest_xp",
+      "amount": 180
+    }
+  ],
+  "prerequisites": ["main_04"],
+  "repeatable": false,
+  "hidden": false
+}

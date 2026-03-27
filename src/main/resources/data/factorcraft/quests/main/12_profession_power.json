@@ -1,0 +1,28 @@
+{
+  "id": "main_12",
+  "title": "职业能力提升",
+  "description": "职业等级达到 25，体验职业系统的力量。",
+  "category": "main",
+  "difficulty": "hard",
+  "objectives": [
+    {
+      "type": "reach_profession_level",
+      "level": 25,
+      "description": "职业等级达到 25"
+    }
+  ],
+  "rewards": [
+    {
+      "type": "item",
+      "item": "factorcraft:profession_token",
+      "count": 3
+    },
+    {
+      "type": "quest_xp",
+      "amount": 650
+    }
+  ],
+  "prerequisites": ["main_11"],
+  "repeatable": false,
+  "hidden": false
+}

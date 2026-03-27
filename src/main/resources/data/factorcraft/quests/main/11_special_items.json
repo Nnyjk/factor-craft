@@ -1,0 +1,29 @@
+{
+  "id": "main_11",
+  "title": "特殊物品制作",
+  "description": "制作 Factor 晶体，解锁特殊物品合成能力。",
+  "category": "main",
+  "difficulty": "hard",
+  "objectives": [
+    {
+      "type": "craft_item",
+      "item": "factorcraft:factor_crystal",
+      "count": 1,
+      "description": "制作 Factor 晶体"
+    }
+  ],
+  "rewards": [
+    {
+      "type": "item",
+      "item": "factorcraft:factor_crystal",
+      "count": 5
+    },
+    {
+      "type": "quest_xp",
+      "amount": 550
+    }
+  ],
+  "prerequisites": ["main_10"],
+  "repeatable": false,
+  "hidden": false
+}

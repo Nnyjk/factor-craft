@@ -1,0 +1,28 @@
+{
+  "id": "main_08",
+  "title": "生物培育入门",
+  "description": "培育 5 只生物，探索 Factor 生物培育系统。",
+  "category": "main",
+  "difficulty": "medium",
+  "objectives": [
+    {
+      "type": "cultivate_creatures",
+      "count": 5,
+      "description": "培育 5 只生物"
+    }
+  ],
+  "rewards": [
+    {
+      "type": "item",
+      "item": "factorcraft:cultivator_core",
+      "count": 1
+    },
+    {
+      "type": "quest_xp",
+      "amount": 300
+    }
+  ],
+  "prerequisites": ["main_07"],
+  "repeatable": false,
+  "hidden": false
+}

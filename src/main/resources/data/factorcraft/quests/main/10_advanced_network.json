@@ -1,0 +1,28 @@
+{
+  "id": "main_10",
+  "title": "高级机器网络",
+  "description": "建立 5 台机器的高级网络，实现自动化生产。",
+  "category": "main",
+  "difficulty": "hard",
+  "objectives": [
+    {
+      "type": "connect_machines",
+      "count": 5,
+      "description": "连接 5 台机器形成网络"
+    }
+  ],
+  "rewards": [
+    {
+      "type": "item",
+      "item": "factorcraft:advanced_energy_cable",
+      "count": 64
+    },
+    {
+      "type": "quest_xp",
+      "amount": 450
+    }
+  ],
+  "prerequisites": ["main_09"],
+  "repeatable": false,
+  "hidden": false
+}

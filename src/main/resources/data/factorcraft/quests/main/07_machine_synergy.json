@@ -1,0 +1,28 @@
+{
+  "id": "main_07",
+  "title": "多机器协同",
+  "description": "运行 3 台不同类型的机器，体验机器协同效应。",
+  "category": "main",
+  "difficulty": "medium",
+  "objectives": [
+    {
+      "type": "run_machines",
+      "count": 3,
+      "description": "同时运行 3 台不同机器"
+    }
+  ],
+  "rewards": [
+    {
+      "type": "item",
+      "item": "factorcraft:efficiency_module",
+      "count": 4
+    },
+    {
+      "type": "quest_xp",
+      "amount": 250
+    }
+  ],
+  "prerequisites": ["main_06"],
+  "repeatable": false,
+  "hidden": false
+}

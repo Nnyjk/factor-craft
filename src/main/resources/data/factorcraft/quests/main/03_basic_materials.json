@@ -1,0 +1,29 @@
+{
+  "id": "main_03",
+  "title": "基础材料合成",
+  "description": "合成 T1 材料锭，解锁基础材料加工能力。",
+  "category": "main",
+  "difficulty": "easy",
+  "objectives": [
+    {
+      "type": "craft_item",
+      "item": "factorcraft:t1_material_ingot",
+      "count": 10,
+      "description": "合成 T1 材料锭"
+    }
+  ],
+  "rewards": [
+    {
+      "type": "item",
+      "item": "factorcraft:t1_material_ingot",
+      "count": 16
+    },
+    {
+      "type": "quest_xp",
+      "amount": 100
+    }
+  ],
+  "prerequisites": ["main_02"],
+  "repeatable": false,
+  "hidden": false
+}
