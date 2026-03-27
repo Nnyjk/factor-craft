@@ -125,4 +125,37 @@ public interface ProfessionAPI {
      * 根据ID获取职业
      */
     Optional<ProfessionType> getProfessionById(String id);
+    
+    // ==================== 隐藏职业系统 ====================
+    
+    /**
+     * 检查玩家是否可以解锁隐藏职业
+     */
+    boolean canUnlockHiddenProfession(ServerPlayerEntity player);
+    
+    /**
+     * 检查玩家是否已解锁隐藏职业
+     */
+    boolean hasUnlockedHiddenProfession(ServerPlayerEntity player);
+    
+    /**
+     * 解锁隐藏职业
+     * @return 解锁结果消息
+     */
+    String unlockHiddenProfession(ServerPlayerEntity player);
+    
+    /**
+     * 获取玩家已满级的职业数量
+     */
+    int getMasteredProfessionCount(ServerPlayerEntity player);
+    
+    /**
+     * 记录玩家收集了稀有Factor
+     */
+    void recordRareFactorCollected(ServerPlayerEntity player, String factorId);
+    
+    /**
+     * 获取玩家已收集的稀有Factor数量
+     */
+    int getCollectedRareFactorCount(ServerPlayerEntity player);
 }

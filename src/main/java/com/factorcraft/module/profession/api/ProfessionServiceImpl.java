@@ -1,5 +1,6 @@
 package com.factorcraft.module.profession.api;
 
+import com.factorcraft.module.profession.HiddenProfessionUnlockManager;
 import com.factorcraft.module.profession.config.ProfessionConfig;
 import com.factorcraft.module.profession.config.ProfessionConfigLoader;
 import com.factorcraft.module.profession.data.ProfessionDataStorage;
@@ -247,6 +248,45 @@ public class ProfessionServiceImpl implements ProfessionAPI {
     @Override
     public Optional<ProfessionType> getProfessionById(String id) {
         return Optional.ofNullable(registeredProfessions.get(id));
+    }
+    
+    // ==================== 隐藏职业系统 ====================
+    
+    @Override
+    public boolean canUnlockHiddenProfession(ServerPlayerEntity player) {
+        return HiddenProfessionUnlockManager.canUnlock(player, this);
+    }
+    
+    @Override
+    public boolean hasUnlockedHiddenProfession(ServerPlayerEntity player) {
+        return HiddenProfessionUnlockManager.isUnlocked(player, this);
+    }
+    
+    @Override
+    public String unlockHiddenProfession(ServerPlayerEntity player) {
+        HiddenProfessionUnlockManager.UnlockResult result = HiddenProfessionUnlockManager.tryUnlock(player, this);
+        if (result.success) {
+            ProfessionDataStorage.get(player.getServerWorld()).markDirty();
+        }
+        return result.message;
+    }
+    
+    @Override
+    public int getMasteredProfessionCount(ServerPlayerEntity player) {
+        PlayerProfessionData data = getPlayerData(player);
+        return data.getMasteredProfessionCount();
+    }
+    
+    @Override
+    public void recordRareFactorCollected(ServerPlayerEntity player, String factorId) {
+        HiddenProfessionUnlockManager.recordRareFactor(player, this, factorId);
+        ProfessionDataStorage.get(player.getServerWorld()).markDirty();
+    }
+    
+    @Override
+    public int getCollectedRareFactorCount(ServerPlayerEntity player) {
+        PlayerProfessionData data = getPlayerData(player);
+        return data.getCollectedRareFactorCount();
     }
     
     // ==================== 私有辅助方法 ====================
