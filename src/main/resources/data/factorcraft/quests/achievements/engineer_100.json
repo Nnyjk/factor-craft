@@ -1,0 +1,35 @@
+{
+  "id": "achievement_engineer_100",
+  "title": "工厂建造者",
+  "description": "作为工程师职业，建造 100 台机器。",
+  "type": "achievement",
+  "category": "profession",
+  "profession": "engineer",
+  "repeatable": false,
+  "hidden": false,
+  "objectives": [
+    {
+      "type": "build_machines",
+      "profession": "engineer",
+      "count": 100,
+      "description": "建造 100 台机器"
+    }
+  ],
+  "rewards": {
+    "experience": 400,
+    "profession_exp": 500,
+    "items": [
+      {
+        "item": "factorcraft:engineer_master_tool",
+        "amount": 1
+      }
+    ],
+    "currency": {
+      "type": "factor_points",
+      "amount": 250
+    },
+    "badge": "factory_builder"
+  },
+  "difficulty": "hard",
+  "prerequisites": []
+}

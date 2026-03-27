@@ -1,0 +1,33 @@
+{
+  "id": "achievement_overload_run",
+  "title": "极限运行",
+  "description": "在 Factor 过载状态下运行机器 1 小时。",
+  "type": "achievement",
+  "category": "challenge",
+  "repeatable": false,
+  "hidden": false,
+  "objectives": [
+    {
+      "type": "machine_overload_run",
+      "duration_ticks": 72000,
+      "description": "过载运行 1 小时"
+    }
+  ],
+  "rewards": {
+    "experience": 300,
+    "profession_exp": 100,
+    "items": [
+      {
+        "item": "factorcraft:overload_core",
+        "amount": 1
+      }
+    ],
+    "currency": {
+      "type": "factor_points",
+      "amount": 150
+    },
+    "badge": "overload_master"
+  },
+  "difficulty": "hard",
+  "prerequisites": []
+}

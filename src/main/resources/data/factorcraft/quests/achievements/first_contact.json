@@ -1,0 +1,33 @@
+{
+  "id": "achievement_first_contact",
+  "title": "初次接触",
+  "description": "首次发现 Factor 能量，开启科技之旅。",
+  "type": "achievement",
+  "category": "progress",
+  "repeatable": false,
+  "hidden": false,
+  "objectives": [
+    {
+      "type": "discover_factor",
+      "count": 1,
+      "description": "发现 Factor 能量"
+    }
+  ],
+  "rewards": {
+    "experience": 100,
+    "profession_exp": 50,
+    "items": [
+      {
+        "item": "factorcraft:factor_crystal_t1",
+        "amount": 5
+      }
+    ],
+    "currency": {
+      "type": "factor_points",
+      "amount": 50
+    },
+    "badge": "first_contact"
+  },
+  "difficulty": "easy",
+  "prerequisites": []
+}

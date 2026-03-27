@@ -1,0 +1,33 @@
+{
+  "id": "achievement_all_materials",
+  "title": "材料收藏家",
+  "description": "收集全部 T1-T5 等级的所有材料。",
+  "type": "achievement",
+  "category": "collection",
+  "repeatable": false,
+  "hidden": false,
+  "objectives": [
+    {
+      "type": "collect_all_materials",
+      "tiers": [1, 2, 3, 4, 5],
+      "description": "收集全部 T1-T5 材料"
+    }
+  ],
+  "rewards": {
+    "experience": 500,
+    "profession_exp": 200,
+    "items": [
+      {
+        "item": "factorcraft:collector_badge",
+        "amount": 1
+      }
+    ],
+    "currency": {
+      "type": "factor_points",
+      "amount": 300
+    },
+    "badge": "material_collector"
+  },
+  "difficulty": "hard",
+  "prerequisites": []
+}

@@ -1,0 +1,33 @@
+{
+  "id": "achievement_tier_3",
+  "title": "科技中坚",
+  "description": "科技等级达到 T3，成为 Factor 技师。",
+  "type": "achievement",
+  "category": "progress",
+  "repeatable": false,
+  "hidden": false,
+  "objectives": [
+    {
+      "type": "reach_tech_tier",
+      "tier": 3,
+      "description": "科技等级达到 T3"
+    }
+  ],
+  "rewards": {
+    "experience": 300,
+    "profession_exp": 150,
+    "items": [
+      {
+        "item": "factorcraft:factor_crystal_t3",
+        "amount": 3
+      }
+    ],
+    "currency": {
+      "type": "factor_points",
+      "amount": 150
+    },
+    "badge": "technician"
+  },
+  "difficulty": "medium",
+  "prerequisites": ["achievement_first_machine"]
+}

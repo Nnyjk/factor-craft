@@ -1,0 +1,33 @@
+{
+  "id": "achievement_all_equipment",
+  "title": "装备齐全",
+  "description": "收集全部职业的专属装备。",
+  "type": "achievement",
+  "category": "collection",
+  "repeatable": false,
+  "hidden": false,
+  "objectives": [
+    {
+      "type": "collect_all_equipment",
+      "professions": ["engineer", "cultivator", "explorer", "factor_master"],
+      "description": "收集全部职业装备"
+    }
+  ],
+  "rewards": {
+    "experience": 600,
+    "profession_exp": 300,
+    "items": [
+      {
+        "item": "factorcraft:equipment_showcase",
+        "amount": 1
+      }
+    ],
+    "currency": {
+      "type": "factor_points",
+      "amount": 400
+    },
+    "badge": "equipment_master"
+  },
+  "difficulty": "hard",
+  "prerequisites": []
+}

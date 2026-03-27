@@ -1,0 +1,33 @@
+{
+  "id": "achievement_tier_5",
+  "title": "科技大师",
+  "description": "科技等级达到 T5，掌握高级 Factor 技术。",
+  "type": "achievement",
+  "category": "progress",
+  "repeatable": false,
+  "hidden": false,
+  "objectives": [
+    {
+      "type": "reach_tech_tier",
+      "tier": 5,
+      "description": "科技等级达到 T5"
+    }
+  ],
+  "rewards": {
+    "experience": 500,
+    "profession_exp": 250,
+    "items": [
+      {
+        "item": "factorcraft:factor_crystal_t5",
+        "amount": 2
+      }
+    ],
+    "currency": {
+      "type": "factor_points",
+      "amount": 300
+    },
+    "badge": "master_technologist"
+  },
+  "difficulty": "hard",
+  "prerequisites": ["achievement_tier_3"]
+}
