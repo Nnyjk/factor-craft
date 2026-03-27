@@ -7,6 +7,7 @@ import com.factorcraft.module.profession.api.ProfessionServiceImpl;
 import com.factorcraft.module.profession.command.ProfessionCommand;
 import com.factorcraft.module.profession.config.ProfessionConfigLoader;
 import com.factorcraft.module.profession.event.ProfessionEventBus;
+import com.factorcraft.module.profession.event.ProfessionLevelUpNotifier;
 import com.factorcraft.module.profession.model.ProfessionType;
 import com.factorcraft.module.profession.registry.ProfessionRegistry;
 import com.factorcraft.module.profession.screen.ProfessionScreens;
@@ -73,6 +74,9 @@ public final class ProfessionModule implements FactorCraftModule {
         
         // 注册事件总线
         ProfessionEventBus.init();
+        
+        // 注册升级通知处理器
+        ProfessionLevelUpNotifier.getInstance().register();
         
         // 注册技能
         registerSkills();
