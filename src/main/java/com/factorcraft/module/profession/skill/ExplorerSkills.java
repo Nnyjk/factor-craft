@@ -5,6 +5,9 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.hit.HitResult;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.RaycastContext;
 
 import java.util.List;
 
@@ -49,7 +52,7 @@ public class ExplorerSkills {
         
         @Override
         public boolean execute(ServerPlayerEntity player) {
-            // TODO: 实现Factor充能效果
+            SkillEffectManager.activateEffect(player, "factor_charge", DURATION);
             player.sendMessage(Text.literal("§c[Factor充能] §b你的装备充满能量！"), true);
             spawnParticles(player, ParticleTypes.ENCHANT, 25);
             playSound(player, SoundEvents.BLOCK_ENCHANTMENT_TABLE_USE);
@@ -75,11 +78,31 @@ public class ExplorerSkills {
         
         @Override
         public boolean execute(ServerPlayerEntity player) {
-            // TODO: 实现空间跃迁效果
-            player.sendMessage(Text.literal("§c[空间跃迁] §d空间折叠！"), true);
-            spawnParticles(player, ParticleTypes.REVERSE_PORTAL, 30);
-            playSound(player, SoundEvents.ENTITY_ENDERMAN_TELEPORT);
-            return true;
+            // 使用射线检测获取视线落点
+            Vec3d eyePos = player.getEyePos();
+            Vec3d lookVec = player.getRotationVec(1.0F);
+            Vec3d endPos = eyePos.add(lookVec.multiply(MAX_RANGE));
+            
+            RaycastContext context = new RaycastContext(
+                eyePos, endPos,
+                RaycastContext.ShapeType.COLLIDER,
+                RaycastContext.FluidHandling.NONE,
+                player
+            );
+            
+            HitResult hit = player.getWorld().raycast(context);
+            Vec3d targetPos = hit.getPos();
+            
+            // 安全传送
+            if (player.teleport(targetPos.x, targetPos.y, targetPos.z, true)) {
+                player.sendMessage(Text.literal("§c[空间跃迁] §d空间折叠！"), true);
+                spawnParticles(player, ParticleTypes.REVERSE_PORTAL, 30);
+                playSound(player, SoundEvents.ENTITY_ENDERMAN_TELEPORT);
+                return true;
+            } else {
+                player.sendMessage(Text.literal("§c[空间跃迁] §7传送位置不安全"), true);
+                return false;
+            }
         }
     }
     
@@ -101,7 +124,7 @@ public class ExplorerSkills {
         
         @Override
         public boolean execute(ServerPlayerEntity player) {
-            // TODO: 实现潮汐护盾效果
+            SkillEffectManager.activateEffect(player, "tidal_shield", DURATION);
             player.sendMessage(Text.literal("§c[潮汐护盾] §9潮汐之力为你提供庇护！"), true);
             spawnParticles(player, ParticleTypes.BUBBLE, 35);
             playSound(player, SoundEvents.BLOCK_BUBBLE_COLUMN_WHIRLPOOL_INSIDE);
@@ -129,6 +152,7 @@ public class ExplorerSkills {
         @Override
         public boolean execute(ServerPlayerEntity player) {
             // TODO: 实现维度破碎效果
+            // 需要战斗系统支持
             player.sendMessage(Text.literal("§d[终极：维度破碎] §c空间崩裂！"), true);
             spawnParticles(player, ParticleTypes.EXPLOSION_EMITTER, 20);
             playSound(player, SoundEvents.ENTITY_GENERIC_EXPLODE.value());
@@ -156,6 +180,7 @@ public class ExplorerSkills {
         @Override
         public boolean execute(ServerPlayerEntity player) {
             // TODO: 实现因子风暴效果
+            // 需要战斗系统支持
             player.sendMessage(Text.literal("§d[终极：因子风暴] §bFactor能量风暴降临！"), true);
             spawnParticles(player, ParticleTypes.DRAGON_BREATH, 50);
             playSound(player, SoundEvents.ENTITY_ENDER_DRAGON_FLAP);

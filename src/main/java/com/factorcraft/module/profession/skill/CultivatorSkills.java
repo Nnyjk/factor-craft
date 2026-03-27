@@ -5,6 +5,11 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Fertilizable;
+import net.minecraft.world.event.GameEvent;
 
 import java.util.List;
 
@@ -49,11 +54,38 @@ public class CultivatorSkills {
         
         @Override
         public boolean execute(ServerPlayerEntity player) {
-            // TODO: 实现生长催化效果
-            player.sendMessage(Text.literal("§a[生长催化] §e周围的生物快速生长！"), true);
-            spawnParticles(player, ParticleTypes.HAPPY_VILLAGER, 30);
-            playSound(player, SoundEvents.BLOCK_CROP_BREAK);
-            return true;
+            World world = player.getWorld();
+            BlockPos center = player.getBlockPos();
+            int affectedCount = 0;
+            
+            // 遍历范围内的方块
+            for (int x = -RANGE; x <= RANGE; x++) {
+                for (int y = -RANGE / 2; y <= RANGE / 2; y++) {
+                    for (int z = -RANGE; z <= RANGE; z++) {
+                        BlockPos pos = center.add(x, y, z);
+                        BlockState state = world.getBlockState(pos);
+                        
+                        // 如果是可以催熟的植物
+                        if (state.getBlock() instanceof Fertilizable fertilizable) {
+                            if (fertilizable.isFertilizable(world, pos, state)) {
+                                fertilizable.grow((net.minecraft.server.world.ServerWorld) world, world.random, pos, state);
+                                world.emitGameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Emitter.of(player));
+                                affectedCount++;
+                            }
+                        }
+                    }
+                }
+            }
+            
+            if (affectedCount > 0) {
+                player.sendMessage(Text.literal("§a[生长催化] §e" + affectedCount + " 个植物被催熟！"), true);
+                spawnParticles(player, ParticleTypes.HAPPY_VILLAGER, 30);
+                playSound(player, SoundEvents.BLOCK_CROP_BREAK);
+                return true;
+            } else {
+                player.sendMessage(Text.literal("§7[生长催化] 周围没有可催熟的植物"), true);
+                return false;
+            }
         }
     }
     
@@ -76,8 +108,8 @@ public class CultivatorSkills {
         
         @Override
         public boolean execute(ServerPlayerEntity player) {
-            // TODO: 实现变异诱导效果
-            player.sendMessage(Text.literal("§a[变异诱导] §d变异能量弥漫开来！"), true);
+            SkillEffectManager.activateEffect(player, "mutation_induce", DURATION);
+            player.sendMessage(Text.literal("§a[变异诱导] §d变异能量弥漫开来！持续1分钟"), true);
             spawnParticles(player, ParticleTypes.PORTAL, 25);
             playSound(player, SoundEvents.BLOCK_END_PORTAL_FRAME_FILL);
             return true;
@@ -102,8 +134,9 @@ public class CultivatorSkills {
         
         @Override
         public boolean execute(ServerPlayerEntity player) {
-            // TODO: 实现灵魂链接效果
-            player.sendMessage(Text.literal("§a[灵魂链接] §c已与生物建立灵魂连接！"), true);
+            // TODO: 需要生物绑定系统支持
+            SkillEffectManager.activateEffect(player, "soul_link", DURATION);
+            player.sendMessage(Text.literal("§a[灵魂链接] §c灵魂链接已激活！请右键目标生物绑定"), true);
             spawnParticles(player, ParticleTypes.SOUL, 20);
             playSound(player, SoundEvents.PARTICLE_SOUL_ESCAPE.value());
             return true;
@@ -128,7 +161,7 @@ public class CultivatorSkills {
         
         @Override
         public boolean execute(ServerPlayerEntity player) {
-            // TODO: 实现丰收时刻效果
+            // TODO: 需要作物收获系统支持
             player.sendMessage(Text.literal("§d[终极：丰收时刻] §6大丰收！"), true);
             spawnParticles(player, ParticleTypes.TOTEM_OF_UNDYING, 40);
             playSound(player, SoundEvents.BLOCK_BELL_USE);
@@ -154,7 +187,7 @@ public class CultivatorSkills {
         
         @Override
         public boolean execute(ServerPlayerEntity player) {
-            // TODO: 实现生物帝国效果
+            // TODO: 需要生物召唤系统支持
             player.sendMessage(Text.literal("§d[终极：生物帝国] §a你的生物军团已苏醒！"), true);
             spawnParticles(player, ParticleTypes.DRAGON_BREATH, 50);
             playSound(player, SoundEvents.ENTITY_ENDER_DRAGON_GROWL);

@@ -50,36 +50,41 @@ public class EngineerSkills {
         
         @Override
         public boolean execute(ServerPlayerEntity player) {
-            // TODO: 实现机器超频效果
-            // 遍历周围32格内的机器，添加超频状态
-            player.sendMessage(Text.literal("§b[超频] §a机器效率提升100%！"), true);
-            spawnParticles(player, ParticleTypes.ELECTRIC_SPARK, 20);
-            playSound(player, SoundEvents.BLOCK_BEACON_POWER_SELECT);
-            return true;
+            int affectedMachines = SkillEffectManager.executeOverclock(player, RANGE, DURATION);
+            
+            if (affectedMachines > 0) {
+                player.sendMessage(Text.literal("§b[超频] §a" + affectedMachines + " 台机器效率提升100%！"), true);
+                spawnParticles(player, ParticleTypes.ELECTRIC_SPARK, 20);
+                playSound(player, SoundEvents.BLOCK_BEACON_POWER_SELECT);
+                return true;
+            } else {
+                player.sendMessage(Text.literal("§c[超频] 周围没有可影响的机器"), true);
+                return false;
+            }
         }
     }
     
     /**
-     * 远程构建 - 可在32格范围内直接放置机器/管道，无需靠近
-     * 基础技能 | CD: 10秒 | Factor消耗: 100
+     * 远程构建 - 允许玩家在10格距离外放置方块
+     * 基础技能 | CD: 20秒 | Factor消耗: 100
      */
     public static class RemoteBuild extends ProfessionSkill {
         
         public static final String ID = "remote_build";
         public static final int FACTOR_COST = 100;
-        public static final int COOLDOWN = 200; // 10秒
-        public static final int RANGE = 32;
+        public static final int COOLDOWN = 400; // 20秒
+        public static final int DURATION = 200; // 10秒
+        public static final int RANGE = 10;
         
         public RemoteBuild() {
-            super(ID, "远程构建", "激活后可远程放置机器/管道，范围32格",
+            super(ID, "远程构建", "激活后10秒内可远程放置方块",
                   ProfessionType.ENGINEER, SkillType.ACTIVE, FACTOR_COST, COOLDOWN, 5, false);
         }
         
         @Override
         public boolean execute(ServerPlayerEntity player) {
-            // TODO: 实现远程构建效果
-            // 添加玩家远程放置能力的临时状态
-            player.sendMessage(Text.literal("§b[远程构建] §a已激活远程放置能力！"), true);
+            SkillEffectManager.activateRemoteBuild(player, DURATION);
+            player.sendMessage(Text.literal("§b[远程构建] §a已激活远程放置能力！持续10秒"), true);
             spawnParticles(player, ParticleTypes.END_ROD, 15);
             playSound(player, SoundEvents.ENTITY_ENDERMAN_TELEPORT);
             return true;
@@ -104,12 +109,17 @@ public class EngineerSkills {
         
         @Override
         public boolean execute(ServerPlayerEntity player) {
-            // TODO: 实现能量爆发效果
-            // 遍历周围机器并充满能量
-            player.sendMessage(Text.literal("§b[能量爆发] §a所有机器已充满能量！"), true);
-            spawnParticles(player, ParticleTypes.TOTEM_OF_UNDYING, 30);
-            playSound(player, SoundEvents.BLOCK_BEACON_ACTIVATE);
-            return true;
+            int chargedMachines = SkillEffectManager.executeEnergyBurst(player, RANGE);
+            
+            if (chargedMachines > 0) {
+                player.sendMessage(Text.literal("§b[能量爆发] §a已为 " + chargedMachines + " 台机器充满能量！"), true);
+                spawnParticles(player, ParticleTypes.TOTEM_OF_UNDYING, 30);
+                playSound(player, SoundEvents.BLOCK_BEACON_ACTIVATE);
+                return true;
+            } else {
+                player.sendMessage(Text.literal("§c[能量爆发] 周围没有需要充能的机器"), true);
+                return false;
+            }
         }
     }
     
@@ -131,8 +141,8 @@ public class EngineerSkills {
         
         @Override
         public boolean execute(ServerPlayerEntity player) {
-            // TODO: 实现工厂意志效果
-            player.sendMessage(Text.literal("§d[终极：工厂意志] §a工厂进入自由运转模式！"), true);
+            SkillEffectManager.activateFactoryWill(player, DURATION);
+            player.sendMessage(Text.literal("§d[终极：工厂意志] §a工厂进入自由运转模式！持续5分钟"), true);
             spawnParticles(player, ParticleTypes.DRAGON_BREATH, 50);
             playSound(player, SoundEvents.BLOCK_END_PORTAL_SPAWN);
             return true;
@@ -158,9 +168,10 @@ public class EngineerSkills {
         @Override
         public boolean execute(ServerPlayerEntity player) {
             // TODO: 实现结构重构效果
+            // 需要多方块结构系统支持
             player.sendMessage(Text.literal("§d[终极：结构重构] §a所有结构已修复！"), true);
-            spawnParticles(player, ParticleTypes.FLASH, 40);
-            playSound(player, SoundEvents.BLOCK_ANVIL_USE);
+            spawnParticles(player, ParticleTypes.REVERSE_PORTAL, 40);
+            playSound(player, SoundEvents.ENTITY_WITHER_SPAWN);
             return true;
         }
     }
