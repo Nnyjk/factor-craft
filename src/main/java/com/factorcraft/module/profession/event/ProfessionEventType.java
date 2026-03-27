@@ -27,5 +27,25 @@ public enum ProfessionEventType {
     /**
      * 技能使用事件
      */
-    SKILL_USE
+    SKILL_USE,
+    
+    /**
+     * 资源采集事件
+     */
+    RESOURCE_COLLECT,
+    
+    /**
+     * 任务完成事件
+     */
+    QUEST_COMPLETE,
+    
+    /**
+     * 成就解锁事件
+     */
+    ACHIEVEMENT_UNLOCK,
+    
+    /**
+     * 数据同步事件
+     */
+    DATA_SYNC
 }

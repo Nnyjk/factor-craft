@@ -70,6 +70,12 @@ public class NetworkPackets {
             AchievementSyncPayload.CODEC
         );
         
+        // ==================== 职业系统同步 ====================
+        PayloadTypeRegistry.playS2C().register(
+            ProfessionSyncPayload.ID,
+            ProfessionSyncPayload.CODEC
+        );
+        
         // ==================== 客户端请求 (C2S) ====================
         PayloadTypeRegistry.playC2S().register(
             MachineOperationPayload.ID,

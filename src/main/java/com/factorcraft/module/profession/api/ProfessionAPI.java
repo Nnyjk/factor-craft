@@ -23,6 +23,11 @@ public interface ProfessionAPI {
     Optional<ProfessionType> getPlayerProfession(ServerPlayerEntity player);
     
     /**
+     * 获取玩家职业类型（非 Optional 版本，用于集成）
+     */
+    ProfessionType getPlayerProfessionType(ServerPlayerEntity player);
+    
+    /**
      * 获取玩家职业数据
      */
     PlayerProfessionData getPlayerData(ServerPlayerEntity player);
@@ -31,6 +36,11 @@ public interface ProfessionAPI {
      * 检查玩家是否已选择职业
      */
     boolean hasProfession(ServerPlayerEntity player);
+    
+    /**
+     * 保存玩家职业数据
+     */
+    void savePlayerData(ServerPlayerEntity player);
     
     // ==================== 职业选择 ====================
     
@@ -64,6 +74,11 @@ public interface ProfessionAPI {
     void addExperience(ServerPlayerEntity player, int amount, String source);
     
     /**
+     * 添加经验值（简化版本，用于集成）
+     */
+    void addExperience(ServerPlayerEntity player, int amount);
+    
+    /**
      * 获取升级所需经验
      */
     int getExperienceForLevel(int level);
@@ -79,6 +94,11 @@ public interface ProfessionAPI {
      * 获取指定属性的加成值
      */
     double getAttributeBonus(ServerPlayerEntity player, String attributeKey);
+    
+    /**
+     * 获取职业加成（用于集成，返回 float 类型）
+     */
+    float getProfessionBonus(ServerPlayerEntity player, String bonusType);
     
     // ==================== 天赋点 ====================
     
