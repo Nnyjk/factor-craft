@@ -28,6 +28,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ResearchManager {
     
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+    private static ResearchManager instance;
     
     // 所有注册的研究
     private final Map<String, Research> allResearch = new ConcurrentHashMap<>();
@@ -40,6 +41,14 @@ public class ResearchManager {
     
     // 服务端引用
     private MinecraftServer server;
+    
+    public ResearchManager() {
+        instance = this;
+    }
+    
+    public static ResearchManager getInstance() {
+        return instance;
+    }
     
     /**
      * 注册研究
@@ -132,6 +141,19 @@ public class ResearchManager {
         Research.State state = getResearchState(researchId, player);
         if (state != Research.State.AVAILABLE) {
             return false;
+        }
+        
+        // 消耗研究点
+        if (research.getResearchPointCost() > 0) {
+            ResearchPointManager pointManager = ResearchModule.getInstance().getResearchPointManager();
+            if (!pointManager.consumePoints(player, research.getResearchPointCost())) {
+                player.sendMessage(
+                    net.minecraft.text.Text.literal("§c§l[研究] §r§e研究点不足！需要 " + 
+                        research.getResearchPointCost() + " 点"),
+                    true
+                );
+                return false;
+            }
         }
         
         // 消耗 Factor
@@ -279,5 +301,23 @@ public class ResearchManager {
      */
     public void loadPlayerData(Path saveDir) {
         // TODO: 实现玩家数据加载
+    }
+    
+    /**
+     * 取消进行中的研究
+     */
+    public boolean cancelResearch(String researchId, ServerPlayerEntity player) {
+        ResearchProgress progress = getProgress(player);
+        
+        if (!progress.isInProgress(researchId)) {
+            return false;
+        }
+        
+        progress.cancelResearch(researchId);
+        
+        FactorCraftMod.LOGGER.info("[Research] 玩家 {} 取消了研究：{}", 
+            player.getName().getString(), researchId);
+        
+        return true;
     }
 }

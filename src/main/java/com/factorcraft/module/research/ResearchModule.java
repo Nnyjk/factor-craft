@@ -2,9 +2,14 @@ package com.factorcraft.module.research;
 
 import com.factorcraft.FactorCraftMod;
 import com.factorcraft.module.FactorCraftModule;
+import com.factorcraft.module.research.network.ResearchPointSyncPayload;
+import com.factorcraft.module.research.network.ResearchSyncPayload;
+import com.factorcraft.module.research.screen.ModScreenHandlers;
 
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
+import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.item.Items;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.Identifier;
@@ -22,10 +27,12 @@ public class ResearchModule implements FactorCraftModule {
     
     private static ResearchModule instance;
     private final ResearchManager researchManager;
+    private final ResearchPointManager researchPointManager;
     private MinecraftServer server;
     
     public ResearchModule() {
         this.researchManager = new ResearchManager();
+        this.researchPointManager = new ResearchPointManager();
         instance = this;
     }
     
@@ -37,6 +44,10 @@ public class ResearchModule implements FactorCraftModule {
         return researchManager;
     }
     
+    public ResearchPointManager getResearchPointManager() {
+        return researchPointManager;
+    }
+    
     @Override
     public String moduleId() {
         return MODULE_ID;
@@ -45,6 +56,12 @@ public class ResearchModule implements FactorCraftModule {
     @Override
     public void initialize() {
         FactorCraftMod.LOGGER.info("[FactorCraft:Research] 正在初始化研究系统...");
+        
+        // 注册 ScreenHandlers
+        ModScreenHandlers.register();
+        
+        // 注册网络包
+        registerNetworkPackets();
         
         // 加载配置
         loadResearchConfig();
@@ -300,6 +317,25 @@ public class ResearchModule implements FactorCraftModule {
     
     private void registerResearch(Research research) {
         researchManager.registerResearch(research);
+    }
+    
+    /**
+     * 注册网络包
+     */
+    private void registerNetworkPackets() {
+        // 注册研究点同步包
+        PayloadTypeRegistry.playS2C().register(
+            ResearchPointSyncPayload.PACKET_ID,
+            ResearchPointSyncPayload.CODEC
+        );
+        
+        // 注册研究进度同步包
+        PayloadTypeRegistry.playS2C().register(
+            ResearchSyncPayload.PACKET_ID,
+            ResearchSyncPayload.CODEC
+        );
+        
+        FactorCraftMod.LOGGER.info("[FactorCraft:Research] 网络包已注册");
     }
     
     /**
