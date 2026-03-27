@@ -6,6 +6,6 @@
   },
   "input_count": 1,
   "output_factor": 500.0,
-  "conversion_time": 100,
+  "conversion_time": 80,
   "category": "conversion"
 }

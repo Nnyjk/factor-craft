@@ -4,12 +4,12 @@
   "input": {
     "item": "factorcraft:ancient_alloy"
   },
-  "input_count": 512,
+  "input_count": 64,
   "output": {
     "item": "factorcraft:void_crystal",
-    "count": 51
+    "count": 32
   },
-  "factor_cost": 125000.0,
-  "craft_time": 6000,
+  "factor_cost": 100000.0,
+  "craft_time": 5000,
   "category": "material"
 }

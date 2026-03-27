@@ -9,7 +9,7 @@
     "item": "factorcraft:shadow_steel_ingot",
     "count": 32
   },
-  "factor_cost": 1000.0,
-  "craft_time": 1200,
+  "factor_cost": 800.0,
+  "craft_time": 1000,
   "category": "material"
 }
