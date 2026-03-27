@@ -1,0 +1,36 @@
+{
+  "title": "掌控者之路：因子共鸣",
+  "description": "与因子建立深层共鸣，感受能量的流动。",
+  "type": "profession",
+  "profession": "factor_master",
+  "difficulty": "expert",
+  "tier": 4,
+  "objectives": [
+    {
+      "id": "achieve_resonance",
+      "type": "use",
+      "target": "factorcraft:resonance_chamber",
+      "amount": 1,
+      "description": "使用共鸣室达到因子共鸣"
+    },
+    {
+      "id": "collect_all_factors",
+      "type": "collect",
+      "target": "factorcraft:factor essence",
+      "amount": 4,
+      "description": "收集 4 种基础因子精华"
+    }
+  ],
+  "rewards": {
+    "experience": 500,
+    "items": [
+      {
+        "item": "factorcraft:resonance_crystal",
+        "amount": 1
+      }
+    ]
+  },
+  "prerequisites": ["engineer_04", "cultivator_04", "explorer_04"],
+  "isRepeatable": false,
+  "hidden": true
+}

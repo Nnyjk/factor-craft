@@ -1,0 +1,40 @@
+{
+  "title": "探索者之路：世界边界",
+  "description": "到达世界的尽头，揭开最终的秘密。",
+  "type": "profession",
+  "profession": "tide_explorer",
+  "difficulty": "hard",
+  "tier": 3,
+  "objectives": [
+    {
+      "id": "reach_world_border",
+      "type": "explore",
+      "target": "minecraft:world_border",
+      "amount": 1,
+      "description": "到达世界边界"
+    },
+    {
+      "id": "map_all_biomes",
+      "type": "explore",
+      "target": "factorcraft:biome_map",
+      "amount": 1,
+      "description": "绘制所有生物群系地图"
+    }
+  ],
+  "rewards": {
+    "experience": 350,
+    "items": [
+      {
+        "item": "factorcraft:master_explorer_badge",
+        "amount": 1
+      },
+      {
+        "item": "factorcraft:teleportation_staff",
+        "amount": 1
+      }
+    ],
+    "unlock": "tide_explorer_master"
+  },
+  "prerequisites": ["explorer_03"],
+  "isRepeatable": false
+}

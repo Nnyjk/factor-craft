@@ -1,0 +1,40 @@
+{
+  "title": "工程师之路：大师工艺",
+  "description": "掌握最高级的工程技术，成为真正的大师。",
+  "type": "profession",
+  "profession": "factor_engineer",
+  "difficulty": "hard",
+  "tier": 3,
+  "objectives": [
+    {
+      "id": "craft_quantum_machine",
+      "type": "craft",
+      "target": "factorcraft:quantum_assembler",
+      "amount": 1,
+      "description": "合成量子组装机"
+    },
+    {
+      "id": "build_factory",
+      "type": "construct",
+      "target": "factorcraft:factory_controller",
+      "amount": 1,
+      "description": "建造工厂控制器"
+    }
+  ],
+  "rewards": {
+    "experience": 300,
+    "items": [
+      {
+        "item": "factorcraft:master_engineer_badge",
+        "amount": 1
+      },
+      {
+        "item": "factorcraft:unlimited_upgrade",
+        "amount": 1
+      }
+    ],
+    "unlock": "factor_engineer_master"
+  },
+  "prerequisites": ["engineer_03"],
+  "isRepeatable": false
+}

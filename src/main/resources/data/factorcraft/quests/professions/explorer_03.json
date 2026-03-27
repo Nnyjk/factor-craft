@@ -1,0 +1,39 @@
+{
+  "title": "探索者之路：维度旅行",
+  "description": "跨越维度，探索未知的世界。",
+  "type": "profession",
+  "profession": "tide_explorer",
+  "difficulty": "medium",
+  "tier": 2,
+  "objectives": [
+    {
+      "id": "enter_nether",
+      "type": "explore",
+      "target": "minecraft:nether",
+      "amount": 1,
+      "description": "进入下界"
+    },
+    {
+      "id": "enter_end",
+      "type": "explore",
+      "target": "minecraft:end",
+      "amount": 1,
+      "description": "进入末地"
+    }
+  ],
+  "rewards": {
+    "experience": 200,
+    "items": [
+      {
+        "item": "factorcraft:dimension_key",
+        "amount": 1
+      },
+      {
+        "item": "factorcraft:ender_eye_enhanced",
+        "amount": 4
+      }
+    ]
+  },
+  "prerequisites": ["explorer_02"],
+  "isRepeatable": false
+}

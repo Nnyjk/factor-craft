@@ -1,0 +1,36 @@
+{
+  "title": "掌控者之路：因子融合",
+  "description": "融合所有因子，创造终极能量源。",
+  "type": "profession",
+  "profession": "factor_master",
+  "difficulty": "expert",
+  "tier": 4,
+  "objectives": [
+    {
+      "id": "fuse_factors",
+      "type": "craft",
+      "target": "factorcraft:fused_factor_core",
+      "amount": 1,
+      "description": "融合因子核心"
+    },
+    {
+      "id": "create_power_source",
+      "type": "craft",
+      "target": "factorcraft:ultimate_power_source",
+      "amount": 1,
+      "description": "创造终极能源"
+    }
+  ],
+  "rewards": {
+    "experience": 750,
+    "items": [
+      {
+        "item": "factorcraft:fusion_crystal",
+        "amount": 1
+      }
+    ]
+  },
+  "prerequisites": ["master_01"],
+  "isRepeatable": false,
+  "hidden": true
+}

@@ -1,0 +1,41 @@
+{
+  "title": "掌控者之路：因子之神",
+  "description": "达到因子掌控的巅峰，成为真正的因子之神。",
+  "type": "profession",
+  "profession": "factor_master",
+  "difficulty": "expert",
+  "tier": 5,
+  "objectives": [
+    {
+      "id": "build_factor_altar",
+      "type": "construct",
+      "target": "factorcraft:factor_altar",
+      "amount": 1,
+      "description": "建造因子祭坛"
+    },
+    {
+      "id": "ascend_to_master",
+      "type": "use",
+      "target": "factorcraft:factor_altar",
+      "amount": 1,
+      "description": "在祭坛上完成升华"
+    }
+  ],
+  "rewards": {
+    "experience": 1000,
+    "items": [
+      {
+        "item": "factorcraft:factor_god_badge",
+        "amount": 1
+      },
+      {
+        "item": "factorcraft:creative_factor_core",
+        "amount": 1
+      }
+    ],
+    "unlock": "factor_god"
+  },
+  "prerequisites": ["master_02"],
+  "isRepeatable": false,
+  "hidden": true
+}

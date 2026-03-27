@@ -1,0 +1,28 @@
+{
+  "title": "培育师之路：能量感知",
+  "description": "学习感知和收集基础能量，成为能量培育师的第一步。",
+  "type": "profession",
+  "profession": "energy_cultivator",
+  "difficulty": "easy",
+  "tier": 1,
+  "objectives": [
+    {
+      "id": "collect_energy",
+      "type": "collect",
+      "target": "factorcraft:energy_crystal",
+      "amount": 10,
+      "description": "收集 10 个能量晶体"
+    }
+  ],
+  "rewards": {
+    "experience": 50,
+    "items": [
+      {
+        "item": "factorcraft:energy_collector",
+        "amount": 1
+      }
+    ]
+  },
+  "prerequisites": [],
+  "isRepeatable": false
+}

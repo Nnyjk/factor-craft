@@ -1,0 +1,28 @@
+{
+  "title": "工程师之路：基础",
+  "description": "成为一名 Factor 工程师的第一步，学习基础机械合成。",
+  "type": "profession",
+  "profession": "factor_engineer",
+  "difficulty": "easy",
+  "tier": 1,
+  "objectives": [
+    {
+      "id": "craft_basic_machine",
+      "type": "craft",
+      "target": "factorcraft:basic_machine",
+      "amount": 1,
+      "description": "合成基础机械"
+    }
+  ],
+  "rewards": {
+    "experience": 50,
+    "items": [
+      {
+        "item": "factorcraft:engineer_toolkit",
+        "amount": 1
+      }
+    ]
+  },
+  "prerequisites": [],
+  "isRepeatable": false
+}

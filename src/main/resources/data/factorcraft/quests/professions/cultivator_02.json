@@ -1,0 +1,28 @@
+{
+  "title": "培育师之路：能量储存",
+  "description": "建造能量储存设施，保存收集的能量。",
+  "type": "profession",
+  "profession": "energy_cultivator",
+  "difficulty": "easy",
+  "tier": 1,
+  "objectives": [
+    {
+      "id": "build_energy_cell",
+      "type": "craft",
+      "target": "factorcraft:energy_cell",
+      "amount": 4,
+      "description": "合成 4 个能量电池"
+    }
+  ],
+  "rewards": {
+    "experience": 75,
+    "items": [
+      {
+        "item": "factorcraft:energy_tank",
+        "amount": 1
+      }
+    ]
+  },
+  "prerequisites": ["cultivator_01"],
+  "isRepeatable": false
+}

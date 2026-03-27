@@ -1,0 +1,35 @@
+{
+  "title": "培育师之路：能量转化",
+  "description": "掌握能量转化技术，将一种能量转换为另一种。",
+  "type": "profession",
+  "profession": "energy_cultivator",
+  "difficulty": "medium",
+  "tier": 2,
+  "objectives": [
+    {
+      "id": "craft_converter",
+      "type": "craft",
+      "target": "factorcraft:energy_converter",
+      "amount": 1,
+      "description": "合成能量转换器"
+    },
+    {
+      "id": "convert_energy",
+      "type": "use",
+      "target": "factorcraft:energy_converter",
+      "amount": 1000,
+      "description": "转化 1000 FE 能量"
+    }
+  ],
+  "rewards": {
+    "experience": 150,
+    "items": [
+      {
+        "item": "factorcraft:efficiency_crystal",
+        "amount": 2
+      }
+    ]
+  },
+  "prerequisites": ["cultivator_02"],
+  "isRepeatable": false
+}

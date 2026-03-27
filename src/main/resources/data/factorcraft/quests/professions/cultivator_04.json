@@ -1,0 +1,40 @@
+{
+  "title": "培育师之路：能量核心",
+  "description": "创造能量核心，成为能量的真正主宰。",
+  "type": "profession",
+  "profession": "energy_cultivator",
+  "difficulty": "hard",
+  "tier": 3,
+  "objectives": [
+    {
+      "id": "craft_energy_core",
+      "type": "craft",
+      "target": "factorcraft:energy_core",
+      "amount": 1,
+      "description": "合成能量核心"
+    },
+    {
+      "id": "store_massive_energy",
+      "type": "use",
+      "target": "factorcraft:energy_core",
+      "amount": 1000000,
+      "description": "储存 100 万 FE 能量"
+    }
+  ],
+  "rewards": {
+    "experience": 300,
+    "items": [
+      {
+        "item": "factorcraft:master_cultivator_badge",
+        "amount": 1
+      },
+      {
+        "item": "factorcraft:infinite_energy_crystal",
+        "amount": 1
+      }
+    ],
+    "unlock": "energy_cultivator_master"
+  },
+  "prerequisites": ["cultivator_03"],
+  "isRepeatable": false
+}
