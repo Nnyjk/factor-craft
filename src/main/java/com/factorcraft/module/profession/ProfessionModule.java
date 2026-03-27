@@ -4,10 +4,12 @@ import com.factorcraft.FactorCraftMod;
 import com.factorcraft.module.FactorCraftModule;
 import com.factorcraft.module.profession.api.ProfessionAPI;
 import com.factorcraft.module.profession.api.ProfessionServiceImpl;
+import com.factorcraft.module.profession.command.ProfessionCommand;
 import com.factorcraft.module.profession.config.ProfessionConfigLoader;
 import com.factorcraft.module.profession.event.ProfessionEventBus;
 import com.factorcraft.module.profession.model.ProfessionType;
 import com.factorcraft.module.profession.registry.ProfessionRegistry;
+import com.factorcraft.module.profession.screen.ProfessionScreens;
 import com.factorcraft.module.profession.skill.*;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
@@ -60,6 +62,11 @@ public final class ProfessionModule implements FactorCraftModule {
     @Override
     public void initialize() {
         FactorCraftMod.LOGGER.info("[FactorCraft:Profession] 初始化职业系统模块...");
+        
+        // 注册 ScreenHandlerType
+        ProfessionScreens.init();
+        
+        // 命令注册已移至 FactorCraftMod.java 统一处理
         
         // 注册职业配置加载器
         ProfessionConfigLoader.init();

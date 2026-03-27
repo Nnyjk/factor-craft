@@ -289,5 +289,24 @@
   "block.factorcraft.factor_machine_extractor_core_t1.lore": "Factor提取机的核心部件，从环境中提取基础Factor",
   "block.factorcraft.factor_machine_synthesizer_core_t1.lore": "Factor合成机的核心部件，将不同Factor合成为复合Factor",
   "block.factorcraft.factor_machine_tank.lore": "使用特殊材料制作的储罐，可以稳定存储Factor能量",
-  "block.factorcraft.factor_block_anchor.lore": "可以锚定区块Factor浓度，防止Factor自然消散"
+  "block.factorcraft.factor_block_anchor.lore": "可以锚定区块Factor浓度，防止Factor自然消散",
+  
+  "_comment": "Profession System",
+  "gui.factorcraft.profession_selection.title": "职业选择",
+  "gui.factorcraft.profession_selection.description": "选择你的初始职业，这将决定你的成长路径",
+  "gui.factorcraft.profession_selection.confirm": "确认选择",
+  "gui.factorcraft.profession_selection.cancel": "取消",
+  "gui.factorcraft.profession_selection.engineer": "Factor工程师",
+  "gui.factorcraft.profession_selection.cultivator": "能量培育师",
+  "gui.factorcraft.profession_selection.explorer": "潮汐探索者",
+  
+  "profession.factorcraft.engineer": "Factor工程师",
+  "profession.factorcraft.cultivator": "能量培育师",
+  "profession.factorcraft.explorer": "潮汐探索者",
+  "profession.factorcraft.master": "因子掌控者",
+  
+  "command.factorcraft.profession.set": "已将 %s 的职业设置为 %s",
+  "command.factorcraft.profession.get": "%s 的当前职业: %s (Lv.%d)",
+  "command.factorcraft.profession.no_profession": "%s 尚未选择职业",
+  "command.factorcraft.profession.reset": "已重置 %s 的职业数据"
 }
