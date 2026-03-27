@@ -289,6 +289,33 @@ public class ProfessionServiceImpl implements ProfessionAPI {
         return data.getCollectedRareFactorCount();
     }
     
+    @Override
+    public ProfessionType getPlayerProfessionType(ServerPlayerEntity player) {
+        Optional<ProfessionType> type = getPlayerProfession(player);
+        return type.orElse(null);
+    }
+    
+    @Override
+    public void savePlayerData(ServerPlayerEntity player) {
+        ServerWorld world = player.getServerWorld();
+        ProfessionDataStorage storage = ProfessionDataStorage.get(world);
+        if (storage != null) {
+            storage.markDirty();
+        }
+    }
+    
+    @Override
+    public void addExperience(ServerPlayerEntity player, int amount) {
+        addExperience(player, amount, "integration");
+    }
+    
+    @Override
+    public float getProfessionBonus(ServerPlayerEntity player, String bonusType) {
+        // 获取属性加成并转换为 float
+        double bonus = getAttributeBonus(player, bonusType);
+        return (float) bonus;
+    }
+    
     // ==================== 私有辅助方法 ====================
     
     private long getSkillCooldownFromConfig(String skillId) {
