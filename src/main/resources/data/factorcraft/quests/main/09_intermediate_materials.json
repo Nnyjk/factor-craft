@@ -1,0 +1,29 @@
+{
+  "id": "main_09",
+  "title": "中级材料合成",
+  "description": "合成 T3 材料锭，解锁中级材料加工能力。",
+  "category": "main",
+  "difficulty": "medium",
+  "objectives": [
+    {
+      "type": "craft_item",
+      "item": "factorcraft:t3_material_ingot",
+      "count": 10,
+      "description": "合成 T3 材料锭"
+    }
+  ],
+  "rewards": [
+    {
+      "type": "item",
+      "item": "factorcraft:t3_material_ingot",
+      "count": 20
+    },
+    {
+      "type": "quest_xp",
+      "amount": 350
+    }
+  ],
+  "prerequisites": ["main_08"],
+  "repeatable": false,
+  "hidden": false
+}

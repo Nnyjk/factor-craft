@@ -1,0 +1,28 @@
+{
+  "id": "main_13",
+  "title": "终极机器配置",
+  "description": "配置 T5 机器网络，达到机器配置的巅峰。",
+  "category": "main",
+  "difficulty": "expert",
+  "objectives": [
+    {
+      "type": "setup_machine_network",
+      "tier": 5,
+      "description": "配置 T5 机器网络"
+    }
+  ],
+  "rewards": [
+    {
+      "type": "item",
+      "item": "factorcraft:t5_machine_core",
+      "count": 1
+    },
+    {
+      "type": "quest_xp",
+      "amount": 800
+    }
+  ],
+  "prerequisites": ["main_12"],
+  "repeatable": false,
+  "hidden": false
+}

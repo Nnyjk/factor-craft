@@ -1,0 +1,28 @@
+{
+  "id": "main_04",
+  "title": "能源网络建设",
+  "description": "连接 2 台机器，建立初步的能源网络。",
+  "category": "main",
+  "difficulty": "easy",
+  "objectives": [
+    {
+      "type": "connect_machines",
+      "count": 2,
+      "description": "连接 2 台机器"
+    }
+  ],
+  "rewards": [
+    {
+      "type": "item",
+      "item": "factorcraft:energy_cable",
+      "count": 32
+    },
+    {
+      "type": "quest_xp",
+      "amount": 150
+    }
+  ],
+  "prerequisites": ["main_03"],
+  "repeatable": false,
+  "hidden": false
+}

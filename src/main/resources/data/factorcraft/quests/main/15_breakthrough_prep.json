@@ -1,0 +1,28 @@
+{
+  "id": "main_15",
+  "title": "突破准备",
+  "description": "完成 T5 所有前置，为最终突破做好准备。",
+  "category": "main",
+  "difficulty": "expert",
+  "objectives": [
+    {
+      "type": "complete_prerequisites",
+      "tier": 5,
+      "description": "完成 T5 所有前置任务"
+    }
+  ],
+  "rewards": [
+    {
+      "type": "item",
+      "item": "factorcraft:breakthrough_catalyst",
+      "count": 1
+    },
+    {
+      "type": "quest_xp",
+      "amount": 1200
+    }
+  ],
+  "prerequisites": ["main_14"],
+  "repeatable": false,
+  "hidden": false
+}

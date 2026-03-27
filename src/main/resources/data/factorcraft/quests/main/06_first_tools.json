@@ -1,0 +1,35 @@
+{
+  "id": "main_06",
+  "title": "第一批工具制作",
+  "description": "制作 T2 工具套装，提升工作效率。",
+  "category": "main",
+  "difficulty": "easy",
+  "objectives": [
+    {
+      "type": "craft_item",
+      "item": "factorcraft:t2_tool_pickaxe",
+      "count": 1,
+      "description": "制作 T2 镐"
+    },
+    {
+      "type": "craft_item",
+      "item": "factorcraft:t2_tool_axe",
+      "count": 1,
+      "description": "制作 T2 斧"
+    }
+  ],
+  "rewards": [
+    {
+      "type": "item",
+      "item": "factorcraft:t2_material_ingot",
+      "count": 16
+    },
+    {
+      "type": "quest_xp",
+      "amount": 200
+    }
+  ],
+  "prerequisites": ["main_05"],
+  "repeatable": false,
+  "hidden": false
+}

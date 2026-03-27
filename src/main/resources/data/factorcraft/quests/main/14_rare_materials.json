@@ -1,0 +1,29 @@
+{
+  "id": "main_14",
+  "title": "稀有材料获取",
+  "description": "获取 T5 稀有材料，解锁顶级合成配方。",
+  "category": "main",
+  "difficulty": "expert",
+  "objectives": [
+    {
+      "type": "obtain_item",
+      "item": "factorcraft:t5_rare_material",
+      "count": 5,
+      "description": "获取 T5 稀有材料"
+    }
+  ],
+  "rewards": [
+    {
+      "type": "item",
+      "item": "factorcraft:t5_rare_material",
+      "count": 10
+    },
+    {
+      "type": "quest_xp",
+      "amount": 1000
+    }
+  ],
+  "prerequisites": ["main_13"],
+  "repeatable": false,
+  "hidden": false
+}

@@ -1,0 +1,31 @@
+{
+  "id": "main_01",
+  "title": "初次接触 Factor",
+  "description": "制作一个 Factor 计量器来检测周围的 Factor 浓度。这是你 Factor 之旅的第一步。",
+  "category": "main",
+  "difficulty": "easy",
+  "tier": 1,
+  "objectives": [
+    {
+      "type": "craft_item",
+      "item": "factorcraft:factor_meter",
+      "count": 1,
+      "description": "制作 Factor 计量器"
+    }
+  ],
+  "rewards": [
+    {
+      "type": "item",
+      "item": "factorcraft:factor_crystal",
+      "count": 3
+    },
+    {
+      "type": "quest_xp",
+      "amount": 50
+    }
+  ],
+  "prerequisites": [],
+  "nextQuests": ["main_02"],
+  "repeatable": false,
+  "hidden": false
+}
