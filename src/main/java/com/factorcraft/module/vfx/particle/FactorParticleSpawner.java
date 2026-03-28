@@ -1,9 +1,11 @@
 package com.factorcraft.module.vfx.particle;
 
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.random.Random;
+import net.minecraft.world.World;
 
 /**
  * Factor 粒子生成器
@@ -163,6 +165,100 @@ public class FactorParticleSpawner {
      * 获取距离最近的玩家距离
      */
     private static double getDistanceToNearestPlayer(ServerWorld world, BlockPos pos) {
+        Vec3d center = pos.toCenterPos();
+        return world.getPlayers().stream()
+            .mapToDouble(player -> player.getPos().distanceTo(center))
+            .min()
+            .orElse(Double.MAX_VALUE);
+    }
+    
+    // ==================== 客户端兼容方法 ====================
+    
+    /**
+     * 生成提取器粒子（客户端版本）
+     */
+    public static void spawnExtractionParticles(ClientWorld world, BlockPos pos, int count, double factorAmount) {
+        if (!FactorParticleConfig.shouldSpawn(getDistanceToNearestPlayer(world, pos))) {
+            return;
+        }
+        
+        int actualCount = FactorParticleConfig.getActualCount(count);
+        double speed = 0.05 + (factorAmount / 1000.0) * 0.1;
+        
+        for (int i = 0; i < actualCount; i++) {
+            double offsetX = random.nextDouble() * 0.8 - 0.4;
+            double offsetY = random.nextDouble() * 0.5;
+            double offsetZ = random.nextDouble() * 0.8 - 0.4;
+            
+            Vec3d particlePos = Vec3d.of(pos).add(0.5, 0.5, 0.5).add(offsetX, offsetY, offsetZ);
+            
+            world.addParticle(
+                FactorParticleTypes.EXTRACTION,
+                particlePos.x, particlePos.y, particlePos.z,
+                offsetX * speed, offsetY * speed + 0.05, offsetZ * speed
+            );
+        }
+    }
+    
+    /**
+     * 生成合成器粒子（客户端版本）
+     */
+    public static void spawnSynthesisParticles(ClientWorld world, BlockPos pos, int count, double factorAmount) {
+        if (!FactorParticleConfig.shouldSpawn(getDistanceToNearestPlayer(world, pos))) {
+            return;
+        }
+        
+        int actualCount = FactorParticleConfig.getActualCount(count);
+        double speed = 0.08 + (factorAmount / 1000.0) * 0.05;
+        
+        for (int i = 0; i < actualCount; i++) {
+            double angle = random.nextDouble() * Math.PI * 2;
+            double radius = 0.5;
+            double offsetX = Math.cos(angle) * radius;
+            double offsetZ = Math.sin(angle) * radius;
+            double offsetY = random.nextDouble() * 0.3;
+            
+            Vec3d particlePos = Vec3d.of(pos).add(0.5, 0.5, 0.5).add(offsetX, offsetY, offsetZ);
+            
+            // 向中心汇聚的效果
+            world.addParticle(
+                FactorParticleTypes.SYNTHESIS,
+                particlePos.x, particlePos.y, particlePos.z,
+                -offsetX * speed, -offsetY * speed, -offsetZ * speed
+            );
+        }
+    }
+    
+    /**
+     * 生成转换器粒子（客户端版本）
+     */
+    public static void spawnTransmissionParticles(ClientWorld world, BlockPos pos, int count, double factorAmount) {
+        if (!FactorParticleConfig.shouldSpawn(getDistanceToNearestPlayer(world, pos))) {
+            return;
+        }
+        
+        int actualCount = FactorParticleConfig.getActualCount(count);
+        double speed = 0.06;
+        
+        for (int i = 0; i < actualCount; i++) {
+            double offsetX = random.nextDouble() * 0.6 - 0.3;
+            double offsetY = random.nextDouble() * 0.6;
+            double offsetZ = random.nextDouble() * 0.6 - 0.3;
+            
+            Vec3d particlePos = Vec3d.of(pos).add(0.5, 0.5, 0.5).add(offsetX, offsetY, offsetZ);
+            
+            world.addParticle(
+                FactorParticleTypes.TRANSMISSION,
+                particlePos.x, particlePos.y, particlePos.z,
+                offsetX * speed, offsetY * speed * 0.5, offsetZ * speed
+            );
+        }
+    }
+    
+    /**
+     * 获取距离最近的玩家距离（客户端版本）
+     */
+    private static double getDistanceToNearestPlayer(ClientWorld world, BlockPos pos) {
         Vec3d center = pos.toCenterPos();
         return world.getPlayers().stream()
             .mapToDouble(player -> player.getPos().distanceTo(center))

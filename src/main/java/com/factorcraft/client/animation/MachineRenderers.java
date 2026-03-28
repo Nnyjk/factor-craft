@@ -1,27 +1,34 @@
 package com.factorcraft.client.animation;
 
-import com.factorcraft.module.technology.machine.*;
-import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
+import net.minecraft.client.render.block.entity.BlockEntityRenderer;
+import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityType;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
- * 机器渲染器注册
+ * 机器渲染器注册表
+ * 
+ * 管理所有机器类型的 BlockEntityRenderer 注册
  */
 public class MachineRenderers {
     
+    private static final Map<BlockEntityType<?>, BlockEntityRenderer<?>> RENDERERS = new HashMap<>();
+    
     /**
-     * 注册所有机器渲染器
+     * 注册机器渲染器
      */
-    public static void register(BlockEntityRendererFactory.Context context) {
-        // 提取器核心
-        // BlockEntityRendererRegistry.register(ModBlockEntities.EXTRACTOR_CORE, ExtractorCoreRenderer::new);
-        
-        // 合成器核心
-        // BlockEntityRendererRegistry.register(ModBlockEntities.SYNTHESIZER_CORE, SynthesizerCoreRenderer::new);
-        
-        // 培育器核心
-        // BlockEntityRendererRegistry.register(ModBlockEntities.CULTIVATOR_CORE, CultivatorCoreRenderer::new);
-        
-        // 传递器
-        // BlockEntityRendererRegistry.register(ModBlockEntities.TRANSMITTER, TransmitterCoreRenderer::new);
+    public static void register() {
+        // 渲染器在 FactorCraftClient 中通过 BlockEntityRendererRegistry 注册
+        // 这里仅作为渲染器类型的集中管理
+    }
+    
+    /**
+     * 获取指定 BlockEntityType 的渲染器
+     */
+    @SuppressWarnings("unchecked")
+    public static <T extends BlockEntity> BlockEntityRenderer<T> getRenderer(BlockEntityType<T> type) {
+        return (BlockEntityRenderer<T>) RENDERERS.get(type);
     }
 }

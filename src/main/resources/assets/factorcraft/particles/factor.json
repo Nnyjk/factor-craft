@@ -1,0 +1,10 @@
+{
+  "textures": [
+    "factorcraft:particle/factor_base",
+    "factorcraft:particle/factor_flow",
+    "factorcraft:particle/factor_dense",
+    "factorcraft:particle/machine_work",
+    "factorcraft:particle/craft_success",
+    "factorcraft:particle/tide_effect"
+  ]
+}

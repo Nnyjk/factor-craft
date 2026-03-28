@@ -1,100 +1,42 @@
 package com.factorcraft.client.animation;
 
-import com.factorcraft.module.technology.machine.MachineBlockEntity;
-import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.VertexConsumer;
-import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
-import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RotationAxis;
+import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityType;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
- * 机器 BlockEntity 渲染器基类
+ * 机器 BlockEntity 渲染器通用实现
  * 
- * 提供通用动画功能：
- * - 旋转动画
- * - 浮动动画
- * - 脉冲光效
+ * 为所有机器类型提供统一的渲染器注册和管理
  */
-public abstract class MachineBlockEntityRenderer<T extends MachineBlockEntity> implements BlockEntityRenderer<T> {
+public class MachineBlockEntityRenderer {
     
-    protected final BlockEntityRendererFactory.Context context;
+    private static final Map<BlockEntityType<?>, BlockEntityRenderer<?>> RENDERERS = new HashMap<>();
     
-    public MachineBlockEntityRenderer(BlockEntityRendererFactory.Context context) {
-        this.context = context;
-    }
-    
-    @Override
-    public void render(T entity, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, 
-                      int light, int overlay) {
-        if (!MachineAnimationConfig.ENABLED) {
-            return;
-        }
-        
-        // 检查渲染距离
-        double distance = context.getEntityRenderDispatcher().getSquaredDistanceToCamera(
-            entity.getPos().getX() + 0.5,
-            entity.getPos().getY() + 0.5,
-            entity.getPos().getZ() + 0.5
-        );
-        
-        if (!MachineAnimationConfig.shouldRender(Math.sqrt(distance))) {
-            return;
-        }
-        
-        matrices.push();
-        matrices.translate(0.5, 0.5, 0.5);
-        
-        // 应用动画
-        applyAnimations(entity, tickDelta, matrices);
-        
-        // 渲染模型
-        renderModel(entity, tickDelta, matrices, vertexConsumers, light, overlay);
-        
-        matrices.pop();
+    /**
+     * 注册机器渲染器
+     * 在 FactorCraftClient 中通过 BlockEntityRendererRegistry 调用
+     */
+    public static void registerRenderers() {
+        // 渲染器在 FactorCraftClient 中注册
+        // 这里仅作为集中管理入口
     }
     
     /**
-     * 应用动画效果
+     * 获取指定 BlockEntityType 的渲染器
      */
-    protected abstract void applyAnimations(T entity, float tickDelta, MatrixStack matrices);
-    
-    /**
-     * 渲染模型
-     */
-    protected abstract void renderModel(T entity, float tickDelta, MatrixStack matrices, 
-                                       VertexConsumerProvider vertexConsumers, int light, int overlay);
-    
-    /**
-     * 旋转动画
-     */
-    protected void applyRotation(MatrixStack matrices, float tickDelta, long time, float speed) {
-        float angle = (time % 3600) / 3600.0f * 360.0f * speed;
-        matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(angle));
+    @SuppressWarnings("unchecked")
+    public static <T extends BlockEntity> BlockEntityRenderer<T> getRenderer(BlockEntityType<T> type) {
+        return (BlockEntityRenderer<T>) RENDERERS.get(type);
     }
     
     /**
-     * 浮动动画
+     * 注册渲染器到内部映射
      */
-    protected void applyFloating(MatrixStack matrices, float tickDelta, long time, float amplitude, float speed) {
-        float offset = MathHelper.sin((time % 2000) / 2000.0f * (float) Math.PI * 2.0f * speed) * amplitude;
-        matrices.translate(0, offset, 0);
-    }
-    
-    /**
-     * 脉冲缩放动画
-     */
-    protected void applyPulseScale(MatrixStack matrices, float tickDelta, long time, float minScale, float maxScale, float speed) {
-        float scale = minScale + (MathHelper.sin((time % 1000) / 1000.0f * (float) Math.PI * 2.0f * speed) + 1) / 2.0f * (maxScale - minScale);
-        matrices.scale(scale, scale, scale);
-    }
-    
-    /**
-     * 获取机器工作时间（tick）
-     */
-    protected long getMachineTime(MachineBlockEntity entity) {
-        return entity.getWorld() != null ? entity.getWorld().getTime() : 0;
+    public static <T extends BlockEntity> void register(BlockEntityType<T> type, BlockEntityRenderer<T> renderer) {
+        RENDERERS.put(type, renderer);
     }
 }

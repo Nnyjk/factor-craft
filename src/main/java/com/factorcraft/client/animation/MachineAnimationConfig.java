@@ -3,26 +3,22 @@ package com.factorcraft.client.animation;
 /**
  * 机器动画配置
  * 
- * 控制动画性能和行为
+ * 定义动画系统的配置参数
  */
 public class MachineAnimationConfig {
     
-    /** 是否启用动画 */
+    /** 是否启用动画效果 */
     public static boolean ENABLED = true;
     
-    /** 动画渲染距离（方块） */
-    public static int RENDER_DISTANCE = 64;
+    /** 动画速度倍率 */
+    public static float ANIMATION_SPEED = 1.0f;
     
-    /** 动画最大更新频率（tick） */
-    public static int MAX_UPDATE_FREQUENCY = 1;
+    /** 是否启用粒子效果 */
+    public static boolean PARTICLES_ENABLED = true;
     
-    /** 是否显示调试信息 */
-    public static boolean DEBUG = false;
+    /** 粒子密度（0.0-1.0） */
+    public static float PARTICLE_DENSITY = 1.0f;
     
-    /**
-     * 检查是否应该渲染动画
-     */
-    public static boolean shouldRender(double distance) {
-        return ENABLED && distance <= RENDER_DISTANCE;
-    }
+    /** 最大渲染距离（方块） */
+    public static int MAX_RENDER_DISTANCE = 64;
 }

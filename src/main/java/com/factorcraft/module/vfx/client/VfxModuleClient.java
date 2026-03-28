@@ -1,6 +1,7 @@
 package com.factorcraft.module.vfx.client;
 
 import com.factorcraft.FactorCraftClient;
+import com.factorcraft.module.vfx.animation.AnimationManager;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 
 /**
@@ -18,8 +19,10 @@ public final class VfxModuleClient {
         // 注册客户端 tick 处理
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             FactorVisualEffectManagerClient.getInstance().tickClient(client);
+            AnimationManager.getInstance().tick(1.0f);
         });
         
         FactorCraftClient.LOGGER.info("[FactorCraft:VFX:Client] 客户端视觉效果系统已启用");
+        FactorCraftClient.LOGGER.info("[FactorCraft:VFX:Client] 机器动画系统已启用");
     }
 }

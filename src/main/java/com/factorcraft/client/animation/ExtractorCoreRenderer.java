@@ -1,40 +1,52 @@
 package com.factorcraft.client.animation;
 
 import com.factorcraft.module.technology.machine.ExtractorCoreBlockEntity;
-import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.VertexConsumer;
+import com.factorcraft.module.vfx.animation.AnimationManager;
 import net.minecraft.client.render.VertexConsumerProvider;
+import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RotationAxis;
+
+import java.util.UUID;
 
 /**
  * 提取器核心渲染器
  * 
- * 动画效果：
- * - 核心方块旋转（工作时加速）
- * - 能量脉冲光效
+ * 使用动画系统渲染提取器工作效果
  */
-public class ExtractorCoreRenderer extends MachineBlockEntityRenderer<ExtractorCoreBlockEntity> {
+public class ExtractorCoreRenderer implements BlockEntityRenderer<ExtractorCoreBlockEntity> {
     
-    public ExtractorCoreRenderer(BlockEntityRendererFactory.Context context) {
-        super(context);
+    public ExtractorCoreRenderer(BlockEntityRendererFactory.Context ctx) {
     }
     
     @Override
-    protected void applyAnimations(ExtractorCoreBlockEntity entity, float tickDelta, MatrixStack matrices) {
-        long time = getMachineTime(entity);
+    public void render(ExtractorCoreBlockEntity entity, float tickDelta, MatrixStack matrices, 
+                       VertexConsumerProvider vertexConsumers, int light, int overlay) {
         
-        // 始终缓慢旋转
-        applyRotation(matrices, tickDelta, time, 0.01f);
+        // 获取位置唯一的动画 ID
+        BlockPos pos = entity.getPos();
+        UUID animId = UUID.nameUUIDFromBytes(Long.toString(pos.asLong()).getBytes());
         
-        // 始终添加浮动效果
-        applyFloating(matrices, tickDelta, time, 0.03f, 0.015f);
-    }
-    
-    @Override
-    protected void renderModel(ExtractorCoreBlockEntity entity, float tickDelta, MatrixStack matrices,
-                               VertexConsumerProvider vertexConsumers, int light, int overlay) {
-        // 简化实现 - 后续使用真正的模型
+        // 获取动画实例
+        var animation = AnimationManager.getInstance().getExtractorAnimation(animId);
+        
+        // 如果正在提取，应用动画
+        if (entity.isExtracting()) {
+            animation.tick(tickDelta);
+            
+            matrices.push();
+            
+            // 应用机械臂伸缩动画
+            float armExtension = animation.getArmExtendProgress(tickDelta);
+            matrices.translate(0, armExtension, 0);
+            
+            // 应用钻头旋转动画
+            float drillRotation = animation.getDrillSpinAngle(tickDelta);
+            matrices.multiply(RotationAxis.POSITIVE_Y.rotation(drillRotation));
+            
+            matrices.pop();
+        }
     }
 }
