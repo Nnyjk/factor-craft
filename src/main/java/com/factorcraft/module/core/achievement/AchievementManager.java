@@ -1,6 +1,7 @@
 package com.factorcraft.module.core.achievement;
 
 import com.factorcraft.FactorCraftMod;
+import com.factorcraft.module.core.achievement.trigger.*;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.MinecraftServer;
@@ -194,5 +195,77 @@ public class AchievementManager {
     public int getUnlockedCount(UUID playerId) {
         AchievementProgress progress = getPlayerProgress(playerId);
         return progress.getUnlockedAchievements().size();
+    }
+    
+    // ========== 触发器集成方法 ==========
+    
+    /**
+     * 触发 Factor 生产事件
+     */
+    public void onFactorProduction(ServerPlayerEntity player, String factorType, int amount, String source) {
+        FactorProductionData data = new FactorProductionData(factorType, amount, source);
+        TriggerRegistry.getInstance().fireEvent(player, TriggerType.FACTOR_PRODUCTION, data);
+        
+        // 更新相关成就进度
+        updateProgressForTrigger(player.getUuid(), TriggerType.FACTOR_PRODUCTION, factorType, amount);
+    }
+    
+    /**
+     * 触发机器制作事件
+     */
+    public void onMachineCraft(ServerPlayerEntity player, String machineId, int tier) {
+        MachineCraftData data = new MachineCraftData(machineId, tier);
+        TriggerRegistry.getInstance().fireEvent(player, TriggerType.MACHINE_CRAFT, data);
+        
+        // 更新相关成就进度
+        updateProgressForTrigger(player.getUuid(), TriggerType.MACHINE_CRAFT, machineId, 1);
+    }
+    
+    /**
+     * 触发任务完成事件
+     */
+    public void onQuestComplete(ServerPlayerEntity player, String questId, String category, boolean isMainQuest) {
+        QuestCompleteData data = new QuestCompleteData(questId, category, isMainQuest);
+        TriggerRegistry.getInstance().fireEvent(player, TriggerType.QUEST_COMPLETE, data);
+        
+        // 更新相关成就进度
+        updateProgressForTrigger(player.getUuid(), TriggerType.QUEST_COMPLETE, questId, 1);
+    }
+    
+    /**
+     * 触发 Boss 击杀事件
+     */
+    public void onBossKill(ServerPlayerEntity player, String bossId, String bossType, int level) {
+        BossKillData data = new BossKillData(bossId, bossType, level);
+        TriggerRegistry.getInstance().fireEvent(player, TriggerType.BOSS_KILL, data);
+        
+        // 更新相关成就进度
+        updateProgressForTrigger(player.getUuid(), TriggerType.BOSS_KILL, bossId, 1);
+    }
+    
+    /**
+     * 触发探索事件
+     */
+    public void onExploration(ServerPlayerEntity player, String dimension, String structure, double x, double z) {
+        ExplorationData data = new ExplorationData(dimension, structure, x, z);
+        TriggerRegistry.getInstance().fireEvent(player, TriggerType.EXPLORATION, data);
+        
+        // 更新相关成就进度
+        updateProgressForTrigger(player.getUuid(), TriggerType.EXPLORATION, dimension, 1);
+    }
+    
+    /**
+     * 根据触发器类型更新成就进度
+     * 自动更新所有匹配分类的成就进度
+     */
+    private void updateProgressForTrigger(UUID playerId, TriggerType type, String key, int amount) {
+        // 遍历所有成就，更新分类匹配的成就进度
+        for (Achievement achievement : getAllAchievements()) {
+            if (achievement.getCategory().matchesTriggerType(type)) {
+                // 对于简单成就，直接增加进度
+                // 具体成就的过滤逻辑在 Step 3 预定义成就中实现
+                updateProgress(playerId, achievement.getId(), amount);
+            }
+        }
     }
 }
