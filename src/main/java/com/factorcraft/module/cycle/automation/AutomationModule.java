@@ -3,6 +3,9 @@ package com.factorcraft.module.cycle.automation;
 import com.factorcraft.module.cycle.CycleModule;
 import com.factorcraft.module.cycle.automation.block.AutomationBlocks;
 import com.factorcraft.module.cycle.automation.block.entity.AutomationBlockEntities;
+import com.factorcraft.module.cycle.automation.endgame.init.EndgameAutomationBlockEntities;
+import com.factorcraft.module.cycle.automation.endgame.init.EndgameAutomationBlocks;
+import com.factorcraft.module.cycle.automation.endgame.init.EndgameAutomationScreenHandlers;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.world.ServerWorld;
@@ -60,6 +63,18 @@ public class AutomationModule {
         // 注册 BlockEntity
         AutomationBlockEntities.init();
         System.out.println("[AutomationModule] BlockEntity 已注册");
+        
+        // 注册终局自动化方块
+        EndgameAutomationBlocks.init();
+        System.out.println("[AutomationModule] 终局自动化方块已注册");
+        
+        // 注册终局自动化 BlockEntity
+        EndgameAutomationBlockEntities.init();
+        System.out.println("[AutomationModule] 终局自动化 BlockEntity 已注册");
+        
+        // 注册终局自动化 ScreenHandler
+        EndgameAutomationScreenHandlers.init();
+        System.out.println("[AutomationModule] 终局自动化 ScreenHandler 已注册");
         
         // 注册服务端 tick 事件（用于 BlockEntity tick）
         ServerTickEvents.END_WORLD_TICK.register(this::onWorldTick);

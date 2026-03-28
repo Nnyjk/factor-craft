@@ -331,5 +331,15 @@
   "block.factorcraft.dimensional_gate.lore": "多方块维度传送阵",
   "block.factorcraft.gate_controller.lore": "控制维度传送门的运行",
   "block.factorcraft.gate_stabilizer.lore": "稳定维度传送，减少传送误差",
-  "item.factorcraft.gate_linker.lore": "用于绑定维度传送门的坐标"
+  "item.factorcraft.gate_linker.lore": "用于绑定维度传送门的坐标",
+  
+  "block.factorcraft.auto_extractor_mk2": "自动提取器 MK-II",
+  "block.factorcraft.factor_pump_mk2": "Factor 泵 MK-II",
+  "block.factorcraft.advanced_crafter": "高级合成器",
+  "block.factorcraft.quantum_storage": "量子仓储单元",
+  
+  "block.factorcraft.auto_extractor_mk2.lore": "高速 Factor 提取设备，支持超频功能 (10 items/tick)",
+  "block.factorcraft.factor_pump_mk2.lore": "高速 Factor 液体传输设备 (1000 mB/tick)",
+  "block.factorcraft.advanced_crafter.lore": "支持多方块合成，并行处理 4 个配方",
+  "block.factorcraft.quantum_storage.lore": "超大容量存储，每格 1,000,000 物品"
 }
