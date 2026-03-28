@@ -5,6 +5,7 @@ import com.factorcraft.module.cycle.energy.block.FactorCompressorBlock;
 import com.factorcraft.module.cycle.energy.block.FactorCrystalBlock;
 import com.factorcraft.module.cycle.energy.block.FactorPumpBlock;
 import com.factorcraft.module.cycle.energy.block.FactorReactorBlock;
+import com.factorcraft.module.cycle.energy.block.FactorStabilizerBlock;
 import net.minecraft.block.*;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
@@ -29,12 +30,14 @@ public class FactorEnergyBlocks {
     public static final RegistryKey<Block> FACTOR_PUMP_KEY = createKey("factor_pump");
     public static final RegistryKey<Block> FACTOR_COMPRESSOR_KEY = createKey("factor_compressor");
     public static final RegistryKey<Block> FACTOR_REACTOR_KEY = createKey("factor_reactor");
+    public static final RegistryKey<Block> FACTOR_STABILIZER_KEY = createKey("factor_stabilizer");
     
     // Blocks
     private static FactorCrystalBlock factorCrystalBlock;
     private static FactorPumpBlock factorPumpBlock;
     public static Block FACTOR_COMPRESSOR;
     public static Block FACTOR_REACTOR;
+    public static Block FACTOR_STABILIZER;
     
     /**
      * 创建 RegistryKey
@@ -80,6 +83,14 @@ public class FactorEnergyBlocks {
                 .nonOpaque())
         );
         FactorReactorBlock.FACTOR_REACTOR = FACTOR_REACTOR;
+        
+        FACTOR_STABILIZER = register(
+            FACTOR_STABILIZER_KEY,
+            new FactorStabilizerBlock(AbstractBlock.Settings.create()
+                .registryKey(FACTOR_STABILIZER_KEY)
+                .strength(3.5f, 7.0f)
+                .nonOpaque())
+        );
     }
     
     /**
@@ -106,5 +117,9 @@ public class FactorEnergyBlocks {
     
     public static Block getFactorReactor() {
         return FACTOR_REACTOR;
+    }
+    
+    public static Block getFactorStabilizer() {
+        return FACTOR_STABILIZER;
     }
 }
