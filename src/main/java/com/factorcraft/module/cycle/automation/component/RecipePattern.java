@@ -52,7 +52,7 @@ public class RecipePattern {
         }
         nbt.put("ingredients", ingredientsNbt);
         
-        nbt.put("output", output.encode(lookup));
+        nbt.put("output", output.toNbt(lookup));
         return nbt;
     }
     
@@ -62,7 +62,7 @@ public class RecipePattern {
     public static RecipePattern fromNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup lookup) {
         String id = nbt.getString("id");
         DefaultedList<Ingredient> ingredients = DefaultedList.of();
-        ItemStack output = ItemStack.fromNbtOrEmpty(lookup, nbt.getCompound("output"));
+        ItemStack output = ItemStack.fromNbt(lookup, nbt.getCompound("output")).orElse(ItemStack.EMPTY);
         return new RecipePattern(id, ingredients, output);
     }
     
