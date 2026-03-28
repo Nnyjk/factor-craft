@@ -1,0 +1,70 @@
+package com.factorcraft.module.cycle.automation.block.controller;
+
+import com.factorcraft.module.cycle.automation.block.entity.AutomationBlockEntities;
+import com.factorcraft.module.cycle.automation.block.entity.controller.SystemControllerBlockEntity;
+import com.mojang.serialization.MapCodec;
+import net.minecraft.block.*;
+import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityTicker;
+import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.screen.NamedScreenHandlerFactory;
+import net.minecraft.state.StateManager;
+import net.minecraft.state.property.BooleanProperty;
+import net.minecraft.state.property.Properties;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+
+/**
+ * 系统控制器方块
+ */
+public class SystemControllerBlock extends BlockWithEntity implements BlockEntityProvider {
+    public static final BooleanProperty ACTIVE = Properties.ACTIVE;
+    
+    public SystemControllerBlock(Settings settings) {
+        super(settings);
+        setDefaultState(getStateManager().getDefaultState().with(ACTIVE, false));
+    }
+    
+    @Override
+    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+        builder.add(ACTIVE);
+    }
+    
+    @Override
+    public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
+        return new SystemControllerBlockEntity(pos, state);
+    }
+    
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
+        if (world.isClient) {
+            return null;
+        }
+        return validateTicker(type, AutomationBlockEntities.SYSTEM_CONTROLLER,
+            SystemControllerBlockEntity::tick);
+    }
+    
+    @Override
+    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
+        if (!world.isClient) {
+            BlockEntity blockEntity = world.getBlockEntity(pos);
+            if (blockEntity instanceof NamedScreenHandlerFactory factory) {
+                player.openHandledScreen(factory);
+            }
+        }
+        return ActionResult.SUCCESS;
+    }
+    
+    @Override
+    public BlockRenderType getRenderType(BlockState state) {
+        return BlockRenderType.MODEL;
+    }
+    
+    @Override
+    protected MapCodec<? extends BlockWithEntity> getCodec() {
+        return createCodec(SystemControllerBlock::new);
+    }
+}
