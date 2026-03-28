@@ -23,25 +23,25 @@ public class EndgameAutomationBlocks {
     // 自动提取器 MK-II
     public static final Block AUTO_EXTRACTOR_MK2 = registerBlock(
         "auto_extractor_mk2",
-        new AutoExtractorMK2Block(AbstractBlock.Settings.create().strength(5.0f, 6.0f).requiresTool())
+        new AutoExtractorMK2Block(AbstractBlock.Settings.create().registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(MOD_ID, "auto_extractor_mk2"))).strength(5.0f, 6.0f).requiresTool())
     );
     
     // Factor 泵 MK-II
     public static final Block FACTOR_PUMP_MK2 = registerBlock(
         "factor_pump_mk2",
-        new FactorPumpMK2Block(AbstractBlock.Settings.create().strength(5.0f, 6.0f).requiresTool())
+        new FactorPumpMK2Block(AbstractBlock.Settings.create().registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(MOD_ID, "factor_pump_mk2"))).strength(5.0f, 6.0f).requiresTool())
     );
     
     // 高级合成器
     public static final Block ADVANCED_CRAFTER = registerBlock(
         "advanced_crafter",
-        new AdvancedCrafterBlock(AbstractBlock.Settings.create().strength(5.0f, 6.0f).requiresTool())
+        new AdvancedCrafterBlock(AbstractBlock.Settings.create().registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(MOD_ID, "advanced_crafter"))).strength(5.0f, 6.0f).requiresTool())
     );
     
     // 量子仓储单元
     public static final Block QUANTUM_STORAGE = registerBlock(
         "quantum_storage",
-        new QuantumStorageBlock(AbstractBlock.Settings.create().strength(5.0f, 6.0f).requiresTool())
+        new QuantumStorageBlock(AbstractBlock.Settings.create().registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(MOD_ID, "quantum_storage"))).strength(5.0f, 6.0f).requiresTool())
     );
     
     private static Block registerBlock(String name, Block block) {
