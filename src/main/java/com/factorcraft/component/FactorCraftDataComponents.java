@@ -8,6 +8,7 @@ import net.minecraft.component.ComponentType;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.BlockPos;
 
 /**
  * Factor Craft 自定义 Data Components 注册
@@ -67,6 +68,20 @@ public class FactorCraftDataComponents {
         ComponentType.<Boolean>builder()
             .codec(com.mojang.serialization.Codec.BOOL)
             .packetCodec(net.minecraft.network.codec.PacketCodecs.BOOLEAN)
+            .build()
+    );
+    
+    // ========== 维度传送相关 ==========
+    
+    /**
+     * 位置数据组件
+     * 用于存储传送门绑定的坐标
+     */
+    public static final ComponentType<BlockPos> POSITION_DATA = register(
+        "position_data",
+        ComponentType.<BlockPos>builder()
+            .codec(BlockPos.CODEC)
+            .packetCodec(BlockPos.PACKET_CODEC)
             .build()
     );
     
