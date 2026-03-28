@@ -312,5 +312,27 @@
   "block.factorcraft.dimensional_gate.lore": "Multi-block dimensional teleportation array",
   "block.factorcraft.gate_controller.lore": "Controls dimensional gate operation",
   "block.factorcraft.gate_stabilizer.lore": "Stabilizes dimensional teleportation, reduces errors",
-  "item.factorcraft.gate_linker.lore": "Binds coordinates for dimensional gates"
+  "item.factorcraft.gate_linker.lore": "Binds coordinates for dimensional gates",
+  
+  "gui.factorcraft.achievement.title": "Achievements",
+  "gui.factorcraft.achievement.category.story": "Story",
+  "gui.factorcraft.achievement.category.factor": "Factor",
+  "gui.factorcraft.achievement.category.machine": "Machine",
+  "gui.factorcraft.achievement.category.exploration": "Exploration",
+  "gui.factorcraft.achievement.category.combat": "Combat",
+  "gui.factorcraft.achievement.completed": "✓ Completed",
+  "gui.factorcraft.achievement.progress": "Progress: %d/%d",
+  "gui.factorcraft.achievement.hidden": "???",
+  "gui.factorcraft.achievement.locked": "Locked",
+  "gui.factorcraft.achievement.unlock_title": "Achievement Unlocked!",
+  "command.factorcraft.achievement.not_player": "This command can only be executed by players",
+  "command.factorcraft.achievement.opened": "§aAchievement screen opened",
+  "command.factorcraft.achievement.list_header": "§6=== Achievement List ===",
+  "command.factorcraft.achievement.total": "§7Total %d achievements",
+  "command.factorcraft.achievement.progress": "§6=== Achievement Progress ===\n§eUnlocked: §f%d/%d §7(%.1f%%)",
+  "command.factorcraft.achievement.unlocked": "§aUnlocked achievement: %s",
+  "command.factorcraft.achievement.failed": "Failed to unlock achievement: %s",
+  "command.factorcraft.achievement.view": "View achievement: %s",
+  "command.factorcraft.achievement.list": "Achievements (%d/%d unlocked)",
+  "command.factorcraft.achievement.reset": "Reset achievement progress"
 }

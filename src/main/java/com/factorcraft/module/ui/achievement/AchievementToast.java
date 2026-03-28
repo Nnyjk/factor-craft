@@ -26,7 +26,7 @@ public class AchievementToast implements Toast {
     
     public AchievementToast(Achievement achievement) {
         this.achievement = achievement;
-        this.title = Text.literal("成就解锁!").styled(style -> style.withBold(true).withColor(0xFFFF00));
+        this.title = Text.translatable("gui.factorcraft.achievement.unlock_title").styled(style -> style.withBold(true).withColor(0xFFFF00));
         this.description = achievement.getTitle();
         this.showTime = 0L;
         this.justShowed = true;

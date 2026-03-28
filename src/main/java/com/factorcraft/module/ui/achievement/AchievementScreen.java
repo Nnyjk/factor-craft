@@ -76,11 +76,11 @@ public class AchievementScreen extends HandledScreen<AchievementTreeScreenHandle
     
     private Text getCategoryShortName(AchievementCategory category) {
         return switch (category) {
-            case STORY -> Text.literal("剧情");
-            case FACTOR -> Text.literal("因子");
-            case MACHINE -> Text.literal("机器");
-            case EXPLORATION -> Text.literal("探索");
-            case COMBAT -> Text.literal("战斗");
+            case STORY -> Text.translatable("gui.factorcraft.achievement.category.story");
+            case FACTOR -> Text.translatable("gui.factorcraft.achievement.category.factor");
+            case MACHINE -> Text.translatable("gui.factorcraft.achievement.category.machine");
+            case EXPLORATION -> Text.translatable("gui.factorcraft.achievement.category.exploration");
+            case COMBAT -> Text.translatable("gui.factorcraft.achievement.category.combat");
         };
     }
     
