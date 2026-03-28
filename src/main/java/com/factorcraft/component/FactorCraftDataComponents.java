@@ -2,6 +2,7 @@ package com.factorcraft.component;
 
 import com.factorcraft.FactorCraftMod;
 import com.factorcraft.component.type.FactorData;
+import com.factorcraft.component.type.FactorInjection;
 import com.factorcraft.component.type.FactorStorage;
 import com.factorcraft.component.type.ScanHistory;
 import net.minecraft.component.ComponentType;
@@ -68,6 +69,18 @@ public class FactorCraftDataComponents {
         ComponentType.<Boolean>builder()
             .codec(com.mojang.serialization.Codec.BOOL)
             .packetCodec(net.minecraft.network.codec.PacketCodecs.BOOLEAN)
+            .build()
+    );
+    
+    /**
+     * Factor 注射数据
+     * 存储工具/装备的 Factor 注射信息（增益类型、持续时间等）
+     */
+    public static final ComponentType<FactorInjection> FACTOR_INJECTION = register(
+        "factor_injection",
+        ComponentType.<FactorInjection>builder()
+            .codec(FactorInjection.CODEC)
+            .packetCodec(FactorInjection.PACKET_CODEC)
             .build()
     );
     
