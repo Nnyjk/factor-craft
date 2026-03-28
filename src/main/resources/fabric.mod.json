@@ -12,10 +12,12 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "com.factorcraft.FactorCraftMod"
+      "com.factorcraft.FactorCraftMod",
+      "com.factorcraft.module.logistics.LogisticsModule"
     ],
     "client": [
-      "com.factorcraft.FactorCraftClient"
+      "com.factorcraft.FactorCraftClient",
+      "com.factorcraft.module.logistics.LogisticsModuleClient"
     ],
     "fabric-gametest": [
       "com.factorcraft.gametest.FactorCraftGameTests"
