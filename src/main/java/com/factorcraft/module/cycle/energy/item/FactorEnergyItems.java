@@ -4,8 +4,6 @@ import com.factorcraft.FactorCraftMod;
 import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
 
 /**
  * Factor 能源模块物品注册
@@ -13,6 +11,7 @@ import net.minecraft.registry.RegistryKeys;
 public class FactorEnergyItems {
     
     public static Item DENSE_FACTOR;
+    public static Item FACTOR_INJECTOR;
     
     /**
      * 初始化并注册所有物品
@@ -24,6 +23,12 @@ public class FactorEnergyItems {
             new DenseFactor(new Item.Settings()
                 .registryKey(DenseFactor.DENSE_FACTOR_KEY)
                 .maxCount(64))
+        );
+        
+        FACTOR_INJECTOR = Registry.register(
+            Registries.ITEM,
+            FactorInjectorItem.FACTOR_INJECTOR_KEY.getValue(),
+            new FactorInjectorItem()
         );
         
         FactorCraftMod.LOGGER.info("Factor Energy Items registered");
