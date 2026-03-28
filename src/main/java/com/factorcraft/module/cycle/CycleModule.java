@@ -243,11 +243,14 @@ public class CycleModule {
     
     /**
      * 初始化周期模块
-     * 同时初始化能源模块
+     * 同时初始化能源模块和自动化模块
      */
     public void initialize() {
         // 初始化能源模块
         com.factorcraft.module.cycle.energy.FactorEnergyModule.init();
+        
+        // 初始化自动化模块
+        com.factorcraft.module.cycle.automation.AutomationModule.init();
         
         System.out.println("[CycleModule] 潮汐周期模块已初始化");
         System.out.println("[CycleModule] 周期长度：" + cycleLength + " ticks");
