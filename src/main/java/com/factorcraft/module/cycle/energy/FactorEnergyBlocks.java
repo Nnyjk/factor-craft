@@ -67,7 +67,7 @@ public class FactorEnergyBlocks {
         
         // 注册对应的 BlockItem
         RegistryKey<Item> itemKey = RegistryKey.of(RegistryKeys.ITEM, key.getValue());
-        Registry.register(Registries.ITEM, itemKey, new BlockItem(block, new Item.Settings()));
+        Registry.register(Registries.ITEM, itemKey, new BlockItem(block, new Item.Settings().registryKey(itemKey)));
         
         return block;
     }
