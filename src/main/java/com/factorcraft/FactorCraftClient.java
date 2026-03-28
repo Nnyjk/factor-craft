@@ -1,5 +1,6 @@
 package com.factorcraft;
 
+import com.factorcraft.client.ClientPredictionManager;
 import com.factorcraft.client.KeyBindings;
 import com.factorcraft.dynamic.DynamicBundle;
 import com.factorcraft.dynamic.DynamicContentManager;
@@ -32,6 +33,10 @@ public class FactorCraftClient implements ClientModInitializer {
         // 注册客户端网络处理器
         ClientNetworkHandler.register();
         LOGGER.info("[FactorCraft:Client] 网络处理器注册完成");
+        
+        // 初始化客户端预测管理器
+        ClientPredictionManager.getInstance();
+        LOGGER.info("[FactorCraft:Client] 客户端预测管理器初始化完成");
         
         // 注册 Screen 客户端渲染
         ModScreens.initClient();
