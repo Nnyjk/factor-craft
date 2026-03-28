@@ -1,15 +1,16 @@
 package com.factorcraft.module.cycle.gear;
 
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.PickaxeItem;
 import net.minecraft.item.ToolMaterial;
-import net.minecraft.registry.tag.BlockTags;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
-import net.minecraft.entity.EquipmentSlot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,81 +30,74 @@ public class QuantumPickaxeItem extends PickaxeItem {
     private static final float ATTACK_DAMAGE = 1.0f;
     private static final float ATTACK_SPEED = -2.8f;
     
-    public QuantumPickaxeItem() {
-        super(ToolMaterial.NETHERITE, ATTACK_DAMAGE, ATTACK_SPEED, 
-              new Settings().maxDamage(MAX_DAMAGE).fireproof());
+    public QuantumPickaxeItem(RegistryKey<net.minecraft.item.Item> key) {
+        super(ToolMaterial.NETHERITE, ATTACK_DAMAGE, ATTACK_SPEED,
+              new Settings().maxDamage(MAX_DAMAGE).fireproof().registryKey(key));
     }
     
-    /**
-     * 获取需要挖掘的方块列表
-     */
-    private List<BlockPos> getBlocksToMine(World world, BlockPos centerPos, Direction face, int range) {
-        List<BlockPos> blocks = new ArrayList<>();
-        blocks.add(centerPos);
-        
-        // 确定挖掘平面 (基于点击的面)
-        Direction.Axis axis = face.getAxis();
-        int halfRange = range / 2;
-        
-        for (int x = -halfRange; x <= halfRange; x++) {
-            for (int y = -halfRange; y <= halfRange; y++) {
-                for (int z = -halfRange; z <= halfRange; z++) {
-                    // 根据点击面确定挖掘平面
-                    boolean inPlane = switch (axis) {
-                        case X -> Math.abs(x) <= halfRange && Math.abs(y) <= halfRange && z == 0;
-                        case Y -> Math.abs(x) <= halfRange && y == 0 && Math.abs(z) <= halfRange;
-                        case Z -> x == 0 && Math.abs(y) <= halfRange && Math.abs(z) <= halfRange;
-                    };
-                    
-                    if (inPlane) {
-                        BlockPos pos = centerPos.add(x, y, z);
-                        if (!pos.equals(centerPos)) {
-                            blocks.add(pos);
+    @Override
+    public float getMiningSpeed(ItemStack stack, BlockState state) {
+        float baseSpeed = super.getMiningSpeed(stack, state);
+        // 对可挖掘方块提供超高挖掘速度
+        if (baseSpeed > 1.0f) {
+            return 12.0f; // 超越下界合金稿的 9.0
+        }
+        return baseSpeed;
+    }
+    
+    @Override
+    public boolean postMine(ItemStack stack, World world, BlockState state, BlockPos pos, LivingEntity miner) {
+        if (!world.isClient && miner instanceof PlayerEntity player) {
+            // 挖掘 3x3 或 5x5 范围
+            List<BlockPos> blocksToMine = getBlocksToMine(world, pos, player, stack);
+            
+            for (BlockPos blockPos : blocksToMine) {
+                if (!blockPos.equals(pos)) {
+                    BlockState blockState = world.getBlockState(blockPos);
+                    float speed = getMiningSpeed(stack, blockState);
+                    if (speed > 1.0f) {
+                        world.breakBlock(blockPos, true, player);
+                        stack.damage(1, miner, EquipmentSlot.MAINHAND);
+                        if (stack.isEmpty()) {
+                            break;
                         }
                     }
                 }
             }
         }
+        return true;
+    }
+    
+    /**
+     * 获取要挖掘的方块列表 (3x3 或 5x5)
+     */
+    public List<BlockPos> getBlocksToMine(World world, BlockPos pos, PlayerEntity player, ItemStack stack) {
+        List<BlockPos> blocks = new ArrayList<>();
+        
+        // 检查 RANGE_MODE component (3 = 3x3, 5 = 5x5)
+        Integer rangeValue = stack.get(FactorGearComponents.RANGE_MODE);
+        int range = (rangeValue != null && rangeValue == 5) ? 2 : 1; // 2 = 5x5, 1 = 3x3
+        
+        // 获取玩家朝向
+        Direction facing = player.getHorizontalFacing();
+        
+        // 根据朝向确定挖掘平面
+        if (facing.getAxis() == Direction.Axis.Z) {
+            // 南北朝向 - 在 X-Y 平面挖掘
+            for (int dx = -range; dx <= range; dx++) {
+                for (int dy = -range; dy <= range; dy++) {
+                    blocks.add(pos.add(dx, dy, 0));
+                }
+            }
+        } else {
+            // 东西朝向 - 在 Z-Y 平面挖掘
+            for (int dz = -range; dz <= range; dz++) {
+                for (int dy = -range; dy <= range; dy++) {
+                    blocks.add(pos.add(0, dy, dz));
+                }
+            }
+        }
         
         return blocks;
-    }
-    
-    /**
-     * 检查方块是否可以被挖掘
-     */
-    private boolean canMine(ItemStack stack, PlayerEntity player, BlockPos pos) {
-        return !player.getWorld().getBlockState(pos).isAir();
-    }
-    
-    /**
-     * 切换范围模式
-     */
-    private void toggleRangeMode(ItemStack stack, PlayerEntity player) {
-        int currentRange = getRangeMode(stack);
-        int newRange = (currentRange == 3) ? 5 : 3;
-        setRangeMode(stack, newRange);
-    }
-    
-    /**
-     * 获取当前范围模式
-     */
-    private int getRangeMode(ItemStack stack) {
-        Integer range = stack.get(FactorGearComponents.RANGE_MODE);
-        return range != null ? range : 3; // 默认 3x3
-    }
-    
-    /**
-     * 设置范围模式
-     */
-    private void setRangeMode(ItemStack stack, int range) {
-        stack.set(FactorGearComponents.RANGE_MODE, range);
-    }
-    
-    @Override
-    public float getMiningSpeed(ItemStack stack, BlockState state) {
-        if (state.isIn(BlockTags.PICKAXE_MINEABLE)) {
-            return 12.0f; // 超越下界合金的挖掘速度
-        }
-        return super.getMiningSpeed(stack, state);
     }
 }
