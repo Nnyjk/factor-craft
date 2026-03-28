@@ -1,6 +1,8 @@
 package com.factorcraft;
 
 import com.factorcraft.command.FactorCraftCommands;
+import com.factorcraft.command.AchievementCommand;
+import com.factorcraft.module.core.init.CoreScreenHandlers;
 import com.factorcraft.module.profession.command.ProfessionCommand;
 import com.factorcraft.module.quest.QuestCommands;
 import com.factorcraft.module.research.ResearchCommands;
@@ -54,6 +56,10 @@ public class FactorCraftMod implements ModInitializer {
         
         // 粒子类型注册已移至 VfxModule 中，避免重复注册
         
+        // 注册核心模块 ScreenHandler
+        CoreScreenHandlers.init();
+        LOGGER.info("[FactorCraft] 核心 ScreenHandler 注册完成");
+        
         // 注册网络包
         NetworkPackets.register();
         LOGGER.info("[FactorCraft] 网络包注册完成");
@@ -67,6 +73,7 @@ public class FactorCraftMod implements ModInitializer {
             PermissionCommands.register(dispatcher);
             ErrorCommands.register(dispatcher);
             ProfessionCommand.register(dispatcher);
+            AchievementCommand.register(dispatcher, registryAccess, environment);
         });
         LOGGER.info("[FactorCraft] 命令系统注册完成");
         

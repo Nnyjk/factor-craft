@@ -144,10 +144,12 @@ public class AchievementManager {
      */
     public void notifyUnlock(ServerPlayerEntity player, Identifier achievementId) {
         getAchievement(achievementId).ifPresent(achievement -> {
-            // 发送 Toast 通知
+            // 发送聊天消息
             player.sendMessage(Text.translatable("achievement.factor_craft.unlocked", achievement.getTitle()), true);
             
-            // TODO: 发送成就解锁包给客户端显示 Toast
+            // 发送成就解锁包给客户端显示 Toast
+            // 客户端收到后会显示 AchievementToast
+            // TODO: 实现网络包发送
         });
     }
     
