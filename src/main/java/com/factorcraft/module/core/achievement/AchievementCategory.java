@@ -1,5 +1,6 @@
 package com.factorcraft.module.core.achievement;
 
+import com.factorcraft.module.core.achievement.trigger.TriggerType;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableTextContent;
 
@@ -52,5 +53,18 @@ public enum AchievementCategory {
     
     public Text getDisplayName() {
         return displayName;
+    }
+    
+    /**
+     * 检查分类是否匹配触发器类型
+     */
+    public boolean matchesTriggerType(TriggerType type) {
+        return switch (this) {
+            case FACTOR -> type == TriggerType.FACTOR_PRODUCTION;
+            case MACHINE -> type == TriggerType.MACHINE_CRAFT;
+            case STORY -> type == TriggerType.QUEST_COMPLETE;
+            case EXPLORATION -> type == TriggerType.EXPLORATION;
+            case COMBAT -> type == TriggerType.BOSS_KILL;
+        };
     }
 }
