@@ -311,6 +311,11 @@ public class SynthesizerBlockEntity extends BlockEntity
         return slot == INPUT_SLOTS; // 只能从输出槽提取
     }
     
+    /** 是否正在合成 */
+    public boolean isCrafting() {
+        return isProcessing;
+    }
+    
     // ========== NBT 序列化 ==========
     
     @Override

@@ -255,6 +255,11 @@ public class ExtractorCoreBlockEntity extends MachineBlockEntity {
             currentTier, factorStorage, maxStorage, getStoragePercentage(), lastExtractRate);
     }
     
+    /** 是否正在提取 */
+    public boolean isExtracting() {
+        return extractProgress > 0;
+    }
+    
     // ==================== NBT ====================
     
     @Override

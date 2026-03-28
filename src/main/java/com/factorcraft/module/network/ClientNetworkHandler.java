@@ -1,12 +1,17 @@
 package com.factorcraft.module.network;
 
 import com.factorcraft.module.quest.ui.QuestTrackerCache;
+import com.factorcraft.module.vfx.animation.AnimationManager;
+import com.factorcraft.module.vfx.particle.FactorParticleSpawner;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.BlockPos;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * 客户端网络包处理器
@@ -93,8 +98,54 @@ public class ClientNetworkHandler {
         // ==================== 机器状态同步 ====================
         ClientPlayNetworking.registerGlobalReceiver(MachineStateSyncPayload.ID, (payload, context) -> {
             context.client().execute(() -> {
-                // 机器状态更新 - 可用于 BlockEntityRenderer
-                // 数据已通过 payload 传递，可以在渲染时使用
+                BlockPos pos = payload.pos();
+                boolean isWorking = payload.isWorking();
+                double progress = payload.progress();
+                String machineType = payload.machineType();
+                
+                // 获取客户端世界
+                var world = context.client().world;
+                if (world == null) return;
+                
+                // 生成位置唯一的 ID
+                UUID posId = UUID.nameUUIDFromBytes(Long.toString(pos.asLong()).getBytes());
+                
+                // 根据机器类型触发不同的动画和粒子
+                if (isWorking) {
+                    switch (machineType.toLowerCase()) {
+                        case "extractor" -> {
+                            // 提取器动画
+                            var anim = AnimationManager.getInstance().getExtractorAnimation(posId);
+                            anim.startWorking();
+                            // 生成提取器粒子
+                            FactorParticleSpawner.spawnExtractionParticles(
+                                world, pos, 5, payload.factorStorage()
+                            );
+                        }
+                        case "synthesizer" -> {
+                            // 合成器动画
+                            var synAnim = AnimationManager.getInstance().getSynthesizerAnimation(posId);
+                            if (!synAnim.isCrafting()) {
+                                synAnim.startCrafting((int)(payload.progress() * 200));
+                            }
+                            // 生成合成器粒子
+                            FactorParticleSpawner.spawnSynthesisParticles(
+                                world, pos, 8, payload.factorStorage()
+                            );
+                        }
+                        case "converter" -> {
+                            // 转换器动画
+                            var convAnim = AnimationManager.getInstance().getConverterAnimation(posId);
+                            if (!convAnim.isTransforming()) {
+                                convAnim.startTransform((int)(payload.progress() * 100));
+                            }
+                            // 生成转换器粒子
+                            FactorParticleSpawner.spawnTransmissionParticles(
+                                world, pos, 6, payload.factorStorage()
+                            );
+                        }
+                    }
+                }
             });
         });
         

@@ -504,6 +504,11 @@ public class ExtractorBlockEntity extends BlockEntity
         return propertyDelegate;
     }
     
+    /** 是否正在处理 */
+    public boolean isProcessing() {
+        return isProcessing;
+    }
+    
     // ========== NBT 序列化 ==========
     
     @Override
