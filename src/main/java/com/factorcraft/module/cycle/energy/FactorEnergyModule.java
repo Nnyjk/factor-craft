@@ -1,6 +1,8 @@
 package com.factorcraft.module.cycle.energy;
 
 import com.factorcraft.module.cycle.energy.block.entity.FactorEnergyBlockEntities;
+import com.factorcraft.module.cycle.energy.item.FactorEnergyItems;
+import com.factorcraft.module.cycle.energy.screen.FactorEnergyScreenHandlers;
 import net.minecraft.util.Identifier;
 
 /**
@@ -26,9 +28,10 @@ public class FactorEnergyModule {
      * 
      * 调用顺序：
      * 1. 注册方块
-     * 2. 注册 BlockEntity
-     * 3. 注册组件
-     * 4. 注册屏幕处理器（如有）
+     * 2. 注册物品
+     * 3. 注册 BlockEntity
+     * 4. 注册 ScreenHandler
+     * 5. 注册组件
      */
     public static void init() {
         if (initialized) {
@@ -38,8 +41,14 @@ public class FactorEnergyModule {
         // 注册方块
         FactorEnergyBlocks.init();
         
+        // 注册物品
+        FactorEnergyItems.init();
+        
         // 注册 BlockEntity
         FactorEnergyBlockEntities.init();
+        
+        // 注册 ScreenHandler
+        FactorEnergyScreenHandlers.init();
         
         initialized = true;
         

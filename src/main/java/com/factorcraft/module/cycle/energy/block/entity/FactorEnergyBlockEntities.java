@@ -4,7 +4,6 @@ import com.factorcraft.FactorCraftMod;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
-import net.minecraft.util.Identifier;
 
 /**
  * Factor 能源模块 BlockEntity 类型注册
@@ -21,6 +20,7 @@ public class FactorEnergyBlockEntities {
     public static void init() {
         FactorCrystalBlockEntity.init();
         FactorPumpBlockEntity.init();
+        FactorCompressorBlockEntity.init();
         
         FactorCraftMod.LOGGER.info("Factor Energy BlockEntities registered");
     }
