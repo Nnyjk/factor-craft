@@ -22,25 +22,25 @@ public class AutomationBlocks {
     // 自动合成器
     public static final Block AUTO_CRAFTER = registerBlock(
         "auto_crafter",
-        new AutoCrafterBlock(AbstractBlock.Settings.create().strength(3.5f).requiresTool())
+        new AutoCrafterBlock(AbstractBlock.Settings.create().registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of("factorcraft", "auto_crafter"))).strength(3.5f).requiresTool())
     );
     
     // 自动收割机
     public static final Block AUTO_HARVESTER = registerBlock(
         "auto_harvester",
-        new AutoHarvesterBlock(AbstractBlock.Settings.create().strength(3.5f).requiresTool())
+        new AutoHarvesterBlock(AbstractBlock.Settings.create().registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of("factorcraft", "auto_harvester"))).strength(3.5f).requiresTool())
     );
     
     // 自动分配器
     public static final Block AUTO_DISTRIBUTOR = registerBlock(
         "auto_distributor",
-        new AutoDistributorBlock(AbstractBlock.Settings.create().strength(3.5f).requiresTool())
+        new AutoDistributorBlock(AbstractBlock.Settings.create().registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of("factorcraft", "auto_distributor"))).strength(3.5f).requiresTool())
     );
     
     // 系统控制器
     public static final Block SYSTEM_CONTROLLER = registerBlock(
         "system_controller",
-        new SystemControllerBlock(AbstractBlock.Settings.create().strength(3.5f).requiresTool())
+        new SystemControllerBlock(AbstractBlock.Settings.create().registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of("factorcraft", "system_controller"))).strength(3.5f).requiresTool())
     );
     
     /**
