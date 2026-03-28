@@ -44,7 +44,7 @@ public class SystemControllerBlock extends BlockWithEntity implements BlockEntit
             return null;
         }
         return validateTicker(type, AutomationBlockEntities.SYSTEM_CONTROLLER,
-            (w, p, s, be) -> be.tick(w, p, s));
+            SystemControllerBlockEntity::tick);
     }
     
     @Override
