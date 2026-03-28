@@ -15,7 +15,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.screen.NamedScreenHandlerFactory;
-import net.minecraft.screen.PropertyArray;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.text.Text;
 import net.minecraft.util.collection.DefaultedList;
@@ -32,7 +31,6 @@ import java.util.List;
  */
 public class AutoCrafterBlockEntity extends BlockEntity implements NamedScreenHandlerFactory, SidedInventory {
     private final DefaultedList<ItemStack> inventory;
-    private final PropertyArray propertyArray;
     private RecipePattern currentPattern;
     private CraftingJob currentJob;
     private int craftTime;
@@ -42,7 +40,6 @@ public class AutoCrafterBlockEntity extends BlockEntity implements NamedScreenHa
     public AutoCrafterBlockEntity(BlockPos pos, BlockState state) {
         super(AutomationBlockEntities.AUTO_CRAFTER, pos, state);
         this.inventory = DefaultedList.ofSize(INVENTORY_SIZE, ItemStack.EMPTY);
-        this.propertyArray = new PropertyArray();
         this.craftTime = 0;
     }
     
