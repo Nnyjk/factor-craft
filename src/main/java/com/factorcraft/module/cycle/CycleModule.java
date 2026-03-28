@@ -241,7 +241,14 @@ public class CycleModule {
             phase.getDisplayName(), multiplier, untilPeak, untilTrough);
     }
     
+    /**
+     * 初始化周期模块
+     * 同时初始化能源模块
+     */
     public void initialize() {
+        // 初始化能源模块
+        com.factorcraft.module.cycle.energy.FactorEnergyModule.init();
+        
         System.out.println("[CycleModule] 潮汐周期模块已初始化");
         System.out.println("[CycleModule] 周期长度：" + cycleLength + " ticks");
         System.out.println("[CycleModule] 振幅：" + (amplitude * 100) + "%");
