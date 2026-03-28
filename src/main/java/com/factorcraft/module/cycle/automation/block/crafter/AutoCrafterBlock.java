@@ -2,6 +2,7 @@ package com.factorcraft.module.cycle.automation.block.crafter;
 
 import com.factorcraft.module.cycle.automation.block.entity.AutomationBlockEntities;
 import com.factorcraft.module.cycle.automation.block.entity.crafter.AutoCrafterBlockEntity;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
@@ -41,7 +42,13 @@ public class AutoCrafterBlock extends BlockWithEntity implements BlockEntityProv
     
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
-        return validateTicker(type, AutomationBlockEntities.AUTO_CRAFTER);
+        if (world.isClient) {
+            return null;
+        }
+        if (type == AutomationBlockEntities.AUTO_CRAFTER) {
+            return (BlockEntityTicker<T>) AutoCrafterBlockEntity::tick;
+        }
+        return null;
     }
     
     @Override
@@ -72,7 +79,7 @@ public class AutoCrafterBlock extends BlockWithEntity implements BlockEntityProv
     }
     
     @Override
-    public BlockState getCodec() {
-        return getDefaultState();
+    protected MapCodec<? extends BlockWithEntity> getCodec() {
+        return createCodec(AutoCrafterBlock::new);
     }
 }

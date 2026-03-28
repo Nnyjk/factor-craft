@@ -2,6 +2,7 @@ package com.factorcraft.module.cycle.automation.block.controller;
 
 import com.factorcraft.module.cycle.automation.block.entity.AutomationBlockEntities;
 import com.factorcraft.module.cycle.automation.block.entity.controller.SystemControllerBlockEntity;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
@@ -39,7 +40,13 @@ public class SystemControllerBlock extends BlockWithEntity implements BlockEntit
     
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
-        return validateTicker(type, AutomationBlockEntities.SYSTEM_CONTROLLER);
+        if (world.isClient) {
+            return null;
+        }
+        if (type == AutomationBlockEntities.SYSTEM_CONTROLLER) {
+            return (BlockEntityTicker<T>) SystemControllerBlockEntity::tick;
+        }
+        return null;
     }
     
     @Override
@@ -59,7 +66,7 @@ public class SystemControllerBlock extends BlockWithEntity implements BlockEntit
     }
     
     @Override
-    public BlockState getCodec() {
-        return getDefaultState();
+    protected MapCodec<? extends BlockWithEntity> getCodec() {
+        return createCodec(SystemControllerBlock::new);
     }
 }

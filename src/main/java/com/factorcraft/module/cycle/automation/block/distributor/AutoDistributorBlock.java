@@ -2,6 +2,7 @@ package com.factorcraft.module.cycle.automation.block.distributor;
 
 import com.factorcraft.module.cycle.automation.block.entity.AutomationBlockEntities;
 import com.factorcraft.module.cycle.automation.block.entity.distributor.AutoDistributorBlockEntity;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
@@ -39,7 +40,13 @@ public class AutoDistributorBlock extends BlockWithEntity implements BlockEntity
     
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
-        return validateTicker(type, AutomationBlockEntities.AUTO_DISTRIBUTOR);
+        if (world.isClient) {
+            return null;
+        }
+        if (type == AutomationBlockEntities.AUTO_DISTRIBUTOR) {
+            return (BlockEntityTicker<T>) AutoDistributorBlockEntity::tick;
+        }
+        return null;
     }
     
     @Override
@@ -59,7 +66,7 @@ public class AutoDistributorBlock extends BlockWithEntity implements BlockEntity
     }
     
     @Override
-    public BlockState getCodec() {
-        return getDefaultState();
+    protected MapCodec<? extends BlockWithEntity> getCodec() {
+        return createCodec(AutoDistributorBlock::new);
     }
 }
