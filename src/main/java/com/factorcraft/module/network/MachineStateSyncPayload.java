@@ -13,6 +13,11 @@ import net.minecraft.util.math.BlockPos;
  * 
  * 同步机器 BlockEntity 的核心状态到客户端
  * 
+ * 优化功能:
+ * - 条件同步：仅当状态变化时同步
+ * - 频率限制：按配置冷却时间同步（默认 500ms）
+ * - 状态哈希：使用哈希值快速检测状态变化
+ * 
  * 支持所有机器类型：
  * - Extractor (提取器)
  * - Synthesizer (合成器)
@@ -68,8 +73,61 @@ public record MachineStateSyncPayload(
     }
     
     /**
-     * 发送机器状态同步给指定玩家
+     * 计算状态哈希值
      */
+    private int calculateStateHash() {
+        int result = machineType.hashCode();
+        result = 31 * result + Boolean.hashCode(isWorking);
+        result = 31 * result + Double.hashCode(progress);
+        result = 31 * result + Double.hashCode(factorStorage);
+        result = 31 * result + Double.hashCode(maxStorage);
+        result = 31 * result + Integer.hashCode(energyStored);
+        result = 31 * result + Integer.hashCode(maxEnergy);
+        return result;
+    }
+    
+    /**
+     * 条件同步机器状态
+     * 
+     * 仅当满足以下条件时才发送：
+     * 1. 距离上次同步超过配置冷却时间
+     * 2. 状态哈希值发生变化（如果启用状态变化检测）
+     * 
+     * @param player 目标玩家
+     */
+    public void conditionalSync(ServerPlayerEntity player) {
+        int stateHash = calculateStateHash();
+        
+        // 检查是否应该同步
+        if (!NetworkSyncTracker.shouldSyncMachine(pos, stateHash)) {
+            return; // 跳过同步
+        }
+        
+        // 发送同步包
+        ServerPlayNetworking.send(player, this);
+        
+        // 记录已同步
+        NetworkSyncTracker.markMachineSynced(pos, stateHash);
+    }
+    
+    /**
+     * 强制同步机器状态（无条件）
+     * 
+     * 用于玩家刚接近机器时的初始同步
+     * 
+     * @param player 目标玩家
+     */
+    public void forceSync(ServerPlayerEntity player) {
+        ServerPlayNetworking.send(player, this);
+        NetworkSyncTracker.markMachineSynced(pos, calculateStateHash());
+    }
+    
+    /**
+     * 发送机器状态同步给指定玩家（传统方法，向后兼容）
+     * 
+     * @deprecated 请使用 {@link #conditionalSync} 或 {@link #forceSync}
+     */
+    @Deprecated
     public static void sendToPlayer(ServerPlayerEntity player, 
                                     BlockPos pos,
                                     String machineType,
@@ -83,7 +141,7 @@ public record MachineStateSyncPayload(
             pos, machineType, isWorking, progress, 
             factorStorage, maxStorage, energyStored, maxEnergy
         );
-        ServerPlayNetworking.send(player, payload);
+        payload.forceSync(player);
     }
     
     /**
@@ -137,8 +195,18 @@ public record MachineStateSyncPayload(
             );
         }
         
-        public void sendTo(ServerPlayerEntity player) {
-            ServerPlayNetworking.send(player, build());
+        /**
+         * 条件同步发送到玩家
+         */
+        public void conditionalSendTo(ServerPlayerEntity player) {
+            build().conditionalSync(player);
+        }
+        
+        /**
+         * 强制同步发送到玩家
+         */
+        public void forceSendTo(ServerPlayerEntity player) {
+            build().forceSync(player);
         }
     }
 }
