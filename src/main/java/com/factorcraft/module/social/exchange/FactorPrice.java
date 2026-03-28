@@ -59,11 +59,21 @@ public class FactorPrice {
         return currentPrice;
     }
     
+    // 别名方法（用于 UI）
+    public int currentPrice() {
+        return currentPrice;
+    }
+    
     public int getPriceChange24h() {
         return priceChange24h;
     }
     
     public double getPriceChangePercent() {
+        return priceChangePercent;
+    }
+    
+    // 别名方法（用于 UI）
+    public double get24hChangePercent() {
         return priceChangePercent;
     }
     
@@ -76,6 +86,11 @@ public class FactorPrice {
     }
     
     public int getVolume24h() {
+        return volume24h;
+    }
+    
+    // 别名方法（用于 UI）
+    public int get24hVolume() {
         return volume24h;
     }
     

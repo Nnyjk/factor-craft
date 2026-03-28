@@ -89,6 +89,20 @@ public class MarketManager {
     }
     
     /**
+     * 添加已有挂单（用于从 NBT 加载）
+     */
+    public void addListing(TradeListing listing) {
+        UUID listingId = listing.getId();
+        UUID sellerId = listing.getSellerId();
+        
+        listings.put(listingId, listing);
+        playerListings.computeIfAbsent(sellerId, k -> new ArrayList<>()).add(listingId);
+        
+        String itemName = listing.getItemIdentifier();
+        itemIndex.computeIfAbsent(itemName, k -> new ArrayList<>()).add(listingId);
+    }
+    
+    /**
      * 取消挂单
      */
     public boolean cancelListing(UUID listingId, UUID playerId) {
@@ -192,6 +206,30 @@ public class MarketManager {
     }
     
     /**
+     * 获取分页挂单列表
+     */
+    public List<TradeListing> getListings(int page, int pageSize) {
+        List<TradeListing> activeListings = listings.values().stream()
+            .filter(listing -> !listing.isSold())
+            .collect(Collectors.toList());
+        
+        int startIndex = page * pageSize;
+        if (startIndex >= activeListings.size()) {
+            return Collections.emptyList();
+        }
+        
+        int endIndex = Math.min(startIndex + pageSize, activeListings.size());
+        return activeListings.subList(startIndex, endIndex);
+    }
+    
+    /**
+     * 获取总挂单数量
+     */
+    public int getTotalListingsCount() {
+        return (int) listings.values().stream().filter(listing -> !listing.isSold()).count();
+    }
+    
+    /**
      * 清理过期挂单
      */
     public void cleanupExpiredListings() {
@@ -221,5 +259,48 @@ public class MarketManager {
      */
     public int getListingCount() {
         return (int) listings.values().stream().filter(l -> !l.isSold()).count();
+    }
+    
+    /**
+     * 获取玩家的所有活跃挂单
+     */
+    public List<TradeListing> getActiveListings(UUID playerId) {
+        List<UUID> listingIds = playerListings.get(playerId);
+        if (listingIds == null) {
+            return Collections.emptyList();
+        }
+        
+        return listingIds.stream()
+            .map(listings::get)
+            .filter(l -> l != null && !l.isSold())
+            .collect(Collectors.toList());
+    }
+    
+    /**
+     * 根据 ID 获取挂单
+     */
+    public TradeListing getListing(UUID listingId) {
+        return listings.get(listingId);
+    }
+    
+    /**
+     * 购买挂单
+     */
+    public boolean buyListing(UUID listingId, UUID buyerId) {
+        TradeListing listing = listings.get(listingId);
+        if (listing == null || listing.isSold()) {
+            return false;
+        }
+        listing.setSold(true);
+        return true;
+    }
+    
+    /**
+     * 清空所有数据（用于加载新数据）
+     */
+    public void clear() {
+        listings.clear();
+        playerListings.clear();
+        itemIndex.clear();
     }
 }

@@ -22,6 +22,7 @@ public class TradeOrder {
     private final UUID id;
     private final UUID playerId;
     private final String playerName;
+    private final String factorType;  // Factor 类型
     private final OrderType type;
     private final OrderMode mode;
     private final int quantity;       // Factor 数量
@@ -30,11 +31,12 @@ public class TradeOrder {
     private int filledQuantity;       // 已成交数量
     private boolean cancelled;
     
-    public TradeOrder(UUID id, UUID playerId, String playerName, OrderType type, OrderMode mode, 
+    public TradeOrder(UUID id, UUID playerId, String playerName, String factorType, OrderType type, OrderMode mode, 
                       int quantity, int pricePerUnit) {
         this.id = id;
         this.playerId = playerId;
         this.playerName = playerName;
+        this.factorType = factorType;
         this.type = type;
         this.mode = mode;
         this.quantity = quantity;
@@ -53,6 +55,14 @@ public class TradeOrder {
     }
     
     public String getPlayerName() {
+        return playerName;
+    }
+    
+    public String getFactorType() {
+        return factorType;
+    }
+    
+    public String getCreatorName() {
         return playerName;
     }
     
@@ -108,6 +118,7 @@ public class TradeOrder {
         nbt.putUuid("id", id);
         nbt.putUuid("player_id", playerId);
         nbt.putString("player_name", playerName);
+        nbt.putString("factor_type", factorType);
         nbt.putString("type", type.name());
         nbt.putString("mode", mode.name());
         nbt.putInt("quantity", quantity);
@@ -125,12 +136,13 @@ public class TradeOrder {
         UUID id = nbt.getUuid("id");
         UUID playerId = nbt.getUuid("player_id");
         String playerName = nbt.getString("player_name");
+        String factorType = nbt.getString("factor_type");
         OrderType type = OrderType.valueOf(nbt.getString("type"));
         OrderMode mode = OrderMode.valueOf(nbt.getString("mode"));
         int quantity = nbt.getInt("quantity");
         int pricePerUnit = nbt.getInt("price_per_unit");
         
-        TradeOrder order = new TradeOrder(id, playerId, playerName, type, mode, quantity, pricePerUnit);
+        TradeOrder order = new TradeOrder(id, playerId, playerName, factorType, type, mode, quantity, pricePerUnit);
         order.filledQuantity = nbt.getInt("filled_quantity");
         order.cancelled = nbt.getBoolean("cancelled");
         return order;
@@ -143,6 +155,7 @@ public class TradeOrder {
         buf.writeUuid(id);
         buf.writeUuid(playerId);
         buf.writeString(playerName);
+        buf.writeString(factorType);
         buf.writeEnumConstant(type);
         buf.writeEnumConstant(mode);
         buf.writeInt(quantity);
@@ -159,6 +172,7 @@ public class TradeOrder {
         UUID id = buf.readUuid();
         UUID playerId = buf.readUuid();
         String playerName = buf.readString();
+        String factorType = buf.readString();
         OrderType type = buf.readEnumConstant(OrderType.class);
         OrderMode mode = buf.readEnumConstant(OrderMode.class);
         int quantity = buf.readInt();
@@ -167,7 +181,7 @@ public class TradeOrder {
         int filledQuantity = buf.readInt();
         boolean cancelled = buf.readBoolean();
         
-        TradeOrder order = new TradeOrder(id, playerId, playerName, type, mode, quantity, pricePerUnit);
+        TradeOrder order = new TradeOrder(id, playerId, playerName, factorType, type, mode, quantity, pricePerUnit);
         order.filledQuantity = filledQuantity;
         order.cancelled = cancelled;
         return order;
