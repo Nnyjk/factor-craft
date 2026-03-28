@@ -5,6 +5,7 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
@@ -21,12 +22,18 @@ import net.minecraft.world.World;
  */
 public class FactorStorageUnitBlock extends Block implements BlockEntityProvider {
     
-    public static final Settings SETTINGS = Settings.create()
-        .strength(3.0f, 15.0f)
-        .nonOpaque();
+    public static Settings createSettings(RegistryKey<Block> key) {
+        return Settings.create().registryKey(key)
+            .strength(3.0f, 15.0f)
+            .nonOpaque();
+    }
+    
+    public FactorStorageUnitBlock(Settings settings) {
+        super(settings);
+    }
     
     public FactorStorageUnitBlock() {
-        super(SETTINGS);
+        this(createSettings(null));
     }
     
     @Override

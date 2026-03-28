@@ -4,6 +4,7 @@ import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -16,12 +17,18 @@ import net.minecraft.world.World;
  */
 public class StorageBusBlock extends Block implements BlockEntityProvider {
     
-    public static final Settings SETTINGS = Settings.create()
-        .strength(2.0f, 10.0f)
-        .nonOpaque();
+    public static Settings createSettings(RegistryKey<Block> key) {
+        return Settings.create().registryKey(key)
+            .strength(2.0f, 10.0f)
+            .nonOpaque();
+    }
+    
+    public StorageBusBlock(Settings settings) {
+        super(settings);
+    }
     
     public StorageBusBlock() {
-        super(SETTINGS);
+        this(createSettings(null));
     }
     
     @Override

@@ -17,9 +17,9 @@ import net.minecraft.util.Identifier;
  */
 public class LogisticsStorage {
     
-    public static final Block STORAGE_UNIT = new FactorStorageUnitBlock();
-    public static final Block STORAGE_MONITOR = new StorageMonitorBlock();
-    public static final Block STORAGE_BUS = new StorageBusBlock();
+    public static Block STORAGE_UNIT;
+    public static Block STORAGE_MONITOR;
+    public static Block STORAGE_BUS;
     
     public static BlockEntityType<FactorStorageUnitBlockEntity> STORAGE_UNIT_ENTITY;
     public static BlockEntityType<StorageMonitorBlockEntity> STORAGE_MONITOR_ENTITY;
@@ -29,10 +29,15 @@ public class LogisticsStorage {
     public static ScreenHandlerType<RequestTerminalScreenHandler> REQUEST_TERMINAL_HANDLER;
     
     public static void register() {
-        // 注册方块
-        registerBlock("storage_unit", STORAGE_UNIT);
-        registerBlock("storage_monitor", STORAGE_MONITOR);
-        registerBlock("storage_bus", STORAGE_BUS);
+        // 创建 RegistryKey
+        RegistryKey<Block> storageUnitKey = RegistryKey.of(RegistryKeys.BLOCK, Identifier.of("factorcraft", "storage_unit"));
+        RegistryKey<Block> storageMonitorKey = RegistryKey.of(RegistryKeys.BLOCK, Identifier.of("factorcraft", "storage_monitor"));
+        RegistryKey<Block> storageBusKey = RegistryKey.of(RegistryKeys.BLOCK, Identifier.of("factorcraft", "storage_bus"));
+        
+        // 创建并注册方块（传入 RegistryKey）
+        STORAGE_UNIT = Registry.register(Registries.BLOCK, storageUnitKey, new FactorStorageUnitBlock(FactorStorageUnitBlock.createSettings(storageUnitKey)));
+        STORAGE_MONITOR = Registry.register(Registries.BLOCK, storageMonitorKey, new StorageMonitorBlock(StorageMonitorBlock.createSettings(storageMonitorKey)));
+        STORAGE_BUS = Registry.register(Registries.BLOCK, storageBusKey, new StorageBusBlock(StorageBusBlock.createSettings(storageBusKey)));
         
         // 注册 BlockEntity
         STORAGE_UNIT_ENTITY = Registry.register(
@@ -65,10 +70,5 @@ public class LogisticsStorage {
             Identifier.of("factorcraft", "request_terminal"),
             new ExtendedScreenHandlerType<>(RequestTerminalScreenHandler::new, RequestTerminalScreenHandler.SyncData.PACKET_CODEC)
         );
-    }
-    
-    private static void registerBlock(String name, Block block) {
-        RegistryKey<Block> key = RegistryKey.of(RegistryKeys.BLOCK, Identifier.of("factorcraft", name));
-        Registry.register(Registries.BLOCK, key, block);
     }
 }

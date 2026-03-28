@@ -8,6 +8,7 @@ import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.ActionResult;
@@ -26,11 +27,20 @@ import org.jetbrains.annotations.Nullable;
  */
 public class OneWayPipeBlock extends Block implements BlockEntityProvider {
     
-    public static final Settings SETTINGS = AdvancedFactorPipeBlock.SETTINGS;
+    public static Settings createSettings(RegistryKey<Block> key) {
+        return Settings.create().registryKey(key)
+            .strength(2.0f, 10.0f)
+            .nonOpaque()
+            .ticksRandomly();
+    }
+    
+    public OneWayPipeBlock(Settings settings) {
+        super(settings);
+        setDefaultState(getStateManager().getDefaultState().with(Properties.HORIZONTAL_FACING, Direction.NORTH));
+    }
     
     public OneWayPipeBlock() {
-        super(SETTINGS);
-        setDefaultState(getStateManager().getDefaultState().with(Properties.HORIZONTAL_FACING, Direction.NORTH));
+        this(createSettings(null));
     }
     
     @Override

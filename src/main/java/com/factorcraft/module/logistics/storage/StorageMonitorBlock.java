@@ -5,6 +5,7 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.text.Text;
@@ -23,12 +24,18 @@ import net.minecraft.world.World;
  */
 public class StorageMonitorBlock extends Block implements BlockEntityProvider {
     
-    public static final Settings SETTINGS = Settings.create()
-        .strength(2.5f, 12.0f)
-        .nonOpaque();
+    public static Settings createSettings(RegistryKey<Block> key) {
+        return Settings.create().registryKey(key)
+            .strength(2.5f, 12.0f)
+            .nonOpaque();
+    }
+    
+    public StorageMonitorBlock(Settings settings) {
+        super(settings);
+    }
     
     public StorageMonitorBlock() {
-        super(SETTINGS);
+        this(createSettings(null));
     }
     
     @Override

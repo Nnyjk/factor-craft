@@ -14,10 +14,10 @@ import net.minecraft.util.Identifier;
  */
 public class LogisticsPipes {
     
-    public static final Block ADVANCED_PIPE = new AdvancedFactorPipeBlock();
-    public static final Block PRIORITY_PIPE = new PriorityPipeBlock();
-    public static final Block FILTER_PIPE = new FilterPipeBlock();
-    public static final Block ONE_WAY_PIPE = new OneWayPipeBlock();
+    public static Block ADVANCED_PIPE;
+    public static Block PRIORITY_PIPE;
+    public static Block FILTER_PIPE;
+    public static Block ONE_WAY_PIPE;
     
     public static BlockEntityType<AdvancedFactorPipeBlockEntity> ADVANCED_PIPE_ENTITY;
     public static BlockEntityType<PriorityPipeBlockEntity> PRIORITY_PIPE_ENTITY;
@@ -25,11 +25,17 @@ public class LogisticsPipes {
     public static BlockEntityType<OneWayPipeBlockEntity> ONE_WAY_PIPE_ENTITY;
     
     public static void register() {
-        // 注册方块
-        registerBlock("advanced_pipe", ADVANCED_PIPE);
-        registerBlock("priority_pipe", PRIORITY_PIPE);
-        registerBlock("filter_pipe", FILTER_PIPE);
-        registerBlock("one_way_pipe", ONE_WAY_PIPE);
+        // 创建 RegistryKey
+        RegistryKey<Block> advancedPipeKey = RegistryKey.of(RegistryKeys.BLOCK, Identifier.of("factorcraft", "advanced_pipe"));
+        RegistryKey<Block> priorityPipeKey = RegistryKey.of(RegistryKeys.BLOCK, Identifier.of("factorcraft", "priority_pipe"));
+        RegistryKey<Block> filterPipeKey = RegistryKey.of(RegistryKeys.BLOCK, Identifier.of("factorcraft", "filter_pipe"));
+        RegistryKey<Block> oneWayPipeKey = RegistryKey.of(RegistryKeys.BLOCK, Identifier.of("factorcraft", "one_way_pipe"));
+        
+        // 创建并注册方块（传入 RegistryKey）
+        ADVANCED_PIPE = Registry.register(Registries.BLOCK, advancedPipeKey, new AdvancedFactorPipeBlock(AdvancedFactorPipeBlock.createSettings(advancedPipeKey)));
+        PRIORITY_PIPE = Registry.register(Registries.BLOCK, priorityPipeKey, new PriorityPipeBlock(PriorityPipeBlock.createSettings(priorityPipeKey)));
+        FILTER_PIPE = Registry.register(Registries.BLOCK, filterPipeKey, new FilterPipeBlock(FilterPipeBlock.createSettings(filterPipeKey)));
+        ONE_WAY_PIPE = Registry.register(Registries.BLOCK, oneWayPipeKey, new OneWayPipeBlock(OneWayPipeBlock.createSettings(oneWayPipeKey)));
         
         // 注册 BlockEntity
         ADVANCED_PIPE_ENTITY = Registry.register(
@@ -55,10 +61,5 @@ public class LogisticsPipes {
             Identifier.of("factorcraft", "one_way_pipe"),
             FabricBlockEntityTypeBuilder.create(OneWayPipeBlockEntity::new, ONE_WAY_PIPE).build()
         );
-    }
-    
-    private static void registerBlock(String name, Block block) {
-        RegistryKey<Block> key = RegistryKey.of(RegistryKeys.BLOCK, Identifier.of("factorcraft", name));
-        Registry.register(Registries.BLOCK, key, block);
     }
 }

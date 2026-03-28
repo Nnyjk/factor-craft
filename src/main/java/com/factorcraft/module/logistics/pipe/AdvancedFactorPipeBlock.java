@@ -7,6 +7,7 @@ import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
@@ -25,13 +26,19 @@ import org.jetbrains.annotations.Nullable;
  */
 public class AdvancedFactorPipeBlock extends Block implements BlockEntityProvider {
     
-    public static final Settings SETTINGS = Settings.create()
-        .strength(2.0f, 10.0f)
-        .nonOpaque()
-        .ticksRandomly();
+    public static Settings createSettings(RegistryKey<Block> key) {
+        return Settings.create().registryKey(key)
+            .strength(2.0f, 10.0f)
+            .nonOpaque()
+            .ticksRandomly();
+    }
+    
+    public AdvancedFactorPipeBlock(Settings settings) {
+        super(settings);
+    }
     
     public AdvancedFactorPipeBlock() {
-        super(SETTINGS);
+        this(createSettings(null));
     }
     
     @Override
