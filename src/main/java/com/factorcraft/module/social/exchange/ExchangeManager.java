@@ -58,7 +58,7 @@ public class ExchangeManager {
     /**
      * 创建订单
      */
-    public TradeOrder createOrder(UUID playerId, String playerName, TradeOrder.OrderType type, 
+    public TradeOrder createOrder(UUID playerId, String playerName, String factorType, TradeOrder.OrderType type, 
                                    TradeOrder.OrderMode mode, int quantity, int pricePerUnit) {
         if (quantity <= 0) {
             return null;
@@ -70,7 +70,7 @@ public class ExchangeManager {
         }
         
         UUID orderId = UUID.randomUUID();
-        TradeOrder order = new TradeOrder(orderId, playerId, playerName, type, mode, quantity, pricePerUnit);
+        TradeOrder order = new TradeOrder(orderId, playerId, playerName, factorType, type, mode, quantity, pricePerUnit);
         
         orders.put(orderId, order);
         
@@ -181,9 +181,43 @@ public class ExchangeManager {
     }
     
     /**
+     * 获取最近 N 个订单
+     */
+    public List<TradeOrder> getRecentOrders(int limit) {
+        return orders.values().stream()
+            .sorted(Comparator.comparingLong(TradeOrder::getTimestamp).reversed())
+            .limit(limit)
+            .collect(Collectors.toList());
+    }
+    
+    /**
      * 获取 Factor 价格对象
      */
     public FactorPrice getFactorPrice() {
+        return factorPrice;
+    }
+    
+    /**
+     * 获取 Factor 价格对象（按类型）
+     */
+    public FactorPrice getFactorPrice(String factorType) {
+        // 当前只支持一种 Factor 类型，后续可扩展
+        return factorPrice;
+    }
+    
+    /**
+     * 获取玩家的有效订单
+     */
+    public List<TradeOrder> getActiveOrders(UUID playerId) {
+        return orders.values().stream()
+            .filter(order -> order.getPlayerId().equals(playerId) && !order.isComplete())
+            .collect(Collectors.toList());
+    }
+    
+    /**
+     * 获取价格数据（用于同步）
+     */
+    public FactorPrice getPriceData() {
         return factorPrice;
     }
     

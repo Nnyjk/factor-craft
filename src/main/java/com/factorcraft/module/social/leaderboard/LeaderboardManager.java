@@ -165,4 +165,44 @@ public class LeaderboardManager {
         leaderboards.put(type, new ArrayList<>());
         FactorCraftMod.LOGGER.info("[FactorCraft:Leaderboard] 排行榜已重置：{}", type.getDisplayName());
     }
+    
+    /**
+     * 序列化为 NBT
+     */
+    public net.minecraft.nbt.NbtCompound toNbt() {
+        net.minecraft.nbt.NbtCompound nbt = new net.minecraft.nbt.NbtCompound();
+        
+        for (LeaderboardType type : LeaderboardType.values()) {
+            net.minecraft.nbt.NbtCompound typeNbt = new net.minecraft.nbt.NbtCompound();
+            List<LeaderboardEntry> entries = leaderboards.getOrDefault(type, new ArrayList<>());
+            
+            net.minecraft.nbt.NbtList entriesNbt = new net.minecraft.nbt.NbtList();
+            for (LeaderboardEntry entry : entries) {
+                entriesNbt.add(entry.toNbt());
+            }
+            typeNbt.put("entries", entriesNbt);
+            nbt.put(type.name(), typeNbt);
+        }
+        
+        return nbt;
+    }
+    
+    /**
+     * 从 NBT 反序列化
+     */
+    public void fromNbt(net.minecraft.nbt.NbtCompound nbt) {
+        for (LeaderboardType type : LeaderboardType.values()) {
+            if (nbt.contains(type.name(), net.minecraft.nbt.NbtElement.COMPOUND_TYPE)) {
+                net.minecraft.nbt.NbtCompound typeNbt = nbt.getCompound(type.name());
+                net.minecraft.nbt.NbtList entriesNbt = typeNbt.getList("entries", net.minecraft.nbt.NbtElement.COMPOUND_TYPE);
+                
+                List<LeaderboardEntry> entries = new ArrayList<>();
+                for (int i = 0; i < entriesNbt.size(); i++) {
+                    entries.add(LeaderboardEntry.fromNbt(entriesNbt.getCompound(i)));
+                }
+                
+                leaderboards.put(type, entries);
+            }
+        }
+    }
 }
