@@ -43,10 +43,8 @@ public class SystemControllerBlock extends BlockWithEntity implements BlockEntit
         if (world.isClient) {
             return null;
         }
-        if (type == AutomationBlockEntities.SYSTEM_CONTROLLER) {
-            return (BlockEntityTicker<T>) SystemControllerBlockEntity::tick;
-        }
-        return null;
+        return validateTicker(type, AutomationBlockEntities.SYSTEM_CONTROLLER,
+            (w, p, s, be) -> be::tick);
     }
     
     @Override
