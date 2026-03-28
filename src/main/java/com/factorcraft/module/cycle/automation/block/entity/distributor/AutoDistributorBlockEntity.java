@@ -32,7 +32,9 @@ public class AutoDistributorBlockEntity extends BlockEntity implements SidedInve
         super(AutomationBlockEntities.AUTO_DISTRIBUTOR, pos, state);
     }
     
-    @Override
+    /**
+     * 每 tick 更新
+     */
     public void tick(World world, BlockPos pos, BlockState state) {
         if (world.isClient) return;
         
@@ -91,7 +93,7 @@ public class AutoDistributorBlockEntity extends BlockEntity implements SidedInve
             }
             
             // 如果可以堆叠，尝试合并
-            if (ItemStack.canCombine(targetStack, stack)) {
+            if (targetStack.isOf(stack.getItem()) && ItemStack.areItemsAndComponentsEqual(targetStack, stack)) {
                 int maxCount = Math.min(targetStack.getMaxCount(), target.getMaxCountPerStack());
                 int space = maxCount - targetStack.getCount();
                 
@@ -166,7 +168,11 @@ public class AutoDistributorBlockEntity extends BlockEntity implements SidedInve
     
     @Override
     public boolean canPlayerUse(PlayerEntity player) {
-        return Inventories.canPlayerUse(player, this);
+        if (this.world == null) {
+            return false;
+        }
+        return this.world.getBlockEntity(this.pos) == this &&
+            player.squaredDistanceTo((double)this.pos.getX() + 0.5, (double)this.pos.getY() + 0.5, (double)this.pos.getZ() + 0.5) <= 64.0;
     }
     
     @Override

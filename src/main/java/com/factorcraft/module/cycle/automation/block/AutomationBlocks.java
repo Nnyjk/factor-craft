@@ -3,6 +3,7 @@ package com.factorcraft.module.cycle.automation.block;
 import com.factorcraft.module.cycle.automation.block.crafter.AutoCrafterBlock;
 import com.factorcraft.module.cycle.automation.block.distributor.AutoDistributorBlock;
 import com.factorcraft.module.cycle.automation.block.harvester.AutoHarvesterBlock;
+import com.factorcraft.module.cycle.automation.block.controller.SystemControllerBlock;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
@@ -34,6 +35,12 @@ public class AutomationBlocks {
     public static final Block AUTO_DISTRIBUTOR = registerBlock(
         "auto_distributor",
         new AutoDistributorBlock(AbstractBlock.Settings.create().strength(3.5f).requiresTool())
+    );
+    
+    // 系统控制器
+    public static final Block SYSTEM_CONTROLLER = registerBlock(
+        "system_controller",
+        new SystemControllerBlock(AbstractBlock.Settings.create().strength(3.5f).requiresTool())
     );
     
     /**

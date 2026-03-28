@@ -141,21 +141,26 @@ public class AutoHarvesterBlockEntity extends BlockEntity implements NamedScreen
             return;
         }
         
-        // 检查前方是否有作物
-        BlockPos cropPos = pos.offset(getCachedState().get(AutoHarvesterBlock.FACING));
-        BlockState cropState = world.getBlockState(cropPos);
+        // 检查周围 4 个方向是否有作物
+        Direction[] directions = {Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST};
         
-        if (cropState.getBlock() instanceof CropBlock crop) {
-            if (crop.isMature(cropState)) {
-                // 收获作物
-                var drops = cropState.getDrops(world, pos, null);
-                for (ItemStack drop : drops) {
-                    addDrop(drop);
+        for (Direction dir : directions) {
+            BlockPos cropPos = pos.offset(dir);
+            BlockState cropState = world.getBlockState(cropPos);
+            
+            if (cropState.getBlock() instanceof CropBlock crop) {
+                if (crop.isMature(cropState)) {
+                    // 收获作物
+                    var drops = cropState.getDrops(world, cropPos, null);
+                    for (ItemStack drop : drops) {
+                        addDrop(drop);
+                    }
+                    
+                    // 重新种植
+                    world.setBlockState(cropPos, crop.withAge(0));
+                    markDirty();
+                    break; // 每次只收获一个方向的作物
                 }
-                
-                // 重新种植
-                world.setBlockState(cropPos, crop.withAge(0));
-                markDirty();
             }
         }
     }

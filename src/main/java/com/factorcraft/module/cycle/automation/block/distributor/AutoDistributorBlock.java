@@ -44,7 +44,7 @@ public class AutoDistributorBlock extends BlockWithEntity implements BlockEntity
             return null;
         }
         if (type == AutomationBlockEntities.AUTO_DISTRIBUTOR) {
-            return (BlockEntityTicker<T>) AutoDistributorBlockEntity::tick;
+            return validateTicker(type, AutomationBlockEntities.AUTO_DISTRIBUTOR, (w, p, s, entity) -> entity.tick(w, p, s));
         }
         return null;
     }

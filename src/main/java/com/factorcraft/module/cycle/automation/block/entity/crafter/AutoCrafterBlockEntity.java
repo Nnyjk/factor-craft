@@ -170,12 +170,12 @@ public class AutoCrafterBlockEntity extends BlockEntity implements NamedScreenHa
             return false;
         }
         
-        List<ItemStack> inputs = new ArrayList<>();
+        DefaultedList<ItemStack> inputs = DefaultedList.ofSize(9);
         for (int i = 0; i < 9; i++) {
-            inputs.add(getStack(i));
+            inputs.set(i, getStack(i));
         }
         
-        return currentPattern.matches(DefaultedList.copyOf(inputs));
+        return currentPattern.matches(inputs);
     }
     
     private void startCrafting() {
