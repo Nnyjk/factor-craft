@@ -46,7 +46,7 @@ public class AchievementCommand {
     private static int openAchievementScreen(CommandContext<ServerCommandSource> context) {
         ServerPlayerEntity player = context.getSource().getPlayer();
         if (player == null) {
-            context.getSource().sendError(Text.literal("此命令只能由玩家执行"));
+            context.getSource().sendError(Text.translatable("command.factorcraft.achievement.not_player"));
             return 0;
         }
         
@@ -54,7 +54,7 @@ public class AchievementCommand {
         player.openHandledScreen(new NamedScreenHandlerFactory() {
             @Override
             public Text getDisplayName() {
-                return Text.literal("成就");
+                return Text.translatable("gui.factorcraft.achievement.title");
             }
             
             @Override
@@ -63,7 +63,7 @@ public class AchievementCommand {
             }
         });
         
-        context.getSource().sendFeedback(() -> Text.literal("§a已打开成就界面"), true);
+        context.getSource().sendFeedback(() -> Text.translatable("command.factorcraft.achievement.opened"), true);
         return 1;
     }
     
@@ -74,12 +74,12 @@ public class AchievementCommand {
         ServerCommandSource source = context.getSource();
         AchievementManager manager = AchievementManager.getInstance();
         
-        source.sendFeedback(() -> Text.literal("§6=== 成就列表 ==="), false);
+        source.sendFeedback(() -> Text.translatable("command.factorcraft.achievement.list_header"), false);
         
         int count = 0;
         for (Achievement achievement : manager.getAllAchievements()) {
             final int finalCount = count + 1;
-            Text status = Text.literal("§7[???]");
+            Text status = Text.translatable("gui.factorcraft.achievement.hidden");
             
             source.sendFeedback(() -> Text.empty()
                 .append(Text.literal("§e" + finalCount + ". "))
@@ -90,7 +90,7 @@ public class AchievementCommand {
         }
         
         final int finalTotal = count;
-        source.sendFeedback(() -> Text.literal("§7共 " + finalTotal + " 个成就"), false);
+        source.sendFeedback(() -> Text.translatable("command.factorcraft.achievement.total", finalTotal), false);
         return 1;
     }
     
@@ -100,7 +100,7 @@ public class AchievementCommand {
     private static int showProgress(CommandContext<ServerCommandSource> context) {
         ServerPlayerEntity player = context.getSource().getPlayer();
         if (player == null) {
-            context.getSource().sendError(Text.literal("此命令只能由玩家执行"));
+            context.getSource().sendError(Text.translatable("command.factorcraft.achievement.not_player"));
             return 0;
         }
         
@@ -111,9 +111,7 @@ public class AchievementCommand {
         int total = manager.getTotalAchievements();
         double percent = (total > 0) ? (unlocked * 100.0 / total) : 0;
         
-        context.getSource().sendFeedback(() -> Text.literal(
-            String.format("§6=== 成就进度 ===\n§e已解锁：§f%d/%d §7(%.1f%%)", unlocked, total, percent)
-        ), false);
+        context.getSource().sendFeedback(() -> Text.translatable("command.factorcraft.achievement.progress", unlocked, total, percent), false);
         
         return 1;
     }
@@ -124,7 +122,7 @@ public class AchievementCommand {
     private static int unlockAchievement(CommandContext<ServerCommandSource> context) {
         ServerPlayerEntity player = context.getSource().getPlayer();
         if (player == null) {
-            context.getSource().sendError(Text.literal("此命令只能由玩家执行"));
+            context.getSource().sendError(Text.translatable("command.factorcraft.achievement.not_player"));
             return 0;
         }
         
@@ -132,9 +130,9 @@ public class AchievementCommand {
         AchievementManager manager = AchievementManager.getInstance();
         
         if (manager.unlockAchievement(player.getUuid(), achievementId)) {
-            context.getSource().sendFeedback(() -> Text.literal("§a已解锁成就：" + achievementId), true);
+            context.getSource().sendFeedback(() -> Text.translatable("command.factorcraft.achievement.unlocked", achievementId.toString()), true);
         } else {
-            context.getSource().sendError(Text.literal("无法解锁成就：" + achievementId));
+            context.getSource().sendError(Text.translatable("command.factorcraft.achievement.failed", achievementId.toString()));
         }
         
         return 1;

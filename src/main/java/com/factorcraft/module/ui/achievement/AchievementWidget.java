@@ -118,7 +118,7 @@ public class AchievementWidget extends PressableWidget {
      */
     public Text getTooltipText() {
         if (locked) {
-            return Text.literal("???").styled(style -> style.withItalic(true));
+            return Text.translatable("gui.factorcraft.achievement.hidden").styled(style -> style.withItalic(true));
         }
         
         Text title = achievement.getTitle();
@@ -126,12 +126,12 @@ public class AchievementWidget extends PressableWidget {
         Text progressText;
         
         if (progressPercent >= 100) {
-            progressText = Text.literal("✓ 已完成").styled(style -> style.withColor(0x00FF00));
+            progressText = Text.translatable("gui.factorcraft.achievement.completed").styled(style -> style.withColor(0x00FF00));
         } else {
             String achievementId = achievement.getId().toString();
             int current = progress.getProgress(achievementId);
             int required = achievement.getRequiredAmount();
-            progressText = Text.literal(String.format("进度：%d/%d", current, required))
+            progressText = Text.translatable("gui.factorcraft.achievement.progress", current, required)
                 .styled(style -> style.withColor(0xFFFF00));
         }
         
