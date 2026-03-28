@@ -1,6 +1,7 @@
 package com.factorcraft.module.cycle.energy;
 
 import com.factorcraft.FactorCraftMod;
+import com.factorcraft.module.cycle.energy.block.FactorCompressorBlock;
 import com.factorcraft.module.cycle.energy.block.FactorCrystalBlock;
 import com.factorcraft.module.cycle.energy.block.FactorPumpBlock;
 import net.minecraft.block.*;
@@ -25,10 +26,12 @@ public class FactorEnergyBlocks {
     // Registry Keys
     public static final RegistryKey<Block> FACTOR_CRYSTAL_KEY = createKey("factor_crystal");
     public static final RegistryKey<Block> FACTOR_PUMP_KEY = createKey("factor_pump");
+    public static final RegistryKey<Block> FACTOR_COMPRESSOR_KEY = createKey("factor_compressor");
     
     // Blocks
     private static FactorCrystalBlock factorCrystalBlock;
     private static FactorPumpBlock factorPumpBlock;
+    public static Block FACTOR_COMPRESSOR;
     
     /**
      * 创建 RegistryKey
@@ -55,6 +58,14 @@ public class FactorEnergyBlocks {
             new FactorPumpBlock(AbstractBlock.Settings.create()
                 .registryKey(FACTOR_PUMP_KEY)
                 .strength(2.5f, 5.0f)
+                .nonOpaque())
+        );
+        
+        FACTOR_COMPRESSOR = register(
+            FACTOR_COMPRESSOR_KEY,
+            new FactorCompressorBlock(AbstractBlock.Settings.create()
+                .registryKey(FACTOR_COMPRESSOR_KEY)
+                .strength(3.0f, 6.0f)
                 .nonOpaque())
         );
     }
