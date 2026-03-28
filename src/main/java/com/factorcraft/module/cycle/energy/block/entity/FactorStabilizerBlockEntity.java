@@ -1,4 +1,4 @@
-package com.factorcraft.module.cycle.energy.block;
+package com.factorcraft.module.cycle.energy.block.entity;
 
 import com.factorcraft.component.FactorCraftDataComponents;
 import com.factorcraft.module.cycle.energy.FactorEnergyBlocks;

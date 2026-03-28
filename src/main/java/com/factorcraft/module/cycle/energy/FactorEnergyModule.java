@@ -3,6 +3,7 @@ package com.factorcraft.module.cycle.energy;
 import com.factorcraft.module.cycle.energy.block.entity.FactorEnergyBlockEntities;
 import com.factorcraft.module.cycle.energy.item.FactorEnergyItems;
 import com.factorcraft.module.cycle.energy.screen.FactorEnergyScreenHandlers;
+import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 
 /**
