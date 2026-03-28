@@ -21,6 +21,7 @@ public class FactorEnergyBlockEntities {
         FactorCrystalBlockEntity.init();
         FactorPumpBlockEntity.init();
         FactorCompressorBlockEntity.init();
+        FactorReactorBlockEntity.init();
         
         FactorCraftMod.LOGGER.info("Factor Energy BlockEntities registered");
     }
