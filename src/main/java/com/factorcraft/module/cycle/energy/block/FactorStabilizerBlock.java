@@ -1,6 +1,7 @@
 package com.factorcraft.module.cycle.energy.block;
 
 import com.factorcraft.FactorCraftMod;
+import com.factorcraft.module.cycle.energy.block.entity.FactorStabilizerBlockEntity;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;

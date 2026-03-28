@@ -1,6 +1,6 @@
 package com.factorcraft.module.cycle.energy.screen;
 
-import com.factorcraft.module.cycle.energy.block.FactorStabilizerBlockEntity;
+import com.factorcraft.module.cycle.energy.block.entity.FactorStabilizerBlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
