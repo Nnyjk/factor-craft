@@ -3,6 +3,7 @@ package com.factorcraft.module.technology.machine;
 import com.factorcraft.api.IFactorContainer;
 import com.factorcraft.module.network.MachineStateSyncPayload;
 import com.factorcraft.module.network.NetworkConfig;
+import com.factorcraft.multiblock.MachineStateBroadcaster;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -95,6 +96,7 @@ public abstract class MachineBlockEntity extends BlockEntity implements IFactorC
     /**
      * 同步状态到附近玩家 (条件同步)
      * 
+     * R3.3 优化：集成 MachineStateBroadcaster 进行状态广播
      * 使用 MachineStateSyncPayload.conditionalSendTo() 仅当必要时才发送
      */
     protected void syncToNearbyPlayers() {
@@ -103,19 +105,10 @@ public abstract class MachineBlockEntity extends BlockEntity implements IFactorC
         }
         
         if (getWorld() instanceof ServerWorld serverWorld) {
-            double syncRadius = NetworkConfig.MACHINE_SYNC_RADIUS;
             BlockPos pos = getPos();
             
-            serverWorld.getPlayers(player -> 
-                player.getPos().distanceTo(pos.toCenterPos()) < syncRadius
-            ).forEach(player -> {
-                MachineStateSyncPayload.builder(pos, getMachineType())
-                    .working(isWorking())
-                    .progress(getProgress())
-                    .factorStorage(getFactorStorage(), getMaxFactorStorage())
-                    .energy(getEnergyStored(), getMaxEnergy())
-                    .conditionalSendTo(player);
-            });
+            // R3.3: 使用广播器进行状态广播
+            MachineStateBroadcaster.broadcastStateChange(serverWorld, pos, this);
             
             // 更新上次同步状态
             updateLastSyncState();

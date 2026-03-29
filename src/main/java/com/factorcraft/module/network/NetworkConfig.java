@@ -27,6 +27,20 @@ public class NetworkConfig {
      */
     public static int SYNC_INTERVAL_MS = 500;
     
+    // ==================== 客户端预测配置 ====================
+    
+    /**
+     * 客户端预测清理间隔 (毫秒)
+     * 默认 60000ms = 1 分钟
+     */
+    public static int PREDICTION_CLEANUP_INTERVAL_MS = 60000;
+    
+    /**
+     * 客户端预测过期时间 (毫秒)
+     * 默认 30000ms = 30 秒
+     */
+    public static int PREDICTION_EXPIRY_MS = 30000;
+    
     // ==================== Factor 同步配置 ====================
     
     /**
