@@ -59,4 +59,11 @@ public class ExtractorDisplay implements Display {
     public long getFactorOutput() {
         return factorOutput;
     }
+    
+    /**
+     * 创建提取器配方显示
+     */
+    public static ExtractorDisplay create(List inputs, List outputs, int tier, int processingTime, long factorOutput) {
+        return new ExtractorDisplay(inputs, outputs, tier, processingTime, factorOutput);
+    }
 }

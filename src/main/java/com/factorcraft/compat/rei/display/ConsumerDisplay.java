@@ -58,4 +58,11 @@ public class ConsumerDisplay implements Display {
     public long getFactorCost() {
         return factorCost;
     }
+    
+    /**
+     * 创建消耗器配方显示
+     */
+    public static ConsumerDisplay create(List inputs, List outputs, int processingTime) {
+        return new ConsumerDisplay(inputs, outputs, 1, processingTime, 0);
+    }
 }

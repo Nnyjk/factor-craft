@@ -58,4 +58,11 @@ public class SynthesizerDisplay implements Display {
     public long getFactorCost() {
         return factorCost;
     }
+    
+    /**
+     * 创建合成器配方显示
+     */
+    public static SynthesizerDisplay create(List inputs, List outputs, int processingTime, long factorCost) {
+        return new SynthesizerDisplay(inputs, outputs, 1, processingTime, factorCost);
+    }
 }
